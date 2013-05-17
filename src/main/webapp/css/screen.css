@@ -1,0 +1,482 @@
+/* top elements */
+* { padding: 0; margin: 0; outline: 0; }
+
+body {
+  margin: 0;  padding: 0;
+  font: normal 73%/1.6em 'Trebuchet MS', Tahoma, sans-serif;
+  color: #555;
+  background: #FFF url(images/bg.jpg) repeat-x;
+  text-align: center;
+}
+
+/* headers */
+h1, h2, h3 { font: bold 1em 'Trebuchet MS', Tahoma, Sans-serif; }
+
+/* links */
+a:link, a:visited { background: inherit; color: #72A545; text-decoration: none; }
+a:hover { background: inherit; color: #006699; text-decoration: underline; }
+
+p, h1, h2, h3, small {
+  margin: 10px 15px;
+}
+ul, ol {
+  margin: 10px 30px;
+  padding: 0 15px;
+}
+
+/* images */
+img {
+  border: 1px solid #DADADA;
+  padding: 8px;
+  /* background: #FAFAFA; */
+}
+img.float-right {
+  margin: 5px 0px 5px 15px;
+}
+img.float-left {
+  margin: 5px 15px 5px 0px;
+}
+
+code {
+  margin: 5px 0;
+  padding: 10px;
+  text-align: left;
+  display: block;
+  overflow: auto;
+  font: 500 1em/1.5em 'Lucida Console', 'courier new', monospace;
+  /* white-space: pre; */
+  background: #FAFAFA;
+  border: 1px solid #f2f2f2;
+  border-left: 3px solid #72A545;
+}
+acronym {
+  cursor: help;
+  border-bottom: 1px solid #777;
+}
+blockquote {
+  margin: 15px;   padding: 0 0 0 20px;
+  background-color: #FAFAFA;
+  background-position: 8px 10px;
+  border: 1px solid #f2f2f2;
+  border-left: 3px solid #72A545;
+  font: bold 1.2em/1.5em "Trebuchet MS", Tahoma, sans-serif;
+  color: #666666;
+}
+
+textarea {
+  width:400px;
+  padding:2px;
+  font: normal 1em "Trebuchet MS", Tahoma, sans-serif;
+  border:1px solid #eee;
+  height:100px;
+  display:block;
+  color:#777;
+}
+
+/* start - table */
+table {
+  border-collapse: collapse;
+  margin: 10px 15px;
+}
+th strong {
+  color: #fff;
+}
+th {
+  background: #74A846;
+  height: 29px;
+  padding-left: 11px;
+  padding-right: 11px;
+  color: #fff;
+  text-align: left;
+  border-left: 1px solid #B6D59A;
+  border-bottom: solid 2px #FFF;
+}
+tr {
+  height: 30px;
+}
+td {
+  padding-left: 11px;
+  padding-right: 11px;
+  border-left: 1px solid #FFF;
+  border-bottom: solid 1px #ffffff;
+}
+td.first,th.first {
+  border-left: 0px;
+}
+tr.row-a {
+  background: #F8F8F8;
+}
+tr.row-b {
+  background: #EFEFEF;
+}
+/* end - table */
+
+/* form elements */
+form {
+  margin:10px 15px; padding: 0;
+  border: 1px solid #f2f2f2;
+  background-color: #FAFAFA;
+}
+label {
+  display:block;
+  font-weight:bold;
+  margin:5px 0;
+}
+input {
+  padding: 2px;
+  border:1px solid #eee;
+  font: normal 1em "Trebuchet MS", Tahoma, sans-serif;
+  color:#777;
+}
+input[required] {
+  background-color: #E0E0E0;
+}
+
+fieldset {
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  border-left: 0px;
+  border-right: 0px;
+}
+
+input.button {
+  margin: 0;
+  font: bold 1em Arial, Sans-serif;
+  background: #FFF url(images/gradientbg.jpg) repeat-x;
+  padding: 2px 3px;
+  color: #333;
+  border: 1px solid #DADADA;
+}
+
+/* ----------------------------
+    SEARCH FORM
+------------------------------- */
+.searchform {
+  background-color: transparent;
+  border: none; margin: 0; padding: 0;
+}
+.searchform p { margin: 10px; padding: 0; }
+.searchform input.textbox {
+  width: 130px;
+  color: #333;
+  height: 20px;
+  padding: 2px;
+  vertical-align: top;
+}
+.searchform input.button {
+  font: bold 12px Arial, Sans-serif;
+  color: #333;
+  width: 60px;
+  height: 26px;
+  border: 1px solid #DADADA;
+  padding: 3px 5px;
+  vertical-align: top;
+}
+
+/* alignment classes */
+.float-left  { float: left; }
+.float-right { float: right; }
+.align-left  { text-align: left; }
+.align-right {  text-align: right; }
+
+/* additional classes */
+.clear { clear: both; }
+.gray  { color: #BFBFBF; }
+
+.messageOn {
+  margin-right: 0px;
+  margin-top: 50px;
+  float: left;
+  font-size: 10px;
+  font-weight: lighter;
+  padding: 3px 12px;
+  color: #FFF;
+  background-color: #333;
+  text-decoration: none;
+  border-right: 1px solid #272727;
+  overflow: hidden;
+  display: block;
+}
+
+.messageOff {
+  display: none;
+  float: left;
+}
+
+.statusOn {
+  display: block;
+  padding: 3px 12px;
+  color: #333;
+  text-decoration: none;
+  font-size: smaller;
+  font-weight: lighter;
+  overflow: hidden;
+}
+
+.statusOff {
+  display: none;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.required {
+  color: red;
+}
+
+.inline {
+  display: inline;
+}
+
+.errorStatusOn {
+  display: block;
+  padding: 3px 12px;
+  color: red;
+  text-decoration: none;
+  font-size: smaller;
+  overflow: hidden;
+}
+
+.gallery-icon img {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.upload-form {
+  margin:10px 15px; padding: 0;
+  border: 1px solid #f2f2f2;
+  background-color: #FAFAFA;
+}
+
+.hint {
+  font-size: 10px;
+  font-style: italic;
+  margin-right: 10px;
+  margin-top: 3px;
+} 
+
+#upload_hint {
+  font-size: 10px;
+  font-style: italic;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* main */
+#main {
+  float: left;
+  width: 75%;
+  margin: 0 0 10px 0; padding: 0;
+}
+
+#main h1 {
+  padding: 10px 0px 0px 5px;
+  margin: 0 0 0 10px;
+  border-bottom: 1px solid #f2f2f2;
+  font: normal 1.8em 'Trebuchet MS', Tahoma, Sans-serif;
+}
+
+#main ul li {
+  list-style-image: url(images/bullet.png);
+}
+
+.post {
+  margin: 0; padding: 0;
+  background: #FFF url(images/gradientbg.jpg) repeat-x;
+  border: 1px solid #EFEDED;
+  box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
+}
+
+.post .post-footer {
+  background-color: #FAFAFA;
+  border: 1px solid #f2f2f2;
+  padding: 5px; 
+  margin-top: 20px;
+  font-size: 95%;
+}
+.post .post-footer .date {
+  background: url(images/clock.png) no-repeat 0 center;
+  padding-left: 20px; 
+  margin: 0 10px 0 5px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+.post .post-footer .comments {
+  background: url(images/comment.png) no-repeat 0 center;
+  padding-left: 20px; 
+  margin: 0 10px 0 5px;
+}
+.post .post-footer .readmore {
+  background: url(images/page.png) no-repeat 0 center;
+  padding-left: 20px; 
+  margin: 0 10px 0 5px;
+}
+
+.post_image {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: -55px;
+  margin-bottom: 2px;
+  float: right;
+}
+
+.post_image_inline {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 2px;
+  float: right;
+}
+
+.block {
+  text-align: justify;
+}
+
+.post_text_content {
+  min-height: 200px;
+}
+
+.image_edit {
+  margin-left: -50px;
+  margin-right: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  height: 40px;
+  float: left;
+  padding: 0;
+}
+
+/* footer */
+#footer {
+  clear: both;
+  margin: 0; 
+  padding: 0;
+  font: normal .95em/1.6em 'Trebuchet MS', Tahoma, Arial, sans-serif;
+  text-align: left;
+}
+
+#footer h1, #footer p { margin-left: 0; }
+
+#footer-content {
+  border-top: 1px solid #EAEAEA;
+  margin: 0 auto;
+  padding-left: 15px;
+}
+#footer-content a {
+  text-decoration: none;
+}
+#footer-content a:hover {
+  color: #333;
+}
+
+/* footer list */
+#footer-content ul.flist {
+  list-style: none;
+  margin: 0; 
+  padding: 0;
+  border-top: 1px solid #f2f2f2;
+}
+#footer-content ul.flist li {
+    border-bottom: 1px solid #f2f2f2;
+}
+#footer-content ul.flist li a:link,
+#footer-content ul.flist li a:visited {
+  color: #555;
+  display: block;
+  font-weight: normal;
+  padding: 5px 0 ;
+  width: 98%;
+}
+#footer-content ul.flist li a:hover {
+  text-decoration: none;
+  color: #222;
+}
+
+#button_list {
+  float: right;
+  margin-right: 10px;
+}
+
+#footer-content .col {
+  width: 240px;
+  padding: 0 5px 30px 0;
+}
+
+#footer-content .col2 {
+  width: 230px;
+  padding: 0 0 30px 0;
+}
+
+#footer-content .space-sep {
+  margin-right: 20px;
+}
+
+#progressbar {
+  display: none;
+  width: 400px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 10px;
+  position: relative;
+  top: 36px;
+  left: 115px;
+}
+
+.edit-image-list {
+  margin-left: 50px !important;
+}
+
+.author-name {
+  float: left; 
+  margin-right: 10px;
+}
+
+.no-border {  
+  border: 0px !important;
+}
+
+.hidden {
+  display: hidden;
+}
+
+.ui-autocomplete-loading { 
+  background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; 
+}
+
+.ui-autocomplete {
+  text-align: left;
+  border:1px solid #eee !important;
+  font: normal 1em "Trebuchet MS", Tahoma, sans-serif !important;
+  color:#777 !important;
+}
+
+.updownbuttons {
+	width: 24px;
+	height: 48px;
+	overflow: hidden;
+	margin-right: 8px;
+	margin-left: -8px;
+	float: left;
+}
+
+.updownbuttons input {
+  margin-top: 2px;  
+  margin-bottom: 2px;  
+}
+
+#indicator {
+	background: url("images/ajax-loader.gif") no-repeat;
+	height: 16px;
+	width: 16px;
+	visibility: hidden;
+  margin-right: 0px;
+  margin-left: 5px;
+  margin-top: 52px;
+  float: left;
+}
