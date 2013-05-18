@@ -26,59 +26,59 @@ import javax.xml.bind.JAXBException;
 @Singleton
 @Startup
 public class QuoteUpdater {
-	@Inject
-	private Logger log;
+  @Inject
+  private Logger log;
 
-	@Inject
-	private QuoteRetriever quoteRetriever;
+  @Inject
+  private QuoteRetriever quoteRetriever;
 
-	@Inject
-	private ShareSubscription shareSubscription;
+  @Inject
+  private ShareSubscription shareSubscription;
 
-	@Inject
-	@StockMarket
-	private Connection connection;
+  @Inject
+  @StockMarket
+  private Connection connection;
 
-	@Inject
-	@StockMarket
-	private Topic quoteTopic;
+  @Inject
+  @StockMarket
+  private Topic quoteTopic;
 
-	@Schedule(second = "*/30", minute = "*", hour = "*", persistent = false)
-	public void updateQuotes() {
-		List<Share> shares = shareSubscription.list();
-		log.info("Update Quotes for " + shares.size() + " shares");
-		Session session = null;
-		try {
-			List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
+  @Schedule(second = "*/30", minute = "*", hour = "*", persistent = false)
+  public void updateQuotes() {
+    List<Share> shares = shareSubscription.list();
+    log.info("Update Quotes for " + shares.size() + " shares");
+    Session session = null;
+    try {
+      List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
 
-			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			MessageProducer producer = session.createProducer(quoteTopic);
+      session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+      MessageProducer producer = session.createProducer(quoteTopic);
 
-			for (Quote quote : quotes) {
-				log.debug("Sending message for " + quote);
-				producer.send(createMessage(quote, session));
-			}
+      for (Quote quote : quotes) {
+        log.debug("Sending message for " + quote);
+        producer.send(createMessage(quote, session));
+      }
 
-		} catch (JMSException | JAXBException e) {
-			log.error(null, e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    } catch (JMSException | JAXBException e) {
+      log.error(null, e);
+    } finally {
+      closeSession(session);
+    }
+  }
 
-	private Message createMessage(Quote quote, Session session) throws JMSException, JAXBException {
-		TextMessage message = session.createTextMessage(JsonHelper.toJSON(quote));
-		message.setStringProperty("type", "quote");
-		return message;
-	}
+  private Message createMessage(Quote quote, Session session) throws JMSException, JAXBException {
+    TextMessage message = session.createTextMessage(JsonHelper.toJSON(quote));
+    message.setStringProperty("type", "quote");
+    return message;
+  }
 
-	private void closeSession(Session session) {
-		try {
-			if (null != session) {
-				session.close();
-			}
-		} catch (JMSException e) {
-			log.warn(null, e);
-		}
-	}
+  private void closeSession(Session session) {
+    try {
+      if (null != session) {
+        session.close();
+      }
+    } catch (JMSException e) {
+      log.warn(null, e);
+    }
+  }
 }

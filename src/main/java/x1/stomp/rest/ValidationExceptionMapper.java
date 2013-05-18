@@ -14,7 +14,8 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
   public Response toResponse(ConstraintViolationException e) {
     ErrorResponse response = new ErrorResponse();
     for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-      response.add(new ErrorMessage(violation.getMessage(), violation.getPropertyPath().toString(), violation.getInvalidValue()));
+      response.add(new ErrorMessage(violation.getMessage(), violation.getPropertyPath().toString(), violation
+          .getInvalidValue()));
     }
     return Response.status(Status.PRECONDITION_FAILED).entity(response).build();
   }

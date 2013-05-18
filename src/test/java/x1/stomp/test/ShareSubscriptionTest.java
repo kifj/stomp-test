@@ -21,28 +21,27 @@ import org.slf4j.Logger;
 
 @RunWith(Arquillian.class)
 public class ShareSubscriptionTest {
-   @Deployment
-   public static Archive<?> createTestArchive() {
-      return ShrinkWrap.create(WebArchive.class, "stomp-test.war")
-            .addClasses(Share.class, ShareSubscription.class, Resources.class)
-            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsWebInfResource("test-ds.xml", "test-ds.xml");
-   }
+  @Deployment
+  public static Archive<?> createTestArchive() {
+    return ShrinkWrap.create(WebArchive.class, "stomp-test.war")
+        .addClasses(Share.class, ShareSubscription.class, Resources.class)
+        .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml", "test-ds.xml");
+  }
 
-   @Inject
-   private ShareSubscription memberRegistration;
+  @Inject
+  private ShareSubscription shareSubscription;
 
-   @Inject
-   private Logger log;
+  @Inject
+  private Logger log;
 
-   @Test
-   public void testSubscribe() throws Exception {
-      Share share = new Share();
-      share.setKey("MSFT");
-      share.setName("Microsoft Corpora");
-      memberRegistration.subscribe(share);
-      assertNotNull(share.getId());
-      log.info(share.getName() + " was persisted with id " + share.getId());
-   }   
+  @Test
+  public void testSubscribe() throws Exception {
+    Share share = new Share();
+    share.setKey("MSFT");
+    share.setName("Microsoft Corpora");
+    shareSubscription.subscribe(share);
+    assertNotNull(share.getId());
+    log.info(share.getName() + " was persisted with id " + share.getId());
+  }
 }

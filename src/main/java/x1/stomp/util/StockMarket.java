@@ -8,6 +8,6 @@ import javax.inject.Qualifier;
 
 @Qualifier
 @Retention(RUNTIME)
-@Target({FIELD, TYPE, METHOD, PARAMETER})
+@Target({ FIELD, TYPE, METHOD, PARAMETER })
 public @interface StockMarket {
 }

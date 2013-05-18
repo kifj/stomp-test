@@ -9,12 +9,16 @@
 <!--       <property name="deploymentExportPath">target/</property>  -->
 <!--    </engine> -->
 
-   <defaultProtocol type="Servlet 3.0" />
+<!-- <defaultProtocol type="Servlet 3.0" />  -->
 
-   <container qualifier="jboss" default="true">
+   <container qualifier="jbossas-managed" default="true">
       <!-- If you want to use the JBOSS_HOME environment variable, just delete the jbossHome property -->
       <configuration>
-         <property name="jbossHome">c:/work/jboss-eap-6.1</property>
+        <property name="allowConnectingToRunningServer">true</property>
+        <property name="username">admin</property>
+        <property name="password">Cygnus</property>
+        <property name="serverConfig">standalone-full.xml</property>
+<!--         <property name="jbossHome">c:/work/jboss-eap-6.1</property> -->
       </configuration>
    </container>
 
