@@ -16,7 +16,7 @@
       <configuration>
         <property name="allowConnectingToRunningServer">true</property>
         <property name="username">admin</property>
-        <property name="password">Cygnus</property>
+        <property name="password">admin</property>
         <property name="serverConfig">standalone-full.xml</property>
 <!--         <property name="jbossHome">c:/work/jboss-eap-6.1</property> -->
       </configuration>
