@@ -36,6 +36,13 @@ public class ErrorMessage {
   public void setInvalidValue(String invalidValue) {
     this.invalidValue = invalidValue;
   }
+  
+  @Override
+  public String toString() {
+    return "<ErrorMessage [message=" + message + ", path=" + path + ", invalidValue=" + invalidValue + "]>";
+  }
+
+
 
   private String message;
   private String path;

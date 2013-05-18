@@ -116,8 +116,6 @@
 			<version>1.3.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> <version>1.7.2</version> <scope>provided</scope> 
-			</dependency> -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -131,6 +129,12 @@
 		<dependency>
 			<groupId>org.jboss.arquillian.protocol</groupId>
 			<artifactId>arquillian-protocol-servlet</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-jacoco</artifactId>
+			<version>1.0.0.Alpha5</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -164,6 +168,27 @@
 				<artifactId>jboss-as-maven-plugin</artifactId>
 				<version>7.4.Final</version>
 			</plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.6.0.201210061924</version>
+        <executions>
+					<execution>
+            <id>prepare-agent</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>				
+          <execution>
+            <id>report</id>
+            <phase>site</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>   			
 		</plugins>
 	</build>
 
@@ -195,8 +220,14 @@
 				<dependency>
 					<groupId>org.jboss.as</groupId>
 					<artifactId>jboss-as-arquillian-container-managed</artifactId>
+					<version>7.1.1.Final</version><!--$NO-MVN-MAN-VER$-->
 					<scope>test</scope>
 				</dependency>
+				<dependency>
+					<groupId>org.jacoco</groupId>
+					<artifactId>org.jacoco.core</artifactId>
+					<version>0.6.0.201210061924</version>
+				</dependency>		
 			</dependencies>
 			<build>
 				<plugins>

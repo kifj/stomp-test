@@ -1,6 +1,6 @@
 package x1.stomp.test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import javax.inject.Inject;
 
@@ -43,5 +43,12 @@ public class ShareSubscriptionTest {
     shareSubscription.subscribe(share);
     assertNotNull(share.getId());
     log.info(share.getName() + " was persisted with id " + share.getId());
+  
+    share = shareSubscription.find(share.getKey());
+    assertNotNull(share);
+    assertEquals(1, shareSubscription.list().size());
+	  
+    //shareSubscription.unsubscribe(share);	  
+    //assertNull(shareSubscription.find(share.getKey()));
   }
 }

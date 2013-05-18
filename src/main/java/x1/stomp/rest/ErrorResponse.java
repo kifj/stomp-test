@@ -29,6 +29,13 @@ public class ErrorResponse {
     errors.add(errorMessage);
   }
 
+  @Override
+  public String toString() {
+    return "<ErrorResponse [errors=" + errors + "]>";
+  }
+
+
+
   private List<ErrorMessage> errors;
 
 }
