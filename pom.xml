@@ -168,30 +168,29 @@
 				<artifactId>jboss-as-maven-plugin</artifactId>
 				<version>7.4.Final</version>
 			</plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.6.0.201210061924</version>
-        <executions>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.6.0.201210061924</version>
+				<executions>
 					<execution>
-            <id>prepare-agent</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>				
-          <execution>
-            <id>report</id>
-            <phase>site</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>   			
+						<id>prepare-agent</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>site</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 	<profiles>
 		<profile>
 			<id>default</id>
@@ -210,7 +209,6 @@
 				</plugins>
 			</build>
 		</profile>
-
 		<profile>
 			<!-- An optional Arquillian testing profile that executes tests in your JBoss AS instance -->
 			<!-- This profile will start a new JBoss AS instance, and execute the test, shutting it down when done -->
@@ -220,14 +218,13 @@
 				<dependency>
 					<groupId>org.jboss.as</groupId>
 					<artifactId>jboss-as-arquillian-container-managed</artifactId>
-					<version>7.1.1.Final</version><!--$NO-MVN-MAN-VER$-->
 					<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.jacoco</groupId>
 					<artifactId>org.jacoco.core</artifactId>
 					<version>0.6.0.201210061924</version>
-				</dependency>		
+				</dependency>	
 			</dependencies>
 			<build>
 				<plugins>
@@ -241,7 +238,6 @@
 				</plugins>
 			</build>
 		</profile>
-
 		<profile>
 			<!-- An optional Arquillian testing profile that executes tests in a remote JBoss AS instance -->
 			<!-- Run with: mvn clean test -Parq-jbossas-remote -->

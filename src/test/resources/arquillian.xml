@@ -14,8 +14,7 @@
       <property name="username">${jboss.user}</property>
       <property name="password">${jboss.password}</property>
       <property name="serverConfig">standalone-full.xml</property>
-      <!-- If you want to use the JBOSS_HOME environment variable, just delete the jbossHome property -->
-      <!-- <property name="jbossHome">c:/work/jboss-eap-6.1</property> -->
+      <property name="jbossHome">${jboss.home}</property>
     </configuration>
   </container>
 
