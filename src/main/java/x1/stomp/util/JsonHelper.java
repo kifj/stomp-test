@@ -19,6 +19,9 @@ public final class JsonHelper {
   }
 
   public static String toJSON(Object o) throws JAXBException {
+    if (o == null) {
+      return null;
+    }
     JAXBContext context = JAXBContext.newInstance(o.getClass());
     Marshaller marshaller = context.createMarshaller();
     StringWriter sw = new StringWriter();
