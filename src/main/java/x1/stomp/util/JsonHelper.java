@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.AbstractXMLStreamReader;
 import org.codehaus.jettison.AbstractXMLStreamWriter;
 import org.codehaus.jettison.json.JSONObject;
@@ -33,6 +34,9 @@ public final class JsonHelper {
 
   @SuppressWarnings("unchecked")
   public static <T> T fromJSON(String content, Class<? extends T> resultClass) throws Exception {
+    if (StringUtils.isEmpty(content)) {
+      return null;
+    }
     JSONObject jsonObject = new JSONObject(content);
     AbstractXMLStreamReader reader = new MappedXMLStreamReader(jsonObject);
     JAXBContext context = JAXBContext.newInstance(resultClass);

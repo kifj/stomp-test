@@ -29,4 +29,26 @@ public class JsonHelperTest {
     String json = JsonHelper.toJSON(null);
     assertNull(json);
   }
+
+  @Test
+  public void testFromJson1() throws Exception {
+    Command c = (Command) JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", Command.class);
+    assertNotNull(c);
+    assertEquals("foo", c.getAction());
+    assertEquals("MSFT", c.getKey());
+  }
+
+  @Test
+  public void testFromJson2() throws Exception {
+    Command c = (Command) JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\"}}", Command.class);
+    assertNotNull(c);
+    assertEquals("foo", c.getAction());
+    assertNull(c.getKey());
+  }
+
+  @Test
+  public void testFromJson3() throws Exception {
+    Command c = (Command) JsonHelper.fromJSON(null, Command.class);
+    assertNull(c);
+  }
 }
