@@ -7,6 +7,10 @@ public class ErrorMessage {
   public ErrorMessage() {
   }
 
+  public ErrorMessage(String message) {
+    this.message = message;    
+  }
+  
   public ErrorMessage(String message, String path, Object invalidValue) {
     this.message = message;
     this.path = path;

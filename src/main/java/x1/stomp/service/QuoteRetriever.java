@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 
@@ -60,7 +59,7 @@ public class QuoteRetriever {
     return result;
   }
 
-  private String retrieveInternal(String keys) throws ClientProtocolException, IOException {
+  private String retrieveInternal(String keys) throws IOException {
     String targetUrl = MessageFormat.format(URL, keys.toUpperCase());
     String content = Request.Get(targetUrl).execute().returnContent().asString();
     log.debug("Received content size:" + content.length());
