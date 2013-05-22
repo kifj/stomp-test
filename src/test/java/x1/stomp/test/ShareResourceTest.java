@@ -1,5 +1,6 @@
 package x1.stomp.test;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,10 @@ import org.jboss.resteasy.util.GenericType;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
+import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
@@ -28,9 +32,18 @@ public class ShareResourceTest {
 
   @Deployment
   public static Archive<?> createTestArchive() {
+    Collection<JavaArchive> libraries = 
+    DependencyResolvers.use(MavenDependencyResolver.class)
+      .loadMetadataFromPom("pom.xml")
+      .artifact("org.apache.httpcomponents:fluent-hc")
+      .artifact("commons-lang:commons-lang")
+      .artifact("org.codehaus.jettison:jettison")
+      .resolveAs(JavaArchive.class);
+    
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
         .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml", "test-ds.xml");
+        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml", "test-ds.xml")
+        .addAsLibraries(libraries);
   }
 
   @Test
@@ -56,11 +69,10 @@ public class ShareResourceTest {
     assertNotNull(created);
     assertNull(created.getId());
     assertEquals("MSFT", share.getKey());
-
+    Thread.sleep(500);
     request = new ClientRequest(BASE_URL + "/shares/{key}");
     request.accept(MediaType.APPLICATION_JSON);
     request.pathParameter("key", "MSFT");
-
     response = request.get(Share.class);
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
     Share found = response.getEntity();
@@ -91,7 +103,7 @@ public class ShareResourceTest {
 
     request = new ClientRequest(BASE_URL + "/shares/{key}");
     request.accept(MediaType.APPLICATION_JSON);
-    request.pathParameter("key", "MSFT");
+    request.pathParameter("key", "GOOG");
     ClientResponse<Share> response2 = request.get(Share.class);
     assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
 
