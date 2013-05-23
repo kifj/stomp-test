@@ -21,14 +21,18 @@ import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import static org.junit.Assert.*;
-
+import javax.inject.Inject;
 import x1.stomp.model.Share;
 import x1.stomp.rest.ErrorResponse;
 
 @RunWith(Arquillian.class)
 public class ShareResourceTest {
   private static final String BASE_URL = "http://localhost:8080/stomp-test/rest";
+
+  @Inject
+  private Logger log;
 
   @Deployment
   public static Archive<?> createTestArchive() {
@@ -48,15 +52,18 @@ public class ShareResourceTest {
 
   @Test
   public void testFindShareNotFound() throws Exception {
+    log.debug("begin testFindShareNotFound");
     ClientRequest request = new ClientRequest(BASE_URL + "/shares/{key}");
     request.accept(MediaType.APPLICATION_JSON);
     request.pathParameter("key", "AAPL");
     ClientResponse<Share> response = request.get(Share.class);
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    log.debug("end testFindShareNotFound");
   }
 
   @Test
   public void testAddAndFindShare() throws Exception {
+    log.debug("begin testAddAndFindShare");
     Share share = new Share();
     share.setKey("MSFT");
     share.setName("Microsoft");
@@ -69,7 +76,7 @@ public class ShareResourceTest {
     assertNotNull(created);
     assertNull(created.getId());
     assertEquals("MSFT", share.getKey());
-    Thread.sleep(500);
+    Thread.sleep(2500);
     request = new ClientRequest(BASE_URL + "/shares/{key}");
     request.accept(MediaType.APPLICATION_JSON);
     request.pathParameter("key", "MSFT");
@@ -87,10 +94,12 @@ public class ShareResourceTest {
     assertEquals(Status.OK.getStatusCode(), response2.getStatus());
     List<Share> shares = response2.getEntity();
     assertEquals(1, shares.size());
+    log.debug("end testAddAndFindShare");
   }
 
   @Test
   public void testAddShareInvalid() throws Exception {
+    log.debug("begin testAddShareInvalid");
     Share share = new Share();
     share.setKey("GOOG");
     ClientRequest request = new ClientRequest(BASE_URL + "/shares/");
@@ -106,6 +115,6 @@ public class ShareResourceTest {
     request.pathParameter("key", "GOOG");
     ClientResponse<Share> response2 = request.get(Share.class);
     assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
-
+    log.debug("end testAddShareInvalid");
   }
 }
