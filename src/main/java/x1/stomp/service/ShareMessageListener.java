@@ -61,7 +61,7 @@ public class ShareMessageListener implements MessageListener {
   private void onMessage(BytesMessage message) throws Exception {
     byte[] bytes = new byte[(int) message.getBodyLength()];
     message.readBytes(bytes);
-    String body = new String(bytes);
+    String body = new String(bytes, "UTF-8");
     log.debug("Received message: " + body);
     Command command = JsonHelper.fromJSON(body, Command.class);
     if (StringUtils.isEmpty(command.getAction()) || StringUtils.isEmpty(command.getKey())) {
