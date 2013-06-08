@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>x1.jboss</groupId>
   <artifactId>stomp-test</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Stomp Test</name>
-  <description>A test run for Stomp on JBoss AS 7.1</description>
+  <description>A test run for Stomp on JBoss AS</description>
   <url>http://maven.x1/site/x1/stomp-test</url>
   <inceptionYear>2013</inceptionYear>
+
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -38,13 +38,56 @@
       </notifier>
     </notifiers>
   </ciManagement>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.7</maven.compiler.target>
     <maven.compiler.source>1.7</maven.compiler.source>
     <jboss.bom.version>1.0.6.Final</jboss.bom.version>
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
   </properties>
+
+  <distributionManagement>
+    <site>
+      <id>vacation-approval.x1.website</id>
+      <name>X1 Website</name>
+      <url>scp://joe@www.x1/var/maven/site/x1/vacation-approval</url>
+    </site>
+    <repository>
+      <id>x1-repo</id>
+      <name>X1 Maven Repository</name>
+      <url>http://www.x1/nexus/content/repositories/x1-repo</url>
+    </repository>
+    <snapshotRepository>
+      <id>x1-snapshot-repo</id>
+      <name>X1 Maven Snapshot Repository</name>
+      <url>http://www.x1/nexus/content/repositories/x1-snapshot-repo</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <organization>
+    <name>X1</name>
+    <url>https://www.x1</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>joe</id>
+      <name>Johannes Beck</name>
+      <email>mail@johannes-beck.name</email>
+      <url>http://johannes-beck.name</url>
+      <organization>X1</organization>
+      <organizationUrl>https://www.x1</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+      <properties>
+        <skype>johannesbeck</skype>
+      </properties>
+    </developer>
+  </developers>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -63,6 +106,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -218,7 +262,88 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <outputEncoding>UTF-8</outputEncoding>
+          <reportPlugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-project-info-reports-plugin</artifactId>
+              <version>2.7</version>
+              <configuration>
+                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>taglist-maven-plugin</artifactId>
+              <version>2.4</version>
+              <configuration>
+                <aggregate>true</aggregate>
+                <tags>
+                  <tag>TODO</tag>
+                  <tag>FIXME</tag>
+                  <tag>XXX</tag>
+                </tags>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-changelog-plugin</artifactId>
+              <version>2.2</version>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-report-plugin</artifactId>
+              <version>2.14.1</version>
+              <configuration>
+                <testFailureIgnore>true</testFailureIgnore>
+              </configuration>
+              <reportSets>
+                <reportSet>
+                  <reports>
+                    <report>report-only</report>
+                  </reports>
+                </reportSet>
+              </reportSets>
+            </plugin>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>findbugs-maven-plugin</artifactId>
+              <version>2.5.2</version>
+              <configuration>
+                <xmlOutput>true</xmlOutput>
+                <!-- <excludeFilterFile>etc/findbugs-exclude.xml</excludeFilterFile> -->
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-checkstyle-plugin</artifactId>
+              <version>2.10</version>
+              <configuration>
+                <configLocation>etc/checkstyle.xml</configLocation>
+                <!-- <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation> -->
+              </configuration>
+              <reportSets>
+                <reportSet>
+                  <reports>
+                    <report>checkstyle</report>
+                  </reports>
+                </reportSet>
+              </reportSets>
+            </plugin>
+            <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+          </reportPlugins>
+        </configuration>
+      </plugin>	  
     </plugins>
+<<<<<<< HEAD
     <pluginManagement>
     	<plugins>
     		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -252,7 +377,17 @@
     		</plugin>
     	</plugins>
     </pluginManagement>
+=======
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>2.4</version>
+      </extension>
+    </extensions>    
+>>>>>>> 53b0cf2d0877f052737c7d534ebc64f71f59b6e3
   </build>
+
   <profiles>
     <profile>
       <id>default</id>
@@ -272,9 +407,6 @@
       </build>
     </profile>
     <profile>
-      <!-- An optional Arquillian testing profile that executes tests in your JBoss AS instance -->
-      <!-- This profile will start a new JBoss AS instance, and execute the test, shutting it down when done -->
-      <!-- Run with: mvn clean test -Parq-jbossas-managed -->
       <id>arq-jbossas-managed</id>
       <dependencies>
         <dependency>
@@ -303,8 +435,6 @@
       </build>
     </profile>
     <profile>
-      <!-- An optional Arquillian testing profile that executes tests in a remote JBoss AS instance -->
-      <!-- Run with: mvn clean test -Parq-jbossas-remote -->
       <id>arq-jbossas-remote</id>
       <dependencies>
         <dependency>
@@ -326,4 +456,5 @@
       </build>
     </profile>
   </profiles>
+
 </project>
