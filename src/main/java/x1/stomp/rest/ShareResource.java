@@ -81,7 +81,7 @@ public class ShareResource {
       message.setJMSCorrelationID(correlationId);
       producer.send(message);
       log.debug("message sent: " + message);
-      return Response.ok(share).build(); //TODO created
+      return Response.ok(share).build(); // TODO created
     } catch (JMSException e) {
       log.error(null, e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).build();

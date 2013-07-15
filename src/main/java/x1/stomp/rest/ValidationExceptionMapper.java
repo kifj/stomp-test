@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
   @Inject
   private Logger log;
-  
+
   @Override
   public Response toResponse(ConstraintViolationException e) {
     ErrorResponse response = new ErrorResponse();

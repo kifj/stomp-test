@@ -34,8 +34,6 @@ public class ErrorResponse {
     return "<ErrorResponse [errors=" + errors + "]>";
   }
 
-
-
   private List<ErrorMessage> errors;
 
 }

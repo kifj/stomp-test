@@ -1,5 +1,7 @@
 package x1.stomp.service;
 
+import java.io.IOException;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
@@ -58,7 +60,7 @@ public class ShareMessageListener implements MessageListener {
     }
   }
 
-  private void onMessage(BytesMessage message) throws Exception {
+  private void onMessage(BytesMessage message) throws JMSException, IOException {
     byte[] bytes = new byte[(int) message.getBodyLength()];
     message.readBytes(bytes);
     String body = new String(bytes, "UTF-8");
