@@ -24,17 +24,15 @@
   </scm>
   <ciManagement>
     <system>Jenkins</system>
-    <url>http://www.x1/jenkins/job/stmp-test/</url>
+    <url>http://www.x1/jenkins/job/stomp-test/</url>
     <notifiers>
       <notifier>
         <type>mail</type>
+        <address>root@www.x1</address>        
         <sendOnError>true</sendOnError>
         <sendOnFailure>true</sendOnFailure>
         <sendOnSuccess>true</sendOnSuccess>
         <sendOnWarning>true</sendOnWarning>
-        <configuration>
-          <address>root@www.x1</address>
-        </configuration>
       </notifier>
     </notifiers>
   </ciManagement>
@@ -50,9 +48,9 @@
 
   <distributionManagement>
     <site>
-      <id>vacation-approval.x1.website</id>
+      <id>x1-website</id>
       <name>X1 Website</name>
-      <url>scp://joe@www.x1/var/maven/site/x1/vacation-approval</url>
+      <url>scp://joe@www.x1/var/maven/site/x1/stomp-test</url>
     </site>
     <repository>
       <id>x1-repo</id>
@@ -231,7 +229,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
