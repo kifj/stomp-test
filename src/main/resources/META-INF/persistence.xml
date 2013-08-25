@@ -5,10 +5,11 @@
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
    <persistence-unit name="stomp-test">
-      <jta-data-source>java:jboss/datasources/stomp-testDS</jta-data-source>
+      <jta-data-source>java:jboss/datasources/stomptestDS</jta-data-source>
       <properties>
-         <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+         <property name="hibernate.hbm2ddl.auto" value="update" />
          <property name="hibernate.show_sql" value="false" />
+         <property name="hibernate.default_schema" value="stocks"/>
       </properties>
    </persistence-unit>
 </persistence>
