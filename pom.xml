@@ -218,6 +218,12 @@
       <version>2.3.6.Final</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.2-1003-jdbc4</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -286,6 +292,19 @@
                   <tag>FIXME</tag>
                   <tag>XXX</tag>
                 </tags>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>x1.maven.plugins</groupId>
+              <artifactId>schemaspy-maven-plugin</artifactId>
+              <version>1.5</version>
+              <configuration>
+                <host>centos.x1</host>
+                <dbname>test</dbname>
+                <schema>stocks</schema>
+                <username>stocks</username>
+                <password>stocks</password>
+                <type>pgsql</type>
               </configuration>
             </plugin>
             <plugin>
