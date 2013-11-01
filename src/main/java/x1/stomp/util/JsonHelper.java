@@ -9,7 +9,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.AbstractXMLStreamReader;
 import org.codehaus.jettison.AbstractXMLStreamWriter;
 import org.codehaus.jettison.json.JSONException;
