@@ -40,7 +40,7 @@ public class ShareResourceTest {
     DependencyResolvers.use(MavenDependencyResolver.class)
       .loadMetadataFromPom("pom.xml")
       .artifact("org.apache.httpcomponents:fluent-hc")
-      .artifact("commons-lang:commons-lang")
+      .artifact("org.apache.commons:commons-lang3")
       .artifact("org.codehaus.jettison:jettison")
       .resolveAs(JavaArchive.class);
     
