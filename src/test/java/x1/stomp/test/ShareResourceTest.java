@@ -85,14 +85,21 @@ public class ShareResourceTest {
 		assertNotNull(found);
 		assertNull(created.getId());
 		assertEquals("MSFT", share.getKey());
+		
 		request = new ClientRequest(BASE_URL + "/shares");
 		request.accept(MediaType.APPLICATION_JSON);
-
 		ClientResponse<List<Share>> response2 = request.get(new GenericType<List<Share>>() {
 		});
 		assertEquals(Status.OK.getStatusCode(), response2.getStatus());
 		List<Share> shares = response2.getEntity();
 		assertEquals(1, shares.size());
+		
+		request = new ClientRequest(BASE_URL + "/shares/{key}");
+		request.accept(MediaType.APPLICATION_JSON);
+		request.pathParameter("key", share.getKey());
+		ClientResponse<?> response3 = request.delete();
+		assertEquals(Status.OK.getStatusCode(), response3.getStatus());
+		
 		log.debug("end testAddAndFindShare");
 	}
 
