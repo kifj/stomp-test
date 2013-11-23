@@ -42,7 +42,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.7</maven.compiler.target>
     <maven.compiler.source>1.7</maven.compiler.source>
-    <jboss.bom.version>1.0.6.Final</jboss.bom.version>
+    <jboss.bom.version>1.0.7.Final</jboss.bom.version>
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
   </properties>
 
@@ -393,8 +393,7 @@
         <dependency>
           <groupId>org.jboss.as</groupId>
           <artifactId>jboss-as-arquillian-container-managed</artifactId>
-          <version>7.2.0.Final</version><!--$NO-MVN-MAN-VER$-->
-          <scope>test</scope>
+         <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.jacoco</groupId>
