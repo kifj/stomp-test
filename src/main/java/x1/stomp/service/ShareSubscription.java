@@ -31,6 +31,7 @@ public class ShareSubscription {
 
   public void unsubscribe(Share share) {
     log.info("Unsubscribe " + share);
+    share = em.merge(share);
     em.remove(share);
     shareEvent.fire(share);
   }

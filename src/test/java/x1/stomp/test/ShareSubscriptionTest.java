@@ -2,7 +2,9 @@ package x1.stomp.test;
 
 import static org.junit.Assert.*;
 
+import javax.ejb.EJBException;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -48,7 +50,14 @@ public class ShareSubscriptionTest {
     assertNotNull(share);
     assertEquals(1, shareSubscription.list().size());
 	  
-    //shareSubscription.unsubscribe(share);	  
-    //assertNull(shareSubscription.find(share.getKey()));
+    shareSubscription.unsubscribe(share);	  
+    try {
+    	shareSubscription.find(share.getKey());
+    	fail("Expected NoResultException");
+    } catch (EJBException e) {
+    	assertEquals(NoResultException.class, e.getCause().getClass());
+    	log.debug("Excpected " + e.getMessage());
+    }
   }
+
 }
