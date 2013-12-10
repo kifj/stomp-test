@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>x1.jboss</groupId>
   <artifactId>stomp-test</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Stomp Test</name>
-  <description>A test run for Stomp on JBoss AS</description>
+  <description>A test run for Stomp on JBoss Wildfly</description>
   <url>http://maven.x1/site/x1/stomp-test</url>
   <inceptionYear>2013</inceptionYear>
 
@@ -87,22 +87,22 @@
   </developers>
 
   <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.jboss.bom</groupId>
-        <artifactId>jboss-javaee-6.0-with-tools</artifactId>
-        <version>${jboss.bom.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.bom</groupId>
-        <artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
-        <version>${jboss.bom.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-7.0</artifactId>
+				<version>1.0.0.Beta2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>1.1.2.Final</version>
+				<type>pom</type>			
+				<scope>import</scope>			
+			</dependency>
+		</dependencies>
   </dependencyManagement>
 
   <dependencies>
@@ -118,44 +118,35 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss.spec.javax.annotation</groupId>
-      <artifactId>jboss-annotations-api_1.1_spec</artifactId>
-      <scope>provided</scope>
+	    <groupId>org.jboss.resteasy</groupId>
+	    <artifactId>jaxrs-api</artifactId>
+			<scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.jboss.spec.javax.ws.rs</groupId>
-      <artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.javax.persistence</groupId>
-      <artifactId>hibernate-jpa-2.0-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.spec.javax.ejb</groupId>
-      <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-      <scope>provided</scope>
-    </dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.ejb</groupId>
+			<artifactId>jboss-ejb-api_3.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
     <dependency>
       <groupId>org.jboss.spec.javax.jms</groupId>
-      <artifactId>jboss-jms-api_1.1_spec</artifactId>
+      <artifactId>jboss-jms-api_2.0_spec</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>5.0.1.Final</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxb-provider</artifactId>
-      <version>2.3.6.Final</version>
+      <version>3.0.4.Final</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -183,6 +174,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -210,7 +202,7 @@
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxrs</artifactId>
-      <version>2.3.6.Final</version>
+      <version>3.0.4.Final</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -238,7 +230,7 @@
       <plugin>
         <groupId>org.jboss.as.plugins</groupId>
         <artifactId>jboss-as-maven-plugin</artifactId>
-        <version>7.4.Final</version>
+        <version>7.5.Final</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -386,8 +378,9 @@
       <id>arq-jbossas-managed</id>
       <dependencies>
         <dependency>
-          <groupId>org.jboss.as</groupId>
-          <artifactId>jboss-as-arquillian-container-managed</artifactId>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+					<version>8.0.0.Alpha4</version>        
          <scope>test</scope>
         </dependency>
         <dependency>
@@ -413,8 +406,9 @@
       <id>arq-jbossas-remote</id>
       <dependencies>
         <dependency>
-          <groupId>org.jboss.as</groupId>
-          <artifactId>jboss-as-arquillian-container-remote</artifactId>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-remote</artifactId>
+					<version>8.0.0.Alpha4</version>        
           <scope>test</scope>
         </dependency>
       </dependencies>

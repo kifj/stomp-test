@@ -4,14 +4,17 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
-import org.jboss.resteasy.util.GenericType;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -52,10 +55,10 @@ public class ShareResourceTest {
 	@Test
 	public void testFindShareNotFound() throws Exception {
 		log.debug("begin testFindShareNotFound");
-		ClientRequest request = new ClientRequest(BASE_URL + "/shares/{key}");
-		request.accept(MediaType.APPLICATION_JSON);
-		request.pathParameter("key", "AAPL");
-		ClientResponse<Share> response = request.get(Share.class);
+		Client client = ClientBuilder.newClient();
+		Builder request = client.target(BASE_URL + "/shares/{key}")
+				.resolveTemplate("key", "AAPL").request(MediaType.APPLICATION_JSON);
+		Response response = request.get();
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 		log.debug("end testFindShareNotFound");
 	}
@@ -66,38 +69,29 @@ public class ShareResourceTest {
 		Share share = new Share();
 		share.setKey("MSFT");
 		share.setName("Microsoft");
-		ClientRequest request = new ClientRequest(BASE_URL + "/shares/");
-		request.body(MediaType.APPLICATION_JSON, share);
-		request.header("Correlation-Id", UUID.randomUUID().toString());
-		ClientResponse<Share> response = request.post(Share.class);
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		Share created = response.getEntity();
+		
+		Client client = ClientBuilder.newClient();
+		Builder request = client.target(BASE_URL + "/shares/")
+				.request().header("Correlation-Id", UUID.randomUUID().toString());
+		Share created = request.post(Entity.entity(share, MediaType.APPLICATION_JSON), Share.class);
 		assertNotNull(created);
 		assertNull(created.getId());
 		assertEquals("MSFT", share.getKey());
 		Thread.sleep(2500);
-		request = new ClientRequest(BASE_URL + "/shares/{key}");
-		request.accept(MediaType.APPLICATION_JSON);
-		request.pathParameter("key", "MSFT");
-		response = request.get(Share.class);
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		Share found = response.getEntity();
+		request = client.target(BASE_URL + "/shares/{key}")
+				.resolveTemplate("key", "MSFT").request(MediaType.APPLICATION_JSON);
+		Share found = request.get(Share.class);
 		assertNotNull(found);
 		assertNull(created.getId());
 		assertEquals("MSFT", share.getKey());
 		
-		request = new ClientRequest(BASE_URL + "/shares");
-		request.accept(MediaType.APPLICATION_JSON);
-		ClientResponse<List<Share>> response2 = request.get(new GenericType<List<Share>>() {
-		});
-		assertEquals(Status.OK.getStatusCode(), response2.getStatus());
-		List<Share> shares = response2.getEntity();
+		request = client.target(BASE_URL + "/shares").request(MediaType.APPLICATION_JSON);
+		List<Share> shares = request.get(new GenericType<List<Share>>() {});
 		assertEquals(1, shares.size());
 		
-		request = new ClientRequest(BASE_URL + "/shares/{key}");
-		request.accept(MediaType.APPLICATION_JSON);
-		request.pathParameter("key", share.getKey());
-		ClientResponse<?> response3 = request.delete();
+		request = client.target(BASE_URL + "/shares/{key}")
+				.resolveTemplate("key", share.getKey()).request(MediaType.APPLICATION_JSON);
+		Response response3 = request.delete();
 		assertEquals(Status.OK.getStatusCode(), response3.getStatus());
 		
 		log.debug("end testAddAndFindShare");
@@ -108,18 +102,18 @@ public class ShareResourceTest {
 		log.debug("begin testAddShareInvalid");
 		Share share = new Share();
 		share.setKey("GOOG");
-		ClientRequest request = new ClientRequest(BASE_URL + "/shares/");
-		request.body(MediaType.APPLICATION_JSON, share);
-		ClientResponse<ErrorResponse> response = request.post(ErrorResponse.class);
+		Client client = ClientBuilder.newClient();
+		Builder request = client.target(BASE_URL + "/shares").request(MediaType.APPLICATION_JSON);
+
+		Response response = request.post(Entity.entity(share, MediaType.APPLICATION_JSON));
 		assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), response.getStatus());
-		ErrorResponse errorResponse = response.getEntity();
+		ErrorResponse errorResponse = (ErrorResponse)response.getEntity();
 		assertNotNull(errorResponse);
 		assertEquals(2, errorResponse.getErrors().size());
 
-		request = new ClientRequest(BASE_URL + "/shares/{key}");
-		request.accept(MediaType.APPLICATION_JSON);
-		request.pathParameter("key", "GOOG");
-		ClientResponse<Share> response2 = request.get(Share.class);
+		request = client.target(BASE_URL + "/shares/{key}")
+				.resolveTemplate("key", "GOOG").request(MediaType.APPLICATION_JSON);
+		Response response2 = request.get();
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
 		log.debug("end testAddShareInvalid");
 	}
