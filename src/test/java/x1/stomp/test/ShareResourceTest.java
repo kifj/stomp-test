@@ -104,10 +104,10 @@ public class ShareResourceTest {
 		share.setKey("GOOG");
 		Client client = ClientBuilder.newClient();
 		Builder request = client.target(BASE_URL + "/shares").request(MediaType.APPLICATION_JSON);
-
+		
 		Response response = request.post(Entity.entity(share, MediaType.APPLICATION_JSON));
 		assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), response.getStatus());
-		ErrorResponse errorResponse = (ErrorResponse)response.getEntity();
+		ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
 		assertNotNull(errorResponse);
 		assertEquals(2, errorResponse.getErrors().size());
 

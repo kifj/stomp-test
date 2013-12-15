@@ -42,7 +42,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.7</maven.compiler.target>
     <maven.compiler.source>1.7</maven.compiler.source>
-    <jboss.bom.version>1.0.7.Final</jboss.bom.version>
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
   </properties>
 
@@ -199,12 +198,14 @@
       <version>1.7.2</version>
       <scope>test</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxrs</artifactId>
       <version>3.0.4.Final</version>
       <scope>test</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -286,7 +287,7 @@
               <artifactId>schemaspy-maven-plugin</artifactId>
               <version>1.5</version>
               <configuration>
-                <host>centos.x1</host>
+                <host>cygnus.x1</host>
                 <dbname>test</dbname>
                 <schema>stocks</schema>
                 <username>stocks</username>
@@ -408,7 +409,7 @@
         <dependency>
 					<groupId>org.wildfly</groupId>
 					<artifactId>wildfly-arquillian-container-remote</artifactId>
-					<version>8.0.0.Alpha4</version>        
+					<version>8.0.0.Alpha4</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
