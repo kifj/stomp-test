@@ -137,6 +137,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+	    <groupId>javax.websocket</groupId>
+	    <artifactId>javax.websocket-api</artifactId>
+      <scope>provided</scope>
+	    <version>1.0</version>
+		</dependency>
+    <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
 			<version>5.0.1.Final</version>
@@ -198,14 +204,6 @@
       <version>1.7.2</version>
       <scope>test</scope>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-jaxrs</artifactId>
-      <version>3.0.4.Final</version>
-      <scope>test</scope>
-    </dependency>
-    -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -213,7 +211,6 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-
   <build>
     <finalName>${project.artifactId}</finalName>
     <plugins>
@@ -356,7 +353,6 @@
       </extension>
     </extensions>    
   </build>
-
   <profiles>
     <profile>
       <id>default</id>
@@ -426,5 +422,4 @@
       </build>
     </profile>
   </profiles>
-
 </project>
