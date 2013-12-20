@@ -6,7 +6,7 @@ function Client() {
 	this.passcode = "guest_12345!";
 	this.stocksQueue = "jms.queue.stocksQueue";
 	this.quotesTopic = "jms.topic.quotesTopic";
-	this.debug = false;
+	this.debug = true;
 }
 
 //---------------------------------------------------------------------
@@ -52,9 +52,14 @@ Client.prototype.connect = function() {
 		client.subscribe(caller.quotesTopic, function(message) {
 			caller.onmessage(JSON.parse(message.body));
 		});	
-  }
+  };
+  var onerror = function(error) {
+  	caller.messageOn(error.headers.message + ": " + error.body);
+  	caller.disconnect();
+  };
+
   this.stompClient = client;
-  client.connect(this.login, this.passcode, onconnect);
+  client.connect(this.login, this.passcode, onconnect, onerror);
 }
 
 Client.prototype.disconnect = function() {
@@ -72,7 +77,6 @@ Client.prototype.disconnect = function() {
 		});
 	}
 }
-
 
 Client.prototype.subscribe = function(key) {
 	var client = this.stompClient;
