@@ -6,7 +6,7 @@ function Client() {
 	this.passcode = "guest_12345!";
 	this.stocksQueue = "jms.queue.stocksQueue";
 	this.quotesTopic = "jms.topic.quotesTopic";
-	this.debug = true;
+	this.debug = false;
 }
 
 //---------------------------------------------------------------------
