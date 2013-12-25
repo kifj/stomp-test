@@ -69,6 +69,7 @@ public class QuoteUpdater {
   private Message createMessage(Quote quote, Session session) throws JMSException, JAXBException {
     TextMessage message = session.createTextMessage(JsonHelper.toJSON(quote));
     message.setStringProperty("type", "quote");
+    message.setStringProperty("key", quote.getShare().getKey());
     return message;
   }
 

@@ -39,13 +39,13 @@ public class ShareMessageListener implements MessageListener {
   public void onMessage(Message message) {
     try {
       if (message instanceof ObjectMessage) {
-        log.info("Received ObjectMessage from queue: " + message.getJMSDestination());
+        log.info("Received ObjectMessage from queue: {}", message.getJMSDestination());
         onMessage((ObjectMessage) message);
       } else if (message instanceof BytesMessage) {
-        log.info("Received BytesMessage from queue: " + message.getJMSDestination());
+        log.info("Received BytesMessage from queue: {}", message.getJMSDestination());
         onMessage((BytesMessage) message);
       } else {
-        log.warn("Message of wrong type: " + message.getClass().getName());
+        log.warn("Message of wrong type: {}", message.getClass().getName());
       }
     } catch (Exception e) {
       throw new EJBException(e);
@@ -64,10 +64,10 @@ public class ShareMessageListener implements MessageListener {
     byte[] bytes = new byte[(int) message.getBodyLength()];
     message.readBytes(bytes);
     String body = new String(bytes, "UTF-8");
-    log.debug("Received message: " + body);
+    log.debug("Received message: {}", body);
     Command command = JsonHelper.fromJSON(body, Command.class);
     if (StringUtils.isEmpty(command.getAction()) || StringUtils.isEmpty(command.getKey())) {
-      log.warn("Incomplete command: " + command);
+      log.warn("Incomplete command: {}", command);
       return;
     }
     switch (command.getAction().toUpperCase()) {
@@ -78,23 +78,23 @@ public class ShareMessageListener implements MessageListener {
       unsubscribe(command.getKey());
       break;
     default:
-      log.warn("Unknown command: " + body);
+      log.warn("Unknown command: {}", body);
       break;
     }
   }
 
   private void unsubscribe(String key) {
     try {
-      log.info("Unsubscribe: " + key);
+      log.info("Unsubscribe: {}", key);
       Share share = shareSubscription.find(key);
       shareSubscription.unsubscribe(share);
     } catch (NoResultException e) {
-      log.warn("Not found: " + key);
+      log.warn("Not found: {}", key);
     }
   }
 
   private void subscribe(String key) {
-    log.info("Subscribe: " + key);
+    log.info("Subscribe: {}", key);
     Share share = new Share();
     share.setKey(key);
     Quote quote = quoteRetriever.retrieveQuote(share);
