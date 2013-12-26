@@ -37,7 +37,7 @@ import x1.stomp.util.JsonHelper;
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ServerEndpoint("/ws/stocks")
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
-	private static final Map<String, Session> sessions = new HashMap<>();
+	static final Map<String, Session> sessions = new HashMap<>();
 
 	@Inject
 	private ShareSubscription shareSubscription;
@@ -119,7 +119,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 	@Override
 	public void onMessage(Message message) {
 		try {
-			log.info("Received Quote for {}", message.getStringProperty("key"));
+			log.info("Received quote for {}", message.getStringProperty("key"));
 			TextMessage textMessage = (TextMessage) message;
 			for (Session session : new ArrayList<>(sessions.values())) {
 				try {

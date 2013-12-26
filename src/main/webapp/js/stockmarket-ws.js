@@ -83,24 +83,32 @@ Client.prototype.unsubscribe = function(key) {
 		var data = {'command' : {'action': 'unsubscribe', 'key': key}};
 		connection.send(JSON.stringify(data));
     $('#l_share').val("");
-    var id = "key_" + key.replace('.', '');
-  	$("#" + id).remove();
 	}
 }
 
 Client.prototype.onmessage = function(message) {
 	var caller = this;
 	var quote = message.quote;
-	var id = "key_" + quote.share.key.replace('.', '');
-	$("#" + id).remove();
-	var row = "<tr id='" + id + "'>";
-	row += "<td>" + quote.share.key + "</td>";
-	row += "<td>" + quote.share.name + "</td>";
-	row += "<td>" + quote.price + "</td>";
-	row += "<td>" + quote.currency + "</td></tr>";
-	$("#tbl_quotes").append(row);
-	this.messageOn('Received quote for ' + quote.share.key + '.');
-	console.log('Received ' + quote.share.key );
+	var event = message.subscriptionEvent;
+	if (event) {
+		var id = "key_" + event.key.replace('.', '');
+		if (event.action == 'unsubscribe') {
+			$("#" + id).remove();
+		}
+		console.log('Received event ' + event.action  + ' for ' + event.key );
+	}
+	if (quote) {
+		var id = "key_" + quote.share.key.replace('.', '');
+		$("#" + id).remove();
+		var row = "<tr id='" + id + "'>";
+		row += "<td>" + quote.share.key + "</td>";
+		row += "<td>" + quote.share.name + "</td>";
+		row += "<td>" + quote.price + "</td>";
+		row += "<td>" + quote.currency + "</td></tr>";
+		$("#tbl_quotes").append(row);
+		this.messageOn('Received quote for ' + quote.share.key + '.');
+		console.log('Received quote ' + quote.share.key );
+	}
 }
 
 //---------------------------------------------------------------------
