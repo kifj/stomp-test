@@ -37,7 +37,7 @@ import x1.stomp.util.JsonHelper;
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ServerEndpoint("/ws/stocks")
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
-	static final Map<String, Session> sessions = new HashMap<>();
+	static final Map<String, Session> SESSIONS = new HashMap<>();
 
 	@Inject
 	private ShareSubscription shareSubscription;
@@ -51,7 +51,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 	@OnOpen
 	public void onConnectionOpen(Session session) {
 		log.info("Connection opened for session " + session.getId());
-		sessions.put(session.getId(), session);
+		SESSIONS.put(session.getId(), session);
 	}
 
 	@OnMessage
@@ -107,12 +107,12 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 	@OnClose
 	public void onConnectionClose(Session session) {
 		log.info("Connection close for session {}", session.getId());
-		sessions.remove(session.getId());
+		SESSIONS.remove(session.getId());
 	}
 
 	@OnError
 	public void error(Session session, Throwable t) {
-		sessions.remove(session);
+		SESSIONS.remove(session);
 		log.info("Connection error for session {}", session.getId());
 	}
 
@@ -121,11 +121,11 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 		try {
 			log.info("Received quote for {}", message.getStringProperty("key"));
 			TextMessage textMessage = (TextMessage) message;
-			for (Session session : new ArrayList<>(sessions.values())) {
+			for (Session session : new ArrayList<>(SESSIONS.values())) {
 				try {
 					session.getBasicRemote().sendText(textMessage.getText());
 				} catch (ClosedChannelException e) {
-					sessions.remove(session.getId());
+					SESSIONS.remove(session.getId());
 				} catch (Exception e) {
 					log.error(null, e);
 				}

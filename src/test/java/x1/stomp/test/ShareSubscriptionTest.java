@@ -2,6 +2,8 @@ package x1.stomp.test;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import javax.ejb.EJBException;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -10,14 +12,14 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 
 import x1.stomp.model.Share;
-import x1.stomp.model.SubscriptionEvent;
+import x1.stomp.service.QuoteUpdater;
 import x1.stomp.service.ShareSubscription;
-import x1.stomp.util.Resources;
 
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -26,14 +28,22 @@ import org.slf4j.Logger;
 public class ShareSubscriptionTest {
 	@Deployment
 	public static Archive<?> createTestArchive() {
-		return ShrinkWrap.create(WebArchive.class, "stomp-test.war")
-				.addClasses(Share.class, ShareSubscription.class, Resources.class, SubscriptionEvent.class)
+		File[] libraries = Maven
+				.resolver()
+				.loadPomFromFile("pom.xml")
+				.resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3",
+						"org.codehaus.jettison:jettison").withTransitivity().asFile();
+		return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
 				.addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml", "test-ds.xml");
+				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml", "test-ds.xml")
+				.addAsLibraries(libraries);
 	}
 
 	@Inject
 	private ShareSubscription shareSubscription;
+
+	@Inject
+	private QuoteUpdater quoteUpdater;
 
 	@Inject
 	private Logger log;
@@ -61,4 +71,14 @@ public class ShareSubscriptionTest {
 		}
 	}
 
+	@Test
+	public void testQuoteUpdater() throws Exception {
+		Share share = new Share();
+		share.setKey("MSFT");
+		share.setName("Microsoft Corpora");
+		shareSubscription.subscribe(share);
+		quoteUpdater.updateQuotes();
+		Thread.sleep(3000);
+		shareSubscription.unsubscribe(share);
+	}
 }
