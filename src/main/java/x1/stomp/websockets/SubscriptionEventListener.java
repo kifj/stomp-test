@@ -21,11 +21,11 @@ public class SubscriptionEventListener {
 	public void onChangeSubscription(
 			@Observes(during = TransactionPhase.AFTER_SUCCESS) SubscriptionEvent event) {
 		log.info("Received subscription event {} for {}", event.getAction(), event.getKey());
-		for (Session session : new ArrayList<>(ShareSubscriptionWebSocketServerEndpoint.sessions.values())) {
+		for (Session session : new ArrayList<>(ShareSubscriptionWebSocketServerEndpoint.SESSIONS.values())) {
 			try {
 				session.getBasicRemote().sendText(JsonHelper.toJSON(event));
 			} catch (ClosedChannelException e) {
-				ShareSubscriptionWebSocketServerEndpoint.sessions.remove(session.getId());
+				ShareSubscriptionWebSocketServerEndpoint.SESSIONS.remove(session.getId());
 			} catch (Exception e) {
 				log.error(null, e);
 			}
