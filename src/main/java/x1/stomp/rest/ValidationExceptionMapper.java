@@ -12,17 +12,17 @@ import org.slf4j.Logger;
 
 @Provider
 public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
-  @Inject
-  private Logger log;
+	@Inject
+	private Logger log;
 
-  @Override
-  public Response toResponse(ConstraintViolationException e) {
-    ErrorResponse response = new ErrorResponse();
-    for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-      response.add(new ErrorMessage(violation.getMessage(), violation.getPropertyPath().toString(), violation
-          .getInvalidValue()));
-    }
-    log.warn(response.toString());
-    return Response.status(Status.PRECONDITION_FAILED).entity(response).build();
-  }
+	@Override
+	public Response toResponse(ConstraintViolationException e) {
+		ErrorResponse response = new ErrorResponse();
+		for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
+			response.add(new ErrorMessage(violation.getMessage(), violation.getPropertyPath().toString(), violation
+					.getInvalidValue()));
+		}
+		log.warn(response.toString());
+		return Response.status(Status.PRECONDITION_FAILED).entity(response).build();
+	}
 }

@@ -40,82 +40,82 @@ import x1.stomp.util.StockMarket;
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class ShareResource {
-  @Inject
-  private Logger log;
+	@Inject
+	private Logger log;
 
-  @Inject
-  private ShareSubscription shareSubscription;
+	@Inject
+	private ShareSubscription shareSubscription;
 
-  @Inject
-  private Validator validator;
+	@Inject
+	private Validator validator;
 
-  @Inject
-  @StockMarket
-  private Connection connection;
+	@Inject
+	@StockMarket
+	private Connection connection;
 
-  @Inject
-  @StockMarket
-  private Queue stockMarketQueue;
+	@Inject
+	@StockMarket
+	private Queue stockMarketQueue;
 
-  @GET
-  @Wrapped(element = "orders")
-  public List<Share> listAllShares() {
-    return shareSubscription.list();
-  }
+	@GET
+	@Wrapped(element = "orders")
+	public List<Share> listAllShares() {
+		return shareSubscription.list();
+	}
 
-  @GET
-  @Path("/{key}")
-  public Share findShare(@PathParam("key") String key) {
-    return shareSubscription.find(key);
-  }
+	@GET
+	@Path("/{key}")
+	public Share findShare(@PathParam("key") String key) {
+		return shareSubscription.find(key);
+	}
 
-  @POST
-  public Response addShare(Share share, @HeaderParam(value = "Correlation-Id") String correlationId) {
-    validate(share);
-    Session session = null;
-    try {
-      log.info("Add share " + share);
-      session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-      MessageProducer producer = session.createProducer(stockMarketQueue);
-      ObjectMessage message = session.createObjectMessage(share);
-      message.setJMSCorrelationID(correlationId);
-      producer.send(message);
-      log.debug("message sent: " + message);
-      return Response.ok(share).build(); // TODO created
-    } catch (JMSException e) {
-      log.error(null, e);
-      return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-    } finally {
-      closeSession(session);
-    }
-  }
+	@POST
+	public Response addShare(Share share, @HeaderParam(value = "Correlation-Id") String correlationId) {
+		validate(share);
+		Session session = null;
+		try {
+			log.info("Add share " + share);
+			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			MessageProducer producer = session.createProducer(stockMarketQueue);
+			ObjectMessage message = session.createObjectMessage(share);
+			message.setJMSCorrelationID(correlationId);
+			producer.send(message);
+			log.debug("message sent: " + message);
+			return Response.ok(share).build(); // TODO created
+		} catch (JMSException e) {
+			log.error(null, e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} finally {
+			closeSession(session);
+		}
+	}
 
-  @DELETE
-  @Path("/{key}")
-  public Response removeShare(@PathParam("key") String key) {
-    try {
-      Share share = shareSubscription.find(key);
-      shareSubscription.unsubscribe(share);
-      return Response.ok(share).build();
-    } catch (NoResultException e) {
-      return Response.status(Status.NOT_FOUND).build();
-    }
-  }
+	@DELETE
+	@Path("/{key}")
+	public Response removeShare(@PathParam("key") String key) {
+		try {
+			Share share = shareSubscription.find(key);
+			shareSubscription.unsubscribe(share);
+			return Response.ok(share).build();
+		} catch (NoResultException e) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+	}
 
-  private void validate(Share share) {
-    Set<ConstraintViolation<Share>> violations = validator.validate(share);
-    if (!violations.isEmpty()) {
-      throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
-    }
-  }
+	private void validate(Share share) {
+		Set<ConstraintViolation<Share>> violations = validator.validate(share);
+		if (!violations.isEmpty()) {
+			throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
+		}
+	}
 
-  private void closeSession(Session session) {
-    try {
-      if (null != session) {
-        session.close();
-      }
-    } catch (JMSException e) {
-      log.warn(null, e);
-    }
-  }
+	private void closeSession(Session session) {
+		try {
+			if (null != session) {
+				session.close();
+			}
+		} catch (JMSException e) {
+			log.warn(null, e);
+		}
+	}
 }
