@@ -47,11 +47,11 @@
   </properties>
 
   <distributionManagement>
-    <site>
-      <id>x1-website</id>
-      <name>X1 Website</name>
-      <url>scp://joe@www.x1/var/maven/site/x1/stomp-test</url>
-    </site>
+  <site>
+    <id>x1-website</id>
+    <name>X1 Website</name>
+    <url>ftp://test4echo.x1/ftp/pub/maven/site/x1/stomp-test</url>
+  </site>
     <repository>
       <id>x1-repo</id>
       <name>X1 Maven Repository</name>
@@ -353,15 +353,15 @@
             </plugin>
           </reportPlugins>
         </configuration>
-      </plugin>	  
+      </plugin>
     </plugins>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>2.5</version>
+        <artifactId>wagon-ftp</artifactId>
+        <version>2.6</version>
       </extension>
-    </extensions>    
+    </extensions>
   </build>
 
   <profiles>
