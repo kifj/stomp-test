@@ -49,7 +49,7 @@
     <site>
       <id>x1-website</id>
       <name>X1 Website</name>
-      <url>scp://joe@www.x1/var/maven/site/x1/stomp-test</url>
+      <url>ftp://test4echo.x1/ftp/pub/maven/site/x1/stomp-test</url>
     </site>
     <repository>
       <id>x1-repo</id>
@@ -105,8 +105,8 @@
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
         <version>1.1.2.Final</version>
-        <type>pom</type>			
-        <scope>import</scope>			
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -353,11 +353,11 @@
       </plugin>	  
     </plugins>
     <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>2.5</version>
-      </extension>
+        <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ftp</artifactId>
+            <version>2.6</version>
+        </extension>
     </extensions>    
   </build>
   <profiles>
