@@ -17,7 +17,7 @@ import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 
 public class QuoteRetriever {
-  private static final String URL = "http://de.finance.yahoo.com/d/quotes.csv?s={0}&f=sna";
+  private static final String URL = "http://finance.yahoo.com/d/quotes.csv?s={0}&f=sna";
   private static final String CURRENCY = "EUR";
 
   @Inject
@@ -28,7 +28,7 @@ public class QuoteRetriever {
       String content = retrieveInternal(share.getKey());
       return createQuote(content, share);
     } catch (IOException e) {
-      log.warn(null, e);
+      log.warn("Cound not retrieve quotes for " + share.getKey(), e);
       return null;
     }
   }
@@ -41,20 +41,22 @@ public class QuoteRetriever {
       }
       buffer.append(share.getKey());
     }
-
+    
     List<Quote> result = new ArrayList<>();
-    try {
-      String content = retrieveInternal(buffer.toString());
-      StringTokenizer tokenizer = new StringTokenizer(content, "\n\r");
-      while (tokenizer.hasMoreTokens()) {
-        String line = tokenizer.nextToken();
-        Quote quote = createQuote(line, shares);
-        if (quote != null) {
-          result.add(quote);
-        }
-      }
-    } catch (IOException e) {
-      log.warn(null, e);
+    if (buffer.length() > 0) {
+	    try {
+	      String content = retrieveInternal(buffer.toString());
+	      StringTokenizer tokenizer = new StringTokenizer(content, "\n\r");
+	      while (tokenizer.hasMoreTokens()) {
+	        String line = tokenizer.nextToken();
+	        Quote quote = createQuote(line, shares);
+	        if (quote != null) {
+	          result.add(quote);
+	        }
+	      }
+	    } catch (IOException e) {
+	      log.warn("Cound not retrieve quotes for " + buffer, e);
+	    }
     }
     return result;
   }
