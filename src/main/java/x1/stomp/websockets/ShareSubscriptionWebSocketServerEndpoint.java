@@ -119,7 +119,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 	@Override
 	public void onMessage(Message message) {
 		try {
-			log.info("Received quote for {}", message.getStringProperty("key"));
+			log.debug("Received quote for {}", message.getStringProperty("key"));
 			TextMessage textMessage = (TextMessage) message;
 			for (Session session : new ArrayList<>(SESSIONS.values())) {
 				try {
