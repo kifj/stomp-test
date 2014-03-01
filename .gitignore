@@ -9,3 +9,4 @@ MANIFEST.MF
 .idea
 *.iml
 /.factorypath
+/nb-configuration.xml
