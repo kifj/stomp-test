@@ -1,7 +1,7 @@
 var client = new Client();
 
 function Client() {
-	this.url = "ws://localhost:8080/stomp-test/ws/stocks";
+	this.url = "ws://" + location.host + "/stomp-test/ws/stocks";
 }
 
 //---------------------------------------------------------------------
