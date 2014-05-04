@@ -197,7 +197,7 @@
     <dependency>
       <groupId>org.jboss.arquillian.extension</groupId>
       <artifactId>arquillian-jacoco</artifactId>
-      <version>1.0.0.Alpha5</version>
+      <version>1.0.0.Alpha6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -240,7 +240,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.6.0.201210061924</version>
+        <version>0.6.4.201312101107</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -396,7 +396,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.6.0.201210061924</version>
+          <version>0.6.4.201312101107</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
