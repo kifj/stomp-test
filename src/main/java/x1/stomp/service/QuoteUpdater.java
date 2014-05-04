@@ -43,8 +43,15 @@ public class QuoteUpdater {
   @StockMarket
   private Topic quoteTopic;
 
+  private int lastUpdatedCount;
+  
+  public int getLastUpdateCount() {
+    return lastUpdatedCount;
+  }
+  
   @Schedule(second = "*/30", minute = "*", hour = "*", persistent = false)
   public void updateQuotes() {
+    lastUpdatedCount = 0;
     List<Share> shares = shareSubscription.list();
     log.info("Update Quotes for " + shares.size() + " shares");
     Session session = null;
@@ -57,8 +64,8 @@ public class QuoteUpdater {
       for (Quote quote : quotes) {
         log.debug("Sending message for " + quote);
         producer.send(createMessage(quote, session));
+        lastUpdatedCount++;
       }
-
     } catch (JMSException | JAXBException e) {
       log.error(null, e);
     } finally {
