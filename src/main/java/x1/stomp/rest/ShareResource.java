@@ -18,6 +18,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -70,8 +71,7 @@ public class ShareResource {
 	}
 
 	@POST
-	public Response addShare(Share share, @HeaderParam(value = "Correlation-Id") String correlationId) {
-		validate(share);
+	public Response addShare(@Valid Share share, @HeaderParam(value = "Correlation-Id") String correlationId) {
 		Session session = null;
 		try {
 			log.info("Add share " + share);
@@ -99,13 +99,6 @@ public class ShareResource {
 			return Response.ok(share).build();
 		} catch (NoResultException e) {
 			return Response.status(Status.NOT_FOUND).build();
-		}
-	}
-
-	private void validate(Share share) {
-		Set<ConstraintViolation<Share>> violations = validator.validate(share);
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
 		}
 	}
 

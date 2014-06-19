@@ -67,8 +67,8 @@ public class ShareResourceTest {
 	public void testAddAndFindShare() throws Exception {
 		log.debug("begin testAddAndFindShare");
 		Share share = new Share();
-		share.setKey("MSFT");
-		share.setName("Microsoft");
+		share.setKey("BMW.DE");
+		share.setName("Bayerische Motoren Werke AG");
 		
 		Client client = ClientBuilder.newClient();
 		Builder request = client.target(BASE_URL + "/shares/")
@@ -76,14 +76,14 @@ public class ShareResourceTest {
 		Share created = request.post(Entity.entity(share, MediaType.APPLICATION_JSON), Share.class);
 		assertNotNull(created);
 		assertNull(created.getId());
-		assertEquals("MSFT", share.getKey());
+		assertEquals("BMW.DE", share.getKey());
 		Thread.sleep(2500);
 		request = client.target(BASE_URL + "/shares/{key}")
-				.resolveTemplate("key", "MSFT").request(MediaType.APPLICATION_JSON);
+				.resolveTemplate("key", "BMW.DE").request(MediaType.APPLICATION_JSON);
 		Share found = request.get(Share.class);
 		assertNotNull(found);
 		assertNull(created.getId());
-		assertEquals("MSFT", share.getKey());
+		assertEquals("BMW.DE", share.getKey());
 		
 		request = client.target(BASE_URL + "/shares").request(MediaType.APPLICATION_JSON);
 		List<Share> shares = request.get(new GenericType<List<Share>>() {});

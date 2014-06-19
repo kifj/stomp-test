@@ -129,6 +129,18 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+			<version>3.0.8.Final</version>
+      <scope>provided</scope>
+    </dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-validator-provider-11</artifactId>
+			<version>3.0.8.Final</version>
+			<scope>provided</scope>
+		</dependency>
+    <dependency>
       <groupId>org.hibernate.javax.persistence</groupId>
       <artifactId>hibernate-jpa-2.1-api</artifactId>
       <scope>provided</scope>
@@ -152,13 +164,13 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>5.0.3.Final</version>
+      <version>5.1.0.Final</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxb-provider</artifactId>
-      <version>3.0.6.Final</version>
+      <version>3.0.8.Final</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -197,7 +209,7 @@
     <dependency>
       <groupId>org.jboss.arquillian.extension</groupId>
       <artifactId>arquillian-jacoco</artifactId>
-      <version>1.0.0.Alpha5</version>
+      <version>1.0.0.Alpha6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -214,7 +226,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>9.2-1003-jdbc4</version>
+      <version>9.3-1101-jdbc4</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -240,7 +252,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.6.0.201210061924</version>
+        <version>0.6.4.201312101107</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -307,7 +319,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-surefire-report-plugin</artifactId>
-              <version>2.16</version>
+              <version>2.17</version>
               <configuration>
                 <testFailureIgnore>true</testFailureIgnore>
               </configuration>
@@ -322,7 +334,7 @@
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>findbugs-maven-plugin</artifactId>
-              <version>2.5.2</version>
+              <version>2.5.4</version>
               <configuration>
                 <xmlOutput>true</xmlOutput>
                 <!-- <excludeFilterFile>etc/findbugs-exclude.xml</excludeFilterFile> -->
@@ -331,7 +343,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-checkstyle-plugin</artifactId>
-              <version>2.10</version>
+              <version>2.12.1</version>
               <configuration>
                 <configLocation>etc/checkstyle.xml</configLocation>
                 <!-- <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation> -->
@@ -370,7 +382,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.16</version>
+            <version>2.17</version>
             <configuration>
               <skip>true</skip>
             </configuration>
@@ -390,13 +402,13 @@
         <dependency>
           <groupId>org.wildfly</groupId>
           <artifactId>wildfly-arquillian-container-managed</artifactId>
-          <version>8.0.0.Final</version>        
+          <version>8.1.0.Final</version>        
          <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.6.0.201210061924</version>
+          <version>0.6.4.201312101107</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -404,7 +416,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.16</version>
+            <version>2.17</version>
             <configuration>
               <skip>false</skip>
             </configuration>
@@ -424,7 +436,7 @@
         <dependency>
           <groupId>org.wildfly</groupId>
           <artifactId>wildfly-arquillian-container-remote</artifactId>
-          <version>8.0.0.Final</version>
+          <version>8.1.0.Final</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -432,7 +444,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.16</version>
+            <version>2.17</version>
             <configuration>
               <skip>false</skip>
             </configuration>

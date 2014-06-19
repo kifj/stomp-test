@@ -50,12 +50,24 @@ public class ShareSubscriptionTest {
 
 	@Test
 	public void testSubscribe() throws Exception {
-		Share share = new Share();
-		share.setKey("MSFT");
-		share.setName("Microsoft Corpora");
+    Share share = new Share();
+    share.setKey("MSFT");
+    share.setName("Microsoft Corpora");
+    
+	  try {
+	    while (true) {
+        Share existing = shareSubscription.find(share.getKey());
+        shareSubscription.unsubscribe(existing);
+	    }
+    } catch (EJBException e) {
+    }
+	  
 		shareSubscription.subscribe(share);
 		assertNotNull(share.getId());
+    assertNotNull(share.getVersion());
 		log.info("{} was persisted with id {}", share.getName(), share.getId());
+		//nothing happens 
+    shareSubscription.subscribe(share);
 
 		share = shareSubscription.find(share.getKey());
 		assertNotNull(share);
@@ -74,11 +86,13 @@ public class ShareSubscriptionTest {
 	@Test
 	public void testQuoteUpdater() throws Exception {
 		Share share = new Share();
-		share.setKey("MSFT");
-		share.setName("Microsoft Corpora");
+		share.setKey("GOOG");
+		share.setName("Google");
 		shareSubscription.subscribe(share);
 		quoteUpdater.updateQuotes();
+		assertEquals(1, quoteUpdater.getLastUpdateCount());
 		Thread.sleep(3000);
+    share = shareSubscription.find(share.getKey());
 		shareSubscription.unsubscribe(share);
 	}
 }
