@@ -1,8 +1,6 @@
 package x1.stomp.rest;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
@@ -16,10 +14,7 @@ import javax.jms.Session;
 import javax.persistence.NoResultException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -46,9 +41,6 @@ public class ShareResource {
 
 	@Inject
 	private ShareSubscription shareSubscription;
-
-	@Inject
-	private Validator validator;
 
 	@Inject
 	@StockMarket
