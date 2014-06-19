@@ -64,7 +64,10 @@ public class ShareSubscriptionTest {
 	  
 		shareSubscription.subscribe(share);
 		assertNotNull(share.getId());
+    assertNotNull(share.getVersion());
 		log.info("{} was persisted with id {}", share.getName(), share.getId());
+		//nothing happens 
+    shareSubscription.subscribe(share);
 
 		share = shareSubscription.find(share.getKey());
 		assertNotNull(share);
