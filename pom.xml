@@ -47,9 +47,9 @@
 
   <distributionManagement>
     <site>
-      <id>x1-website</id>
-      <name>X1 Website</name>
-      <url>ftp://test4echo.x1/ftp/pub/maven/site/x1/stomp-test</url>
+      <id>x1-site</id>
+      <name>X1 Maven Site</name>
+      <url>dav:http://www.x1/nexus/content/repositories/x1-site/${project.groupId}/${project.artifactId}/${project.version}</url>
     </site>
     <repository>
       <id>x1-repo</id>
@@ -131,15 +131,15 @@
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxrs</artifactId>
-			<version>3.0.8.Final</version>
+      <version>3.0.8.Final</version>
       <scope>provided</scope>
     </dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-validator-provider-11</artifactId>
-			<version>3.0.8.Final</version>
-			<scope>provided</scope>
-		</dependency>
+      <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-validator-provider-11</artifactId>
+      <version>3.0.8.Final</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.hibernate.javax.persistence</groupId>
       <artifactId>hibernate-jpa-2.1-api</artifactId>
@@ -229,13 +229,13 @@
       <version>9.3-1101-jdbc4</version>
       <scope>provided</scope>
     </dependency>
-		<dependency>
+    <dependency>
       <groupId>sun.jdk</groupId>
       <artifactId>jconsole</artifactId>
       <version>jdk</version>
       <scope>system</scope>
       <systemPath>${env.JAVA_HOME}/lib/jconsole.jar</systemPath>
-    </dependency>		    
+    </dependency>
   </dependencies>
   <build>
     <finalName>${project.artifactId}</finalName>
@@ -310,8 +310,8 @@
               <artifactId>schemaspy-maven-plugin</artifactId>
               <version>1.5</version>
               <configuration>
-                <host>cygnus.x1</host>
-                <dbname>test</dbname>
+                <host>db.x1</host>
+                <dbname>stocks</dbname>
                 <schema>stocks</schema>
                 <username>stocks</username>
                 <password>stocks</password>
@@ -374,10 +374,10 @@
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ftp</artifactId>
-        <version>2.6</version>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>2.4</version>
       </extension>
-    </extensions>    
+    </extensions>
   </build>
   <profiles>
     <profile>
