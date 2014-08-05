@@ -234,7 +234,7 @@
       <artifactId>jconsole</artifactId>
       <version>jdk</version>
       <scope>system</scope>
-      <systemPath>${env.JAVA_HOME}/lib/jconsole.jar</systemPath>
+      <systemPath>${java.home}/../lib/jconsole.jar</systemPath>
     </dependency>
   </dependencies>
   <build>
