@@ -8,7 +8,7 @@
   <packaging>war</packaging>
   <name>Stomp Test</name>
   <description>A test run for Stomp on JBoss Wildfly</description>
-  <url>http://maven.x1/site/x1/stomp-test</url>
+  <url>http://maven.x1/site/x1.jboss/stomp-test/${project.version}</url>
   <inceptionYear>2013</inceptionYear>
 
   <licenses>
@@ -230,11 +230,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>sun.jdk</groupId>
-      <artifactId>jconsole</artifactId>
-      <version>jdk</version>
-      <scope>system</scope>
-      <systemPath>${java.home}/../lib/jconsole.jar</systemPath>
+			<groupId>sun.jdk</groupId>
+ 			<artifactId>jconsole</artifactId>
+ 			<version>jdk</version>
+ 			<scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
