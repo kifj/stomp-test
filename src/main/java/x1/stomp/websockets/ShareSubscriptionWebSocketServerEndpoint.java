@@ -82,7 +82,9 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 		try {
 			log.info("Unsubscribe: {}", key);
 			Share share = shareSubscription.find(key);
-			shareSubscription.unsubscribe(share);
+			if (share != null) {
+				shareSubscription.unsubscribe(share);
+			}
 		} catch (Exception e) {
 			log.warn("Unsubscribe {} failed: {}", key, e.getMessage());
 		}

@@ -44,11 +44,12 @@ public class ShareResourceTest {
 				.resolver()
 				.loadPomFromFile("pom.xml")
 				.resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3",
-						"org.codehaus.jettison:jettison").withTransitivity().asFile();
+						"com.wordnik:swagger-jaxrs_2.10").withTransitivity().asFile();
 
 		return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
 				.addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml", "test-ds.xml")
+				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+				.addAsWebInfResource("jboss-deployment-structure.xml")
 				.addAsLibraries(libraries);
 	}
 
@@ -105,7 +106,7 @@ public class ShareResourceTest {
 		Client client = ClientBuilder.newClient();
 		Builder request = client.target(BASE_URL + "/shares").request(MediaType.APPLICATION_JSON);
 		
-		Response response = request.post(Entity.entity(share, MediaType.APPLICATION_JSON));
+		Response response = request.post(Entity.entity(share, MediaType.APPLICATION_XML));
 		assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), response.getStatus());
 		ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
 		assertNotNull(errorResponse);

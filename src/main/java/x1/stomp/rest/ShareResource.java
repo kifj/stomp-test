@@ -11,7 +11,6 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
-import javax.persistence.NoResultException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -27,6 +26,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
+
 import x1.stomp.model.Share;
 import x1.stomp.service.ShareSubscription;
 import x1.stomp.util.StockMarket;
@@ -35,6 +40,7 @@ import x1.stomp.util.StockMarket;
 @RequestScoped
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Api(value = "/shares", description = "Manage your shares of at the stock market")
 public class ShareResource {
 	@Inject
 	private Logger log;
@@ -51,19 +57,35 @@ public class ShareResource {
 	private Queue stockMarketQueue;
 
 	@GET
-	@Wrapped(element = "orders")
+	@Wrapped(element = "shares")
+	@ApiOperation(value = "List all subscriptions")
 	public List<Share> listAllShares() {
 		return shareSubscription.list();
 	}
 
 	@GET
 	@Path("/{key}")
-	public Share findShare(@PathParam("key") String key) {
-		return shareSubscription.find(key);
+	@ApiOperation(value = "Find a share subscription")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found"),
+			@ApiResponse(code = 404, message = "Subscription not found") })
+	public Response findShare(
+			@ApiParam("Stock symbol (e.g. BMW.DE), see http://finance.yahoo.com/q") @PathParam("key") String key) {
+		Share share = shareSubscription.find(key);
+		if (share != null) {
+			return Response.ok(share).build();
+		} else {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 
 	@POST
-	public Response addShare(@Valid Share share, @HeaderParam(value = "Correlation-Id") String correlationId) {
+	@ApiOperation(value = "Add share to your list of subscriptions")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Share queued for subscribing"),
+			@ApiResponse(code = 500, message = "Queuing failed") })
+	public Response addShare(
+			@ApiParam(required = true, value = "The share which is will be added for supscription") @Valid Share share,
+			@ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
+
 		Session session = null;
 		try {
 			log.info("Add share " + share);
@@ -84,12 +106,15 @@ public class ShareResource {
 
 	@DELETE
 	@Path("/{key}")
-	public Response removeShare(@PathParam("key") String key) {
-		try {
-			Share share = shareSubscription.find(key);
+	@ApiOperation(value = "Remove a subscription to a share")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription removed"),
+			@ApiResponse(code = 404, message = "Subscription was not found") })
+	public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
+		Share share = shareSubscription.find(key);
+		if (share != null) {
 			shareSubscription.unsubscribe(share);
 			return Response.ok(share).build();
-		} catch (NoResultException e) {
+		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 	}

@@ -4,9 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
-import javax.ejb.EJBException;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -32,10 +30,11 @@ public class ShareSubscriptionTest {
 				.resolver()
 				.loadPomFromFile("pom.xml")
 				.resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3",
-						"org.codehaus.jettison:jettison").withTransitivity().asFile();
+						"com.wordnik:swagger-jaxrs_2.10").withTransitivity().asFile();
 		return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
 				.addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml", "test-ds.xml")
+				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+				.addAsWebInfResource("jboss-deployment-structure.xml")
 				.addAsLibraries(libraries);
 	}
 
@@ -54,13 +53,14 @@ public class ShareSubscriptionTest {
     share.setKey("MSFT");
     share.setName("Microsoft Corpora");
     
-	  try {
-	    while (true) {
-        Share existing = shareSubscription.find(share.getKey());
-        shareSubscription.unsubscribe(existing);
-	    }
-    } catch (EJBException e) {
-    }
+		while (true) {
+			Share existing = shareSubscription.find(share.getKey());
+			if (existing != null) {
+				shareSubscription.unsubscribe(existing);
+			} else {
+				break;
+			}
+		}
 	  
 		shareSubscription.subscribe(share);
 		assertNotNull(share.getId());
@@ -74,13 +74,7 @@ public class ShareSubscriptionTest {
 		assertEquals(1, shareSubscription.list().size());
 
 		shareSubscription.unsubscribe(share);
-		try {
-			shareSubscription.find(share.getKey());
-			fail("Expected NoResultException");
-		} catch (EJBException e) {
-			assertEquals(NoResultException.class, e.getCause().getClass());
-			log.debug("Expected {}", e.getMessage());
-		}
+		assertNull(shareSubscription.find(share.getKey()));
 	}
 
 	@Test

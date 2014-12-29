@@ -6,6 +6,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @XmlRootElement(name = "response")
 public class ErrorResponse {
 	public ErrorResponse() {
@@ -17,6 +19,7 @@ public class ErrorResponse {
 	}
 
 	@XmlElementRef(name = "error")
+	@JsonProperty(value = "error")
 	public List<ErrorMessage> getErrors() {
 		return errors;
 	}
