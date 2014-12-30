@@ -6,13 +6,14 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.ws.rs.core.Application;
 
 import scala.collection.immutable.List;
 
 import com.wordnik.swagger.config.ConfigFactory;
-import com.wordnik.swagger.config.Scanner;
 import com.wordnik.swagger.config.ScannerFactory;
 import com.wordnik.swagger.config.SwaggerConfig;
+import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
 import com.wordnik.swagger.jaxrs.reader.DefaultJaxrsApiReader;
 import com.wordnik.swagger.model.ApiInfo;
 import com.wordnik.swagger.reader.ClassReaders;
@@ -24,10 +25,11 @@ public class SwaggerServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
 		super.init(servletConfig);
+		// TODO read from POM
 		SwaggerConfig swaggerConfig = new SwaggerConfig();
 		ConfigFactory.setConfig(swaggerConfig);
 		swaggerConfig.setBasePath("http://localhost:8080/stomp-test/rest");
-		swaggerConfig.setApiVersion("1.1.0");
+		swaggerConfig.setApiVersion("1.2.0");
 
 		ApiInfo info = new ApiInfo(
 		/* title */
@@ -43,16 +45,18 @@ public class SwaggerServlet extends HttpServlet {
 		/* license URL */
 		"http://www.apache.org/licenses/LICENSE-2.0.txt");
 		swaggerConfig.setApiInfo(info);
-		ScannerFactory.setScanner(new Scanner() {
-			
+
+		ScannerFactory.setScanner(new DefaultJaxrsScanner() {
 			@Override
-			public List<Class<?>> classes() {
+			public List<Class<?>> classesFromContext(Application application, ServletConfig config) {
 				java.util.List<Class<?>> resources = new ArrayList<Class<?>>();
+				
 				resources.add(ShareResource.class);
+
 				resources.add(com.wordnik.swagger.jaxrs.listing.ApiListingResource.class);
-		    resources.add(com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider.class);
-		    resources.add(com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON.class);
-		    resources.add(com.wordnik.swagger.jaxrs.listing.ResourceListingProvider.class);				
+				resources.add(com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider.class);
+				resources.add(com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON.class);
+				resources.add(com.wordnik.swagger.jaxrs.listing.ResourceListingProvider.class);
 				return scala.collection.JavaConversions.asScalaIterable(resources).toList();
 			}
 		});
