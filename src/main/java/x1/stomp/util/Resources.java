@@ -55,8 +55,8 @@ public class Resources {
     return connectionFactory.createConnection();
   }
 
-  public void closeConnection(@Disposes @StockMarket Connection conn) throws JMSException {
-    conn.close();
+  public void closeConnection(@Disposes @StockMarket Connection connection) throws JMSException {
+    connection.close();
   }
 
 }

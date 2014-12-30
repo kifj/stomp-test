@@ -26,12 +26,9 @@ public class ShareSubscription {
 	private Event<SubscriptionEvent> shareEvent;
 
 	public void subscribe(Share share) {
-		try {
-			if (find(share.getKey()) != null) {
-				log.info("Subscription for {} already exists.", share);
-				return;
-			}
-		} catch (NoResultException e) {
+		if (find(share.getKey()) != null) {
+			log.info("Subscription for {} already exists.", share);
+			return;
 		}
 		log.info("Subscribe {}", share);
 		em.persist(share);
@@ -46,9 +43,13 @@ public class ShareSubscription {
 	}
 
 	public Share find(String key) {
-		TypedQuery<Share> query = em.createQuery("from Share s where s.key = :key", Share.class);
-		query.setParameter("key", key);
-		return query.getSingleResult();
+		try {
+			TypedQuery<Share> query = em.createQuery("from Share s where s.key = :key", Share.class);
+			query.setParameter("key", key);
+			return query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	public List<Share> list() {
