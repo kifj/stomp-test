@@ -266,9 +266,9 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.jboss.as.plugins</groupId>
-        <artifactId>jboss-as-maven-plugin</artifactId>
-        <version>7.5.Final</version>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>1.0.2.Final</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -423,7 +423,6 @@
         <dependency>
           <groupId>org.wildfly</groupId>
           <artifactId>wildfly-arquillian-container-managed</artifactId>
-          <version>8.2.0.Final</version>        
          <scope>test</scope>
         </dependency>
         <dependency>
@@ -457,7 +456,6 @@
         <dependency>
           <groupId>org.wildfly</groupId>
           <artifactId>wildfly-arquillian-container-remote</artifactId>
-          <version>8.2.0.Final</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
