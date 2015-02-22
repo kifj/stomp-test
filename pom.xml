@@ -252,7 +252,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>${project.artifactId}</finalName>
+    <finalName>${project.artifactId}-v${app.majorVersion}.${app.minorVersion}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -265,6 +265,23 @@
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.9</version>
+        <executions>
+          <execution>
+            <id>parse-version</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <propertyPrefix>app</propertyPrefix>
+        </configuration>
+      </plugin>      
       <plugin>
         <groupId>org.wildfly.plugins</groupId>
         <artifactId>wildfly-maven-plugin</artifactId>
@@ -471,5 +488,39 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>rpm</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>rpm-maven-plugin</artifactId>
+            <version>2.1-alpha-4</version>
+            <executions>
+              <execution>
+                <id>build-rpm</id>
+                <goals>
+                  <goal>attached-rpm</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <group>Applications/Internet</group>
+              <!-- <requires> <require>tomcat6</require> </requires> -->
+              <mappings>
+                <mapping>
+                  <directory>/usr/share/java</directory>
+                  <sources>
+                    <source>
+                      <location>${project.build.directory}/${project.build.finalName}.war</location>
+                    </source>
+                  </sources>
+                </mapping>
+              </mappings>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>    
   </profiles>
 </project>
