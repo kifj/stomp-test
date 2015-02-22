@@ -78,7 +78,7 @@ public class ShareResourceTest {
 		assertNotNull(created);
 		assertNull(created.getId());
 		assertEquals("BMW.DE", share.getKey());
-		Thread.sleep(2500);
+		Thread.sleep(10000);
 		request = client.target(BASE_URL + "/shares/{key}")
 				.resolveTemplate("key", "BMW.DE").request(MediaType.APPLICATION_JSON);
 		Share found = request.get(Share.class);
