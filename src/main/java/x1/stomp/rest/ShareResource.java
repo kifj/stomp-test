@@ -121,7 +121,7 @@ public class ShareResource {
 
 	private void closeSession(Session session) {
 		try {
-			if (null != session) {
+			if (session != null) {
 				session.close();
 			}
 		} catch (JMSException e) {

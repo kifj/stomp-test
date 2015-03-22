@@ -510,6 +510,7 @@
               <mappings>
                 <mapping>
                   <directory>/usr/share/java</directory>
+                  <directoryIncluded>false</directoryIncluded>
                   <sources>
                     <source>
                       <location>${project.build.directory}/${project.build.finalName}.war</location>
