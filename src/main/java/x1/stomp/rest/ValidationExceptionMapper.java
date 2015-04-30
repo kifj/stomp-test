@@ -12,16 +12,16 @@ import org.slf4j.Logger;
 
 @Provider
 public class ValidationExceptionMapper implements ExceptionMapper<ResteasyViolationException> {
-	@Inject
-	private Logger log;
+  @Inject
+  private Logger log;
 
-	@Override
-	public Response toResponse(ResteasyViolationException e) {
-		ErrorResponse response = new ErrorResponse();
-		for (ResteasyConstraintViolation violation : e.getViolations()) {
-			response.add(new ErrorMessage(violation.getMessage(), violation.getPath().toString(), violation.getValue()));
-		}
-		log.warn(response.toString());
-		return Response.status(Status.PRECONDITION_FAILED).entity(response).build();
-	}
+  @Override
+  public Response toResponse(ResteasyViolationException e) {
+    ErrorResponse response = new ErrorResponse();
+    for (ResteasyConstraintViolation violation : e.getViolations()) {
+      response.add(new ErrorMessage(violation.getMessage(), violation.getPath().toString(), violation.getValue()));
+    }
+    log.warn(response.toString());
+    return Response.status(Status.PRECONDITION_FAILED).entity(response).build();
+  }
 }

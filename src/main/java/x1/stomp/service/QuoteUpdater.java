@@ -44,11 +44,11 @@ public class QuoteUpdater {
   private Topic quoteTopic;
 
   private int lastUpdatedCount;
-  
+
   public int getLastUpdateCount() {
     return lastUpdatedCount;
   }
-  
+
   @Schedule(second = "*/30", minute = "*", hour = "*", persistent = false)
   public void updateQuotes() {
     lastUpdatedCount = 0;

@@ -42,90 +42,90 @@ import x1.stomp.util.StockMarket;
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Api(value = "/shares", description = "Manage your shares of at the stock market")
 public class ShareResource {
-	@Inject
-	private Logger log;
+  @Inject
+  private Logger log;
 
-	@Inject
-	private ShareSubscription shareSubscription;
+  @Inject
+  private ShareSubscription shareSubscription;
 
-	@Inject
-	@StockMarket
-	private Connection connection;
+  @Inject
+  @StockMarket
+  private Connection connection;
 
-	@Inject
-	@StockMarket
-	private Queue stockMarketQueue;
+  @Inject
+  @StockMarket
+  private Queue stockMarketQueue;
 
-	@GET
-	@Wrapped(element = "shares")
-	@ApiOperation(value = "List all subscriptions")
-	public List<Share> listAllShares() {
-		return shareSubscription.list();
-	}
+  @GET
+  @Wrapped(element = "shares")
+  @ApiOperation(value = "List all subscriptions")
+  public List<Share> listAllShares() {
+    return shareSubscription.list();
+  }
 
-	@GET
-	@Path("/{key}")
-	@ApiOperation(value = "Find a share subscription")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found"),
-			@ApiResponse(code = 404, message = "Subscription not found") })
-	public Response findShare(
-			@ApiParam("Stock symbol (e.g. BMW.DE), see http://finance.yahoo.com/q") @PathParam("key") String key) {
-		Share share = shareSubscription.find(key);
-		if (share != null) {
-			return Response.ok(share).build();
-		} else {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-	}
+  @GET
+  @Path("/{key}")
+  @ApiOperation(value = "Find a share subscription")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found"),
+      @ApiResponse(code = 404, message = "Subscription not found") })
+  public Response findShare(
+      @ApiParam("Stock symbol (e.g. BMW.DE), see http://finance.yahoo.com/q") @PathParam("key") String key) {
+    Share share = shareSubscription.find(key);
+    if (share != null) {
+      return Response.ok(share).build();
+    } else {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+  }
 
-	@POST
-	@ApiOperation(value = "Add share to your list of subscriptions")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Share queued for subscribing"),
-			@ApiResponse(code = 500, message = "Queuing failed") })
-	public Response addShare(
-			@ApiParam(required = true, value = "The share which is will be added for supscription") @Valid Share share,
-			@ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
+  @POST
+  @ApiOperation(value = "Add share to your list of subscriptions")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Share queued for subscribing"),
+      @ApiResponse(code = 500, message = "Queuing failed") })
+  public Response addShare(
+      @ApiParam(required = true, value = "The share which is will be added for supscription") @Valid Share share,
+      @ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
 
-		Session session = null;
-		try {
-			log.info("Add share " + share);
-			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			MessageProducer producer = session.createProducer(stockMarketQueue);
-			ObjectMessage message = session.createObjectMessage(share);
-			message.setJMSCorrelationID(correlationId);
-			producer.send(message);
-			log.debug("message sent: " + message);
-			return Response.ok(share).build(); // TODO created
-		} catch (JMSException e) {
-			log.error(null, e);
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-		} finally {
-			closeSession(session);
-		}
-	}
+    Session session = null;
+    try {
+      log.info("Add share " + share);
+      session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+      MessageProducer producer = session.createProducer(stockMarketQueue);
+      ObjectMessage message = session.createObjectMessage(share);
+      message.setJMSCorrelationID(correlationId);
+      producer.send(message);
+      log.debug("message sent: " + message);
+      return Response.ok(share).build(); // TODO created
+    } catch (JMSException e) {
+      log.error(null, e);
+      return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+    } finally {
+      closeSession(session);
+    }
+  }
 
-	@DELETE
-	@Path("/{key}")
-	@ApiOperation(value = "Remove a subscription to a share")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription removed"),
-			@ApiResponse(code = 404, message = "Subscription was not found") })
-	public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
-		Share share = shareSubscription.find(key);
-		if (share != null) {
-			shareSubscription.unsubscribe(share);
-			return Response.ok(share).build();
-		} else {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-	}
+  @DELETE
+  @Path("/{key}")
+  @ApiOperation(value = "Remove a subscription to a share")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription removed"),
+      @ApiResponse(code = 404, message = "Subscription was not found") })
+  public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
+    Share share = shareSubscription.find(key);
+    if (share != null) {
+      shareSubscription.unsubscribe(share);
+      return Response.ok(share).build();
+    } else {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+  }
 
-	private void closeSession(Session session) {
-		try {
-			if (session != null) {
-				session.close();
-			}
-		} catch (JMSException e) {
-			log.warn(null, e);
-		}
-	}
+  private void closeSession(Session session) {
+    try {
+      if (session != null) {
+        session.close();
+      }
+    } catch (JMSException e) {
+      log.warn(null, e);
+    }
+  }
 }

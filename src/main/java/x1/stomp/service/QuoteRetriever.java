@@ -34,29 +34,29 @@ public class QuoteRetriever {
   }
 
   public List<Quote> retrieveQuotes(List<Share> shares) {
-    StringBuffer buffer = new StringBuffer();
+    StringBuilder buffer = new StringBuilder();
     for (Share share : shares) {
       if (buffer.length() > 0) {
         buffer.append('+');
       }
       buffer.append(share.getKey());
     }
-    
+
     List<Quote> result = new ArrayList<>();
     if (buffer.length() > 0) {
-	    try {
-	      String content = retrieveInternal(buffer.toString());
-	      StringTokenizer tokenizer = new StringTokenizer(content, "\n\r");
-	      while (tokenizer.hasMoreTokens()) {
-	        String line = tokenizer.nextToken();
-	        Quote quote = createQuote(line, shares);
-	        if (quote != null) {
-	          result.add(quote);
-	        }
-	      }
-	    } catch (IOException e) {
-	      log.warn("Cound not retrieve quotes for " + buffer, e);
-	    }
+      try {
+        String content = retrieveInternal(buffer.toString());
+        StringTokenizer tokenizer = new StringTokenizer(content, "\n\r");
+        while (tokenizer.hasMoreTokens()) {
+          String line = tokenizer.nextToken();
+          Quote quote = createQuote(line, shares);
+          if (quote != null) {
+            result.add(quote);
+          }
+        }
+      } catch (IOException e) {
+        log.warn("Cound not retrieve quotes for " + buffer, e);
+      }
     }
     return result;
   }
@@ -77,7 +77,7 @@ public class QuoteRetriever {
     String key = StringUtils.remove(parts[0], "\"").trim();
     String name = StringUtils.remove(parts[1], "\"").trim();
     String price = parts[2].trim();
-    if (price.equalsIgnoreCase("N/A")) {
+    if ("N/A".equalsIgnoreCase(price)) {
       log.warn("No price received for key={}", key);
       return null;
     }
