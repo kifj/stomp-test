@@ -1,7 +1,15 @@
 var client = new Client();
 
 function Client() {
-	this.url = "ws://" + location.host + "/stomp-test-v1.2/ws/stocks";
+	var protocol = 'ws://';
+	if (window.location.protocol == 'https:') {
+		protocol = 'wss://';
+	}
+	var path = '';
+	if (window.location.pathname.length > 1) {
+		path = '/' + window.location.pathname.split( '/' )[1];
+	}
+	this.url = protocol + location.host + path + "ws/stocks";
 }
 
 //---------------------------------------------------------------------

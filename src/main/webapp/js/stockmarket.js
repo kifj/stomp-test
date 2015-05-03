@@ -1,7 +1,12 @@
 var client = new Client();
 
 function Client() {
-	this.url = "ws://" + location.hostname + ":61614/stomp";
+	var protocol = 'ws://';
+	if (window.location.protocol == 'https:') {
+		protocol = 'wss://';
+	}
+	//if we are behind a proxy or load-balancer, the port is wrong
+	this.url = protocol + location.hostname + ":61614/stomp";
 	this.login = "guest";
 	this.passcode = "guest_12345!";
 	this.stocksQueue = "jms.queue.stocksQueue";
