@@ -98,7 +98,7 @@
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.1.5.Final</version>
+        <version>1.1.7.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -231,7 +231,7 @@
     <dependency>
       <groupId>org.jboss.arquillian.extension</groupId>
       <artifactId>arquillian-jacoco</artifactId>
-      <version>1.0.0.Alpha7</version>
+      <version>1.0.0.Alpha8</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -290,7 +290,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.2.201409121644</version>
+        <version>0.7.4.201502262128</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -372,7 +372,7 @@
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>findbugs-maven-plugin</artifactId>
-              <version>3.0.0</version>
+              <version>3.0.1</version>
               <configuration>
                 <xmlOutput>true</xmlOutput>
                 <!-- <excludeFilterFile>etc/findbugs-exclude.xml</excludeFilterFile> -->
@@ -445,7 +445,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.2.201409121644</version>
+          <version>0.7.4.201502262128</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -510,6 +510,7 @@
               <mappings>
                 <mapping>
                   <directory>/usr/share/java</directory>
+                  <directoryIncluded>false</directoryIncluded>
                   <sources>
                     <source>
                       <location>${project.build.directory}/${project.build.finalName}.war</location>

@@ -1,0 +1,30 @@
+if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
+  /subsystem=datasources/data-source=stocksDS:add( \
+    jndi-name=java:jboss/datasources/stocksDS, \
+    connection-url=jdbc:postgresql://db.x1/stocks,\
+    user-name=stocks, \
+    password=stocks, \
+    min-pool-size=2,\
+    max-pool-size=5,\
+    driver-name=postgresql,\
+    driver-class=org.postgresql.Driver,\
+    validate-on-match=true,\
+    background-validation=false,\
+    share-prepared-statements=false,\
+    check-valid-connection-sql="select current_timestamp"\
+    )
+end-if
+
+if (outcome != success) of /subsystem=messaging/hornetq-server=default/jms-queue=stocksQueue:read-resource
+  /subsystem=messaging/hornetq-server=default/jms-queue=stocksQueue:add(\
+    durable=true,\
+    entries=[queue/stocks, java:jboss/exported/jms/queue/stocks],\
+    )
+end-if
+
+if (outcome != success) of /subsystem=messaging/hornetq-server=default/jms-topic=quotesTopic:read-resource
+  /subsystem=messaging/hornetq-server=default/jms-topic=quotesTopic:add(\
+    entries=[topic/quotes, java:jboss/exported/jms/topic/quotes],\
+    )
+end-if
+b
