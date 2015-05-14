@@ -456,6 +456,9 @@
             <version>2.18.1</version>
             <configuration>
               <skip>false</skip>
+              <systemPropertyVariables>
+                <arquillian.launch>jbossas-managed</arquillian.launch>
+              </systemPropertyVariables>	      
             </configuration>
           </plugin>
         </plugins>
@@ -483,6 +486,11 @@
             <version>2.18.1</version>
             <configuration>
               <skip>false</skip>
+              <systemPropertyVariables>
+                <arquillian.launch>jbossas-remote</arquillian.launch>
+                <jboss.managementAddress>127.0.0.1</jboss.managementAddress>
+                <jboss.managementPort>9990</jboss.managementPort>
+              </systemPropertyVariables>	      
             </configuration>
           </plugin>
         </plugins>
@@ -506,7 +514,6 @@
             </executions>
             <configuration>
               <group>Applications/Internet</group>
-              <!-- <requires> <require>tomcat6</require> </requires> -->
               <mappings>
                 <mapping>
                   <directory>/usr/share/java</directory>
