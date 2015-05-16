@@ -29,11 +29,17 @@ public class ShareSubscriptionTest {
 		File[] libraries = Maven
 				.resolver()
 				.loadPomFromFile("pom.xml")
-				.resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3",
-						"com.wordnik:swagger-jaxrs_2.10").withTransitivity().asFile();
-		return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
+				.resolve(
+				    "org.apache.httpcomponents:fluent-hc", 
+				    "org.apache.commons:commons-lang3",
+						"com.wordnik:swagger-jaxrs_2.10")
+				.withTransitivity()
+				.asFile();
+		return ShrinkWrap.create(WebArchive.class, "stomp-test.war")
+		    .addPackages(true, "x1.stomp")
 				.addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+				.addAsWebInfResource("test-ds.xml")
 				.addAsWebInfResource("jboss-deployment-structure.xml")
 				.addAsLibraries(libraries);
 	}

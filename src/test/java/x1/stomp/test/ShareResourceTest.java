@@ -1,5 +1,6 @@
 package x1.stomp.test;
 
+
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
@@ -7,7 +8,6 @@ import java.util.UUID;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,6 +20,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ import x1.stomp.rest.ErrorResponse;
 
 @RunWith(Arquillian.class)
 public class ShareResourceTest {
-	private static final String BASE_URL = "http://localhost:8080/stomp-test/rest";
+	private String baseUrl;
 
 	@Inject
 	private Logger log;
@@ -43,24 +44,34 @@ public class ShareResourceTest {
 		File[] libraries = Maven
 				.resolver()
 				.loadPomFromFile("pom.xml")
-				.resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3",
-						"com.wordnik:swagger-jaxrs_2.10").withTransitivity().asFile();
+				.resolve(
+				    "org.apache.httpcomponents:fluent-hc", 
+				    "org.apache.commons:commons-lang3",
+						"com.wordnik:swagger-jaxrs_2.10")
+				.withTransitivity()
+				.asFile();
 
-		return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
+		return ShrinkWrap.create(WebArchive.class, "stomp-test.war")
+		    .addPackages(true, "x1.stomp")
 				.addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+				.addAsWebInfResource("test-ds.xml")
 				.addAsWebInfResource("jboss-deployment-structure.xml")
 				.addAsLibraries(libraries);
 	}
+	
+  @Before
+  public void setup() {
+    baseUrl = "http://localhost:8080/stomp-test/rest";
+  }
 
 	@Test
 	public void testFindShareNotFound() throws Exception {
 		log.debug("begin testFindShareNotFound");
 		Client client = ClientBuilder.newClient();
-		Builder request = client.target(BASE_URL + "/shares/{key}")
-				.resolveTemplate("key", "AAPL").request(MediaType.APPLICATION_JSON);
-		Response response = request.get();
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    Response response = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "AAPL")
+        .request(MediaType.APPLICATION_JSON).get();
+	assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 		log.debug("end testFindShareNotFound");
 	}
 
@@ -72,27 +83,26 @@ public class ShareResourceTest {
 		share.setName("Bayerische Motoren Werke AG");
 		
 		Client client = ClientBuilder.newClient();
-		Builder request = client.target(BASE_URL + "/shares/")
-				.request().header("Correlation-Id", UUID.randomUUID().toString());
-		Share created = request.post(Entity.entity(share, MediaType.APPLICATION_JSON), Share.class);
+    Share created = client.target(baseUrl + "/shares/").request()
+        .header("Correlation-Id", UUID.randomUUID().toString())
+        .post(Entity.entity(share, MediaType.APPLICATION_JSON), Share.class);
 		assertNotNull(created);
 		assertNull(created.getId());
 		assertEquals("BMW.DE", share.getKey());
 		Thread.sleep(10000);
-		request = client.target(BASE_URL + "/shares/{key}")
-				.resolveTemplate("key", "BMW.DE").request(MediaType.APPLICATION_JSON);
-		Share found = request.get(Share.class);
+    Share found = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "BMW.DE")
+        .request(MediaType.APPLICATION_JSON).get(Share.class);
 		assertNotNull(found);
 		assertNull(created.getId());
 		assertEquals("BMW.DE", share.getKey());
 		
-		request = client.target(BASE_URL + "/shares").request(MediaType.APPLICATION_JSON);
-		List<Share> shares = request.get(new GenericType<List<Share>>() {});
+    List<Share> shares = client.target(baseUrl + "/shares").request(MediaType.APPLICATION_JSON)
+        .get(new GenericType<List<Share>>() {
+        });
 		assertEquals(1, shares.size());
 		
-		request = client.target(BASE_URL + "/shares/{key}")
-				.resolveTemplate("key", share.getKey()).request(MediaType.APPLICATION_JSON);
-		Response response3 = request.delete();
+    Response response3 = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", share.getKey())
+        .request(MediaType.APPLICATION_JSON).delete();
 		assertEquals(Status.OK.getStatusCode(), response3.getStatus());
 		
 		log.debug("end testAddAndFindShare");
@@ -104,17 +114,15 @@ public class ShareResourceTest {
 		Share share = new Share();
 		share.setKey("GOOG");
 		Client client = ClientBuilder.newClient();
-		Builder request = client.target(BASE_URL + "/shares").request(MediaType.APPLICATION_JSON);
-		
-		Response response = request.post(Entity.entity(share, MediaType.APPLICATION_XML));
+    Response response = client.target(baseUrl + "/shares").request(MediaType.APPLICATION_JSON)
+        .post(Entity.entity(share, MediaType.APPLICATION_XML));
 		assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), response.getStatus());
 		ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
 		assertNotNull(errorResponse);
 		assertEquals(2, errorResponse.getErrors().size());
 
-		request = client.target(BASE_URL + "/shares/{key}")
-				.resolveTemplate("key", "GOOG").request(MediaType.APPLICATION_JSON);
-		Response response2 = request.get();
+		Response response2 = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "GOOG")
+        .request(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
 		log.debug("end testAddShareInvalid");
 	}
