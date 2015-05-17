@@ -14,10 +14,6 @@ textarea {
 	  LAYOUT
 ------------------------------- */
 
-#header-content, #content, #footer-content {
-	width: 760px;
-}
-
 /* header */
 #header {
 	height: 100px;
@@ -93,7 +89,6 @@ textarea {
 /* content */
 #content-wrap {
 	clear: both;
-	float: left;
 	width: 100%;
 }
 #content {
@@ -103,12 +98,6 @@ textarea {
 }
 
 /* sidebar */
-#sidebar {
-	float: right;
-	width: 23%;
-	margin: 0 0 10px 0; padding: 0;
-}
-
 #sidebar h1 {
 	padding: 10px 0px 5px 10px;
 	margin: 0;

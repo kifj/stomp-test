@@ -268,11 +268,23 @@ input.button {
   margin-right: 10px;
 }
 
+#header-content, #content, #footer-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: flex-start;
+  align-items: flex-start;
+}
+
 /* main */
 #main {
-  float: left;
-  width: 75%;
-  margin: 0 0 10px 0; padding: 0;
+  order: 2;
+  flex: 1 2 auto;
+  align-self: auto;
+  margin: 0 0 10px 0; 
+  padding: 0;
+  min-width: 320px;
 }
 
 #main h1 {
@@ -284,6 +296,22 @@ input.button {
 
 #main ul li {
   list-style-image: url(images/bullet.png);
+}
+
+#sidebar {
+    order: 3;
+    flex: 0 1 150px;
+    align-self: auto;
+    margin: 0 0 10px 0; 
+	padding: 0;
+}
+
+#menubar {
+    order: 1;
+    flex: 0 1 150px;
+    align-self: auto;
+    margin: 0 0 10px 0; 
+	padding: 0;
 }
 
 .post {
@@ -457,12 +485,12 @@ input.button {
 }
 
 .updownbuttons {
-	width: 24px;
-	height: 48px;
-	overflow: hidden;
-	margin-right: 8px;
-	margin-left: -8px;
-	float: left;
+  width: 24px;
+  height: 48px;
+  overflow: hidden;
+  margin-right: 8px;
+  margin-left: -8px;
+  float: left;
 }
 
 .updownbuttons input {
@@ -471,10 +499,10 @@ input.button {
 }
 
 #indicator {
-	background: url("images/ajax-loader.gif") no-repeat;
-	height: 16px;
-	width: 16px;
-	visibility: hidden;
+  background: url("images/ajax-loader.gif") no-repeat;
+  height: 16px;
+  width: 16px;
+  visibility: hidden;
   margin-right: 0px;
   margin-left: 5px;
   margin-top: 52px;
