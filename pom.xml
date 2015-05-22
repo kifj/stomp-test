@@ -456,6 +456,9 @@
             <version>2.18.1</version>
             <configuration>
               <skip>false</skip>
+              <systemPropertyVariables>
+                <arquillian.launch>jbossas-managed</arquillian.launch>
+              </systemPropertyVariables>	      
             </configuration>
           </plugin>
         </plugins>
@@ -483,10 +486,77 @@
             <version>2.18.1</version>
             <configuration>
               <skip>false</skip>
+              <systemPropertyVariables>
+                <arquillian.launch>jbossas-remote</arquillian.launch>
+                <jboss.managementAddress>127.0.0.1</jboss.managementAddress>
+                <jboss.managementPort>9990</jboss.managementPort>
+              </systemPropertyVariables>	
             </configuration>
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+        <!-- An optional Arquillian testing profile that executes tests in a docker hosted remote JBoss AS instance -->
+        <id>arq-jbossas-docker</id>
+        <dependencies>
+            <dependency>
+                <groupId>org.arquillian.cube</groupId>
+                <artifactId>arquillian-cube-docker</artifactId>
+                <version>1.0.0.Alpha5</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.3.1</version><!--$NO-MVN-MAN-VER$-->
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.3.1</version><!--$NO-MVN-MAN-VER$-->
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxrs</artifactId>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                <artifactId>shrinkwrap-resolver-depchain</artifactId>
+                <scope>test</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-arquillian-container-remote</artifactId>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>org.jacoco.core</artifactId>
+                <version>0.7.4.201502262128</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+        <build>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.18.1</version>
+                    <configuration>
+                        <skip>false</skip>
+                        <systemPropertyVariables>
+                            <arquillian.launch>jbossas-remote</arquillian.launch>
+                            <jboss.managementAddress>dockerServerIp</jboss.managementAddress>
+                            <jboss.managementPort>9990</jboss.managementPort>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </build>
     </profile>
     <profile>
       <id>rpm</id>
@@ -506,7 +576,6 @@
             </executions>
             <configuration>
               <group>Applications/Internet</group>
-              <!-- <requires> <require>tomcat6</require> </requires> -->
               <mappings>
                 <mapping>
                   <directory>/usr/share/java</directory>
