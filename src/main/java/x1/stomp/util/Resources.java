@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Resources {
-  @Inject
-  private Logger log;
 
   @Produces
   @PersistenceContext
@@ -60,7 +58,6 @@ public class Resources {
   }
 
   public void closeConnection(@Disposes @StockMarket Connection connection) throws JMSException {
-    log.info("Closing {} ...", connection);
     connection.close();
   }
 
