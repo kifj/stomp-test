@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -16,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Resources {
+  @Inject
+  private Logger log;
+
   @Produces
   @PersistenceContext
   private EntityManager em;
@@ -56,6 +60,7 @@ public class Resources {
   }
 
   public void closeConnection(@Disposes @StockMarket Connection connection) throws JMSException {
+    log.info("Closing {} ...", connection);
     connection.close();
   }
 
