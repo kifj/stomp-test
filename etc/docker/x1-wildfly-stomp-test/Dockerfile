@@ -2,7 +2,7 @@ FROM j7beck/x1-wildfly-slot0
 MAINTAINER joe <joe@mail.x1>
 
 ADD x1-testing.repo /etc/yum.repos.d/x1-testing.repo
-RUN yum -y install stomp-test && yum clean all
+RUN dnf -y install stomp-test && dnf clean all
 ADD collectd.conf /etc/collectd.d/stomp-test-slot0.conf
 
 COPY scripts /srv/wildfly/scripts
