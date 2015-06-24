@@ -290,7 +290,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.4.201502262128</version>
+        <version>0.7.5.201505241946</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -440,12 +440,13 @@
         <dependency>
           <groupId>org.wildfly</groupId>
           <artifactId>wildfly-arquillian-container-managed</artifactId>
+          <version>9.0.0.CR2</version>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.4.201502262128</version>
+          <version>0.7.5.201505241946</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -476,6 +477,7 @@
         <dependency>
           <groupId>org.wildfly</groupId>
           <artifactId>wildfly-arquillian-container-remote</artifactId>
+          <version>9.0.0.CR2</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -532,12 +534,13 @@
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-arquillian-container-remote</artifactId>
+                <version>8.2.0.Final</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.jacoco</groupId>
                 <artifactId>org.jacoco.core</artifactId>
-                <version>0.7.4.201502262128</version>
+                <version>0.7.5.201505241946</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
