@@ -33,7 +33,7 @@
         <property name="connectionMode">STARTANDSTOP</property>
         <property name="dockerContainers">
           jbossas-remote:
-            image: j7beck/x1-wildfly-slot0
+            image: j7beck/x1-wildfly-slot0:9.0.0.Final
             exposedPorts: [8080/tcp, 9990/tcp]
             attachStdin: true
             attachStderr: true
