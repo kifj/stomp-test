@@ -564,6 +564,8 @@
                             <arquillian.launch>jbossas-remote</arquillian.launch>
                             <jboss.managementAddress>dockerServerIp</jboss.managementAddress>
                             <jboss.managementPort>9990</jboss.managementPort>
+                            <jboss.user>admin</jboss.user>
+                            <jboss.password>12345</jboss.password>
                         </systemPropertyVariables>
                     </configuration>
                 </plugin>
