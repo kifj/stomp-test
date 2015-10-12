@@ -1,4 +1,4 @@
-FROM j7beck/x1-wildfly-slot0:9.0.0.Final
+FROM j7beck/x1-wildfly-slot0:9.0.1.Final
 MAINTAINER joe <joe@mail.x1>
 
 ADD x1-testing.repo /etc/yum.repos.d/x1-testing.repo
