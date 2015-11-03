@@ -2,8 +2,7 @@
 <arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="
         http://jboss.org/schema/arquillian
-        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
-        
+        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">        
     <container qualifier="jbossas-remote" default="false">
         <configuration>
             <property name="managementAddress">${jboss.managementAddress}</property>
@@ -34,7 +33,9 @@
         <property name="connectionMode">STARTANDSTOP</property>
         <property name="dockerContainers">
           jbossas-remote:
-            image: j7beck/x1-wildfly-slot0
+            buildImage:
+               dockerfileLocation: etc/docker/integration-tests
+               remove: true
             exposedPorts: [8080/tcp, 9990/tcp]
             attachStdin: true
             attachStderr: true
