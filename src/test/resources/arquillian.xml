@@ -3,6 +3,7 @@
     xsi:schemaLocation="
         http://jboss.org/schema/arquillian
         http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+        
     <container qualifier="jbossas-remote" default="false">
         <configuration>
             <property name="managementAddress">${jboss.managementAddress}</property>
@@ -12,14 +13,14 @@
         </configuration>
     </container>
 
-    <container qualifier="jbossas-managed" default="true">
+    <container qualifier="jbossas-managed" default="false">
         <configuration>
             <property name="allowConnectingToRunningServer">true</property>
             <property name="username">${jboss.user}</property>
             <property name="password">${jboss.password}</property>
             <property name="serverConfig">standalone-full.xml</property>
             <property name="jbossHome">${jboss.home}</property>
-            <property name="javaVmArguments">-Xms768m -Xmx768m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</property>
+            <property name="javaVmArguments">-Xms768m -Xmx768m -Djava.net.preferIPv4Stack=true -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</property>
         </configuration>
     </container>
 

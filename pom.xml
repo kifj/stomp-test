@@ -28,7 +28,7 @@
     <notifiers>
       <notifier>
         <type>mail</type>
-        <address>admin@mail.x1</address>        
+        <address>admin@mail.x1</address>
         <sendOnError>true</sendOnError>
         <sendOnFailure>true</sendOnFailure>
         <sendOnSuccess>true</sendOnSuccess>
@@ -43,7 +43,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-    <resteasy.version>3.0.10.Final</resteasy.version>
+    <resteasy.version>3.0.11.Final</resteasy.version>
   </properties>
 
   <distributionManagement>
@@ -89,6 +89,13 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.jboss.shrinkwrap.resolver</groupId>
+        <artifactId>shrinkwrap-resolver-bom</artifactId>
+        <version>2.2.0</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
         <version>1.1.9.Final</version>
@@ -98,7 +105,7 @@
       <dependency>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-spec-api</artifactId>
-        <version>8.2.0.Final</version>
+        <version>9.0.2.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -117,8 +124,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>jaxrs-api</artifactId>
+      <groupId>org.jboss.spec.javax.ws.rs</groupId>
+      <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -126,7 +133,7 @@
       <artifactId>resteasy-jaxrs</artifactId>
       <scope>provided</scope>
     </dependency>
-      <dependency>
+    <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-validator-provider-11</artifactId>
       <scope>provided</scope>
@@ -175,7 +182,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>fluent-hc</artifactId>
-      <version>4.2.1</version>
+      <version>4.3.6</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.jettison</groupId>
@@ -186,12 +193,12 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
       <scope>provided</scope>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <scope>provided</scope>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
@@ -200,16 +207,16 @@
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <scope>provided</scope>    
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.spec.javax.servlet</groupId>
       <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-      <scope>provided</scope>    
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.wordnik</groupId>
-      <artifactId>swagger-jaxrs_2.10</artifactId>
+      <artifactId>swagger-jaxrs_2.11</artifactId>
       <version>1.3.12</version>
       <exclusions>
         <exclusion>
@@ -217,7 +224,7 @@
           <groupId>javax.ws.rs</groupId>
         </exclusion>
       </exclusions>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -281,7 +288,7 @@
         <configuration>
           <propertyPrefix>app</propertyPrefix>
         </configuration>
-      </plugin>      
+      </plugin>
       <plugin>
         <groupId>org.wildfly.plugins</groupId>
         <artifactId>wildfly-maven-plugin</artifactId>
@@ -290,7 +297,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.4.201502262128</version>
+        <version>0.7.5.201505241946</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -432,20 +439,24 @@
       <id>arq-jbossas-managed</id>
       <dependencies>
         <dependency>
-          <groupId>org.jboss.shrinkwrap.resolver</groupId>
-          <artifactId>shrinkwrap-resolver-depchain</artifactId>
-          <scope>test</scope>
-          <type>pom</type>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-aether-provider</artifactId>
+          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
         </dependency>
         <dependency>
-          <groupId>org.wildfly</groupId>
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
+          <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
           <artifactId>wildfly-arquillian-container-managed</artifactId>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.4.201502262128</version>
+          <version>0.7.5.201505241946</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -458,7 +469,7 @@
               <skip>false</skip>
               <systemPropertyVariables>
                 <arquillian.launch>jbossas-managed</arquillian.launch>
-              </systemPropertyVariables>	      
+              </systemPropertyVariables>
             </configuration>
           </plugin>
         </plugins>
@@ -468,13 +479,17 @@
       <id>arq-jbossas-remote</id>
       <dependencies>
         <dependency>
-          <groupId>org.jboss.shrinkwrap.resolver</groupId>
-          <artifactId>shrinkwrap-resolver-depchain</artifactId>
-          <scope>test</scope>
-          <type>pom</type>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-aether-provider</artifactId>
+          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
         </dependency>
         <dependency>
-          <groupId>org.wildfly</groupId>
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
+          <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
           <artifactId>wildfly-arquillian-container-remote</artifactId>
           <scope>test</scope>
         </dependency>
@@ -490,73 +505,79 @@
                 <arquillian.launch>jbossas-remote</arquillian.launch>
                 <jboss.managementAddress>127.0.0.1</jboss.managementAddress>
                 <jboss.managementPort>9990</jboss.managementPort>
-              </systemPropertyVariables>	
+              </systemPropertyVariables>
             </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
     <profile>
-        <!-- An optional Arquillian testing profile that executes tests in a docker hosted remote JBoss AS instance -->
-        <id>arq-jbossas-docker</id>
-        <dependencies>
-            <dependency>
-                <groupId>org.arquillian.cube</groupId>
-                <artifactId>arquillian-cube-docker</artifactId>
-                <version>1.0.0.Alpha5</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpcore</artifactId>
-                <version>4.3.1</version><!--$NO-MVN-MAN-VER$-->
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.3.1</version><!--$NO-MVN-MAN-VER$-->
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jaxrs</artifactId>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                <artifactId>shrinkwrap-resolver-depchain</artifactId>
-                <scope>test</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-arquillian-container-remote</artifactId>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jacoco</groupId>
-                <artifactId>org.jacoco.core</artifactId>
-                <version>0.7.4.201502262128</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-        <build>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.18.1</version>
-                    <configuration>
-                        <skip>false</skip>
-                        <systemPropertyVariables>
-                            <arquillian.launch>jbossas-remote</arquillian.launch>
-                            <jboss.managementAddress>dockerServerIp</jboss.managementAddress>
-                            <jboss.managementPort>9990</jboss.managementPort>
-                        </systemPropertyVariables>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </build>
+      <!-- An optional Arquillian testing profile that executes tests in a docker hosted remote JBoss AS instance -->
+      <id>arq-jbossas-docker</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.arquillian.cube</groupId>
+          <artifactId>arquillian-cube-docker</artifactId>
+          <version>1.0.0.Alpha7</version>
+          <scope>test</scope>
+        </dependency>
+        <!-- 
+        <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpcore</artifactId>
+          <version>4.3.6</version>< ! - - $NO-MVN-MAN-VER$ - - >
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+          <version>4.3.6</version><! - -$NO-MVN-MAN-VER$ - - >
+          <scope>test</scope>
+        </dependency>
+        -->
+        <dependency>
+          <groupId>org.jboss.resteasy</groupId>
+          <artifactId>resteasy-jaxrs</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-aether-provider</artifactId>
+          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
+          <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
+          <artifactId>wildfly-arquillian-container-remote</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.jacoco</groupId>
+          <artifactId>org.jacoco.core</artifactId>
+          <version>0.7.5.201505241946</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.18.1</version>
+            <configuration>
+              <skip>false</skip>
+              <systemPropertyVariables>
+                <arquillian.launch>jbossas-remote</arquillian.launch>
+                <jboss.managementAddress>dockerServerIp</jboss.managementAddress>
+                <jboss.managementPort>9990</jboss.managementPort>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>rpm</id>
