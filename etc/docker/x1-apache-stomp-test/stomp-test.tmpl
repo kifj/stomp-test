@@ -1,0 +1,35 @@
+{{if gt (len (ls "/services/stomp-test/")) 0}}  <Proxy balancer://httpbalancer>
+{{ range gets "/services/stomp-test/*:8009" }}{{ $node := index (split (index (split .Key "/") 3) ":") 1 }}
+    BalancerMember ajp://{{.Value}} route={{ $node }} connectiontimeout=2 retry=30{{ end }}
+    
+  </Proxy>
+  <Proxy balancer://wsbalancer>
+{{ range gets "/services/stomp-test/*:8080" }}
+    BalancerMember ws://{{.Value}} connectiontimeout=2 retry=30{{ end }}
+    
+  </Proxy>
+  <Proxy balancer://stompbalancer>
+{{ range gets "/services/stomp-test/*:61614" }}
+    BalancerMember ws://{{.Value}} connectiontimeout=2 retry=30{{ end }}
+    
+  </Proxy>{{ end }}
+    
+  ProxyPass /balancer-manager !
+  ProxyPass /server-status !
+  ProxyPass /ws/stocks balancer://wsbalancer/ws/stocks
+  ProxyPass /stomp balancer://stompbalancer/stomp
+  ProxyPass / balancer://httpbalancer/
+  ProxyPassReverse / balancer://httpbalancer/
+
+  <IfModule status_module>
+    <Location /server-status>
+      SetHandler server-status
+      Require local
+    </Location> 
+  </IfModule>
+  <Location /balancer-manager>
+    SetHandler balancer-manager
+    Require local
+    Require ip 192.168 2001:4dd0:fd6f::/56
+    Require host .x1
+  </Location>

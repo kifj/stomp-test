@@ -7,4 +7,5 @@ ADD postgresql.conf /etc/collectd.d/postgresql.conf
 RUN su postgres -c "/tmp/create-db.sh stocks"
 RUN rm -rf /tmp/create-db.sh /tmp/sql
 
+VOLUME /var/lib/pgsql/data
 ENV SERVICE_NAME stomp-test-db
