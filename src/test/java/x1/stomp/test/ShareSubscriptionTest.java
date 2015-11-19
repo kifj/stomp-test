@@ -32,7 +32,7 @@ public class ShareSubscriptionTest {
 				.resolve(
 				    "org.apache.httpcomponents:fluent-hc", 
 				    "org.apache.commons:commons-lang3",
-						"com.wordnik:swagger-jaxrs_2.10")
+						"com.wordnik:swagger-jaxrs_2.11")
 				.withTransitivity()
 				.asFile();
 		return ShrinkWrap.create(WebArchive.class, "stomp-test.war")

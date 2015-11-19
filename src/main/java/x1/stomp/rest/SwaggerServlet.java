@@ -57,7 +57,7 @@ public class SwaggerServlet extends HttpServlet {
         resources.add(com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider.class);
         resources.add(com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON.class);
         resources.add(com.wordnik.swagger.jaxrs.listing.ResourceListingProvider.class);
-        return scala.collection.JavaConversions.asScalaIterable(resources).toList();
+        return scala.collection.JavaConversions.collectionAsScalaIterable(resources).toList();
       }
     });
     ClassReaders.setReader(new DefaultJaxrsApiReader());
