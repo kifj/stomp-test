@@ -78,14 +78,14 @@ public class ShareResource {
     }
   }
 
-  @POST
-  @ApiOperation(value = "Add share to your list of subscriptions")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "Share queued for subscribing"),
-      @ApiResponse(code = 500, message = "Queuing failed") })
-  public Response addShare(
-      @ApiParam(required = true, value = "The share which is will be added for supscription") @Valid Share share,
-      @ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
-
+	@POST
+	@ApiOperation(value = "Add share to your list of subscriptions")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Share queued for subscribing"),
+			@ApiResponse(code = 500, message = "Queuing failed") })
+	public Response addShare(
+			@ApiParam(required = true, value = "The share which is will be added for subscription") @Valid Share share,
+			@ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") 
+			@HeaderParam(value = "Correlation-Id") String correlationId) {
     Session session = null;
     try {
       log.info("Add share " + share);
