@@ -5,9 +5,12 @@ export JBOSS_HOME=/opt/wildfly-9.0.2.Final
 export RUN_CONF=$WILDFLY_DIR/standalone.conf
 export MAIL_SERVER=localhost
 export MANAGEMENT=local
+MGMT_USER=admin
+MGMT_PASSWORD=12345
 
-$JBOSS_HOME/bin/add-user.sh -s  -a -u $MGMT_USER -g admin,guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p $MGMT_PASSWORD
-$JBOSS_HOME/bin/add-user.sh -s  -a -u guest -g guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p guest_12345!
+$JBOSS_HOME/bin/add-user.sh -s -u $MGMT_USER -r ManagementRealm -sc $JBOSS_BASE_DIR/configuration -p $MGMT_PASSWORD
+$JBOSS_HOME/bin/add-user.sh -s -a -u $MGMT_USER -g admin,guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p $MGMT_PASSWORD
+$JBOSS_HOME/bin/add-user.sh -s -a -u guest -g guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p guest_12345!
 
 $JBOSS_HOME/bin/standalone.sh -c profile-slot0.xml &
 sleep 20

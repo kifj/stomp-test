@@ -24,7 +24,7 @@
   </scm>
   <ciManagement>
     <system>Jenkins</system>
-    <url>http://www.x1/jenkins/job/stomp-test-wildfly/</url>
+    <url>http://www.x1/jenkins/job/stomp-test-wildfly-9/</url>
     <notifiers>
       <notifier>
         <type>mail</type>
@@ -512,6 +512,8 @@
                 <arquillian.launch>jbossas-remote</arquillian.launch>
                 <jboss.managementAddress>127.0.0.1</jboss.managementAddress>
                 <jboss.managementPort>9990</jboss.managementPort>
+                <jboss.user>admin</jboss.user>
+                <jboss.password>12345</jboss.password>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -528,20 +530,6 @@
           <version>1.0.0.Alpha7</version>
           <scope>test</scope>
         </dependency>
-        <!-- 
-        <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpcore</artifactId>
-          <version>4.3.6</version>< ! - - $NO-MVN-MAN-VER$ - - >
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpclient</artifactId>
-          <version>4.3.6</version><! - -$NO-MVN-MAN-VER$ - - >
-          <scope>test</scope>
-        </dependency>
-        -->
         <dependency>
           <groupId>org.jboss.resteasy</groupId>
           <artifactId>resteasy-jaxrs</artifactId>
@@ -581,6 +569,8 @@
                 <arquillian.launch>jbossas-remote</arquillian.launch>
                 <jboss.managementAddress>dockerServerIp</jboss.managementAddress>
                 <jboss.managementPort>9990</jboss.managementPort>
+                <jboss.user>admin</jboss.user>
+                <jboss.password>12345</jboss.password>
               </systemPropertyVariables>
             </configuration>
           </plugin>

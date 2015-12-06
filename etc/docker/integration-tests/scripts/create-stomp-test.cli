@@ -10,4 +10,3 @@ if (outcome != success) of /subsystem=messaging/hornetq-server=default/jms-topic
     entries=[topic/quotes, java:jboss/exported/jms/topic/quotes],\
     )
 end-if
-b
