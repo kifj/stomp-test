@@ -470,7 +470,7 @@ input.button {
 }
 
 .hidden {
-  display: hidden;
+  display: none;
 }
 
 .ui-autocomplete-loading { 
