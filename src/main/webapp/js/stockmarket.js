@@ -37,16 +37,16 @@ Client.prototype.connect = function() {
 	var caller = this;
 	var client = Stomp.client(this.url);
 	
-  if (this.debug) {
-    // this allows to display debug logs directly on the web page
-    client.debug = function(str) {
-      $("#debug").append(str + "\n");
-    };
-  } else {
-  	$("#sidebar").fadeOut();
-  }
-  // the client is notified when it is connected to the server.
-  var onconnect = function(frame) {
+	if (this.debug) {
+		// this allows to display debug logs directly on the web page
+		client.debug = function(str) {
+			$("#debug").append(str + "\n");
+		};
+	} else {
+		$("#sidebar").fadeOut();
+	}
+	// the client is notified when it is connected to the server.
+	var onconnect = function(frame) {
     caller.messageOn("Connected.");
 		$('#button_connect').fadeOut({
 			duration : 'fast'
@@ -57,14 +57,14 @@ Client.prototype.connect = function() {
 		client.subscribe(caller.quotesTopic, function(message) {
 			caller.onmessage(JSON.parse(message.body));
 		});	
-  };
-  var onerror = function(error) {
-  	caller.messageOn(error.headers.message + ": " + error.body);
-  	caller.disconnect();
-  };
+	};
+	var onerror = function(error) {
+		caller.messageOn(error.headers.message + ": " + error.body);
+  		aller.disconnect();
+	};
 
-  this.stompClient = client;
-  client.connect(this.login, this.passcode, onconnect, onerror);
+	this.stompClient = client;
+	client.connect(this.login, this.passcode, onconnect, onerror);
 }
 
 Client.prototype.disconnect = function() {
@@ -78,7 +78,7 @@ Client.prototype.disconnect = function() {
 			});
 			$('#button_connect').fadeIn();
 			$('#l_share').attr('disabled', 'disabled');
-	    caller.messageOn("Disconnected.");
+			caller.messageOn("Disconnected.");
 		});
 	}
 }
@@ -88,8 +88,8 @@ Client.prototype.subscribe = function(key) {
 	if (client && key) {
 		this.messageOn('Subscribe ' + key);
 		var data = {'command' : {'action': 'subscribe', 'key': key}};
-    client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
-    $('#l_share').val("");
+		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
+		$('#l_share').val("");
 	}
 }
 
@@ -98,10 +98,10 @@ Client.prototype.unsubscribe = function(key) {
 	if (client && key) {
 		this.messageOn('Unsubscribe ' + key);
 		var data = {'command' : {'action': 'unsubscribe', 'key': key}};
-    client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
-    $('#l_share').val("");
-    var id = "key_" + key.replace('.', '');
-  	$("#" + id).remove();
+		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
+		$('#l_share').val("");
+		var id = "key_" + key.replace('.', '');
+		$("#" + id).remove();
 	}
 }
 

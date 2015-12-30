@@ -1,5 +1,6 @@
 package x1.stomp.rest;
 
+import java.net.URI;
 import java.util.List;
 
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
@@ -31,6 +32,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 
 import x1.stomp.model.Share;
 import x1.stomp.service.ShareSubscription;
@@ -95,7 +97,8 @@ public class ShareResource {
       message.setJMSCorrelationID(correlationId);
       producer.send(message);
       log.debug("message sent: " + message);
-      return Response.ok(share).build(); // TODO created
+      URI location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
+      return Response.created(location).build();
     } catch (JMSException e) {
       log.error(null, e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).build();

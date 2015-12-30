@@ -47,7 +47,7 @@ public class ShareResourceTest {
 				.resolve(
 				    "org.apache.httpcomponents:fluent-hc", 
 				    "org.apache.commons:commons-lang3",
-						"com.wordnik:swagger-jaxrs_2.11")
+						"io.swagger:swagger-jaxrs")
 				.withTransitivity()
 				.asFile();
 
@@ -83,18 +83,19 @@ public class ShareResourceTest {
 		share.setName("Bayerische Motoren Werke AG");
 		
 		Client client = ClientBuilder.newClient();
-    Share created = client.target(baseUrl + "/shares/").request()
+    Response resp = client.target(baseUrl + "/shares/").request()
         .header("Correlation-Id", UUID.randomUUID().toString())
-        .post(Entity.entity(share, MediaType.APPLICATION_JSON), Share.class);
-		assertNotNull(created);
-		assertNull(created.getId());
-		assertEquals("BMW.DE", share.getKey());
+        .post(Entity.entity(share, MediaType.APPLICATION_JSON));
+		assertNotNull(resp);
+		assertEquals(Status.CREATED.getStatusCode(), resp.getStatus());
+		assertEquals(baseUrl + "/shares/" + share.getKey(), resp.getLocation().toString());
+		resp.close();
 		Thread.sleep(10000);
     Share found = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "BMW.DE")
         .request(MediaType.APPLICATION_JSON).get(Share.class);
 		assertNotNull(found);
-		assertNull(created.getId());
-		assertEquals("BMW.DE", share.getKey());
+		assertNull(found.getId());
+		assertEquals("BMW.DE", found.getKey());
 		
     List<Share> shares = client.target(baseUrl + "/shares").request(MediaType.APPLICATION_JSON)
         .get(new GenericType<List<Share>>() {

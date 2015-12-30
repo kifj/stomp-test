@@ -37,24 +37,24 @@ Client.prototype.connect = function() {
 	var connection = new WebSocket(this.url);
 	$("#sidebar").fadeOut();
 	
-  connection.onopen = function() {
-    caller.messageOn("Connected.");
+	connection.onopen = function() {
+		caller.messageOn("Connected.");
 		$('#button_connect').fadeOut({
 			duration : 'fast'
 		});
 		$('#button_disconnect').fadeIn();
 		$('#l_share').removeAttr('disabled');
-  };
-  connection.onclose = function(event) {
-    caller.disconnect(true);  	
-  };
-  connection.onmessage = function(e){
-  	caller.onmessage(JSON.parse(e.data));
-  };
-  connection.onerror = function(event) {
-  	caller.errorStatusOn("Operation not successful.")
-  };
-  this.connection = connection;
+  	};
+  	connection.onclose = function(event) {
+	  caller.disconnect(true);  	
+  	};
+  	connection.onmessage = function(e){
+  		caller.onmessage(JSON.parse(e.data));
+  	};
+  	connection.onerror = function(event) {
+  		caller.errorStatusOn("Operation not successful.")
+  	};
+  	this.connection = connection;
 }
 
 Client.prototype.disconnect = function(isClosed) {
@@ -70,7 +70,7 @@ Client.prototype.disconnect = function(isClosed) {
 		});
 		$('#button_connect').fadeIn();
 		$('#l_share').attr('disabled', 'disabled');
-    caller.messageOn("Disconnected.");
+		caller.messageOn("Disconnected.");
 	}
 }
 
@@ -80,7 +80,7 @@ Client.prototype.subscribe = function(key) {
 		this.messageOn('Subscribe ' + key);
 		var data = {'command' : {'action': 'subscribe', 'key': key}};
 		connection.send(JSON.stringify(data));
-    $('#l_share').val("");
+		$('#l_share').val("");
 	}
 }
 
@@ -90,7 +90,7 @@ Client.prototype.unsubscribe = function(key) {
 		this.messageOn('Unsubscribe ' + key);
 		var data = {'command' : {'action': 'unsubscribe', 'key': key}};
 		connection.send(JSON.stringify(data));
-    $('#l_share').val("");
+		$('#l_share').val("");
 	}
 }
 
