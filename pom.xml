@@ -285,13 +285,32 @@
         <version>2.6</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
+           <archive>
+              <manifest>
+                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+              <manifestSections>
+              <manifestSection>
+                <name>Application</name>
+                  <manifestEntries>
+                     <Application-Title>${project.name}</Application-Title>
+                     <Application-Description>${project.description}</Application-Description>
+                     <Application-Version>${app.majorVersion}.${app.minorVersion}</Application-Version>
+                     <Application-License>${project.licenses[0].name}</Application-License>
+                     <Application-LicenseUrl>${project.licenses[0].url}</Application-LicenseUrl>
+                     <Application-Contact>${project.developers[0].email}</Application-Contact>
+                  </manifestEntries>
+                </manifestSection>
+              </manifestSections>
+           </archive>
+        </configuration>        
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.9</version>
-        <executions>
+        <version>1.10</version>
+        <executions>          
           <execution>
             <id>parse-version</id>
             <phase>initialize</phase>
@@ -544,20 +563,6 @@
           <version>1.0.0.Alpha7</version>
           <scope>test</scope>
         </dependency>
-        <!-- 
-        <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpcore</artifactId>
-          <version>4.3.6</version>< ! - - $NO-MVN-MAN-VER$ - - >
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpclient</artifactId>
-          <version>4.3.6</version><! - -$NO-MVN-MAN-VER$ - - >
-          <scope>test</scope>
-        </dependency>
-        -->
         <dependency>
           <groupId>org.jboss.resteasy</groupId>
           <artifactId>resteasy-jaxrs</artifactId>

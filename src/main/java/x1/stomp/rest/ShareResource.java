@@ -61,6 +61,7 @@ public class ShareResource {
   @GET
   @Wrapped(element = "shares")
   @ApiOperation(value = "List all subscriptions")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found", response = Share[].class)})
   public List<Share> listAllShares() {
     return shareSubscription.list();
   }
@@ -68,7 +69,8 @@ public class ShareResource {
   @GET
   @Path("/{key}")
   @ApiOperation(value = "Find a share subscription")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found"),
+  @ApiResponses(value = { 
+      @ApiResponse(code = 200, message = "Subscription found", response = Share.class),
       @ApiResponse(code = 404, message = "Subscription not found") })
   public Response findShare(
       @ApiParam("Stock symbol (e.g. BMW.DE), see http://finance.yahoo.com/q") @PathParam("key") String key) {
@@ -82,8 +84,9 @@ public class ShareResource {
 
 	@POST
 	@ApiOperation(value = "Add share to your list of subscriptions")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Share queued for subscribing"),
-			@ApiResponse(code = 500, message = "Queuing failed") })
+	@ApiResponses(value = { 
+	    @ApiResponse(code = 201, message = "Share queued for subscription"),
+	    @ApiResponse(code = 500, message = "Queuing failed") })
 	public Response addShare(
 			@ApiParam(required = true, value = "The share which is will be added for subscription") @Valid Share share,
 			@ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") 
@@ -110,7 +113,8 @@ public class ShareResource {
   @DELETE
   @Path("/{key}")
   @ApiOperation(value = "Remove a subscription to a share")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription removed"),
+  @ApiResponses(value = { 
+      @ApiResponse(code = 200, message = "Subscription removed", response = Share.class),
       @ApiResponse(code = 404, message = "Subscription was not found") })
   public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
     Share share = shareSubscription.find(key);
