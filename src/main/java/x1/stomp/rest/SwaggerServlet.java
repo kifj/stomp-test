@@ -1,6 +1,5 @@
 package x1.stomp.rest;
 
-import java.io.IOException;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -27,7 +26,7 @@ public class SwaggerServlet extends HttpServlet {
       beanConfig.setContact(attributes.getValue("Application-Contact"));
       beanConfig.setLicense(attributes.getValue("Application-License"));
       beanConfig.setLicenseUrl(attributes.getValue("Application-LicenseUrl"));
-    } catch (IOException e) {
+    } catch (Exception e) {
       // ignore
     }
     beanConfig.setSchemes(new String[] { "http" });
