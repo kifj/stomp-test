@@ -114,8 +114,8 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   @OnError
   public void error(Session session, Throwable t) {
-    SESSIONS.remove(session);
-    log.info("Connection error for session {}", session.getId());
+    log.warn("Connection error for session {} with error {}", session.getId(), t.getMessage());
+    SESSIONS.remove(session.getId());
   }
 
   @Override

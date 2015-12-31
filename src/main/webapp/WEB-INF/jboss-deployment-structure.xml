@@ -10,6 +10,8 @@
 			<module name="com.fasterxml.jackson.core.jackson-annotations" />
 			<module name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider"/>
 			<module name="org.javassist" />
+			<module name="org.jboss.weld.core" />
+			<module name="org.jboss.weld.spi" />
 		</dependencies>
 	</deployment>
 </jboss-deployment-structure>

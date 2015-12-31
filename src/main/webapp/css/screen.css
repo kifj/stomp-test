@@ -54,7 +54,8 @@ acronym {
   border-bottom: 1px solid #777;
 }
 blockquote {
-  margin: 15px;   padding: 0 0 0 20px;
+  margin: 15px;   
+  padding: 0 0 0 20px;
   background-color: #FAFAFA;
   background-position: 8px 10px;
   border: 1px solid #f2f2f2;
@@ -64,13 +65,13 @@ blockquote {
 }
 
 textarea {
-  width:400px;
-  padding:2px;
+  width: 400px;
+  padding: 2px;
   font: normal 1em "Trebuchet MS", Tahoma, sans-serif;
-  border:1px solid #eee;
-  height:100px;
-  display:block;
-  color:#777;
+  border: 1px solid #eee;
+  height: 100px;
+  display: block;
+  color: #777;
 }
 
 /* start - table */
@@ -113,20 +114,20 @@ tr.row-b {
 
 /* form elements */
 form {
-  margin:10px 15px; padding: 0;
+  margin: 10px 15px; padding: 0;
   border: 1px solid #f2f2f2;
   background-color: #FAFAFA;
 }
 label {
-  display:block;
-  font-weight:bold;
-  margin:5px 0;
+  display: block;
+  font-weight: bold;
+  margin: 5px 0;
 }
 input {
   padding: 2px;
-  border:1px solid #eee;
+  border: 1px solid #eee;
   font: normal 1em "Trebuchet MS", Tahoma, sans-serif;
-  color:#777;
+  color: #777;
 }
 input[required] {
   background-color: #E0E0E0;
@@ -149,7 +150,7 @@ input.button {
 }
 
 /* ----------------------------
-    SEARCH FORM
+  SEARCH FORM
 ------------------------------- */
 .searchform {
   background-color: transparent;
@@ -249,7 +250,8 @@ input.button {
 }
 
 .upload-form {
-  margin:10px 15px; padding: 0;
+  margin:10px 15px; 
+  padding: 0;
   border: 1px solid #f2f2f2;
   background-color: #FAFAFA;
 }
@@ -299,18 +301,18 @@ input.button {
 }
 
 #sidebar {
-    order: 3;
-    flex: 0 1 150px;
-    align-self: auto;
-    margin: 0 0 10px 0; 
+  order: 3;
+  flex: 0 1 150px;
+  align-self: auto;
+  margin: 0 0 10px 0; 
 	padding: 0;
 }
 
 #menubar {
-    order: 1;
-    flex: 0 1 150px;
-    align-self: auto;
-    margin: 0 0 10px 0; 
+  order: 1;
+  flex: 0 1 150px;
+  align-self: auto;
+  margin: 0 0 10px 0; 
 	padding: 0;
 }
 
@@ -411,7 +413,7 @@ input.button {
   border-top: 1px solid #f2f2f2;
 }
 #footer-content ul.flist li {
-    border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
 }
 #footer-content ul.flist li a:link,
 #footer-content ul.flist li a:visited {
