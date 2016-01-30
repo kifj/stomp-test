@@ -4,7 +4,7 @@ MGMT_PASSWORD=SandTHEM
 
 export JBOSS_BASE_DIR=$1
 export JAVA_HOME=/usr/java/default
-export JBOSS_HOME=/opt/wildfly-9.0.2.Final
+export JBOSS_HOME=/opt/wildfly-10.0.0.Final
 export RUN_CONF=$WILDFLY_DIR/standalone.conf
 export MAIL_SERVER=localhost
 export MANAGEMENT=local

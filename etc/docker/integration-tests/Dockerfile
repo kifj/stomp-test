@@ -1,4 +1,4 @@
-FROM j7beck/x1-wildfly-slot0:9.0.2.Final
+FROM j7beck/x1-wildfly-slot0:10.0.0.Final
 MAINTAINER joe <joe@mail.x1>
 
 COPY scripts /srv/wildfly/scripts

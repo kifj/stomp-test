@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>x1.jboss</groupId>
   <artifactId>stomp-test</artifactId>
-  <version>1.3.0-SNAPSHOT</version>
+  <version>1.4.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Stomp Test</name>
   <description>A test run for Stomp on JBoss Wildfly 10</description>
@@ -24,7 +24,7 @@
   </scm>
   <ciManagement>
     <system>Jenkins</system>
-    <url>http://www.x1/jenkins/job/stomp-test-wildfly-9/</url>
+    <url>http://www.x1/jenkins/job/stomp-test-wildfly-10/</url>
     <notifiers>
       <notifier>
         <type>mail</type>
@@ -42,8 +42,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <resteasy.version>3.0.11.Final</resteasy.version>
-    <swagger.version>1.5.4</swagger.version>
+    <swagger.version>1.5.6</swagger.version>
   </properties>
 
   <distributionManagement>
