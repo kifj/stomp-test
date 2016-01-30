@@ -22,7 +22,7 @@ import x1.stomp.util.JsonHelper;
 
 @MessageDriven(name = "ShareMessageListener", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-    @ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/stocks"),
+    @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 public class ShareMessageListener implements MessageListener {
   @Inject

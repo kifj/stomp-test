@@ -1,12 +1,12 @@
 if (outcome != success) of /subsystem=messaging/hornetq-server=default/jms-queue=stocksQueue:read-resource
   /subsystem=messaging/hornetq-server=default/jms-queue=stocksQueue:add(\
     durable=true,\
-    entries=[queue/stocks, java:jboss/exported/jms/queue/stocks],\
+    entries=[java:/jms/queue/stocks],\
     )
 end-if
 
 if (outcome != success) of /subsystem=messaging/hornetq-server=default/jms-topic=quotesTopic:read-resource
   /subsystem=messaging/hornetq-server=default/jms-topic=quotesTopic:add(\
-    entries=[topic/quotes, java:jboss/exported/jms/topic/quotes],\
+    entries=[java:/jms/topic/quotes],\
     )
 end-if

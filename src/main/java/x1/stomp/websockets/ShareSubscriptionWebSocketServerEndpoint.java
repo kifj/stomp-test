@@ -33,7 +33,7 @@ import x1.stomp.util.JsonHelper;
 
 @MessageDriven(name = "ShareSubscriptionWebSocketServerEndpoint", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
-    @ActivationConfigProperty(propertyName = "destination", propertyValue = "topic/quotes"),
+    @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/topic/quotes"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ServerEndpoint("/ws/stocks")
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
