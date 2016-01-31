@@ -32,10 +32,12 @@ textarea {
 	font: bold 45px 'Trebuchet MS', Sans-serif;
 	letter-spacing: -2px;
 	color: #FFF;
-	margin: 0; padding: 0;
+	margin: 0; 
+	padding: 0;
 
 	/* change the values of left and top to adjust the position of the logo */
-	top: 0; left: 0px;
+	top: 5px; 
+	left: 10px;
 }
 #header-content h1#logo a {
 	text-decoration: none;
@@ -55,11 +57,13 @@ textarea {
 /* header menu */
 #header-content ul {
 	position: absolute;
-	right: -5px; top: 15px;
+	right: 5px; 
+	top: 15px;
 	font: bolder 1.3em 'Trebuchet MS', sans-serif;
 	color: #FFF;
 	list-style: none;
-	margin: 0; padding: 0;
+	margin: 0; 
+	padding: 0;
 }
 #header-content li {
 	display: inline;
@@ -113,7 +117,7 @@ textarea {
 
 /* sidebar menu */
 #sidebar ul.sidemenu {
-	list-style:none;
+	list-style: none;
 	margin: 10px 0 15px 0;
 	padding: 0;
 	background: #F2F2F2;
@@ -122,14 +126,14 @@ textarea {
 	padding: 0px 10px;
 }
 #sidebar ul.sidemenu a {
-	display:block;
-	font-weight:normal;
+	display: block;
+	font-weight: normal;
 	color: #333;
 	height: 1.5em;
 	padding:.3em 0 .3em 15px;
 	line-height: 1.5em;
 	border-bottom: 1px dashed #D4D4D4;
-	text-decoration:none;
+	text-decoration: none;
 }
 #sidebar ul.sidemenu a.top {
 	border-top: 1px dashed #D4D4D4;
@@ -146,4 +150,3 @@ textarea {
 	max-height: 350px;
 	overflow: auto;
 }
-

@@ -2,7 +2,8 @@
 * { padding: 0; margin: 0; outline: 0; }
 
 body {
-  margin: 0;  padding: 0;
+  margin: 0;
+  padding: 0;
   font: normal 73%/1.6em 'Trebuchet MS', Tahoma, sans-serif;
   color: #555;
   background: #FFF url(images/bg.jpg) repeat-x;
@@ -28,7 +29,6 @@ ul, ol {
 img {
   border: 1px solid #DADADA;
   padding: 8px;
-  /* background: #FAFAFA; */
 }
 img.float-right {
   margin: 5px 0px 5px 15px;
@@ -114,7 +114,8 @@ tr.row-b {
 
 /* form elements */
 form {
-  margin: 10px 15px; padding: 0;
+  margin: 10px 15px; 
+  padding: 0;
   border: 1px solid #f2f2f2;
   background-color: #FAFAFA;
 }
@@ -154,7 +155,9 @@ input.button {
 ------------------------------- */
 .searchform {
   background-color: transparent;
-  border: none; margin: 0; padding: 0;
+  border: none; 
+  margin: 0; 
+  padding: 0;
 }
 .searchform p { margin: 10px; padding: 0; }
 .searchform input.textbox {
@@ -250,7 +253,7 @@ input.button {
 }
 
 .upload-form {
-  margin:10px 15px; 
+  margin: 10px 15px; 
   padding: 0;
   border: 1px solid #f2f2f2;
   background-color: #FAFAFA;
@@ -285,7 +288,7 @@ input.button {
   flex: 1 2 auto;
   align-self: auto;
   margin: 0 0 10px 0; 
-  padding: 0;
+  padding: 5px;
   min-width: 320px;
 }
 
@@ -305,7 +308,7 @@ input.button {
   flex: 0 1 150px;
   align-self: auto;
   margin: 0 0 10px 0; 
-	padding: 0;
+  padding: 0;
 }
 
 #menubar {
@@ -313,11 +316,12 @@ input.button {
   flex: 0 1 150px;
   align-self: auto;
   margin: 0 0 10px 0; 
-	padding: 0;
+  padding: 0;
 }
 
 .post {
-  margin: 0; padding: 0;
+  margin: 0; 
+  padding: 0;
   background: #FFF url(images/gradientbg.jpg) repeat-x;
   border: 1px solid #EFEDED;
   box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
