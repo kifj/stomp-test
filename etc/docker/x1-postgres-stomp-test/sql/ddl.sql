@@ -1,5 +1,4 @@
 CREATE SCHEMA stocks;
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 CREATE SEQUENCE stocks.hibernate_sequence;
 

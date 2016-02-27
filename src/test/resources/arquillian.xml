@@ -45,8 +45,8 @@
             env: [ MANAGEMENT=public ]
             portBindings: [8080/tcp, 9990/tcp]
             volumes:
-              - /opt/x1/docker/docker.key:/etc/pki/tls/private/node.key:ro
-              - /opt/x1/docker/docker.crt:/etc/pki/tls/certs/node.crt:ro
+              - /opt/docker/x1/certs/docker.key:/etc/pki/tls/private/node.key:ro
+              - /opt/docker/x1/certs/docker.crt:/etc/pki/tls/certs/node.crt:ro
       </property>
     </extension>
 </arquillian>
