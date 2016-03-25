@@ -30,7 +30,6 @@ public class SwaggerServlet extends HttpServlet {
       // ignore
     }
     beanConfig.setSchemes(new String[] { "http" });
-    //beanConfig.setHost("localhost:8080");
     beanConfig.setBasePath(servletConfig.getServletContext().getContextPath() + "/rest");
     beanConfig.setResourcePackage("x1.stomp.rest");
     beanConfig.setScan(true);

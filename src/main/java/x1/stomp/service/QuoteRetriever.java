@@ -34,6 +34,9 @@ public class QuoteRetriever {
   }
 
   public List<Quote> retrieveQuotes(List<Share> shares) {
+    if (shares.isEmpty()) {
+      return new ArrayList<>();
+    }
     StringBuilder buffer = new StringBuilder();
     for (Share share : shares) {
       if (buffer.length() > 0) {
@@ -41,21 +44,23 @@ public class QuoteRetriever {
       }
       buffer.append(share.getKey());
     }
+    try {
+      String content = retrieveInternal(buffer.toString());
+      return extractQuotes(shares, content);
+    } catch (IOException e) {
+      log.warn("Cound not retrieve quotes for " + buffer, e);
+      return new ArrayList<>();
+    }
+  }
 
+  private List<Quote> extractQuotes(List<Share> shares, String content) {
     List<Quote> result = new ArrayList<>();
-    if (buffer.length() > 0) {
-      try {
-        String content = retrieveInternal(buffer.toString());
-        StringTokenizer tokenizer = new StringTokenizer(content, "\n\r");
-        while (tokenizer.hasMoreTokens()) {
-          String line = tokenizer.nextToken();
-          Quote quote = createQuote(line, shares);
-          if (quote != null) {
-            result.add(quote);
-          }
-        }
-      } catch (IOException e) {
-        log.warn("Cound not retrieve quotes for " + buffer, e);
+    StringTokenizer tokenizer = new StringTokenizer(content, "\n\r");
+    while (tokenizer.hasMoreTokens()) {
+      String line = tokenizer.nextToken();
+      Quote quote = createQuote(line, shares);
+      if (quote != null) {
+        result.add(quote);
       }
     }
     return result;
@@ -96,5 +101,5 @@ public class QuoteRetriever {
 
   private Quote createQuote(String line, Share share) {
     return createQuote(line, Arrays.asList(share));
-  };
+  }
 }

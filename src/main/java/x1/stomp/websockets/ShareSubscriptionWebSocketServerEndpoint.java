@@ -124,15 +124,19 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
       log.debug("Received quote for {}", message.getStringProperty("key"));
       TextMessage textMessage = (TextMessage) message;
       for (Session session : new ArrayList<>(SESSIONS.values())) {
-        try {
-          session.getBasicRemote().sendText(textMessage.getText());
-        } catch (ClosedChannelException e) {
-          SESSIONS.remove(session.getId());
-        } catch (Exception e) {
-          log.error(null, e);
-        }
+        sendMessage(textMessage, session);
       }
     } catch (JMSException e) {
+      log.error(null, e);
+    }
+  }
+
+  private void sendMessage(TextMessage textMessage, Session session) {
+    try {
+      session.getBasicRemote().sendText(textMessage.getText());
+    } catch (ClosedChannelException e) {
+      SESSIONS.remove(session.getId());
+    } catch (Exception e) {
       log.error(null, e);
     }
   }
