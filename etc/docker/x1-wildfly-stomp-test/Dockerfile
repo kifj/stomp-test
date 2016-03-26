@@ -11,7 +11,7 @@ RUN chown -R jboss.jboss /srv/wildfly
 RUN su -l jboss -c "/srv/wildfly/scripts/configure.sh /srv/wildfly/slot0"
 RUN rm -rf /srv/wildfly/scripts
 
-RUN cp /usr/share/java/stomp-test-v1.3.war /srv/wildfly/slot0/deployments/ROOT.war
+RUN cp /usr/share/java/stomp-test-v1.4.war /srv/wildfly/slot0/deployments/ROOT.war
 RUN chown -R jboss.jboss /srv/wildfly
 
 ENV SERVICE_NAME=stomp-test
