@@ -217,7 +217,7 @@
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
       <scope>provided</scope>
-    </dependency>  
+    </dependency>
     <dependency>
       <groupId>io.swagger</groupId>
       <artifactId>swagger-core</artifactId>
@@ -284,32 +284,32 @@
         <version>2.6</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
-           <archive>
-              <manifest>
-                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              </manifest>
-              <manifestSections>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+            <manifestSections>
               <manifestSection>
                 <name>Application</name>
-                  <manifestEntries>
-                     <Application-Title>${project.name}</Application-Title>
-                     <Application-Description>${project.description}</Application-Description>
-                     <Application-Version>${app.majorVersion}.${app.minorVersion}</Application-Version>
-                     <Application-License>${project.licenses[0].name}</Application-License>
-                     <Application-LicenseUrl>${project.licenses[0].url}</Application-LicenseUrl>
-                     <Application-Contact>${project.developers[0].email}</Application-Contact>
-                  </manifestEntries>
-                </manifestSection>
-              </manifestSections>
-           </archive>
-        </configuration>        
+                <manifestEntries>
+                  <Application-Title>${project.name}</Application-Title>
+                  <Application-Description>${project.description}</Application-Description>
+                  <Application-Version>${app.majorVersion}.${app.minorVersion}</Application-Version>
+                  <Application-License>${project.licenses[0].name}</Application-License>
+                  <Application-LicenseUrl>${project.licenses[0].url}</Application-LicenseUrl>
+                  <Application-Contact>${project.developers[0].email}</Application-Contact>
+                </manifestEntries>
+              </manifestSection>
+            </manifestSections>
+          </archive>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <version>1.10</version>
-        <executions>          
+        <executions>
           <execution>
             <id>parse-version</id>
             <phase>initialize</phase>
@@ -472,19 +472,19 @@
       <id>arq-jbossas-managed</id>
       <dependencies>
         <dependency>
-          <groupId>org.jboss.shrinkwrap.resolver</groupId>  
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.apache.maven</groupId>
           <artifactId>maven-aether-provider</artifactId>
-          <version>3.2.5</version><!--$NO-MVN-MAN-VER$-->
+          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.wildfly.arquillian</groupId>
-          <artifactId>wildfly-arquillian-container-managed</artifactId>        
+          <artifactId>wildfly-arquillian-container-managed</artifactId>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -513,14 +513,14 @@
       <id>arq-jbossas-remote</id>
       <dependencies>
         <dependency>
-          <groupId>org.jboss.shrinkwrap.resolver</groupId>  
+          <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.apache.maven</groupId>
           <artifactId>maven-aether-provider</artifactId>
-          <version>3.2.5</version><!--$NO-MVN-MAN-VER$-->
+          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
           <scope>test</scope>
         </dependency>
         <dependency>

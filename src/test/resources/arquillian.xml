@@ -5,8 +5,8 @@
         http://jboss.org/schema/arquillian/arquillian_1_0.xsd">        
     <container qualifier="jbossas-remote" default="false">
         <configuration>
-            <property name="managementAddress">${jboss.managementAddress}</property>
-            <property name="managementPort">${jboss.managementPort}</property>
+            <property name="managementAddress">${jboss.managementAddress:localhost}</property>
+            <property name="managementPort">${jboss.managementPort:9990}</property>
             <property name="username">${jboss.user}</property>
             <property name="password">${jboss.password}</property>
         </configuration>
@@ -15,6 +15,7 @@
     <container qualifier="jbossas-managed" default="false">
         <configuration>
             <property name="allowConnectingToRunningServer">true</property>
+            <property name="managementPort">${jboss.managementPort:9990}</property>
             <property name="username">${jboss.user}</property>
             <property name="password">${jboss.password}</property>
             <property name="serverConfig">standalone-full.xml</property>
@@ -28,7 +29,7 @@
     </extension>
 
     <extension qualifier="docker">
-        <property name="serverVersion">1.18</property>
+        <property name="serverVersion">1.20</property>
         <property name="serverUri">http://localhost:2375</property>
         <property name="connectionMode">STARTANDSTOP</property>
         <property name="dockerContainers">

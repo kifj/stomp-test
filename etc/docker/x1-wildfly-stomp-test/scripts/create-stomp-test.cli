@@ -11,7 +11,8 @@ if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-reso
     validate-on-match=true,\
     background-validation=false,\
     share-prepared-statements=false,\
-    check-valid-connection-sql="select current_timestamp"\
+    check-valid-connection-sql="select current_timestamp",\
+    statistics-enabled=true\
     )
 end-if
 
