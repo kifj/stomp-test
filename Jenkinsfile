@@ -2,7 +2,7 @@ node {
    def mvnHome = tool 'Maven-3.3'
    
    stage 'Checkout'
-   git url: 'https://github.com/kifj/stomp-test.git'
+   git url: 'https://github.com/kifj/stomp-test.git', , branch: 'wildfly-10'
 
    stage 'Build'
    sh "${mvnHome}/bin/mvn clean package"
