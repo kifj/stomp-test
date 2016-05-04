@@ -90,14 +90,14 @@
       <dependency>
         <groupId>org.jboss.shrinkwrap.resolver</groupId>
         <artifactId>shrinkwrap-resolver-bom</artifactId>
-        <version>2.2.0</version>
+        <version>2.2.2</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.1.10.Final</version>
+        <version>1.1.11.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -268,7 +268,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>9.4-1205-jdbc4</version>
+      <version>9.4-1206-jdbc4</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -358,7 +358,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-project-info-reports-plugin</artifactId>
-              <version>2.8</version>
+              <version>2.9</version>
               <configuration>
                 <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
               </configuration>
@@ -397,7 +397,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-surefire-report-plugin</artifactId>
-              <version>2.19</version>
+              <version>2.19.1</version>
               <configuration>
                 <testFailureIgnore>true</testFailureIgnore>
               </configuration>
@@ -460,7 +460,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <configuration>
               <skip>true</skip>
             </configuration>
@@ -498,7 +498,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
@@ -539,7 +539,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
@@ -561,7 +561,7 @@
         <dependency>
           <groupId>org.arquillian.cube</groupId>
           <artifactId>arquillian-cube-docker</artifactId>
-          <version>1.0.0.Alpha7</version>
+          <version>1.0.0.Alpha10</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -596,7 +596,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19</version>
+            <version>2.19.1</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
@@ -618,7 +618,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>rpm-maven-plugin</artifactId>
-            <version>2.1.4</version>
+            <version>2.1.5</version>
             <executions>
               <execution>
                 <id>build-rpm</id>
