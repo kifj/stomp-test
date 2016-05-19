@@ -42,7 +42,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <swagger.version>1.5.8</swagger.version>
+    <swagger.version>1.5.9</swagger.version>
   </properties>
 
   <distributionManagement>
@@ -87,6 +87,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+		<groupId>org.apache.maven</groupId>
+    	<artifactId>maven</artifactId>
+    	<version>3.2.5</version>      
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
       <dependency>
         <groupId>org.jboss.shrinkwrap.resolver</groupId>
         <artifactId>shrinkwrap-resolver-bom</artifactId>
@@ -330,7 +337,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.5.201505241946</version>
+        <version>0.7.6.201602180812</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -477,12 +484,6 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-aether-provider</artifactId>
-          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
-          <scope>test</scope>
-        </dependency>
-        <dependency>
           <groupId>org.wildfly.arquillian</groupId>
           <artifactId>wildfly-arquillian-container-managed</artifactId>
           <scope>test</scope>
@@ -490,7 +491,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.5.201505241946</version>
+          <version>0.7.6.201602180812</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -518,12 +519,6 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-aether-provider</artifactId>
-          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
-          <scope>test</scope>
-        </dependency>
-        <dependency>
           <groupId>org.wildfly.arquillian</groupId>
           <artifactId>wildfly-arquillian-container-remote</artifactId>
           <scope>test</scope>
@@ -531,7 +526,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.5.201505241946</version>
+          <version>0.7.6.201602180812</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -570,12 +565,6 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-aether-provider</artifactId>
-          <version>3.2.5</version><!--$NO-MVN-MAN-VER$ -->
-          <scope>test</scope>
-        </dependency>
-        <dependency>
           <groupId>org.jboss.shrinkwrap.resolver</groupId>
           <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
           <scope>test</scope>
@@ -588,7 +577,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.5.201505241946</version>
+          <version>0.7.6.201602180812</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
