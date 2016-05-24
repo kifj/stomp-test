@@ -1,6 +1,5 @@
 package x1.stomp.test;
 
-
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -31,40 +30,32 @@ import static org.junit.Assert.*;
 
 import javax.inject.Inject;
 
+import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.rest.ErrorResponse;
 
 @RunWith(Arquillian.class)
 public class ShareResourceTest {
-	private String baseUrl;
+  private String baseUrl;
 
-	@Inject
-	private Logger log;
-	
-	@ArquillianResource
-	private URL url;
+  @Inject
+  private Logger log;
 
-	@Deployment
-	public static Archive<?> createTestArchive() {
-		File[] libraries = Maven
-				.resolver()
-				.loadPomFromFile("pom.xml")
-				.resolve(
-				    "org.apache.httpcomponents:fluent-hc", 
-				    "org.apache.commons:commons-lang3",
-						"io.swagger:swagger-jaxrs")
-				.withTransitivity()
-				.asFile();
+  @ArquillianResource
+  private URL url;
 
-		return ShrinkWrap.create(WebArchive.class, "stomp-test.war")
-		    .addPackages(true, "x1.stomp")
-				.addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-				.addAsWebInfResource("test-ds.xml")
-				.addAsWebInfResource("jboss-deployment-structure.xml")
-				.addAsLibraries(libraries);
-	}
-	
+  @Deployment
+  public static Archive<?> createTestArchive() {
+    File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
+        .resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
+        .withTransitivity().asFile();
+
+    return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
+        .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+        .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
+  }
+
   @Before
   public void setup() {
     if (url == null) {
@@ -75,66 +66,74 @@ public class ShareResourceTest {
     log.debug("baseUrl={}", baseUrl);
   }
 
-	@Test
-	public void testFindShareNotFound() throws Exception {
-		log.debug("begin testFindShareNotFound");
-		Client client = ClientBuilder.newClient();
+  @Test
+  public void testFindShareNotFound() throws Exception {
+    Client client = ClientBuilder.newClient();
     Response response = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "AAPL")
         .request(MediaType.APPLICATION_JSON).get();
-	assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-		log.debug("end testFindShareNotFound");
-	}
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+  }
 
-	@Test
-	public void testAddAndFindShare() throws Exception {
-		log.debug("begin testAddAndFindShare");
-		Share share = new Share();
-		share.setKey("BMW.DE");
-		share.setName("Bayerische Motoren Werke AG");
-		
-		Client client = ClientBuilder.newClient();
-    Response resp = client.target(baseUrl + "/shares/").request()
-        .header("Correlation-Id", UUID.randomUUID().toString())
+  @Test
+  public void testAddAndFindShare() throws Exception {
+    Share share = new Share();
+    share.setKey("BMW.DE");
+    share.setName("Bayerische Motoren Werke AG");
+
+    Client client = ClientBuilder.newClient();
+    Response resp = client.target(baseUrl + "/shares/").request().header("Correlation-Id", UUID.randomUUID().toString())
         .post(Entity.entity(share, MediaType.APPLICATION_JSON));
-		assertNotNull(resp);
-		assertEquals(Status.CREATED.getStatusCode(), resp.getStatus());
-		assertEquals(baseUrl + "/shares/" + share.getKey(), resp.getLocation().toString());
-		resp.close();
-		Thread.sleep(10000);
+    assertNotNull(resp);
+    assertEquals(Status.CREATED.getStatusCode(), resp.getStatus());
+    assertEquals(baseUrl + "/shares/" + share.getKey(), resp.getLocation().toString());
+    resp.close();
+    Thread.sleep(10000);
     Share found = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "BMW.DE")
         .request(MediaType.APPLICATION_JSON).get(Share.class);
-		assertNotNull(found);
-		assertNull(found.getId());
-		assertEquals("BMW.DE", found.getKey());
-		
+    assertNotNull(found);
+    assertNull(found.getId());
+    assertEquals("BMW.DE", found.getKey());
+
     List<Share> shares = client.target(baseUrl + "/shares").request(MediaType.APPLICATION_JSON)
         .get(new GenericType<List<Share>>() {
         });
-		assertEquals(1, shares.size());
-		
+    assertEquals(1, shares.size());
+
+    Quote quote = client.target(baseUrl + "/quotes/{key}").resolveTemplate("key", share.getKey())
+        .request(MediaType.APPLICATION_JSON).get(Quote.class);
+    assertNotNull(quote);
+    assertNotNull(quote.getCurrency());
+    assertNotNull(quote.getPrice());
+    assertEquals(quote.getShare().getKey(), share.getKey());
+
     Response response3 = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", share.getKey())
         .request(MediaType.APPLICATION_JSON).delete();
-		assertEquals(Status.OK.getStatusCode(), response3.getStatus());
-		
-		log.debug("end testAddAndFindShare");
-	}
+    assertEquals(Status.OK.getStatusCode(), response3.getStatus());
+  }
 
-	@Test
-	public void testAddShareInvalid() throws Exception {
-		log.debug("begin testAddShareInvalid");
-		Share share = new Share();
-		share.setKey("GOOG");
-		Client client = ClientBuilder.newClient();
+  @Test
+  public void testAddShareInvalid() throws Exception {
+    Share share = new Share();
+    share.setKey("GOOG");
+    Client client = ClientBuilder.newClient();
     Response response = client.target(baseUrl + "/shares").request(MediaType.APPLICATION_JSON)
         .post(Entity.entity(share, MediaType.APPLICATION_XML));
-		assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), response.getStatus());
-		ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
-		assertNotNull(errorResponse);
-		assertEquals(2, errorResponse.getErrors().size());
+    assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), response.getStatus());
+    ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
+    assertNotNull(errorResponse);
+    assertEquals(2, errorResponse.getErrors().size());
 
-		Response response2 = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "GOOG")
+    Response response2 = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "GOOG")
         .request(MediaType.APPLICATION_JSON).get();
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
-		log.debug("end testAddShareInvalid");
-	}
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
+  }
+
+  @Test
+  public void testGetQuoteNotFound() throws Exception {
+    Client client = ClientBuilder.newClient();
+    Response response = client.target(baseUrl + "/quotes/{key}").resolveTemplate("key", "AAPL")
+        .request(MediaType.APPLICATION_JSON).get();
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+  }
+
 }
