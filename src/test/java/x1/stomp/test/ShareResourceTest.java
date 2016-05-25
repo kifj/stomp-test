@@ -104,7 +104,6 @@ public class ShareResourceTest {
     assertNotNull(found);
     assertNull(found.getId());
     assertEquals(key, found.getKey());
-    assertEquals(name, found.getName());
 
     List<Share> shares = client.target(baseUrl).path(PATH_SHARES).request(MediaType.APPLICATION_JSON)
         .get(new GenericType<List<Share>>() {
