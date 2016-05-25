@@ -98,15 +98,16 @@ Client.prototype.onmessage = function(message) {
 	var caller = this;
 	var quote = message.quote;
 	var event = message.subscriptionEvent;
+	var id;
 	if (event) {
-		var id = "key_" + event.key.replace('.', '');
+		id = "key_" + event.key.replace('.', '');
 		if (event.action == 'unsubscribe') {
 			$("#" + id).remove();
 		}
 		console.log('Received event ' + event.action  + ' for ' + event.key );
 	}
 	if (quote) {
-		var id = "key_" + quote.share.key.replace('.', '');
+		id = "key_" + quote.share.key.replace('.', '');
 		$("#" + id).remove();
 		var row = "<tr id='" + id + "'>";
 		row += "<td>" + quote.share.key + "</td>";

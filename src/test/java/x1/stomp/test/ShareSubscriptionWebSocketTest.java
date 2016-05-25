@@ -3,6 +3,7 @@ package x1.stomp.test;
 import java.io.File;
 import java.net.URL;
 
+import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 
@@ -21,11 +22,16 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 import x1.stomp.model.Command;
+import x1.stomp.model.Quote;
+import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
+import x1.stomp.service.QuoteUpdater;
 import x1.stomp.util.JsonHelper;
 
 @RunWith(Arquillian.class)
 public class ShareSubscriptionWebSocketTest {
+  private static final String TEST_SHARE = "MSFT";
+
   private String baseUrl;
 
   @Inject
@@ -33,6 +39,9 @@ public class ShareSubscriptionWebSocketTest {
 
   @ArquillianResource
   private URL url;
+  
+  @EJB
+  private QuoteUpdater quoteUpdater;
 
   @Deployment
   public static Archive<?> createTestArchive() {
@@ -61,11 +70,27 @@ public class ShareSubscriptionWebSocketTest {
     WebSocketClient client = WebSocketClient.openConnection(baseUrl);
     Command command = new Command();
     command.setAction("SUBSCRIBE");
-    command.setKey("MSFT");
+    command.setKey(TEST_SHARE);
     String message = JsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
     Thread.sleep(2500);
+    
+    Quote quote = new Quote();
+    quote.setCurrency("USD");
+    quote.setPrice(10.0f);
+    Share share = new Share();
+    share.setKey(TEST_SHARE);
+    quote.setShare(share);
+    quoteUpdater.updateQuote(quote);
+    Thread.sleep(1500);
+    String response = client.getLastMessage();
+    assertNotNull(response);
+    log.debug("Received: {}", response);
+    Quote received = JsonHelper.fromJSON(response, Quote.class);
+    assertEquals(quote.getPrice(), received.getPrice());
+    assertEquals(quote.getCurrency(), received.getCurrency());
+    assertEquals(TEST_SHARE, received.getShare().getKey());
 
     command.setAction("UNSUBSCRIBE");
     message = JsonHelper.toJSON(command);
@@ -73,10 +98,10 @@ public class ShareSubscriptionWebSocketTest {
     client.sendMessage(message);
 
     Thread.sleep(2500);
-    String response = client.getLastMessage();
+    response = client.getLastMessage();
     assertNotNull(response);
     SubscriptionEvent event = JsonHelper.fromJSON(response, SubscriptionEvent.class);
-    assertEquals("MSFT", event.getKey());
+    assertEquals(TEST_SHARE, event.getKey());
     assertEquals("unsubscribe", event.getAction());
     client.closeConnection();
   }

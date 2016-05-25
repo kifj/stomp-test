@@ -54,11 +54,8 @@ public class QuoteUpdater {
     lastUpdatedCount = 0;
     List<Share> shares = shareSubscription.list();
     log.info("Update Quotes for " + shares.size() + " shares");
-    Session session = null;
-    try {
+    try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
-
-      session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
       MessageProducer producer = session.createProducer(quoteTopic);
 
       for (Quote quote : quotes) {
@@ -68,8 +65,17 @@ public class QuoteUpdater {
       }
     } catch (JMSException | JAXBException e) {
       log.error(null, e);
-    } finally {
-      closeSession(session);
+    }
+  }
+
+  public void updateQuote(Quote quote) {
+    try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
+      MessageProducer producer = session.createProducer(quoteTopic);
+      log.debug("Sending message for " + quote);
+      producer.send(createMessage(quote, session));
+      lastUpdatedCount++;
+    } catch (JMSException | JAXBException e) {
+      log.error(null, e);
     }
   }
 
@@ -78,15 +84,5 @@ public class QuoteUpdater {
     message.setStringProperty("type", "quote");
     message.setStringProperty("key", quote.getShare().getKey());
     return message;
-  }
-
-  private void closeSession(Session session) {
-    try {
-      if (null != session) {
-        session.close();
-      }
-    } catch (JMSException e) {
-      log.warn(null, e);
-    }
   }
 }

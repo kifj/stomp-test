@@ -12,6 +12,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -36,6 +37,12 @@ import x1.stomp.rest.ErrorResponse;
 
 @RunWith(Arquillian.class)
 public class ShareResourceTest {
+  private static final String HEADER_CORRELATION_ID = "Correlation-Id";
+  private static final String PATH_QUOTES = "quotes";
+  private static final String PATH_SHARES = "shares";
+  private static final String PATH_PARAM_KEY = "{key}";
+  private static final String PARAM_KEY = "key";
+
   private String baseUrl;
 
   @Inject
@@ -69,7 +76,7 @@ public class ShareResourceTest {
   @Test
   public void testFindShareNotFound() throws Exception {
     Client client = ClientBuilder.newClient();
-    Response response = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "AAPL")
+    Response response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, "AAPL")
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
   }
@@ -77,53 +84,59 @@ public class ShareResourceTest {
   @Test
   public void testAddAndFindShare() throws Exception {
     Share share = new Share();
-    share.setKey("BMW.DE");
-    share.setName("Bayerische Motoren Werke AG");
+    String key = "BMW.DE";
+    String name = "Bayerische Motoren Werke AG";
+    share.setKey(key);
+    share.setName(name);
 
     Client client = ClientBuilder.newClient();
-    Response resp = client.target(baseUrl + "/shares/").request().header("Correlation-Id", UUID.randomUUID().toString())
+    Response resp = client.target(baseUrl).path(PATH_SHARES).request()
+        .header(HEADER_CORRELATION_ID, UUID.randomUUID().toString())
         .post(Entity.entity(share, MediaType.APPLICATION_JSON));
     assertNotNull(resp);
     assertEquals(Status.CREATED.getStatusCode(), resp.getStatus());
-    assertEquals(baseUrl + "/shares/" + share.getKey(), resp.getLocation().toString());
+    assertEquals(UriBuilder.fromUri(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).build(share.getKey()).toString(),
+        resp.getLocation().toString());
     resp.close();
     Thread.sleep(10000);
-    Share found = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "BMW.DE")
+    Share found = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
         .request(MediaType.APPLICATION_JSON).get(Share.class);
     assertNotNull(found);
     assertNull(found.getId());
-    assertEquals("BMW.DE", found.getKey());
+    assertEquals(key, found.getKey());
+    assertEquals(name, found.getName());
 
-    List<Share> shares = client.target(baseUrl + "/shares").request(MediaType.APPLICATION_JSON)
+    List<Share> shares = client.target(baseUrl).path(PATH_SHARES).request(MediaType.APPLICATION_JSON)
         .get(new GenericType<List<Share>>() {
         });
     assertEquals(1, shares.size());
 
-    Quote quote = client.target(baseUrl + "/quotes/{key}").resolveTemplate("key", share.getKey())
-        .request(MediaType.APPLICATION_JSON).get(Quote.class);
+    Quote quote = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
+        .resolveTemplate(PARAM_KEY, share.getKey()).request(MediaType.APPLICATION_JSON).get(Quote.class);
     assertNotNull(quote);
     assertNotNull(quote.getCurrency());
     assertNotNull(quote.getPrice());
     assertEquals(quote.getShare().getKey(), share.getKey());
 
-    Response response3 = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", share.getKey())
-        .request(MediaType.APPLICATION_JSON).delete();
+    Response response3 = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
+        .resolveTemplate(PARAM_KEY, share.getKey()).request(MediaType.APPLICATION_JSON).delete();
     assertEquals(Status.OK.getStatusCode(), response3.getStatus());
   }
 
   @Test
   public void testAddShareInvalid() throws Exception {
     Share share = new Share();
-    share.setKey("GOOG");
+    String key = "GOOG";
+    share.setKey(key);
     Client client = ClientBuilder.newClient();
-    Response response = client.target(baseUrl + "/shares").request(MediaType.APPLICATION_JSON)
+    Response response = client.target(baseUrl).path(PATH_SHARES).request(MediaType.APPLICATION_JSON)
         .post(Entity.entity(share, MediaType.APPLICATION_XML));
     assertEquals(Status.PRECONDITION_FAILED.getStatusCode(), response.getStatus());
     ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
     assertNotNull(errorResponse);
     assertEquals(2, errorResponse.getErrors().size());
 
-    Response response2 = client.target(baseUrl + "/shares/{key}").resolveTemplate("key", "GOOG")
+    Response response2 = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
   }
@@ -131,7 +144,7 @@ public class ShareResourceTest {
   @Test
   public void testGetQuoteNotFound() throws Exception {
     Client client = ClientBuilder.newClient();
-    Response response = client.target(baseUrl + "/quotes/{key}").resolveTemplate("key", "AAPL")
+    Response response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, "AAPL")
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
   }
