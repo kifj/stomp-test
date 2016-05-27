@@ -79,6 +79,7 @@ public class ShareResourceTest {
     Response response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, "AAPL")
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    response.close();
   }
 
   @Test
