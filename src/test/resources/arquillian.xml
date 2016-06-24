@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="
+  xsi:schemaLocation="
         http://jboss.org/schema/arquillian
-        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">        
-    <container qualifier="jbossas-remote" default="false">
-        <configuration>
-            <property name="managementAddress">${jboss.managementAddress:localhost}</property>
-            <property name="managementPort">${jboss.managementPort:9990}</property>
-            <property name="username">${jboss.user}</property>
-            <property name="password">${jboss.password}</property>
-        </configuration>
-    </container>
+        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+  <container qualifier="jbossas-remote" default="false">
+    <configuration>
+      <property name="managementAddress">${jboss.managementAddress:localhost}</property>
+      <property name="managementPort">${jboss.managementPort:9990}</property>
+      <property name="username">${jboss.user}</property>
+      <property name="password">${jboss.password}</property>
+    </configuration>
+  </container>
 
-    <container qualifier="jbossas-managed" default="false">
-        <configuration>
-            <property name="allowConnectingToRunningServer">true</property>
-            <property name="managementPort">${jboss.managementPort:9990}</property>
-            <property name="username">${jboss.user}</property>
-            <property name="password">${jboss.password}</property>
-            <property name="serverConfig">standalone-full.xml</property>
-            <property name="jbossHome">${jboss.home}</property>
-            <property name="startupTimeoutInSeconds">240</property>
-            <property name="javaVmArguments">-Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</property>
-        </configuration>
-    </container>
+  <container qualifier="jbossas-managed" default="false">
+    <configuration>
+      <property name="allowConnectingToRunningServer">true</property>
+      <property name="managementPort">${jboss.managementPort:9990}</property>
+      <property name="username">${jboss.user}</property>
+      <property name="password">${jboss.password}</property>
+      <property name="serverConfig">standalone-full.xml</property>
+      <property name="jbossHome">${jboss.home}</property>
+      <property name="startupTimeoutInSeconds">240</property>
+      <property name="javaVmArguments">-Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</property>
+    </configuration>
+  </container>
 
-    <extension qualifier="jacoco">
-        <property name="includes">x1.*</property>
-    </extension>
+  <extension qualifier="jacoco">
+    <property name="includes">x1.*</property>
+  </extension>
 
-    <extension qualifier="docker">
-        <property name="serverVersion">1.20</property>
-        <property name="serverUri">http://localhost:2375</property>
-        <property name="connectionMode">STARTANDSTOP</property>
-        <property name="dockerContainers">
+  <extension qualifier="docker">
+    <property name="serverVersion">1.20</property>
+    <property name="serverUri">http://localhost:2375</property>
+    <property name="connectionMode">STARTANDSTOP</property>
+    <property name="dockerContainers">
           jbossas-remote:
             buildImage:
                dockerfileLocation: etc/docker/integration-tests
@@ -50,5 +50,5 @@
               - /opt/docker/x1/certs/docker.key:/etc/pki/tls/private/node.key:ro
               - /opt/docker/x1/certs/docker.crt:/etc/pki/tls/certs/node.crt:ro
       </property>
-    </extension>
+  </extension>
 </arquillian>

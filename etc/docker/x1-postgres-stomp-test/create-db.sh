@@ -10,4 +10,5 @@ psql -d $DB_NAME -f $WD/sql/grant.sql  || exit 1
 psql -d $DB_NAME -f $WD/sql/data.sql  || exit 1
 
 kill $(pidof postgres)
+rm /var/run/postgresql/.s.PGSQL.5432.lock /var/lib/pgsql/data/postmaster.pid
 exit 0

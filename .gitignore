@@ -10,3 +10,4 @@ MANIFEST.MF
 *.iml
 /.factorypath
 /nb-configuration.xml
+/.tern-project
