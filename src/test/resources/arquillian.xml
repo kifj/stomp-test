@@ -21,7 +21,7 @@
       <property name="serverConfig">standalone-full.xml</property>
       <property name="jbossHome">${jboss.home}</property>
       <property name="startupTimeoutInSeconds">240</property>
-      <property name="javaVmArguments">-server -Xms64m -Xmx512m -XX:+UseG1GC -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n</property>
+      <property name="javaVmArguments">-server -Xms64m -Xmx512m -XX:+UseG1GC -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dactivemq.artemis.client.global.thread.pool.max.size=30 -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n</property>
     </configuration>
   </container>
 
