@@ -1,15 +1,12 @@
 package x1.stomp.test;
 
 import java.io.File;
-import java.net.URL;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
-import javax.ws.rs.core.UriBuilder;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -37,9 +34,6 @@ public class ShareSubscriptionWebSocketTest {
   @Inject
   private Logger log;
 
-  @ArquillianResource
-  private URL url;
-  
   @EJB
   private QuoteUpdater quoteUpdater;
 
@@ -57,11 +51,7 @@ public class ShareSubscriptionWebSocketTest {
 
   @Before
   public void setup() {
-    if (url == null) {
-      baseUrl = "ws://localhost:8080/stomp-test/ws/stocks";
-    } else {
-      baseUrl = UriBuilder.fromUri(url.toString()).scheme("ws").path("ws/stocks").build().toString();
-    }
+    baseUrl = "ws://" + System.getProperty("jboss.bind.address", "127.0.0.1") + ":8080/stomp-test/ws/stocks";
     log.debug("baseUrl={}", baseUrl);
   }
 
@@ -75,7 +65,7 @@ public class ShareSubscriptionWebSocketTest {
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
     Thread.sleep(2500);
-    
+
     Quote quote = new Quote();
     quote.setCurrency("USD");
     quote.setPrice(10.0f);

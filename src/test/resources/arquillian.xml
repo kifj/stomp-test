@@ -35,20 +35,17 @@
     <property name="connectionMode">STARTANDSTOP</property>
     <property name="dockerContainers">
           jbossas-remote:
-            buildImage:
-               dockerfileLocation: etc/docker/integration-tests
-               remove: true
             exposedPorts: [8080/tcp, 9990/tcp]
-            attachStdin: true
-            attachStderr: true
+            portBindings: [8080/tcp, 9990/tcp]
+            buildImage:
+              dockerfileLocation: etc/docker/integration-tests
+              remove: true
             await:
               strategy: sleeping
-              sleepTime: 15s
-            env: [ MANAGEMENT=public ]
-            portBindings: [8080/tcp, 9990/tcp]
-            volumes:
-              - /opt/docker/x1/certs/docker.key:/etc/pki/tls/private/node.key:ro
-              - /opt/docker/x1/certs/docker.crt:/etc/pki/tls/certs/node.crt:ro
+              sleepTime: 20 s
+              stdErr: true
+              stdOut: true
+            env: [ MANAGEMENT=public HTTP=public ]
       </property>
   </extension>
 </arquillian>

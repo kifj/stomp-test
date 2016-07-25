@@ -1,7 +1,6 @@
 package x1.stomp.test;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -48,9 +46,6 @@ public class ShareResourceTest {
   @Inject
   private Logger log;
 
-  @ArquillianResource
-  private URL url;
-
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
@@ -65,11 +60,7 @@ public class ShareResourceTest {
 
   @Before
   public void setup() {
-    if (url == null) {
-      baseUrl = "http://localhost:8080/stomp-test/rest";
-    } else {
-      baseUrl = url.toString() + "rest";
-    }
+    baseUrl = "http://" + System.getProperty("jboss.bind.address", "127.0.0.1") + ":8080/stomp-test/rest";
     log.debug("baseUrl={}", baseUrl);
   }
 

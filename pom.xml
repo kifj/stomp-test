@@ -553,15 +553,29 @@
       <!-- An optional Arquillian testing profile that executes tests in a docker hosted remote JBoss AS instance -->
       <id>arq-jbossas-docker</id>
       <dependencies>
+        <!-- a lot of version conflicts between Wildfly 10 & arquillian-cube-docker -->
         <dependency>
-          <groupId>org.arquillian.cube</groupId>
-          <artifactId>arquillian-cube-docker</artifactId>
-          <version>1.0.0.Alpha10</version>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+          <version>2.6.4</version>
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.jboss.resteasy</groupId>
-          <artifactId>resteasy-jaxrs</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+          <version>2.6.4</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+          <version>2.6.4</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.arquillian.cube</groupId>
+          <artifactId>arquillian-cube-docker</artifactId>
+          <version>1.0.0.Alpha11</version>
           <scope>test</scope>
         </dependency>
         <dependency>
