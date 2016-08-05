@@ -83,7 +83,7 @@ public class QuoteRetriever {
     String name = StringUtils.remove(parts[1], "\"").trim();
     String price = parts[2].trim();
     if ("N/A".equalsIgnoreCase(price)) {
-      log.warn("No price received for key={}", key);
+      log.warn("No price received for key={}: {}", key,  line);
       return null;
     }
     for (Share share : shares) {

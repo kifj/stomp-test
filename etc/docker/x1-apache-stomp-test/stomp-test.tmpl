@@ -1,10 +1,10 @@
-{{if gt (len (ls "/services/stomp-test/")) 0}}  <Proxy balancer://httpbalancer>
-{{ range gets "/services/stomp-test/*:8009" }}{{ $node := index (split (index (split .Key "/") 3) ":") 1 }}
+{{if gt (len (ls "/services/stomp-test-8009/")) 0}}  <Proxy balancer://httpbalancer>
+{{ range gets "/services/stomp-test-8009/*:8009" }}{{ $node := index (split (index (split .Key "/") 3) ":") 1 }}
     BalancerMember ajp://{{.Value}} route={{ $node }} connectiontimeout=2 retry=30{{ end }}
     
   </Proxy>
   <Proxy balancer://wsbalancer>
-{{ range gets "/services/stomp-test/*:8080" }}
+{{ range gets "/services/stomp-test-8080/*:8080" }}
     BalancerMember ws://{{.Value}} connectiontimeout=2 retry=30{{ end }}
     
   </Proxy>
