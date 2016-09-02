@@ -1,9 +1,9 @@
 if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
   /subsystem=datasources/data-source=stocksDS:add( \
     jndi-name=java:jboss/datasources/stocksDS, \
-    connection-url=jdbc:postgresql://db.x1/stocks,\
-    user-name=stocks, \
-    password=stocks, \
+    connection-url=jdbc:postgresql://${env.DB_SERVER}/stocks,\
+    user-name=${env.DB_USER}, \
+    password=${env.DB_PASSWORD}, \
     min-pool-size=2,\
     max-pool-size=5,\
     driver-name=postgresql,\

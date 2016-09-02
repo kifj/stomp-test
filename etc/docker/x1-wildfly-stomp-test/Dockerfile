@@ -1,4 +1,4 @@
-FROM j7beck/x1-wildfly-slot0:10.0.0.Final
+FROM j7beck/x1-wildfly-slot0:10.1.0.Final
 MAINTAINER joe <joe@mail.x1>
 
 ADD x1-testing.repo /etc/yum.repos.d/x1-testing.repo
@@ -14,4 +14,4 @@ RUN rm -rf /srv/wildfly/scripts
 RUN cp /usr/share/java/stomp-test-v1.4.war /srv/wildfly/slot0/deployments/ROOT.war
 RUN chown -R jboss.jboss /srv/wildfly
 
-ENV SERVICE_NAME=stomp-test
+ENV SERVICE_NAME=stomp-test DB_USER=stocks DB_PASSWORD=stocks
