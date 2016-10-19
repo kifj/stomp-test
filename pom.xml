@@ -42,7 +42,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <swagger.version>1.5.9</swagger.version>
+    <swagger.version>1.5.10</swagger.version>
   </properties>
 
   <distributionManagement>
@@ -111,7 +111,7 @@
       <dependency>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-spec-api</artifactId>
-        <version>10.0.0.Final</version>
+        <version>10.1.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -275,7 +275,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>9.4-1206-jdbc4</version>
+      <version>9.4.1209</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -447,6 +447,11 @@
             </plugin>
           </reportPlugins>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
       </plugin>
     </plugins>
     <extensions>
@@ -643,6 +648,49 @@
                   </sources>
                 </mapping>
               </mappings>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <version>3.1.73</version>
+            <executions>
+                <execution>
+                  <phase>install</phase>
+                  <goals>
+                    <goal>resource</goal>
+                    <goal>build</goal>
+                  </goals>
+                </execution>
+              </executions>
+            <configuration>
+              <images>
+                <image>
+                  <name>j7beck/x1-haproxy-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
+                  <build>
+                    <dockerFileDir>x1-haproxy-stomp-test</dockerFileDir>
+                  </build>
+                </image>
+                <image>
+                  <name>j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
+                  <build>
+                    <dockerFileDir>x1-postgres-stomp-test</dockerFileDir>
+                  </build>
+                </image>
+                <image>
+                  <name>j7beck/x1-camunda-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
+                  <build>
+                    <dockerFileDir>x1-wildfly-stomp-test</dockerFileDir>
+                  </build>
+                </image>
+              </images>
             </configuration>
           </plugin>
         </plugins>
