@@ -2,7 +2,7 @@
 <arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
         http://jboss.org/schema/arquillian
-        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+        http://www.jboss.org/schema/arquillian/arquillian_1_0.xsd">
   <container qualifier="jbossas-remote" default="false">
     <configuration>
       <property name="managementAddress">${jboss.managementAddress:localhost}</property>
@@ -38,7 +38,7 @@
             exposedPorts: [8080/tcp, 9990/tcp]
             portBindings: [8080/tcp, 9990/tcp]
             buildImage:
-              dockerfileLocation: etc/docker/integration-tests
+              dockerfileLocation: src/main/docker/docker/integration-tests
               remove: true
             await:
               strategy: sleeping
