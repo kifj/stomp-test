@@ -24,18 +24,28 @@ import javax.xml.bind.JAXBException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
+import x1.service.registry.Protocol;
+import x1.service.registry.Service;
+import x1.service.registry.Services;
+import x1.service.registry.Technology;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.service.QuoteRetriever;
 import x1.stomp.service.ShareSubscription;
 import x1.stomp.util.JsonHelper;
+import x1.stomp.util.VersionData;
 
 @MessageDriven(name = "ShareSubscriptionWebSocketServerEndpoint", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/topic/quotes"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ServerEndpoint("/ws/stocks")
+@Services(services = { 
+    @Service(technology = Technology.JMS, value = "java:/jms/topic/quotes", version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
+    @Service(technology = Technology.WEBSOCKETS, value = "/ws/stocks", version = VersionData.MAJOR_MINOR, protocols = { Protocol.WS, Protocol.WSS }),
+    @Service(technology = Technology.STOMP, value = "jms.topic.quotesTopic", version = VersionData.MAJOR_MINOR, protocols = { Protocol.STOMP_WS, Protocol.STOMP_WSS })
+    })
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
   static final Map<String, Session> SESSIONS = new HashMap<>();
 

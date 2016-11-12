@@ -15,15 +15,30 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.ejb.ActivationConfigProperty;
 
+import x1.service.registry.Protocol;
+import x1.service.registry.Service;
+import x1.service.registry.Services;
+import x1.service.registry.Technology;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.util.JsonHelper;
+import x1.stomp.util.VersionData;
 
 @MessageDriven(name = "ShareMessageListener", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
+@Services(services = {
+    @Service(technology = Technology.JMS, 
+        value = "java:/jms/queue/stocks", 
+        version = VersionData.MAJOR_MINOR, 
+        protocols = Protocol.EJB),
+    @Service(technology = Technology.STOMP, 
+        value = "jms.queue.stocksQueue", 
+        version = VersionData.MAJOR_MINOR, 
+        protocols = { Protocol.STOMP_WS, Protocol.STOMP_WSS })
+})
 public class ShareMessageListener implements MessageListener {
   @Inject
   private Logger log;

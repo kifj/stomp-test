@@ -34,16 +34,29 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import x1.service.registry.Protocol;
+import x1.service.registry.Service;
+import x1.service.registry.Services;
+import x1.service.registry.Technology;
 import x1.stomp.model.Share;
 import x1.stomp.service.ShareSubscription;
 import x1.stomp.util.StockMarket;
+import x1.stomp.util.VersionData;
 
-@Path("/shares")
+@Path(ShareResource.PATH)
 @RequestScoped
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Api(value = "/shares")
+@Api(value = ShareResource.PATH)
+@Services(services = {
+  @Service(technology = Technology.REST, 
+      value = RestApplication.PATH + ShareResource.PATH, 
+      version = VersionData.MAJOR_MINOR, 
+      protocols = { Protocol.HTTP, Protocol.HTTPS })
+})
 public class ShareResource {
+  public static final String PATH = "/shares";
+  
   @Inject
   private Logger log;
 

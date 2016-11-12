@@ -28,3 +28,6 @@ if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topi
     entries=[java:/jms/topic/quotes],\
     )
 end-if
+
+/system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:remove()
+/system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:add(value="stomp-test")

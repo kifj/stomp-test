@@ -226,6 +226,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>x1.service</groupId>
+      <artifactId>service-registry</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
       <groupId>io.swagger</groupId>
       <artifactId>swagger-core</artifactId>
       <version>${swagger.version}</version>
@@ -447,11 +452,6 @@
             </plugin>
           </reportPlugins>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
       </plugin>
     </plugins>
     <extensions>
@@ -685,9 +685,40 @@
                   </build>
                 </image>
                 <image>
-                  <name>j7beck/x1-camunda-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
+                  <name>j7beck/x1-wildfly-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-wildfly-stomp-test</dockerFileDir>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>docker-integration-test</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <version>3.1.73</version>
+            <executions>
+                <execution>
+                  <phase>pre-integration-test</phase>
+                  <goals>
+                    <goal>resource</goal>
+                    <goal>build</goal>
+                  </goals>
+                </execution>
+              </executions>
+            <configuration>
+              <images>
+                <image>
+                  <name>j7beck/x1-wildfly-stomp-test-it:${app.majorVersion}.${app.minorVersion}</name>
+                  <build>
+                    <dockerFileDir>integration-tests</dockerFileDir>
                   </build>
                 </image>
               </images>

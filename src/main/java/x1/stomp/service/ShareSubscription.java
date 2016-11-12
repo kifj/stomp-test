@@ -4,6 +4,7 @@ import java.util.List;
 
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
+import x1.stomp.util.VersionData;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -14,8 +15,19 @@ import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 
+/*
+@Service(
+    technology = Technology.RMI, 
+    value = ShareSubscription.JNDI_PATH, 
+    version = VersionData.MAJOR_MINOR, 
+    protocols = Protocol.EJB)
+@Remote
+*/
 @Stateless
 public class ShareSubscription {
+  public static final String JNDI_PATH = "ejb:/" + VersionData.APP_NAME_MAJOR_MINOR
+      + "/ShareSubscription!x1.stomp.service.ShareSubscription";
+
   @Inject
   private Logger log;
 
