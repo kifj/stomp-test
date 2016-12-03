@@ -14,9 +14,7 @@ $JBOSS_HOME/bin/standalone.sh -c profile-slot0.xml --admin-only &
 sleep 10
 
 $JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:9990 --file=$JBOSS_BASE_DIR/../scripts/create-stomp-test.cli
+$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:9990 --command=:shutdown
 
-kill -HUP $(pidof java)
-sleep 3
 rm $JBOSS_BASE_DIR/log/*.log $JBOSS_BASE_DIR/configuration/keystore.jks
-
 exit 0
