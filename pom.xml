@@ -20,7 +20,7 @@
   </licenses>
   <scm>
     <url>https://github.com/kifj/stomp-test</url>
-    <connection>scm:git:https://github.com/kifj/stomp-test.git</connection>
+    <connection>scm:git:git@github.com:kifj/stomp-test.git</connection>
   </scm>
   <ciManagement>
     <system>Jenkins</system>
@@ -580,7 +580,7 @@
         <dependency>
           <groupId>org.arquillian.cube</groupId>
           <artifactId>arquillian-cube-docker</artifactId>
-          <version>1.0.0.Alpha11</version>
+          <version>1.0.0.Alpha15</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -662,14 +662,14 @@
             <artifactId>fabric8-maven-plugin</artifactId>
             <version>3.1.73</version>
             <executions>
-                <execution>
-                  <phase>install</phase>
-                  <goals>
-                    <goal>resource</goal>
-                    <goal>build</goal>
-                  </goals>
-                </execution>
-              </executions>
+              <execution>
+                <phase>install</phase>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
             <configuration>
               <images>
                 <image>
