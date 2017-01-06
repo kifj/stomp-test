@@ -1,10 +1,9 @@
 if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
   /subsystem=datasources/data-source=stocksDS:add( \
     jndi-name=java:jboss/datasources/stocksDS, \
-    connection-url=jdbc:postgresql://${env.DB_SERVER}/stocks,\
-    user-name=${env.DB_USER}, \
-    password=${env.DB_PASSWORD}, \
-    statistics-enabled=true,\
+    connection-url=jdbc:postgresql://db.x1/stocks,\
+    user-name=stocks, \
+    password=stocks, \
     min-pool-size=2,\
     max-pool-size=5,\
     driver-name=postgresql,\
@@ -30,6 +29,3 @@ if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topi
     )
 end-if
 
-/system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:remove()
-/system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:add(value="stomp-test")
-/system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")

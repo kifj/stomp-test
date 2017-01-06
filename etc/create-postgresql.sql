@@ -1,3 +1,5 @@
+CREATE SCHEMA stocks;
+
 CREATE TABLE stocks.share (
   id bigint NOT NULL,
   key character varying(25) NOT NULL,

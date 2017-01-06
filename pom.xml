@@ -647,6 +647,18 @@
                     </source>
                   </sources>
                 </mapping>
+                <mapping>
+                  <directory>/usr/share/stomp-test</directory>
+                  <directoryIncluded>true</directoryIncluded>
+                  <sources>
+                    <source>
+                      <location>${basedir}/etc/create-postgresql.sql</location>
+                    </source>
+                    <source>
+                      <location>${basedir}/etc/create-stomp-test.cli</location>
+                    </source>
+                  </sources>
+                </mapping>
               </mappings>
             </configuration>
           </plugin>
