@@ -178,7 +178,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.4</version>
+      <version>3.5</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -293,7 +293,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.6</version>
+        <version>3.0.0</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
           <archive>
@@ -320,7 +320,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.10</version>
+        <version>1.12</version>
         <executions>
           <execution>
             <id>parse-version</id>
@@ -424,7 +424,7 @@
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>findbugs-maven-plugin</artifactId>
-              <version>3.0.3</version>
+              <version>3.0.4</version>
               <configuration>
                 <xmlOutput>true</xmlOutput>
                 <!-- <excludeFilterFile>etc/findbugs-exclude.xml</excludeFilterFile> -->

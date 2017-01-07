@@ -1,20 +1,13 @@
 #---------------------------------------------------------------------
-# Example configuration for a possible web application.  See the
-# full configuration options online.
-#
-#   http://haproxy.1wt.eu/download/1.4/doc/configuration.txt
-#
-#---------------------------------------------------------------------
-
-#---------------------------------------------------------------------
 # Global settings
 #---------------------------------------------------------------------
 global
-    log 127.0.0.1 local2
-    chroot /var/lib/haproxy
-    user haproxy
-    group haproxy
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    user        haproxy
+    group       haproxy
     # daemon
+    
     # turn on stats unix socket
     stats socket /var/lib/haproxy/stats
     tune.ssl.default-dh-param 2048
@@ -28,6 +21,7 @@ global
 defaults
     mode                    http
     log                     global
+    option                  httplog
     option                  dontlognull
     option                  http-server-close
     option                  redispatch
@@ -39,6 +33,7 @@ defaults
     timeout server          1m
     timeout http-keep-alive 10s
     timeout check           10s
+    timeout tunnel          3600s
     maxconn                 3000
 
 frontend statistics
@@ -47,44 +42,46 @@ frontend statistics
     stats uri /
 
 frontend http-in
-    bind *:80
-    option                  httplog
-    reqadd X-Forwarded-Proto:\ http
-    default_backend         nodes-http
+    bind            *:80
+    reqadd          X-Forwarded-Proto:\ http
+    default_backend nodes-http
 
 frontend https-in
-    bind :443 ssl crt /etc/haproxy/node.pem alpn h2,http/1.1
-    mode                    tcp
-    option                  tcplog
-    reqadd X-Forwarded-Proto:\ https
-    http-response set-header Strict-Transport-Security "max-age=16000000; includeSubDomains; preload;"
-    use_backend nodes-http2 if { ssl_fc_alpn -i h2 }
+    bind            :443 ssl crt /etc/haproxy/node.pem alpn h2,http/1.1
+    mode            tcp
+    option          tcplog
+    reqadd          X-Forwarded-Proto:\ https
+    http-response   set-header Strict-Transport-Security "max-age=16000000; includeSubDomains; preload;"
+    use_backend     nodes-http2 if { ssl_fc_alpn -i h2 }
     default_backend nodes-http
 
 frontend stomp-in
-    bind *:61614
-    mode                    tcp
-    option                  tcplog
-    reqadd X-Forwarded-Proto:\ http
-    default_backend         nodes-stomp
+    bind            *:61614
+    mode            tcp
+    option          tcplog
+    reqadd          X-Forwarded-Proto:\ http
+    default_backend nodes-stomp
 
 backend nodes-http
-    mode                    http
-    option                  httplog
+    mode            http
+    option          httplog
+    option          forwardfor except 127.0.0.0/8
+    option          httpchk GET /
 {{if gt (len (ls "/services/stomp-test-8080/")) 0}}{{ range gets "/services/stomp-test-8080/*:8080" }}{{ $node := index (split (index (split .Key "/") 3) ":") 1 }}
-    server {{ $node }} {{.Value}} check{{ end }}
+    server {{ $node }} {{.Value}} check inter 5000{{ end }}
 {{end}}
 
 backend nodes-http2
-    mode                    tcp
-    option                  tcplog
+    mode            tcp
+    option          tcplog
+    option          httpchk GET /
 {{if gt (len (ls "/services/stomp-test-8443/")) 0}}{{ range gets "/services/stomp-test-8443/*:8443" }}{{ $node := index (split (index (split .Key "/") 3) ":") 1 }}
-    server {{ $node }} {{.Value}} check{{ end }}
+    server {{ $node }} {{.Value}} check ssl verify none inter 5000{{ end }}
 {{end}}
 
 backend nodes-stomp
-    mode                    tcp
-    option                  tcplog
+    mode            tcp
+    option          tcplog
 {{if gt (len (ls "/services/stomp-test-61614/")) 0}}{{ range gets "/services/stomp-test-61614/*:61614" }}{{ $node := index (split (index (split .Key "/") 3) ":") 1 }}
-    server {{ $node }} {{.Value}} check{{ end }}
+    server {{ $node }} {{.Value}} check inter 5000{{ end }}
 {{end}}
