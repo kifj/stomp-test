@@ -10,3 +10,5 @@ if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topi
     entries=[java:/jms/topic/quotes],\
     )
 end-if
+
+/system-property=x1.service.registry.etcd:add(value="http://192.168.123.1:4001")

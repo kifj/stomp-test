@@ -97,14 +97,14 @@
       <dependency>
         <groupId>org.jboss.shrinkwrap.resolver</groupId>
         <artifactId>shrinkwrap-resolver-bom</artifactId>
-        <version>2.2.2</version>
+        <version>2.2.5</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.1.11.Final</version>
+        <version>1.1.12.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -262,14 +262,19 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss.arquillian.extension</groupId>
-      <artifactId>arquillian-jacoco</artifactId>
-      <version>1.0.0.Alpha8</version>
+      <groupId>org.jboss.arquillian.protocol</groupId>
+      <artifactId>arquillian-protocol-servlet</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.shrinkwrap.resolver</groupId>
       <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.extension</groupId>
+      <artifactId>arquillian-jacoco</artifactId>
+      <version>1.0.0.Alpha8</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -333,11 +338,6 @@
         <configuration>
           <propertyPrefix>app</propertyPrefix>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.wildfly.plugins</groupId>
-        <artifactId>wildfly-maven-plugin</artifactId>
-        <version>1.0.2.Final</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -453,6 +453,16 @@
           </reportPlugins>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>1.0.2.Final</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+      </plugin>
     </plugins>
     <extensions>
       <extension>
@@ -524,14 +534,14 @@
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.wildfly.arquillian</groupId>
-          <artifactId>wildfly-arquillian-container-remote</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
           <version>0.7.6.201602180812</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.wildfly.arquillian</groupId>
+          <artifactId>wildfly-arquillian-container-remote</artifactId>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -558,25 +568,6 @@
       <!-- An optional Arquillian testing profile that executes tests in a docker hosted remote JBoss AS instance -->
       <id>arq-jbossas-docker</id>
       <dependencies>
-        <!-- a lot of version conflicts between Wildfly 10 & arquillian-cube-docker -->
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-core</artifactId>
-          <version>2.6.4</version>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-          <version>2.6.4</version>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-          <version>2.6.4</version>
-          <scope>test</scope>
-        </dependency>
         <dependency>
           <groupId>org.arquillian.cube</groupId>
           <artifactId>arquillian-cube-docker</artifactId>

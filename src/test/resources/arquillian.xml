@@ -30,22 +30,23 @@
   </extension>
 
   <extension qualifier="docker">
-    <property name="serverVersion">1.20</property>
+    <property name="serverVersion">1.24</property>
     <property name="serverUri">http://localhost:2375</property>
     <property name="connectionMode">STARTANDSTOP</property>
+    <property name="definitionFormat">CUBE</property>
     <property name="dockerContainers">
-          jbossas-remote:
-            exposedPorts: [8080/tcp, 9990/tcp]
-            portBindings: [8080/tcp, 9990/tcp]
-            buildImage:
-              dockerfileLocation: src/main/docker/docker/integration-tests
-              remove: true
-            await:
-              strategy: sleeping
-              sleepTime: 20 s
-              stdErr: true
-              stdOut: true
-            env: [ MANAGEMENT=public HTTP=public ]
+      jbossas-remote:
+        buildImage:
+          dockerfileLocation: src/main/docker/integration-tests
+          remove: true
+        exposedPorts: [8080/tcp, 9990/tcp]
+        portBindings: [8080/tcp, 9990/tcp]
+        await:
+          strategy: sleeping
+          sleepTime: 20 s
+          stdErr: true
+          stdOut: true
+        env: [ MANAGEMENT=public HTTP=public ]
       </property>
   </extension>
 </arquillian>
