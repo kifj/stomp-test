@@ -226,9 +226,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>x1.service</groupId>
+      <groupId>x1.jboss</groupId>
       <artifactId>service-registry</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.3</version>
     </dependency>
     <dependency>
       <groupId>io.swagger</groupId>
@@ -294,7 +294,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.5</version>
       </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
