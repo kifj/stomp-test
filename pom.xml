@@ -363,95 +363,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.4</version>
-        <configuration>
-          <outputEncoding>UTF-8</outputEncoding>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-project-info-reports-plugin</artifactId>
-              <version>2.9</version>
-              <configuration>
-                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-              </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>taglist-maven-plugin</artifactId>
-              <version>2.4</version>
-              <configuration>
-                <aggregate>true</aggregate>
-                <tags>
-                  <tag>TODO</tag>
-                  <tag>FIXME</tag>
-                  <tag>XXX</tag>
-                </tags>
-              </configuration>
-            </plugin>
-            <plugin>
-              <groupId>x1.maven.plugins</groupId>
-              <artifactId>schemaspy-maven-plugin</artifactId>
-              <version>1.6</version>
-              <configuration>
-                <host>db.x1</host>
-                <dbname>stocks</dbname>
-                <schema>stocks</schema>
-                <username>stocks</username>
-                <password>stocks</password>
-                <type>pgsql</type>
-              </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-changelog-plugin</artifactId>
-              <version>2.3</version>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-surefire-report-plugin</artifactId>
-              <version>2.19.1</version>
-              <configuration>
-                <testFailureIgnore>true</testFailureIgnore>
-              </configuration>
-              <reportSets>
-                <reportSet>
-                  <reports>
-                    <report>report-only</report>
-                  </reports>
-                </reportSet>
-              </reportSets>
-            </plugin>
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>findbugs-maven-plugin</artifactId>
-              <version>3.0.4</version>
-              <configuration>
-                <xmlOutput>true</xmlOutput>
-                <!-- <excludeFilterFile>etc/findbugs-exclude.xml</excludeFilterFile> -->
-              </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-checkstyle-plugin</artifactId>
-              <version>2.17</version>
-              <configuration>
-                <configLocation>etc/checkstyle.xml</configLocation>
-                <!-- <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation> -->
-              </configuration>
-              <reportSets>
-                <reportSet>
-                  <reports>
-                    <report>checkstyle</report>
-                  </reports>
-                </reportSet>
-              </reportSets>
-            </plugin>
-            <plugin>
-              <groupId>org.jacoco</groupId>
-              <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-          </reportPlugins>
-        </configuration>
+        <version>3.6</version>
       </plugin>
       <plugin>
         <groupId>org.wildfly.plugins</groupId>
@@ -472,6 +384,94 @@
       </extension>
     </extensions>
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <aggregate>true</aggregate>
+          <tags>
+            <tag>TODO</tag>
+            <tag>FIXME</tag>
+            <tag>XXX</tag>
+          </tags>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>x1.maven.plugins</groupId>
+        <artifactId>schemaspy-maven-plugin</artifactId>
+        <version>1.6</version>
+        <configuration>
+          <host>db.x1</host>
+          <dbname>stocks</dbname>
+          <schema>stocks</schema>
+          <username>stocks</username>
+          <password>stocks</password>
+          <type>pgsql</type>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.19.1</version>
+        <configuration>
+          <testFailureIgnore>true</testFailureIgnore>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report-only</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>3.0.4</version>
+        <configuration>
+          <xmlOutput>true</xmlOutput>
+          <!-- <excludeFilterFile>etc/findbugs-exclude.xml</excludeFilterFile> -->
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.17</version>
+        <configuration>
+          <configLocation>etc/checkstyle.xml</configLocation>
+          <!-- <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation> -->
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+  
   <profiles>
     <profile>
       <id>default</id>
