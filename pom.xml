@@ -708,14 +708,14 @@
             <artifactId>fabric8-maven-plugin</artifactId>
             <version>3.1.73</version>
             <executions>
-               <execution>
-                  <phase>pre-integration-test</phase>
-                  <goals>
-                    <goal>resource</goal>
-                    <goal>build</goal>
-                  </goals>
-                </execution>
-              </executions>
+              <execution>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
             <configuration>
               <images>
                 <image>
