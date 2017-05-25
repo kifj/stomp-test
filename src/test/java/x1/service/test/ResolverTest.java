@@ -62,9 +62,10 @@ public class ResolverTest {
 
     List<Node> nodes = resolver.resolve(Technology.REST, ShareResource.class, VersionData.MAJOR_MINOR, STAGE,
         Protocol.HTTPS);
-    assertEquals(1, nodes.size());
-
-    Properties props = resolver.getProperties(nodes.get(0));
+    assertTrue(nodes.size() > 0);
+    Node node = getNode(nodes, resolver);
+    assertNotNull(node);
+    Properties props = resolver.getProperties(node);
     assertEquals(5, props.size());
     int port = 8443;
     String context = "/" + VersionData.APP_NAME_MAJOR_MINOR;
@@ -84,9 +85,10 @@ public class ResolverTest {
 
     List<Node> nodes = resolver.resolve(Technology.JMS, "x1.stomp.service.ShareMessageListener",
         VersionData.MAJOR_MINOR, STAGE, Protocol.EJB);
-    assertEquals(1, nodes.size());
-
-    Properties props = resolver.getProperties(nodes.get(0));
+    assertTrue(nodes.size() > 0);
+    Node node = getNode(nodes, resolver);
+    assertNotNull(node);
+    Properties props = resolver.getProperties(node);
     assertEquals(5, props.size());
     assertNull(props.getProperty(Constants.BASE_URI));
     String context = "/" + VersionData.APP_NAME_MAJOR_MINOR;
@@ -99,4 +101,13 @@ public class ResolverTest {
     assertNull(props.getProperty(Constants.DESTINATION));
   }
 
+  private Node getNode(List<Node> nodes, Resolver resolver) {
+    for (Node node : nodes) {
+      Properties props = resolver.getProperties(node);
+      if (props.getProperty(Constants.HOST_NAME).equals(hostname)) {
+        return node;
+      }
+    }
+    return null;
+  }
 }
