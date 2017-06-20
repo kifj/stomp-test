@@ -674,6 +674,7 @@
               </execution>
             </executions>
             <configuration>
+              <mode>kubernetes</mode>
               <images>
                 <image>
                   <name>j7beck/x1-haproxy-stomp-test:${app.majorVersion}.${app.minorVersion}</name>

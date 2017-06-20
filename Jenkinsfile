@@ -19,7 +19,7 @@ node {
       .withRun('-e MANAGEMENT=public -e HTTP=public') {
     c ->
       try {
-        sleep 10
+        sleep 30
         sh "${mvnHome}/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
       } finally {
         junit '**/target/surefire-reports/TEST-*.xml'
