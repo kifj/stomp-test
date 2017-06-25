@@ -675,7 +675,7 @@
             </executions>
             <configuration>
               <mode>kubernetes</mode>
-              <verbose>true</mode>
+              <verbose>true</verbose>
               <images>
                 <image>
                   <name>j7beck/x1-haproxy-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
@@ -720,7 +720,7 @@
             </executions>
             <configuration>
               <mode>kubernetes</mode>            
-              <verbose>true</mode>
+              <verbose>true</verbose>
               <images>
                 <image>
                   <name>j7beck/x1-wildfly-stomp-test-it:${app.majorVersion}.${app.minorVersion}</name>
