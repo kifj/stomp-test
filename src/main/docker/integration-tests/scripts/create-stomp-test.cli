@@ -11,4 +11,4 @@ if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topi
     )
 end-if
 
-/system-property=x1.service.registry.etcd:add(value="http://192.168.123.1:4001")
+/system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
