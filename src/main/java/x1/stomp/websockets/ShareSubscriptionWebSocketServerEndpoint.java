@@ -17,6 +17,7 @@ import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import javax.xml.bind.JAXBException;
@@ -139,6 +140,15 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     } catch (JMSException e) {
       log.error(null, e);
     }
+  }
+  
+  @OnMessage
+  public void onMessage(PongMessage message, Session session) throws IOException, JAXBException {
+    String answer = null;
+    if (message.getApplicationData().hasArray()) {  
+      answer = new String(message.getApplicationData().array());
+    }
+    log.debug("Received pong [{}]", answer);
   }
 
   private void sendMessage(TextMessage textMessage, Session session) {
