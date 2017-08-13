@@ -252,6 +252,11 @@
       <version>${swagger.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <scope>provided</scope>
+    </dependency>    
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -294,7 +299,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5</version>
+        <version>3.6.2</version>
       </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
@@ -325,7 +330,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.12</version>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <id>parse-version</id>
@@ -342,7 +347,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.8</version>
+        <version>0.7.9</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -380,7 +385,7 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>2.4</version>
+        <version>3.0.0</version>
       </extension>
     </extensions>
   </build>
@@ -506,7 +511,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.8</version>
+          <version>0.7.9</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -536,7 +541,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.8</version>
+          <version>0.7.9</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -587,7 +592,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.8</version>
+          <version>0.7.9</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
