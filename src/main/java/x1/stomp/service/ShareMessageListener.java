@@ -25,6 +25,8 @@ import x1.stomp.model.Share;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.util.VersionData;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 @MessageDriven(name = "ShareMessageListener", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
@@ -80,7 +82,7 @@ public class ShareMessageListener implements MessageListener {
     String body = new String(bytes, "UTF-8");
     log.debug("Received message: {}", body);
     Command command = JsonHelper.fromJSON(body, Command.class);
-    if (StringUtils.isEmpty(command.getAction()) || StringUtils.isEmpty(command.getKey())) {
+    if (command == null || isEmpty(command.getAction()) || isEmpty(command.getKey())) {
       log.warn("Incomplete command: {}", command);
       return;
     }
