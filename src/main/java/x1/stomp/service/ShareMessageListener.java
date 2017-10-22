@@ -2,7 +2,6 @@ package x1.stomp.service;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import javax.ejb.EJBException;
