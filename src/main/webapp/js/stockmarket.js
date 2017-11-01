@@ -105,7 +105,6 @@ Client.prototype.unsubscribe = function(key) {
 }
 
 Client.prototype.onmessage = function(message) {
-	var caller = this;
 	this.messageOn('Received quotes.');
 	var quote = message.quote;
 	var id = "key_" + quote.share.key.replace('.', '');
