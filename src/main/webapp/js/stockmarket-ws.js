@@ -95,7 +95,6 @@ Client.prototype.unsubscribe = function(key) {
 }
 
 Client.prototype.onmessage = function(message) {
-	var caller = this;
 	var quote = message.quote;
 	var event = message.subscriptionEvent;
 	var id;
