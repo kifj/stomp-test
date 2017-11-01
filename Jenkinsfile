@@ -2,7 +2,7 @@ node {
   def mvnHome = tool 'Maven-3.3'
   
   stage('Checkout') {
-    git url: 'https://github.com/kifj/stomp-test.git', branch: 'wildfly-10'
+    git url: 'https://github.com/kifj/stomp-test.git', branch: 'wildfly-11'
   }
   
   stage('Build') {
@@ -15,7 +15,7 @@ node {
   
   stage('Run IT test') {
     docker
-      .image('j7beck/x1-wildfly-stomp-test-it:1.4')
+      .image('j7beck/x1-wildfly-stomp-test-it:1.5')
       .withRun('-e MANAGEMENT=public -e HTTP=public') {
     c ->
       try {
