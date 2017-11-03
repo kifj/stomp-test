@@ -5,7 +5,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.inject.Inject;
 
@@ -15,10 +14,11 @@ import org.slf4j.Logger;
 
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
+import x1.stomp.util.JsonHelper;
 
 public class QuoteRetriever {
-  private static final String URL = "http://download.finance.yahoo.com/d/quotes.csv?s={0}&f=snl1";
-  private static final String CURRENCY = "EUR";
+  private static final String URL = "https://quote.cnbc.com/quote-html-webservice/quote.htm?symbols={0}&output=json";
+  private static final String DEFAULT_CURRENCY = "EUR";
 
   @Inject
   private Logger log;
@@ -40,7 +40,7 @@ public class QuoteRetriever {
     StringBuilder buffer = new StringBuilder();
     for (Share share : shares) {
       if (buffer.length() > 0) {
-        buffer.append('+');
+        buffer.append('|');
       }
       buffer.append(share.getKey());
     }
@@ -53,14 +53,15 @@ public class QuoteRetriever {
     }
   }
 
-  private List<Quote> extractQuotes(List<Share> shares, String content) {
+  private List<Quote> extractQuotes(List<Share> shares, String content) throws IOException {
     List<Quote> result = new ArrayList<>();
-    StringTokenizer tokenizer = new StringTokenizer(content, "\n\r");
-    while (tokenizer.hasMoreTokens()) {
-      String line = tokenizer.nextToken();
-      Quote quote = createQuote(line, shares);
-      if (quote != null) {
-        result.add(quote);
+    QuickQuoteResult quickQuoteResult = JsonHelper.fromJSON(content, QuickQuoteResult.class);
+    if (quickQuoteResult.getQuotes() != null) {
+      for (QuickQuote quickQuote : quickQuoteResult.getQuotes()) {
+        Quote quote = createQuote(quickQuote, shares);
+        if (quote != null) {
+          result.add(quote);
+        }
       }
     }
     return result;
@@ -74,32 +75,29 @@ public class QuoteRetriever {
     return content;
   }
 
-  private Quote createQuote(String line, List<Share> shares) {
-    String[] parts = StringUtils.split(line, ',');
-    if (parts.length != 3) {
-      return null;
-    }
-    String key = StringUtils.remove(parts[0], "\"").trim();
-    String name = StringUtils.remove(parts[1], "\"").trim();
-    String price = parts[2].trim();
-    if ("N/A".equalsIgnoreCase(price)) {
-      log.warn("No price received for key={}: {}", key,  line);
+  private Quote createQuote(QuickQuote quickQuote, List<Share> shares) {
+    if (quickQuote.getLast() == null || quickQuote.getName() == null || quickQuote.getSymbol() == null) {
       return null;
     }
     for (Share share : shares) {
+      String key = quickQuote.getSymbol();
       if (share.getKey().equalsIgnoreCase(key)) {
         share.setKey(key);
-        share.setName(name);
+        share.setName(quickQuote.getName());
         Quote quote = new Quote(share);
-        quote.setPrice(Float.valueOf(price));
-        quote.setCurrency(CURRENCY);
+        quote.setPrice(quickQuote.getLast());
+        quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));
         return quote;
       }
     }
     return null;
   }
 
-  private Quote createQuote(String line, Share share) {
-    return createQuote(line, Arrays.asList(share));
+  private Quote createQuote(String content, Share share) throws IOException {
+    QuickQuoteResult quickQuoteResult = JsonHelper.fromJSON(content, QuickQuoteResult.class);
+    if (quickQuoteResult.getQuotes() != null && quickQuoteResult.getQuotes().isEmpty()) {
+      return null;
+    }
+    return createQuote(quickQuoteResult.getQuotes().get(0), Arrays.asList(share));
   }
 }

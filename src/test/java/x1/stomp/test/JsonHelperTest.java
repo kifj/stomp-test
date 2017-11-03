@@ -2,7 +2,14 @@ package x1.stomp.test;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.io.File;
+
+import org.apache.commons.io.FileUtils;
+
 import x1.stomp.model.Command;
+import x1.stomp.service.QuickQuote;
+import x1.stomp.service.QuickQuoteResult;
 import x1.stomp.util.JsonHelper;
 
 public class JsonHelperTest {
@@ -32,7 +39,7 @@ public class JsonHelperTest {
 
   @Test
   public void testFromJson1() throws Exception {
-    Command c = (Command) JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", Command.class);
+    Command c = JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", Command.class);
     assertNotNull(c);
     assertEquals("foo", c.getAction());
     assertEquals("MSFT", c.getKey());
@@ -40,7 +47,7 @@ public class JsonHelperTest {
 
   @Test
   public void testFromJson2() throws Exception {
-    Command c = (Command) JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\"}}", Command.class);
+    Command c = JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\"}}", Command.class);
     assertNotNull(c);
     assertEquals("foo", c.getAction());
     assertNull(c.getKey());
@@ -48,7 +55,23 @@ public class JsonHelperTest {
 
   @Test
   public void testFromJson3() throws Exception {
-    Command c = (Command) JsonHelper.fromJSON(null, Command.class);
+    Command c = JsonHelper.fromJSON(null, Command.class);
     assertNull(c);
+  }
+  
+  @Test
+  public void testFromJson4() throws Exception {
+    File f = new File(getClass().getClassLoader().getResource("quickquoteresult.json").getFile());
+    String c = FileUtils.readFileToString(f, "UTF-8");
+    QuickQuoteResult q = JsonHelper.fromJSON(c, QuickQuoteResult.class);
+    assertNotNull(q);
+    assertEquals(2, q.getQuotes().size());
+    QuickQuote q1 = q.getQuotes().get(0);
+    assertEquals("BMW.DE", q1.getSymbol());
+    assertEquals("89.57", q1.getLast().toString());
+    assertEquals("EUR", q1.getCurrencyCode());
+    assertEquals("DE", q1.getCountryCode());
+    assertEquals("Bayerische Motoren Werke AG", q1.getName());
+    assertEquals("XETRA", q1.getExchange());
   }
 }
