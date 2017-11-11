@@ -632,6 +632,7 @@
               </execution>
             </executions>
             <configuration>
+              <name>stomp-test-v${app.majorVersion}.${app.minorVersion}</name>
               <group>Applications/Internet</group>
               <mappings>
                 <mapping>
@@ -668,7 +669,7 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>fabric8-maven-plugin</artifactId>
-            <version>3.1.73</version>
+            <version>3.5.33</version>
             <executions>
               <execution>
                 <phase>install</phase>
@@ -698,6 +699,9 @@
                   <name>j7beck/x1-wildfly-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-wildfly-stomp-test</dockerFileDir>
+                    <assembly>
+                      <descriptorRef>rootWar</descriptorRef>
+                    </assembly>
                   </build>
                 </image>
               </images>
@@ -713,7 +717,7 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>fabric8-maven-plugin</artifactId>
-            <version>3.1.73</version>
+            <version>3.5.33</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
