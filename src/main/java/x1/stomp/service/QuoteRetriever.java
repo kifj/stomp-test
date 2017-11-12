@@ -40,7 +40,7 @@ public class QuoteRetriever {
     StringBuilder buffer = new StringBuilder();
     for (Share share : shares) {
       if (buffer.length() > 0) {
-        buffer.append('|');
+        buffer.append("%7C");
       }
       buffer.append(share.getKey());
     }
