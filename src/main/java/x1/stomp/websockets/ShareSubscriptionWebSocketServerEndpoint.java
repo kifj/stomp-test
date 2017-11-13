@@ -149,7 +149,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   public void onMessage(PongMessage message, Session session) throws IOException, JAXBException {
     String answer = null;
     if (message.getApplicationData().hasArray()) {  
-      answer = new String(message.getApplicationData().array());
+      answer = new String(message.getApplicationData().array(), "UTF-8");
     }
     log.debug("Received pong [{}]", answer);
   }
