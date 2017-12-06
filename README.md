@@ -4,7 +4,7 @@ Sample application how to use JBoss Wildfly with Websockets and Stomp
 
 See details: [http://blog.johannes-beck.name/?p=285](http://blog.johannes-beck.name/?p=285)
 
-## CLI-Scripts for Wildfly 10.0
+## CLI-Scripts for Wildfly 11
 
 This creates the STOMP acceptor on port 61614
 
