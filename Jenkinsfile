@@ -16,7 +16,7 @@ node {
   stage('Run IT test') {
     docker
       .image('j7beck/x1-wildfly-stomp-test-it:1.4')
-      .withRun('-e MANAGEMENT=public -e HTTP=public') {
+      .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
     c ->
       try {
         sleep 60

@@ -645,7 +645,7 @@
                   </sources>
                 </mapping>
                 <mapping>
-                  <directory>/usr/share/stomp-test</directory>
+                  <directory>/usr/share/stomp-test-v${app.majorVersion}.${app.minorVersion}</directory>
                   <directoryIncluded>true</directoryIncluded>
                   <sources>
                     <source>
