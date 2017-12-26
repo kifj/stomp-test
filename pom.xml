@@ -104,7 +104,7 @@
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.1.13.Final</version>
+        <version>1.1.15.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -290,7 +290,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>9.4.1212</version>
+      <version>42.1.4</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -571,13 +571,13 @@
       </build>
     </profile>
     <profile>
-      <!-- An optional Arquillian testing profile that executes tests in a docker hosted remote JBoss AS instance -->
+      <!-- An optional Arquillian testing profile that executes tests in a docker hosted remote Wildfly instance -->
       <id>arq-jbossas-docker</id>
       <dependencies>
         <dependency>
           <groupId>org.arquillian.cube</groupId>
           <artifactId>arquillian-cube-docker</artifactId>
-          <version>1.9.1</version>
+          <version>1.11.0</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -605,9 +605,7 @@
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
-                <arquillian.launch>docker-stomp-test-it</arquillian.launch>
-                <jboss.managementAddress>dockerServerIp</jboss.managementAddress>
-                <jboss.managementPort>9990</jboss.managementPort>
+                <arquillian.launch>docker-stomp-test-it</arquillian.launch> 
                 <jboss.user>admin</jboss.user>
                 <jboss.password>12345</jboss.password>
               </systemPropertyVariables>

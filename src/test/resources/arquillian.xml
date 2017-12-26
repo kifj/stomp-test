@@ -34,7 +34,7 @@
 	<container qualifier="docker-stomp-test-it" default="false">
 		<protocol type="Servlet 3.0" />
 		<configuration>
-			<property name="managementAddress">${jboss.managementAddress:localhost}</property>
+			<property name="managementAddress">localhost</property>
 			<property name="managementPort">${jboss.managementPort:9990}</property>
 			<property name="username">${jboss.user}</property>
 			<property name="password">${jboss.password}</property>
@@ -53,7 +53,7 @@
 		<property name="dockerContainers">
       stomp-test-it:
         image: j7beck/x1-wildfly-stomp-test-it:1.5
-        portBindings: [9990->9990/tcp, 8080->8080/tcp]
+        portBindings: [9990/tcp, 8080/tcp]
         await:
           strategy: polling
           sleepPollingTime: 10 s
