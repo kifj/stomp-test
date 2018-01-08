@@ -40,23 +40,30 @@
 			<property name="password">${jboss.password}</property>
 		</configuration>
 	</container>
-	
+
 	<extension qualifier="jacoco">
 		<property name="includes">x1.*</property>
 	</extension>
 
+	<extension qualifier="cube">
+	  <property name="connectionMode">STARTANDSTOP</property>
+	</extension>
+
 	<extension qualifier="docker">
-		<property name="serverVersion">1.24</property>
-		<property name="serverUri">http://localhost:2375</property>
-		<property name="connectionMode">STARTANDSTOP</property>
+		<property name="serverVersion">1.26</property>
+		<property name="autoStartContainers">stomp-test-it</property>
 		<property name="definitionFormat">CUBE</property>
+		<property name="clean">true</property>
 		<property name="dockerContainers">
       stomp-test-it:
         image: j7beck/x1-wildfly-stomp-test-it:1.5
+        alwaysPull: false
         portBindings: [9990/tcp, 8080/tcp]
         await:
-          strategy: polling
-          sleepPollingTime: 10 s
+          strategy: http
+          responseCode: 200
+          url: http://dockerHost:8080
+          sleepPollingTime: 5 s
           iterations: 10
           stdErr: true
           stdOut: true
