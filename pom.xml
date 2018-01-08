@@ -88,23 +88,16 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven</artifactId>
-        <version>3.2.5</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-      <dependency>
         <groupId>org.jboss.shrinkwrap.resolver</groupId>
         <artifactId>shrinkwrap-resolver-bom</artifactId>
-        <version>2.2.6</version>
+        <version>3.0.1</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.1.13.Final</version>
+        <version>1.2.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -476,7 +469,7 @@
       </plugin>
     </plugins>
   </reporting>
-  
+
   <profiles>
     <profile>
       <id>default</id>
@@ -576,7 +569,7 @@
         <dependency>
           <groupId>org.arquillian.cube</groupId>
           <artifactId>arquillian-cube-docker</artifactId>
-          <version>1.0.0.Alpha15</version>
+          <version>1.12.0</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -604,9 +597,8 @@
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
-                <arquillian.launch>jbossas-remote</arquillian.launch>
-                <jboss.managementAddress>dockerServerIp</jboss.managementAddress>
-                <jboss.managementPort>9990</jboss.managementPort>
+                <org.jboss.logging.provider>slf4j</org.jboss.logging.provider>
+                <arquillian.launch>docker-stomp-test-it</arquillian.launch>
                 <jboss.user>admin</jboss.user>
                 <jboss.password>12345</jboss.password>
               </systemPropertyVariables>
@@ -728,7 +720,7 @@
               </execution>
             </executions>
             <configuration>
-              <mode>kubernetes</mode>            
+              <mode>kubernetes</mode>
               <verbose>true</verbose>
               <images>
                 <image>
