@@ -41,9 +41,9 @@ def hostIp(container) {
   readFile('hostIp').trim()
 }
 
-def waitFor(target, sleep, retries) {
+def waitFor(target, sleepInSec, retries) {
   retry (retries) {
-    sleep sleep
+    sleep sleepInSec
     httpRequest url: target, validResponseCodes: '200'
   }
 }
