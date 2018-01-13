@@ -3,6 +3,7 @@ package x1.stomp.websockets;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
@@ -21,11 +22,7 @@ public class PingSender {
 
   @PostConstruct
   public void setup() {
-    try {
-      ping = ByteBuffer.wrap("ping".getBytes("UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      ping = null;
-    }
+    ping = ByteBuffer.wrap("ping".getBytes(StandardCharsets.UTF_8));
   }
 
   @Inject

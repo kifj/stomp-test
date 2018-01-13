@@ -2,6 +2,7 @@ package x1.stomp.websockets;
 
 import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   @OnOpen
   public void onConnectionOpen(Session session) {
-    log.info("Connection opened for session " + session.getId());
+    log.info("Connection opened for session {}", session.getId());
     SESSIONS.put(session.getId(), session);
   }
 
@@ -149,7 +150,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   public void onMessage(PongMessage message, Session session) throws IOException {
     String answer = null;
     if (message.getApplicationData().hasArray()) {  
-      answer = new String(message.getApplicationData().array(), "UTF-8");
+      answer = new String(message.getApplicationData().array(), StandardCharsets.UTF_8);
     }
     log.debug("Received pong [{}]", answer);
   }
