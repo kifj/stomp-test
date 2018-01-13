@@ -68,10 +68,10 @@ public class QuoteRetriever {
   }
 
   private String retrieveInternal(String keys) throws IOException {
-    log.debug("Retrieve quotes for " + keys);
+    log.debug("Retrieve quotes for {}", keys);
     String targetUrl = MessageFormat.format(URL, keys.toUpperCase());
     String content = Request.Get(targetUrl).execute().returnContent().asString();
-    log.debug("Received content size:" + content.length());
+    log.debug("Received content size: {}", content.length());
     return content;
   }
 

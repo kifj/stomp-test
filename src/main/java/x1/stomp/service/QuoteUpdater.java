@@ -53,15 +53,15 @@ public class QuoteUpdater {
   public void updateQuotes() {
     lastUpdatedCount = 0;
     List<Share> shares = shareSubscription.list();
-    log.info("Update Quotes for " + shares.size() + " shares");
+    log.info("Update Quotes for {} shares", shares.size());
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
-      MessageProducer producer = session.createProducer(quoteTopic);
-
-      for (Quote quote : quotes) {
-        log.debug("Sending message for " + quote);
-        producer.send(createMessage(quote, session));
-        lastUpdatedCount++;
+      try (MessageProducer producer = session.createProducer(quoteTopic)) {
+        List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
+        for (Quote quote : quotes) {
+          log.debug("Sending message for {}", quote);
+          producer.send(createMessage(quote, session));
+          lastUpdatedCount++;
+        }
       }
     } catch (JMSException | JAXBException e) {
       log.error(null, e);
@@ -70,9 +70,10 @@ public class QuoteUpdater {
 
   public void updateQuote(Quote quote) {
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      MessageProducer producer = session.createProducer(quoteTopic);
-      log.debug("Sending message for " + quote);
-      producer.send(createMessage(quote, session));
+      try (MessageProducer producer = session.createProducer(quoteTopic)) {
+        log.debug("Sending message for " + quote);
+        producer.send(createMessage(quote, session));
+      }
       lastUpdatedCount++;
     } catch (JMSException | JAXBException e) {
       log.error(null, e);

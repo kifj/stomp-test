@@ -1,6 +1,7 @@
 package x1.stomp.service;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 
@@ -27,18 +28,18 @@ import x1.stomp.util.VersionData;
 import static org.apache.commons.lang3.StringUtils.*;
 
 @MessageDriven(name = "ShareMessageListener", activationConfig = {
-    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-    @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
-    @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
+        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")})
 @Services(services = {
-    @Service(technology = Technology.JMS, 
-        value = "java:/jms/queue/stocks", 
-        version = VersionData.MAJOR_MINOR, 
-        protocols = Protocol.EJB),
-    @Service(technology = Technology.STOMP, 
-        value = "jms.queue.stocksQueue", 
-        version = VersionData.MAJOR_MINOR, 
-        protocols = { Protocol.STOMP_WS, Protocol.STOMP_WSS })
+        @Service(technology = Technology.JMS,
+                value = "java:/jms/queue/stocks",
+                version = VersionData.MAJOR_MINOR,
+                protocols = Protocol.EJB),
+        @Service(technology = Technology.STOMP,
+                value = "jms.queue.stocksQueue",
+                version = VersionData.MAJOR_MINOR,
+                protocols = {Protocol.STOMP_WS, Protocol.STOMP_WSS})
 })
 public class ShareMessageListener implements MessageListener {
   @Inject
@@ -78,7 +79,7 @@ public class ShareMessageListener implements MessageListener {
   private void onMessage(BytesMessage message) throws JMSException, IOException {
     byte[] bytes = new byte[(int) message.getBodyLength()];
     message.readBytes(bytes);
-    String body = new String(bytes, "UTF-8");
+    String body = new String(bytes, StandardCharsets.UTF_8);
     log.debug("Received message: {}", body);
     Command command = JsonHelper.fromJSON(body, Command.class);
     if (command == null || isEmpty(command.getAction()) || isEmpty(command.getKey())) {
@@ -86,15 +87,15 @@ public class ShareMessageListener implements MessageListener {
       return;
     }
     switch (command.getAction().toUpperCase()) {
-    case "SUBSCRIBE":
-      subscribe(command.getKey());
-      break;
-    case "UNSUBSCRIBE":
-      unsubscribe(command.getKey());
-      break;
-    default:
-      log.warn("Unknown command: {}", body);
-      break;
+      case "SUBSCRIBE":
+        subscribe(command.getKey());
+        break;
+      case "UNSUBSCRIBE":
+        unsubscribe(command.getKey());
+        break;
+      default:
+        log.warn("Unknown command: {}", body);
+        break;
     }
   }
 
