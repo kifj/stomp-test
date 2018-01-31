@@ -40,6 +40,7 @@ public class ShareResourceTest {
   private static final String PATH_SHARES = "shares";
   private static final String PATH_PARAM_KEY = "{key}";
   private static final String PARAM_KEY = "key";
+  public static final String TEST_SHARE = "AAPL";
 
   private String baseUrl;
 
@@ -67,7 +68,7 @@ public class ShareResourceTest {
   @Test
   public void testFindShareNotFound() throws Exception {
     Client client = ClientBuilder.newClient();
-    Response response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, "AAPL")
+    Response response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, TEST_SHARE)
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     response.close();
@@ -135,7 +136,7 @@ public class ShareResourceTest {
   @Test
   public void testGetQuoteNotFound() throws Exception {
     Client client = ClientBuilder.newClient();
-    Response response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, "AAPL")
+    Response response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, TEST_SHARE)
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
   }
