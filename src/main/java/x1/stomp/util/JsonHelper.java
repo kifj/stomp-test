@@ -22,16 +22,15 @@ public final class JsonHelper {
   private JsonHelper() {
   }
 
-  public static String toJSON(Object o) throws JAXBException {
-    if (o == null) {
+  public static String toJSON(Object obj) throws JAXBException {
+    if (obj == null) {
       return null;
     }
-    JAXBContext context = JAXBContext.newInstance(o.getClass());
-    Marshaller marshaller = context.createMarshaller();
+    Marshaller marshaller = JAXBContext.newInstance(obj.getClass()).createMarshaller();
     StringWriter sw = new StringWriter();
     MappedNamespaceConvention con = new MappedNamespaceConvention();
     AbstractXMLStreamWriter w = new MappedXMLStreamWriter(con, sw);
-    marshaller.marshal(o, w);
+    marshaller.marshal(obj, w);
     return sw.toString();
   }
 
@@ -41,10 +40,9 @@ public final class JsonHelper {
       return null;
     }
     try {
-      JSONObject jsonObject = new JSONObject(content);
-      AbstractXMLStreamReader reader = new MappedXMLStreamReader(jsonObject);
-      JAXBContext context = JAXBContext.newInstance(resultClass);
-      Unmarshaller unmarshaller = context.createUnmarshaller();
+      JSONObject obj = new JSONObject(content);
+      AbstractXMLStreamReader reader = new MappedXMLStreamReader(obj);
+      Unmarshaller unmarshaller = JAXBContext.newInstance(resultClass).createUnmarshaller();
       // note: setting schema to null will turn validator off
       unmarshaller.setSchema(null);
       return (T) unmarshaller.unmarshal(reader);

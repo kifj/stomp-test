@@ -59,7 +59,7 @@ public class ShareSubscriptionWebSocketTest {
   public void testWebSocket() throws Exception {
     WebSocketClient client = WebSocketClient.openConnection(baseUrl);
     Command command = new Command();
-    command.setAction("SUBSCRIBE");
+    command.setAction(Command.ACTION_SUBSCRIBE);
     command.setKey(TEST_SHARE);
     String message = JsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
@@ -82,7 +82,7 @@ public class ShareSubscriptionWebSocketTest {
     assertEquals(quote.getCurrency(), received.getCurrency());
     assertEquals(TEST_SHARE, received.getShare().getKey());
 
-    command.setAction("UNSUBSCRIBE");
+    command.setAction(Command.ACTION_UNSUBSCRIBE);
     message = JsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);

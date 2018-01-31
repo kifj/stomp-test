@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Command {
+  public static final String ACTION_SUBSCRIBE = "SUBSCRIBE";
+  public static final String ACTION_UNSUBSCRIBE = "UNSUBSCRIBE";
+
   private String action;
   private String key;
 

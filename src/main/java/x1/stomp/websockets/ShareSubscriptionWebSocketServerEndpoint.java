@@ -79,11 +79,11 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
       return result;
     }
     switch (command.getAction().toUpperCase()) {
-    case "SUBSCRIBE":
+    case Command.ACTION_SUBSCRIBE:
       Quote quote = subscribe(command.getKey());
       result = JsonHelper.toJSON(quote);
       break;
-    case "UNSUBSCRIBE":
+    case Command.ACTION_UNSUBSCRIBE:
       unsubscribe(command.getKey());
       break;
     default:

@@ -42,6 +42,7 @@ import static org.apache.commons.lang3.StringUtils.*;
                 protocols = {Protocol.STOMP_WS, Protocol.STOMP_WSS})
 })
 public class ShareMessageListener implements MessageListener {
+
   @Inject
   private Logger log;
 
@@ -87,10 +88,10 @@ public class ShareMessageListener implements MessageListener {
       return;
     }
     switch (command.getAction().toUpperCase()) {
-      case "SUBSCRIBE":
+      case Command.ACTION_SUBSCRIBE:
         subscribe(command.getKey());
         break;
-      case "UNSUBSCRIBE":
+      case Command.ACTION_UNSUBSCRIBE:
         unsubscribe(command.getKey());
         break;
       default:
