@@ -1,5 +1,6 @@
 package x1.stomp.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.Schedule;
@@ -21,7 +22,6 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
-import javax.xml.bind.JAXBException;
 
 @Singleton
 @Startup
@@ -53,7 +53,7 @@ public class QuoteUpdater {
   public void updateQuotes() {
     lastUpdatedCount = 0;
     List<Share> shares = shareSubscription.list();
-    log.info("Update Quotes for {} shares", shares.size());
+    log.debug("Update Quotes for {} shares", shares.size());
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(quoteTopic)) {
         List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
@@ -63,7 +63,7 @@ public class QuoteUpdater {
           lastUpdatedCount++;
         }
       }
-    } catch (JMSException | JAXBException e) {
+    } catch (JMSException | IOException e) {
       log.error(null, e);
     }
   }
@@ -75,12 +75,12 @@ public class QuoteUpdater {
         producer.send(createMessage(quote, session));
       }
       lastUpdatedCount++;
-    } catch (JMSException | JAXBException e) {
+    } catch (JMSException | IOException e) {
       log.error(null, e);
     }
   }
 
-  private Message createMessage(Quote quote, Session session) throws JMSException, JAXBException {
+  private Message createMessage(Quote quote, Session session) throws JMSException, IOException {
     TextMessage message = session.createTextMessage(JsonHelper.toJSON(quote));
     message.setStringProperty("type", "quote");
     message.setStringProperty("key", quote.getShare().getKey());

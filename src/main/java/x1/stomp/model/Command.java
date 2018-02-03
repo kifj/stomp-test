@@ -2,7 +2,12 @@ package x1.stomp.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 @XmlRootElement
+@JsonRootName(value = "command")
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class Command {
   public static final String ACTION_SUBSCRIBE = "SUBSCRIBE";
   public static final String ACTION_UNSUBSCRIBE = "UNSUBSCRIBE";

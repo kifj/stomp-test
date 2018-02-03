@@ -35,9 +35,8 @@ public class ResolverTest {
 
   @Deployment
   public static Archive<?> createTestArchive() {
-    File[] libraries = Maven
-        .resolver().loadPomFromFile("pom.xml").resolve("org.apache.httpcomponents:fluent-hc",
-            "org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs", "x1.jboss:service-registry")
+    File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs", "x1.jboss:service-registry")
         .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")

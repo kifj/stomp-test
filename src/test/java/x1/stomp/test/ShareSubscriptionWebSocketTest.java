@@ -40,7 +40,7 @@ public class ShareSubscriptionWebSocketTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
         .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")

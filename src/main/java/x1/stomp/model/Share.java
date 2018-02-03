@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -33,9 +35,13 @@ public class Share implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @JsonIgnore
+  @XmlTransient
   private Long id;
 
   @Version
+  @JsonIgnore
+  @XmlTransient
   private Long version;
 
   @NotNull

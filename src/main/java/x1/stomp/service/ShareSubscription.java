@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 @Stateless
 public class ShareSubscription {
   public static final String JNDI_PATH = "ejb:/" + VersionData.APP_NAME_MAJOR_MINOR
-          + "/ShareSubscription!x1.stomp.service.ShareSubscription";
+      + "/ShareSubscription!x1.stomp.service.ShareSubscription";
 
   @Inject
   private Logger log;

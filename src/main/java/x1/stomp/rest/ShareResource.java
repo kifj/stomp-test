@@ -34,7 +34,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import x1.service.registry.Protocol;
+import static x1.service.registry.Protocol.*;
+import static x1.service.registry.Technology.*;
+
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.service.registry.Technology;
@@ -48,12 +50,8 @@ import x1.stomp.util.VersionData;
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Api(value = ShareResource.PATH)
-@Services(services = {
-  @Service(technology = Technology.REST, 
-      value = RestApplication.PATH + ShareResource.PATH, 
-      version = VersionData.MAJOR_MINOR, 
-      protocols = { Protocol.HTTP, Protocol.HTTPS })
-})
+@Services(services = { @Service(technology = REST, value = RestApplication.ROOT
+    + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 public class ShareResource {
   public static final String PATH = "/shares";
   
@@ -85,7 +83,7 @@ public class ShareResource {
   @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found", response = Share.class),
       @ApiResponse(code = 404, message = "Subscription not found") })
   public Response findShare(
-      @ApiParam("Stock symbol (e.g. BMW.DE), see http://finance.yahoo.com/q") @PathParam("key") String key) {
+      @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Share share = shareSubscription.find(key);
     if (share != null) {
       return Response.ok(share).build();
@@ -96,13 +94,11 @@ public class ShareResource {
 
   @POST
   @ApiOperation(value = "Add share to your list of subscriptions")
-  @ApiResponses(value = {@ApiResponse(code = 201, message = "Share queued for subscription"),
-          @ApiResponse(code = 500, message = "Queuing failed")})
+  @ApiResponses(value = { @ApiResponse(code = 201, message = "Share queued for subscription"),
+      @ApiResponse(code = 500, message = "Queuing failed") })
   public Response addShare(
-          @ApiParam(required = true, value = "The share which is will be added for subscription")
-          @Valid Share share,
-          @ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.")
-          @HeaderParam(value = "Correlation-Id") String correlationId) {
+      @ApiParam(required = true, value = "The share which is will be added for subscription") @Valid Share share,
+      @ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
     log.info("Add share " + share);
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
@@ -122,8 +118,8 @@ public class ShareResource {
   @DELETE
   @Path("/{key}")
   @ApiOperation(value = "Remove a subscription to a share")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription removed", response = Share.class),
-          @ApiResponse(code = 404, message = "Subscription was not found")})
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription removed", response = Share.class),
+      @ApiResponse(code = 404, message = "Subscription was not found") })
   public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
     Share share = shareSubscription.find(key);
     if (share != null) {

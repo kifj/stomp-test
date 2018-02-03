@@ -8,6 +8,8 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 
 import x1.stomp.model.Command;
+import x1.stomp.model.Quote;
+import x1.stomp.model.Share;
 import x1.stomp.service.QuickQuote;
 import x1.stomp.service.QuickQuoteResult;
 import x1.stomp.util.JsonHelper;
@@ -38,6 +40,22 @@ public class JsonHelperTest {
   }
 
   @Test
+  public void testToJson4() throws Exception {
+    Share share = new Share();
+    share.setId(1L);
+    share.setKey("BMW.DE");
+    share.setName("Bayerische Motorenwerke AG");
+    Quote q = new Quote();
+    q.setCurrency("EUR");
+    q.setPrice(1.23f);
+    q.setShare(share);
+    String json = JsonHelper.toJSON(q);
+    assertEquals(
+        "{\"Quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,\"currency\":\"EUR\"}}",
+        json);
+  }
+
+  @Test
   public void testFromJson1() throws Exception {
     Command c = JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", Command.class);
     assertNotNull(c);
@@ -58,7 +76,7 @@ public class JsonHelperTest {
     Command c = JsonHelper.fromJSON(null, Command.class);
     assertNull(c);
   }
-  
+
   @Test
   public void testFromJson4() throws Exception {
     File f = new File(getClass().getClassLoader().getResource("quickquoteresult.json").getFile());
