@@ -21,7 +21,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,14 +42,12 @@ import x1.stomp.util.VersionData;
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/topic/quotes"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ServerEndpoint("/ws/stocks")
-@Services(services = { 
-    @Service(technology = Technology.JMS, value = "java:/jms/topic/quotes", 
-      version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
-    @Service(technology = Technology.WEBSOCKETS, value = "/ws/stocks", 
-      version = VersionData.MAJOR_MINOR, protocols = { Protocol.WS, Protocol.WSS }),
-    @Service(technology = Technology.STOMP, value = "jms.topic.quotesTopic", 
-      version = VersionData.MAJOR_MINOR, protocols = { Protocol.STOMP_WS, Protocol.STOMP_WSS })
-    })
+@Services(services = {
+    @Service(technology = Technology.JMS, value = "java:/jms/topic/quotes", version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
+    @Service(technology = Technology.WEBSOCKETS, value = "/ws/stocks", version = VersionData.MAJOR_MINOR, protocols = {
+        Protocol.WS, Protocol.WSS }),
+    @Service(technology = Technology.STOMP, value = "jms.topic.quotesTopic", version = VersionData.MAJOR_MINOR, protocols = {
+        Protocol.STOMP_WS, Protocol.STOMP_WSS }) })
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
   static final Map<String, Session> SESSIONS = new HashMap<>();
 
@@ -70,7 +67,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   }
 
   @OnMessage
-  public String onMessage(String message, Session session) throws IOException, JAXBException {
+  public String onMessage(String message, Session session) throws IOException {
     log.debug("Received message: {}", message);
     String result = null;
     Command command = JsonHelper.fromJSON(message, Command.class);
@@ -145,11 +142,11 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
       log.error(null, e);
     }
   }
-  
+
   @OnMessage
   public void onMessage(PongMessage message, Session session) {
     String answer = null;
-    if (message.getApplicationData().hasArray()) {  
+    if (message.getApplicationData().hasArray()) {
       answer = new String(message.getApplicationData().array(), StandardCharsets.UTF_8);
     }
     log.debug("Received pong [{}]", answer);

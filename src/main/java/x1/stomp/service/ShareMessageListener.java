@@ -28,19 +28,13 @@ import x1.stomp.util.VersionData;
 import static org.apache.commons.lang3.StringUtils.*;
 
 @MessageDriven(name = "ShareMessageListener", activationConfig = {
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
-        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")})
+    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+    @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
+    @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @Services(services = {
-        @Service(technology = Technology.JMS,
-                value = "java:/jms/queue/stocks",
-                version = VersionData.MAJOR_MINOR,
-                protocols = Protocol.EJB),
-        @Service(technology = Technology.STOMP,
-                value = "jms.queue.stocksQueue",
-                version = VersionData.MAJOR_MINOR,
-                protocols = {Protocol.STOMP_WS, Protocol.STOMP_WSS})
-})
+    @Service(technology = Technology.JMS, value = "java:/jms/queue/stocks", version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
+    @Service(technology = Technology.STOMP, value = "jms.queue.stocksQueue", version = VersionData.MAJOR_MINOR, protocols = {
+        Protocol.STOMP_WS, Protocol.STOMP_WSS }) })
 public class ShareMessageListener implements MessageListener {
 
   @Inject
@@ -88,15 +82,15 @@ public class ShareMessageListener implements MessageListener {
       return;
     }
     switch (command.getAction().toUpperCase()) {
-      case Command.ACTION_SUBSCRIBE:
-        subscribe(command.getKey());
-        break;
-      case Command.ACTION_UNSUBSCRIBE:
-        unsubscribe(command.getKey());
-        break;
-      default:
-        log.warn("Unknown command: {}", body);
-        break;
+    case Command.ACTION_SUBSCRIBE:
+      subscribe(command.getKey());
+      break;
+    case Command.ACTION_UNSUBSCRIBE:
+      unsubscribe(command.getKey());
+      break;
+    default:
+      log.warn("Unknown command: {}", body);
+      break;
     }
   }
 

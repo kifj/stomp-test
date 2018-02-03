@@ -2,6 +2,11 @@ package x1.stomp.service;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonRootName(value = "QuickQuote")
 public class QuickQuote implements Serializable {
   private static final long serialVersionUID = -7248251946071933412L;
 
@@ -69,11 +74,10 @@ public class QuickQuote implements Serializable {
     this.exchange = exchange;
   }
 
-
   @Override
   public String toString() {
     return "QuickQuote [last=" + last + ", name=" + name + ", symbol=" + symbol + ", volume=" + volume
-            + ", countryCode=" + countryCode + ", currencyCode=" + currencyCode + ", exchange=" + exchange + "]";
+        + ", countryCode=" + countryCode + ", currencyCode=" + currencyCode + ", exchange=" + exchange + "]";
   }
 
 }

@@ -41,6 +41,7 @@ public class ShareResourceTest {
   private static final String PATH_PARAM_KEY = "{key}";
   private static final String PARAM_KEY = "key";
   public static final String TEST_SHARE = "AAPL";
+  public static final String TEST_SHARE_INVALID = "XXXX";
 
   private String baseUrl;
 
@@ -50,7 +51,7 @@ public class ShareResourceTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
         .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
@@ -68,8 +69,8 @@ public class ShareResourceTest {
   @Test
   public void testFindShareNotFound() throws Exception {
     Client client = ClientBuilder.newClient();
-    Response response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, TEST_SHARE)
-        .request(MediaType.APPLICATION_JSON).get();
+    Response response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
+        .resolveTemplate(PARAM_KEY, TEST_SHARE).request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     response.close();
   }
@@ -99,8 +100,7 @@ public class ShareResourceTest {
     assertEquals(key, found.getKey());
 
     List<Share> shares = client.target(baseUrl).path(PATH_SHARES).request(MediaType.APPLICATION_JSON)
-        .get(new GenericType<List<Share>>() {
-        });
+        .get(new GenericType<List<Share>>() {});
     assertEquals(1, shares.size());
 
     Quote quote = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
@@ -109,6 +109,10 @@ public class ShareResourceTest {
     assertNotNull(quote.getCurrency());
     assertNotNull(quote.getPrice());
     assertEquals(quote.getShare().getKey(), share.getKey());
+
+    List<Quote> quotes = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, share.getKey(), TEST_SHARE_INVALID)
+        .request(MediaType.APPLICATION_JSON).get(new GenericType<List<Quote>>() {});
+    assertEquals(1, quotes.size());
 
     Response response3 = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
         .resolveTemplate(PARAM_KEY, share.getKey()).request(MediaType.APPLICATION_JSON).delete();
@@ -136,7 +140,15 @@ public class ShareResourceTest {
   @Test
   public void testGetQuoteNotFound() throws Exception {
     Client client = ClientBuilder.newClient();
-    Response response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, TEST_SHARE)
+    Response response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
+        .resolveTemplate(PARAM_KEY, TEST_SHARE).request(MediaType.APPLICATION_JSON).get();
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+  }
+
+  @Test
+  public void testGetQuotesNotFound() throws Exception {
+    Client client = ClientBuilder.newClient();
+    Response response = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, TEST_SHARE, TEST_SHARE_INVALID)
         .request(MediaType.APPLICATION_JSON).get();
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
   }
