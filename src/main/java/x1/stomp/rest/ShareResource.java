@@ -45,18 +45,18 @@ import x1.stomp.util.VersionData;
 
 @Path(ShareResource.PATH)
 @RequestScoped
-@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Api(value = ShareResource.PATH)
 @Services(services = {
-        @Service(technology = Technology.REST,
-                value = RestApplication.PATH + ShareResource.PATH,
-                version = VersionData.MAJOR_MINOR,
-                protocols = {Protocol.HTTP, Protocol.HTTPS})
+  @Service(technology = Technology.REST, 
+      value = RestApplication.PATH + ShareResource.PATH, 
+      version = VersionData.MAJOR_MINOR, 
+      protocols = { Protocol.HTTP, Protocol.HTTPS })
 })
 public class ShareResource {
   public static final String PATH = "/shares";
-
+  
   @Inject
   private Logger log;
 
@@ -74,7 +74,7 @@ public class ShareResource {
   @GET
   @Wrapped(element = "shares")
   @ApiOperation(value = "List all subscriptions")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription found", response = Share[].class)})
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found", response = Share[].class) })
   public List<Share> listAllShares() {
     return shareSubscription.list();
   }
@@ -82,10 +82,10 @@ public class ShareResource {
   @GET
   @Path("/{key}")
   @ApiOperation(value = "Find a share subscription")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription found", response = Share.class),
-          @ApiResponse(code = 404, message = "Subscription not found")})
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription found", response = Share.class),
+      @ApiResponse(code = 404, message = "Subscription not found") })
   public Response findShare(
-          @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
+      @ApiParam("Stock symbol (e.g. BMW.DE), see http://finance.yahoo.com/q") @PathParam("key") String key) {
     Share share = shareSubscription.find(key);
     if (share != null) {
       return Response.ok(share).build();

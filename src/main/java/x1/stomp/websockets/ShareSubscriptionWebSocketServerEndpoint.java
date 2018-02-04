@@ -38,18 +38,22 @@ import x1.stomp.service.ShareSubscription;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.util.VersionData;
 
+import static x1.service.registry.Protocol.*;
+import static x1.service.registry.Technology.*;
+import static x1.stomp.model.Command.*;
+
 @MessageDriven(name = "ShareSubscriptionWebSocketServerEndpoint", activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/topic/quotes"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ServerEndpoint("/ws/stocks")
 @Services(services = { 
-    @Service(technology = Technology.JMS, value = "java:/jms/topic/quotes", 
-      version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
-    @Service(technology = Technology.WEBSOCKETS, value = "/ws/stocks", 
-      version = VersionData.MAJOR_MINOR, protocols = { Protocol.WS, Protocol.WSS }),
-    @Service(technology = Technology.STOMP, value = "jms.topic.quotesTopic", 
-      version = VersionData.MAJOR_MINOR, protocols = { Protocol.STOMP_WS, Protocol.STOMP_WSS })
+    @Service(technology = JMS, value = "java:/jms/topic/quotes",
+      version = VersionData.MAJOR_MINOR, protocols = EJB),
+    @Service(technology = WEBSOCKETS, value = "/ws/stocks",
+      version = VersionData.MAJOR_MINOR, protocols = { WS, WSS }),
+    @Service(technology = STOMP, value = "jms.topic.quotesTopic",
+      version = VersionData.MAJOR_MINOR, protocols = { STOMP_WS, STOMP_WSS })
     })
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
   static final Map<String, Session> SESSIONS = new HashMap<>();
@@ -79,11 +83,11 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
       return result;
     }
     switch (command.getAction().toUpperCase()) {
-    case Command.ACTION_SUBSCRIBE:
+    case ACTION_SUBSCRIBE:
       Quote quote = subscribe(command.getKey());
       result = JsonHelper.toJSON(quote);
       break;
-    case Command.ACTION_UNSUBSCRIBE:
+    case ACTION_UNSUBSCRIBE:
       unsubscribe(command.getKey());
       break;
     default:
