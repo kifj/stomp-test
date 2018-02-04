@@ -4,7 +4,7 @@ Sample application how to use JBoss Wildfly with Websockets and Stomp
 
 See details: [http://blog.johannes-beck.name/?p=285](http://blog.johannes-beck.name/?p=285)
 
-## CLI-Scripts for Wildfly 11
+## CLI-Scripts for Wildfly 10
 
 This creates the STOMP acceptor on port 61614
 
@@ -15,5 +15,5 @@ This creates the STOMP acceptor on port 61614
 
 The application needs a queue, a topic and a datasource.
 
-	etc\docker\x1-wildfly-stomp-test\scripts\create-stomp-test.cli
+	src/main/docker/x1-wildfly-stomp-test/scripts/create-stomp-test.cli
 	

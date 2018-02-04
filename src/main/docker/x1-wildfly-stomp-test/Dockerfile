@@ -1,4 +1,4 @@
-FROM j7beck/x1-wildfly-slot0:11.0.0.Final
+FROM j7beck/x1-wildfly-slot0:10.1.0.Final
 MAINTAINER joe <joe@mail.x1>
 
 ADD collectd.conf /etc/collectd.d/stomp-test-slot0.conf
