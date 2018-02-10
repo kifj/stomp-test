@@ -26,6 +26,7 @@ import x1.service.etcd.Node;
 import x1.service.registry.Protocol;
 import x1.service.registry.Technology;
 import x1.stomp.boundary.ShareResource;
+import x1.stomp.control.ShareMessageListener;
 import x1.stomp.util.VersionData;
 
 @RunWith(Arquillian.class)
@@ -82,7 +83,7 @@ public class ResolverTest {
   public void testResolveJms() throws Exception {
     Resolver resolver = new Resolver();
 
-    List<Node> nodes = resolver.resolve(Technology.JMS, "x1.stomp.service.ShareMessageListener",
+    List<Node> nodes = resolver.resolve(Technology.JMS, ShareMessageListener.class,
         VersionData.MAJOR_MINOR, STAGE, Protocol.EJB);
     assertTrue(nodes.size() > 0);
     Node node = getNode(nodes, resolver);
