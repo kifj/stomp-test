@@ -97,7 +97,8 @@ public class ShareResource {
       @ApiResponse(code = 500, message = "Queuing failed") })
   public Response addShare(
       @ApiParam(required = true, value = "The share which is will be added for subscription") @Valid Share share,
-      @ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
+      @ApiParam(value = "provide a Correlation-Id header to receive a response for your operation when it finished.") 
+      @HeaderParam(value = "Correlation-Id") String correlationId) {
     log.info("Add share " + share);
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {

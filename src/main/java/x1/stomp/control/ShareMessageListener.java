@@ -32,9 +32,10 @@ import static org.apache.commons.lang3.StringUtils.*;
     @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @Services(services = {
-    @Service(technology = Technology.JMS, value = "java:/jms/queue/stocks", version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
-    @Service(technology = Technology.STOMP, value = "jms.queue.stocksQueue", version = VersionData.MAJOR_MINOR, protocols = {
-        Protocol.STOMP_WS, Protocol.STOMP_WSS }) })
+    @Service(technology = Technology.JMS, value = "java:/jms/queue/stocks", 
+      version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
+    @Service(technology = Technology.STOMP, value = "jms.queue.stocksQueue", 
+       version = VersionData.MAJOR_MINOR, protocols = { Protocol.STOMP_WS, Protocol.STOMP_WSS }) })
 public class ShareMessageListener implements MessageListener {
 
   @Inject
