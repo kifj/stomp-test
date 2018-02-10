@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -17,7 +19,8 @@ public final class JsonHelper {
       return null;
     }
     ObjectMapper mapper = new ObjectMapper();
-    mapper.enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).enable(SerializationFeature.WRAP_ROOT_VALUE);
+    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).enable(SerializationFeature.WRAP_ROOT_VALUE)
+        .setSerializationInclusion(Include.NON_NULL);
     StringWriter sw = new StringWriter();
     mapper.writeValue(sw, obj);
     return sw.toString();
