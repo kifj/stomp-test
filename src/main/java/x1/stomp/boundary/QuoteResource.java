@@ -1,4 +1,4 @@
-package x1.stomp.rest;
+package x1.stomp.boundary;
 
 import static x1.service.registry.Protocol.HTTP;
 import static x1.service.registry.Protocol.HTTPS;
@@ -33,8 +33,8 @@ import x1.service.registry.Services;
 import x1.service.registry.Technology;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
-import x1.stomp.service.QuoteRetriever;
-import x1.stomp.service.ShareSubscription;
+import x1.stomp.control.QuoteRetriever;
+import x1.stomp.control.ShareSubscription;
 import x1.stomp.util.VersionData;
 
 @Path(QuoteResource.PATH)
@@ -77,7 +77,7 @@ public class QuoteResource {
   @Path("/")
   @ApiOperation(value = "get quotes")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "Quotes received", response = Quote[].class),
-      @ApiResponse(code = 404, message = "Subscription not found") })
+      @ApiResponse(code = 404, message = "No subscription found") })
   public void getQuotes(@ApiParam("Stock symbols") @QueryParam("key") String[] keys,
       @Suspended AsyncResponse response) {
     withTimeoutHandler(response);

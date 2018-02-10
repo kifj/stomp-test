@@ -25,15 +25,13 @@ import javax.websocket.server.ServerEndpoint;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-import x1.service.registry.Protocol;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
-import x1.service.registry.Technology;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
-import x1.stomp.service.QuoteRetriever;
-import x1.stomp.service.ShareSubscription;
+import x1.stomp.control.QuoteRetriever;
+import x1.stomp.control.ShareSubscription;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.util.VersionData;
 
@@ -66,6 +64,9 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   @Inject
   private Logger log;
 
+  @Inject
+  private JsonHelper jsonHelper;
+
   @OnOpen
   public void onConnectionOpen(Session session) {
     log.info("Connection opened for session {}", session.getId());
@@ -76,7 +77,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   public String onMessage(String message, Session session) throws IOException {
     log.debug("Received message: {}", message);
     String result = null;
-    Command command = JsonHelper.fromJSON(message, Command.class);
+    Command command = jsonHelper.fromJSON(message, Command.class);
     if (StringUtils.isEmpty(command.getAction()) || StringUtils.isEmpty(command.getKey())) {
       log.warn("Incomplete command: {}", command);
       return result;
@@ -84,7 +85,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     switch (command.getAction().toUpperCase()) {
     case ACTION_SUBSCRIBE:
       Quote quote = subscribe(command.getKey());
-      result = JsonHelper.toJSON(quote);
+      result = jsonHelper.toJSON(quote);
       break;
     case ACTION_UNSUBSCRIBE:
       unsubscribe(command.getKey());

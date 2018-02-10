@@ -1,4 +1,4 @@
-package x1.stomp.rest;
+package x1.stomp.boundary;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

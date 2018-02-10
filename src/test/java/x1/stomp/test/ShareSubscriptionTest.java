@@ -10,8 +10,8 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 
 import x1.stomp.model.Share;
-import x1.stomp.service.QuoteUpdater;
-import x1.stomp.service.ShareSubscription;
+import x1.stomp.control.QuoteUpdater;
+import x1.stomp.control.ShareSubscription;
 
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;

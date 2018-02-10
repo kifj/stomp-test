@@ -25,7 +25,7 @@ import x1.service.client.Resolver;
 import x1.service.etcd.Node;
 import x1.service.registry.Protocol;
 import x1.service.registry.Technology;
-import x1.stomp.rest.ShareResource;
+import x1.stomp.boundary.ShareResource;
 import x1.stomp.util.VersionData;
 
 @RunWith(Arquillian.class)

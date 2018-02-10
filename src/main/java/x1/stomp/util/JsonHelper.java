@@ -8,11 +8,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-public final class JsonHelper {
-  private JsonHelper() {
-  }
+public class JsonHelper {
 
-  public static String toJSON(Object obj) throws IOException {
+  public String toJSON(Object obj) throws IOException {
     if (obj == null) {
       return null;
     }
@@ -23,7 +21,7 @@ public final class JsonHelper {
     return sw.toString();
   }
 
-  public static <T> T fromJSON(String content, Class<? extends T> resultClass) throws IOException {
+  public <T> T fromJSON(String content, Class<? extends T> resultClass) throws IOException {
     if (StringUtils.isEmpty(content)) {
       return null;
     }

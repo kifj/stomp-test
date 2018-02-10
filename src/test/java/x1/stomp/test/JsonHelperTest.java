@@ -10,18 +10,19 @@ import org.apache.commons.io.FileUtils;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
-import x1.stomp.service.QuickQuote;
-import x1.stomp.service.QuickQuoteResult;
+import x1.stomp.control.QuickQuote;
+import x1.stomp.control.QuickQuoteResult;
 import x1.stomp.util.JsonHelper;
 
 public class JsonHelperTest {
+  private JsonHelper jsonHelper = new JsonHelper();
 
   @Test
   public void testToJson1() throws Exception {
     Command c = new Command();
     c.setAction("foo");
     c.setKey("MSFT");
-    String json = JsonHelper.toJSON(c);
+    String json = jsonHelper.toJSON(c);
     assertEquals("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", json);
   }
 
@@ -29,13 +30,13 @@ public class JsonHelperTest {
   public void testToJson2() throws Exception {
     Command c = new Command();
     c.setAction("bar");
-    String json = JsonHelper.toJSON(c);
+    String json = jsonHelper.toJSON(c);
     assertEquals("{\"command\":{\"action\":\"bar\"}}", json);
   }
 
   @Test
   public void testToJson3() throws Exception {
-    String json = JsonHelper.toJSON(null);
+    String json = jsonHelper.toJSON(null);
     assertNull(json);
   }
 
@@ -49,7 +50,7 @@ public class JsonHelperTest {
     q.setCurrency("EUR");
     q.setPrice(1.23f);
     q.setShare(share);
-    String json = JsonHelper.toJSON(q);
+    String json = jsonHelper.toJSON(q);
     assertEquals(
         "{\"Quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,\"currency\":\"EUR\"}}",
         json);
@@ -57,7 +58,7 @@ public class JsonHelperTest {
 
   @Test
   public void testFromJson1() throws Exception {
-    Command c = JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", Command.class);
+    Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", Command.class);
     assertNotNull(c);
     assertEquals("foo", c.getAction());
     assertEquals("MSFT", c.getKey());
@@ -65,7 +66,7 @@ public class JsonHelperTest {
 
   @Test
   public void testFromJson2() throws Exception {
-    Command c = JsonHelper.fromJSON("{\"command\":{\"action\":\"foo\"}}", Command.class);
+    Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"foo\"}}", Command.class);
     assertNotNull(c);
     assertEquals("foo", c.getAction());
     assertNull(c.getKey());
@@ -73,7 +74,7 @@ public class JsonHelperTest {
 
   @Test
   public void testFromJson3() throws Exception {
-    Command c = JsonHelper.fromJSON(null, Command.class);
+    Command c = jsonHelper.fromJSON(null, Command.class);
     assertNull(c);
   }
 
@@ -81,7 +82,7 @@ public class JsonHelperTest {
   public void testFromJson4() throws Exception {
     File f = new File(getClass().getClassLoader().getResource("quickquoteresult.json").getFile());
     String c = FileUtils.readFileToString(f, "UTF-8");
-    QuickQuoteResult q = JsonHelper.fromJSON(c, QuickQuoteResult.class);
+    QuickQuoteResult q = jsonHelper.fromJSON(c, QuickQuoteResult.class);
     assertNotNull(q);
     assertEquals(2, q.getQuotes().size());
     QuickQuote q1 = q.getQuotes().get(0);

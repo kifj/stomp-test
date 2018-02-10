@@ -22,7 +22,7 @@ import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
-import x1.stomp.service.QuoteUpdater;
+import x1.stomp.control.QuoteUpdater;
 import x1.stomp.util.JsonHelper;
 
 @RunWith(Arquillian.class)
@@ -33,6 +33,9 @@ public class ShareSubscriptionWebSocketTest {
 
   @Inject
   private Logger log;
+
+  @Inject
+  private JsonHelper jsonHelper;
 
   @EJB
   private QuoteUpdater quoteUpdater;
@@ -61,7 +64,7 @@ public class ShareSubscriptionWebSocketTest {
     Command command = new Command();
     command.setAction(Command.ACTION_SUBSCRIBE);
     command.setKey(TEST_SHARE);
-    String message = JsonHelper.toJSON(command);
+    String message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
     Thread.sleep(2500);
@@ -77,20 +80,20 @@ public class ShareSubscriptionWebSocketTest {
     String response = client.getLastMessage();
     assertNotNull(response);
     log.debug("Received: {}", response);
-    Quote received = JsonHelper.fromJSON(response, Quote.class);
+    Quote received = jsonHelper.fromJSON(response, Quote.class);
     assertEquals(quote.getPrice(), received.getPrice());
     assertEquals(quote.getCurrency(), received.getCurrency());
     assertEquals(TEST_SHARE, received.getShare().getKey());
 
     command.setAction(Command.ACTION_UNSUBSCRIBE);
-    message = JsonHelper.toJSON(command);
+    message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
 
     Thread.sleep(2500);
     response = client.getLastMessage();
     assertNotNull(response);
-    SubscriptionEvent event = JsonHelper.fromJSON(response, SubscriptionEvent.class);
+    SubscriptionEvent event = jsonHelper.fromJSON(response, SubscriptionEvent.class);
     assertEquals(TEST_SHARE, event.getKey());
     assertEquals("unsubscribe", event.getAction());
     client.closeConnection();
