@@ -1,4 +1,4 @@
-package x1.stomp.service;
+package x1.stomp.control;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -46,6 +46,9 @@ public class ShareMessageListener implements MessageListener {
   @Inject
   private QuoteRetriever quoteRetriever;
 
+  @Inject
+  private JsonHelper jsonHelper;
+
   @Override
   public void onMessage(Message message) {
     try {
@@ -76,7 +79,7 @@ public class ShareMessageListener implements MessageListener {
     message.readBytes(bytes);
     String body = new String(bytes, StandardCharsets.UTF_8);
     log.debug("Received message: {}", body);
-    Command command = JsonHelper.fromJSON(body, Command.class);
+    Command command = jsonHelper.fromJSON(body, Command.class);
     if (command == null || isEmpty(command.getAction()) || isEmpty(command.getKey())) {
       log.warn("Incomplete command: {}", command);
       return;

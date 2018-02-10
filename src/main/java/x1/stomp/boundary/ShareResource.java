@@ -1,4 +1,4 @@
-package x1.stomp.rest;
+package x1.stomp.boundary;
 
 import java.net.URI;
 import java.util.List;
@@ -37,9 +37,8 @@ import javax.ws.rs.core.UriBuilder;
 import static x1.service.registry.Protocol.*;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
-import x1.service.registry.Technology;
 import x1.stomp.model.Share;
-import x1.stomp.service.ShareSubscription;
+import x1.stomp.control.ShareSubscription;
 import x1.stomp.util.StockMarket;
 import x1.stomp.util.VersionData;
 

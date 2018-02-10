@@ -46,7 +46,7 @@ public class Share implements Serializable {
 
   @NotNull
   @Size(min = 1, max = 25)
-  @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and spaces")
+  @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column
   @ApiModelProperty(required = true, value = "Stock symbol")
   private String key;

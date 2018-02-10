@@ -31,7 +31,7 @@ import javax.inject.Inject;
 
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
-import x1.stomp.rest.ErrorResponse;
+import x1.stomp.boundary.ErrorResponse;
 
 @RunWith(Arquillian.class)
 public class ShareResourceTest {

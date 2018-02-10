@@ -1,4 +1,4 @@
-package x1.stomp.service;
+package x1.stomp.control;
 
 import java.io.Serializable;
 import java.util.List;

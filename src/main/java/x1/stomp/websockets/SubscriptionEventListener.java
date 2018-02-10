@@ -3,6 +3,7 @@ package x1.stomp.websockets;
 import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.TransactionPhase;
 import javax.inject.Inject;
@@ -13,16 +14,20 @@ import org.slf4j.Logger;
 import x1.stomp.model.SubscriptionEvent;
 import x1.stomp.util.JsonHelper;
 
+@ApplicationScoped
 public class SubscriptionEventListener {
 
   @Inject
   private Logger log;
 
+  @Inject
+  private JsonHelper jsonHelper;
+
   public void onChangeSubscription(@Observes(during = TransactionPhase.AFTER_SUCCESS) SubscriptionEvent event) {
     log.info("Received subscription event {} for {}", event.getAction(), event.getKey());
     for (Session session : new ArrayList<>(ShareSubscriptionWebSocketServerEndpoint.SESSIONS.values())) {
       try {
-        session.getBasicRemote().sendText(JsonHelper.toJSON(event));
+        session.getBasicRemote().sendText(jsonHelper.toJSON(event));
       } catch (ClosedChannelException e) {
         ShareSubscriptionWebSocketServerEndpoint.SESSIONS.remove(session.getId());
       } catch (Exception e) {
