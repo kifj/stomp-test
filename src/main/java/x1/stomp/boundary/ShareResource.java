@@ -35,6 +35,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
 import static x1.service.registry.Protocol.*;
+import static x1.service.registry.Technology.*;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.model.Share;
@@ -47,7 +48,7 @@ import x1.stomp.util.VersionData;
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Api(value = ShareResource.PATH)
-@Services(services = { @Service(technology = Technology.REST, value = RestApplication.ROOT
+@Services(services = { @Service(technology = REST, value = RestApplication.ROOT
     + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 public class ShareResource {
   public static final String PATH = "/shares";

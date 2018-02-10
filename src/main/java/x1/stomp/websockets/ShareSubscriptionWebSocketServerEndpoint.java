@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 
 import x1.service.registry.Service;
 import x1.service.registry.Services;
+import static x1.service.registry.Protocol.*;
+import static x1.service.registry.Technology.*;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
@@ -41,11 +43,11 @@ import x1.stomp.util.VersionData;
     @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @ServerEndpoint("/ws/stocks")
 @Services(services = {
-    @Service(technology = Technology.JMS, value = "java:/jms/topic/quotes", version = VersionData.MAJOR_MINOR, protocols = Protocol.EJB),
-    @Service(technology = Technology.WEBSOCKETS, value = "/ws/stocks", version = VersionData.MAJOR_MINOR, protocols = {
-        Protocol.WS, Protocol.WSS }),
-    @Service(technology = Technology.STOMP, value = "jms.topic.quotesTopic", version = VersionData.MAJOR_MINOR, protocols = {
-        Protocol.STOMP_WS, Protocol.STOMP_WSS }) })
+    @Service(technology = JMS, value = "java:/jms/topic/quotes", version = VersionData.MAJOR_MINOR, protocols = EJB),
+    @Service(technology = WEBSOCKETS, value = "/ws/stocks", version = VersionData.MAJOR_MINOR, protocols = {
+        WS, WSS }),
+    @Service(technology = STOMP, value = "jms.topic.quotesTopic", version = VersionData.MAJOR_MINOR, protocols = {
+        STOMP_WS, STOMP_WSS }) })
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
   static final Map<String, Session> SESSIONS = new HashMap<>();
 
