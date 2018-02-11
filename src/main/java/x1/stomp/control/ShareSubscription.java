@@ -4,7 +4,6 @@ import java.util.List;
 
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
-import x1.stomp.util.VersionData;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
