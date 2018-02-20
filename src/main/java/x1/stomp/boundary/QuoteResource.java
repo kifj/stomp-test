@@ -1,25 +1,29 @@
 package x1.stomp.boundary;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 import static x1.service.registry.Protocol.HTTP;
 import static x1.service.registry.Protocol.HTTPS;
+import static x1.service.registry.Technology.REST;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -30,7 +34,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
-import x1.service.registry.Technology;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.control.QuoteRetriever;
@@ -39,11 +42,10 @@ import x1.stomp.util.VersionData;
 
 @Path(QuoteResource.PATH)
 @RequestScoped
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Api(value = QuoteResource.PATH)
-@Services(services = { @Service(technology = Technology.REST, value = RestApplication.ROOT
-    + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
+@Services(services = {@Service(technology = REST, value = RestApplication.ROOT
+        + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class QuoteResource {
   public static final String PATH = "/quotes";
 
@@ -59,50 +61,46 @@ public class QuoteResource {
   @GET
   @Path("/{key}")
   @ApiOperation(value = "get a quote")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "Quote received", response = Quote.class),
-      @ApiResponse(code = 404, message = "Subscription not found") })
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Quote received", response = Quote.class),
+          @ApiResponse(code = 404, message = "Subscription not found")})
   public Response getQuote(
-      @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
-    Share share = shareSubscription.find(key);
-    if (share != null) {
-      Quote quote = quoteRetriever.retrieveQuote(share);
-      if (quote != null) {
-        return Response.ok(quote).build();
+          @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
+    Optional<Share> share = shareSubscription.find(key);
+    if (share.isPresent()) {
+      Optional<Quote> quote = quoteRetriever.retrieveQuote(share.get());
+      if (quote.isPresent()) {
+        return Response.ok(quote.get()).build();
       }
     }
-    return Response.status(Status.NOT_FOUND).build();
+    return Response.status(NOT_FOUND).build();
   }
 
   @GET
   @Path("/")
   @ApiOperation(value = "get quotes")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "Quotes received", response = Quote[].class),
-      @ApiResponse(code = 404, message = "No subscription found") })
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "Quotes received", response = Quote[].class),
+          @ApiResponse(code = 404, message = "No subscription found")})
   public void getQuotes(@ApiParam("Stock symbols") @QueryParam("key") String[] keys,
-      @Suspended AsyncResponse response) {
-    withTimeoutHandler(response);
-    mes.execute(() -> response.resume(retrieveQuotes(keys)));
+                        @Suspended AsyncResponse response) {
+    withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys)));
   }
 
   private Response retrieveQuotes(String[] keys) {
     List<Share> shares = new ArrayList<>();
     for (String key : keys) {
-      Share share = shareSubscription.find(key);
-      if (share != null) {
-        shares.add(share);
-      }
+      shareSubscription.find(key).ifPresent(shares::add);
     }
     if (shares.isEmpty()) {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(NOT_FOUND).build();
     }
     List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
     return Response.ok(quotes).build();
   }
 
-  private AsyncResponse withTimeoutHandler(AsyncResponse response) {
-    response.setTimeout(5, TimeUnit.SECONDS);
-    response.setTimeoutHandler(r -> r.resume(Response.status(Status.SERVICE_UNAVAILABLE).build()));
-    return response;
+  private ManagedExecutorService withTimeoutHandler(AsyncResponse response) {
+    response.setTimeout(5, SECONDS);
+    response.setTimeoutHandler(r -> r.resume(Response.status(SERVICE_UNAVAILABLE).build()));
+    return mes;
   }
 
 }

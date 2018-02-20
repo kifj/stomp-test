@@ -1,18 +1,19 @@
 package x1.stomp.test;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-import java.io.File;
-
 import org.apache.commons.io.FileUtils;
-
+import org.junit.Test;
+import x1.stomp.control.QuickQuote;
+import x1.stomp.control.QuickQuoteResult;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
-import x1.stomp.control.QuickQuote;
-import x1.stomp.control.QuickQuoteResult;
 import x1.stomp.util.JsonHelper;
+
+import java.io.File;
+
+import static org.junit.Assert.*;
+import static x1.stomp.model.Action.SUBSCRIBE;
+import static x1.stomp.model.Action.UNSUBSCRIBE;
 
 public class JsonHelperTest {
   private JsonHelper jsonHelper = new JsonHelper();
@@ -20,18 +21,18 @@ public class JsonHelperTest {
   @Test
   public void testToJson1() throws Exception {
     Command c = new Command();
-    c.setAction("foo");
+    c.setAction(SUBSCRIBE);
     c.setKey("MSFT");
     String json = jsonHelper.toJSON(c);
-    assertEquals("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", json);
+    assertEquals("{\"command\":{\"action\":\"SUBSCRIBE\",\"key\":\"MSFT\"}}", json);
   }
 
   @Test
   public void testToJson2() throws Exception {
     Command c = new Command();
-    c.setAction("bar");
+    c.setAction(UNSUBSCRIBE);
     String json = jsonHelper.toJSON(c);
-    assertEquals("{\"command\":{\"action\":\"bar\"}}", json);
+    assertEquals("{\"command\":{\"action\":\"UNSUBSCRIBE\"}}", json);
   }
 
   @Test
@@ -52,23 +53,23 @@ public class JsonHelperTest {
     q.setShare(share);
     String json = jsonHelper.toJSON(q);
     assertEquals(
-        "{\"Quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,\"currency\":\"EUR\"}}",
-        json);
+            "{\"Quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,\"currency\":\"EUR\"}}",
+            json);
   }
 
   @Test
   public void testFromJson1() throws Exception {
-    Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"foo\",\"key\":\"MSFT\"}}", Command.class);
+    Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"UNSUBSCRIBE\",\"key\":\"MSFT\"}}", Command.class);
     assertNotNull(c);
-    assertEquals("foo", c.getAction());
+    assertEquals(UNSUBSCRIBE, c.getAction());
     assertEquals("MSFT", c.getKey());
   }
 
   @Test
   public void testFromJson2() throws Exception {
-    Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"foo\"}}", Command.class);
+    Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"SUBSCRIBE\"}}", Command.class);
     assertNotNull(c);
-    assertEquals("foo", c.getAction());
+    assertEquals(SUBSCRIBE, c.getAction());
     assertNull(c.getKey());
   }
 

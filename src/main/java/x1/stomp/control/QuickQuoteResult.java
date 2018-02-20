@@ -1,6 +1,7 @@
 package x1.stomp.control;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,6 +20,9 @@ public class QuickQuoteResult implements Serializable {
   @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
   @JsonProperty(value = "QuickQuote")
   public List<QuickQuote> getQuotes() {
+    if (quotes == null) {
+      quotes = new ArrayList<>();
+    }
     return quotes;
   }
 

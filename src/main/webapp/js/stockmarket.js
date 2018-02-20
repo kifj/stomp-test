@@ -86,7 +86,7 @@ Client.prototype.subscribe = function(key) {
 	var client = this.stompClient;
 	if (client && key) {
 		this.messageOn('Subscribe ' + key);
-		var data = {'command' : {'action': 'subscribe', 'key': key}};
+		var data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
 		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
 		$('#l_share').val("");
 	}
@@ -96,7 +96,7 @@ Client.prototype.unsubscribe = function(key) {
 	var client = this.stompClient;
 	if (client && key) {
 		this.messageOn('Unsubscribe ' + key);
-		var data = {'command' : {'action': 'unsubscribe', 'key': key}};
+		var data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
 		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
 		$('#l_share').val("");
 		var id = "key_" + key.replace('.', '');

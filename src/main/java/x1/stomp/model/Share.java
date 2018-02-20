@@ -31,6 +31,8 @@ import io.swagger.annotations.ApiModelProperty;
     @Index(columnList = "name", name = "idx_name", unique = false) })
 @ApiModel(description = "Shares are identified by stock symbols, and may have an name for readability.")
 public class Share implements Serializable {
+  public static final String FIND_BY_KEY = "from Share s where s.key = :key";
+  public static final String LIST_ALL = "from Share s order by s.name";
   private static final long serialVersionUID = -6219237799499789827L;
 
   @Id

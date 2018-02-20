@@ -10,6 +10,8 @@ import org.jboss.resteasy.api.validation.ResteasyConstraintViolation;
 import org.jboss.resteasy.api.validation.ResteasyViolationException;
 import org.slf4j.Logger;
 
+import static javax.ws.rs.core.Response.Status.PRECONDITION_FAILED;
+
 @Provider
 public class ValidationExceptionMapper implements ExceptionMapper<ResteasyViolationException> {
   @Inject
@@ -22,6 +24,6 @@ public class ValidationExceptionMapper implements ExceptionMapper<ResteasyViolat
       response.add(new ErrorMessage(violation.getMessage(), violation.getPath(), violation.getValue()));
     }
     log.warn(response.toString());
-    return Response.status(Status.PRECONDITION_FAILED).entity(response).build();
+    return Response.status(PRECONDITION_FAILED).entity(response).build();
   }
 }
