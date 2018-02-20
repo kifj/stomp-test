@@ -1,16 +1,17 @@
 package x1.stomp.boundary;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
-import static x1.service.registry.Protocol.HTTP;
-import static x1.service.registry.Protocol.HTTPS;
-import static x1.service.registry.Technology.REST;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import x1.service.registry.Service;
+import x1.service.registry.Services;
+import x1.stomp.control.QuoteRetriever;
+import x1.stomp.control.ShareSubscription;
+import x1.stomp.model.Quote;
+import x1.stomp.model.Share;
+import x1.stomp.util.VersionData;
 
 import javax.annotation.Resource;
 import javax.ejb.TransactionAttribute;
@@ -25,20 +26,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import x1.service.registry.Service;
-import x1.service.registry.Services;
-import x1.stomp.model.Quote;
-import x1.stomp.model.Share;
-import x1.stomp.control.QuoteRetriever;
-import x1.stomp.control.ShareSubscription;
-import x1.stomp.util.VersionData;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
+import static x1.service.registry.Protocol.HTTP;
+import static x1.service.registry.Protocol.HTTPS;
+import static x1.service.registry.Technology.REST;
 
 @Path(QuoteResource.PATH)
 @RequestScoped
