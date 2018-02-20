@@ -2,6 +2,7 @@ package x1.stomp.boundary;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
@@ -21,24 +24,24 @@ import javax.jms.Session;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static x1.service.registry.Protocol.*;
 import static x1.service.registry.Technology.*;
 
 import x1.service.registry.Service;
 import x1.service.registry.Services;
+import x1.stomp.model.Action;
 import x1.stomp.model.Share;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.util.StockMarket;
@@ -46,11 +49,10 @@ import x1.stomp.util.VersionData;
 
 @Path(ShareResource.PATH)
 @RequestScoped
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Api(value = ShareResource.PATH)
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT
     + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class ShareResource {
   public static final String PATH = "/shares";
   
@@ -83,11 +85,11 @@ public class ShareResource {
       @ApiResponse(code = 404, message = "Subscription not found") })
   public Response findShare(
       @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
-    Share share = shareSubscription.find(key);
-    if (share != null) {
-      return Response.ok(share).build();
+    Optional<Share> share = shareSubscription.find(key);
+    if (share.isPresent()) {
+      return Response.ok(share.get()).build();
     } else {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(NOT_FOUND).build();
     }
   }
 
@@ -104,14 +106,16 @@ public class ShareResource {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
         ObjectMessage message = session.createObjectMessage(share);
         message.setJMSCorrelationID(correlationId);
+        message.setStringProperty("type", "share");
+        message.setStringProperty("action", Action.SUBSCRIBE.name());
         producer.send(message);
         log.debug("message sent: " + message);
       }
       URI location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
       return Response.created(location).build();
     } catch (JMSException e) {
-      log.error(null, e);
-      return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+      log.error(e.getErrorCode(), e);
+      return Response.status(INTERNAL_SERVER_ERROR).build();
     }
   }
 
@@ -121,13 +125,12 @@ public class ShareResource {
   @ApiResponses(value = { @ApiResponse(code = 200, message = "Subscription removed", response = Share.class),
       @ApiResponse(code = 404, message = "Subscription was not found") })
   public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
-    Share share = shareSubscription.find(key);
+    Optional<Share> share = shareSubscription.find(key);
     if (share != null) {
-      shareSubscription.unsubscribe(share);
-      return Response.ok(share).build();
+      shareSubscription.unsubscribe(share.get());
+      return Response.ok(share.get()).build();
     } else {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(NOT_FOUND).build();
     }
   }
-
 }
