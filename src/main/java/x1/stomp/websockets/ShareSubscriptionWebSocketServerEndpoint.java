@@ -35,11 +35,13 @@ import static x1.service.registry.Technology.*;
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")})
 @ServerEndpoint("/ws/stocks")
 @Services(services = {
-    @Service(technology = JMS, value = "java:/jms/topic/quotes", version = VersionData.MAJOR_MINOR, protocols = EJB),
-    @Service(technology = WEBSOCKETS, value = "/ws/stocks", version = VersionData.MAJOR_MINOR, protocols = {
-        WS, WSS }),
-    @Service(technology = STOMP, value = "jms.topic.quotesTopic", version = VersionData.MAJOR_MINOR, protocols = {
-        STOMP_WS, STOMP_WSS }) })
+        @Service(technology = JMS, value = "java:/jms/topic/quotes",
+                version = VersionData.MAJOR_MINOR, protocols = EJB),
+        @Service(technology = WEBSOCKETS, value = "/ws/stocks",
+                version = VersionData.MAJOR_MINOR, protocols = {WS, WSS}),
+        @Service(technology = STOMP, value = "jms.topic.quotesTopic",
+                version = VersionData.MAJOR_MINOR, protocols = {STOMP_WS, STOMP_WSS})
+})
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
 
   @Inject
