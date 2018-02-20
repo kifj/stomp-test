@@ -1,10 +1,9 @@
 package x1.stomp.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @JsonRootName(value = "command")

@@ -21,6 +21,7 @@
   <scm>
     <url>https://github.com/kifj/stomp-test</url>
     <connection>scm:git:git@github.com:kifj/stomp-test.git</connection>
+    <tag>HEAD</tag>
   </scm>
   <ciManagement>
     <system>Jenkins</system>
