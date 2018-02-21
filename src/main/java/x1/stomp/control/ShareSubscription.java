@@ -1,7 +1,6 @@
 package x1.stomp.control;
 
-import java.util.List;
-
+import org.slf4j.Logger;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
 
@@ -11,8 +10,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.List;
+import java.util.Optional;
 
-import org.slf4j.Logger;
+import static x1.stomp.model.Action.SUBSCRIBE;
+import static x1.stomp.model.Action.UNSUBSCRIBE;
 
 @Stateless
 public class ShareSubscription {
@@ -27,33 +29,33 @@ public class ShareSubscription {
   private Event<SubscriptionEvent> shareEvent;
 
   public void subscribe(Share share) {
-    if (find(share.getKey()) != null) {
+    if (find(share.getKey()).isPresent()) {
       log.info("Subscription for {} already exists.", share);
       return;
     }
     log.info("Subscribe to {}", share);
     em.persist(share);
-    shareEvent.fire(new SubscriptionEvent(share.getKey(), "subscribe"));
+    shareEvent.fire(new SubscriptionEvent(SUBSCRIBE, share.getKey()));
   }
 
   public void unsubscribe(Share share) {
     log.info("Unsubscribe from {}", share);
     share = em.merge(share);
     em.remove(share);
-    shareEvent.fire(new SubscriptionEvent(share.getKey(), "unsubscribe"));
+    shareEvent.fire(new SubscriptionEvent(UNSUBSCRIBE, share.getKey()));
   }
 
-  public Share find(String key) {
+  public Optional<Share> find(String key) {
     try {
-      TypedQuery<Share> query = em.createQuery("from Share s where s.key = :key", Share.class);
+      TypedQuery<Share> query = em.createQuery(Share.FIND_BY_KEY, Share.class);
       query.setParameter("key", key);
-      return query.getSingleResult();
+      return Optional.of(query.getSingleResult());
     } catch (NoResultException e) {
-      return null;
+      return Optional.empty();
     }
   }
 
   public List<Share> list() {
-    return em.createQuery("from Share s order by s.name", Share.class).getResultList();
+    return em.createQuery(Share.LIST_ALL, Share.class).getResultList();
   }
 }

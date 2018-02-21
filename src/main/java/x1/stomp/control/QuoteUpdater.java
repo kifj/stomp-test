@@ -56,7 +56,7 @@ public class QuoteUpdater {
   public void updateQuotes() {
     lastUpdatedCount = 0;
     List<Share> shares = shareSubscription.list();
-    log.debug("Update Quotes for {} shares", shares.size());
+    log.debug("Update quotes for {} shares", shares.size());
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(quoteTopic)) {
         List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
