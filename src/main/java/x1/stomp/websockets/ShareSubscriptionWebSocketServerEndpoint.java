@@ -120,9 +120,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     try {
       log.debug("Received quote for {}", message.getStringProperty("key"));
       TextMessage textMessage = (TextMessage) message;
-      sessionHolder.values().forEach(session -> {
-        sendMessage(textMessage, session);
-      });
+      sessionHolder.values().forEach(session -> sendMessage(textMessage, session));
     } catch (JMSException e) {
       log.error(e.getErrorCode(), e);
     }
