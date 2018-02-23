@@ -78,7 +78,7 @@ Client.prototype.subscribe = function(key) {
 	var connection = this.connection;
 	if (connection && key) {
 		this.messageOn('Subscribe ' + key);
-		var data = {'command' : {'action': 'subscribe', 'key': key}};
+		var data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
 		connection.send(JSON.stringify(data));
 		$('#l_share').val("");
 	}
@@ -88,7 +88,7 @@ Client.prototype.unsubscribe = function(key) {
 	var connection = this.connection;
 	if (connection && key) {
 		this.messageOn('Unsubscribe ' + key);
-		var data = {'command' : {'action': 'unsubscribe', 'key': key}};
+		var data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
 		connection.send(JSON.stringify(data));
 		$('#l_share').val("");
 	}
@@ -100,7 +100,7 @@ Client.prototype.onmessage = function(message) {
 	var id;
 	if (event) {
 		id = "key_" + event.key.replace('.', '');
-		if (event.action == 'unsubscribe') {
+		if (event.action == 'UNSUBSCRIBE') {
 			$("#" + id).remove();
 		}
 		console.log('Received event ' + event.action  + ' for ' + event.key );

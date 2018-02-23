@@ -1,10 +1,5 @@
 package x1.stomp.test;
 
-import java.io.File;
-
-import javax.ejb.EJB;
-import javax.inject.Inject;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -14,16 +9,23 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
-
+import x1.stomp.control.QuoteUpdater;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
-import x1.stomp.control.QuoteUpdater;
 import x1.stomp.util.JsonHelper;
+
+import javax.ejb.EJB;
+import javax.inject.Inject;
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static x1.stomp.model.Action.SUBSCRIBE;
+import static x1.stomp.model.Action.UNSUBSCRIBE;
 
 @RunWith(Arquillian.class)
 public class ShareSubscriptionWebSocketTest {
@@ -46,9 +48,9 @@ public class ShareSubscriptionWebSocketTest {
         .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs").withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
-        .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
-        .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
+            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+            .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
   }
 
   @Before
@@ -60,9 +62,7 @@ public class ShareSubscriptionWebSocketTest {
   @Test
   public void testWebSocket() throws Exception {
     WebSocketClient client = WebSocketClient.openConnection(baseUrl);
-    Command command = new Command();
-    command.setAction(Command.ACTION_SUBSCRIBE);
-    command.setKey(TEST_SHARE);
+    Command command = new Command(SUBSCRIBE, TEST_SHARE);
     String message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
@@ -84,7 +84,7 @@ public class ShareSubscriptionWebSocketTest {
     assertEquals(quote.getCurrency(), received.getCurrency());
     assertEquals(TEST_SHARE, received.getShare().getKey());
 
-    command.setAction(Command.ACTION_UNSUBSCRIBE);
+    command.setAction(UNSUBSCRIBE);
     message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
@@ -94,7 +94,7 @@ public class ShareSubscriptionWebSocketTest {
     assertNotNull(response);
     SubscriptionEvent event = jsonHelper.fromJSON(response, SubscriptionEvent.class);
     assertEquals(TEST_SHARE, event.getKey());
-    assertEquals("unsubscribe", event.getAction());
+    assertEquals(UNSUBSCRIBE, event.getAction());
     client.closeConnection();
   }
 }
