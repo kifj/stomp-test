@@ -110,8 +110,8 @@ public class ShareResource {
       URI location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
       return Response.created(location).build();
     } catch (JMSException e) {
-      log.error(null, e);
-      return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+      log.error(e.getErrorCode(), e);
+      return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getErrorCode()).build();
     }
   }
 

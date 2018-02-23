@@ -83,8 +83,8 @@ public class ResolverTest {
   public void testResolveJms() throws Exception {
     Resolver resolver = new Resolver();
 
-    List<Node> nodes = resolver.resolve(Technology.JMS, ShareMessageListener.class,
-        VersionData.MAJOR_MINOR, STAGE, Protocol.EJB);
+    List<Node> nodes = resolver.resolve(Technology.JMS, ShareMessageListener.class, VersionData.MAJOR_MINOR, STAGE,
+        Protocol.EJB);
     assertTrue(nodes.size() > 0);
     Node node = getNode(nodes, resolver);
     assertNotNull(node);

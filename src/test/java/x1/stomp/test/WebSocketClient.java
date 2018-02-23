@@ -25,7 +25,7 @@ public class WebSocketClient {
 
   private WebSocketClient() {
   }
-  
+
   public String getLastMessage() {
     return lastMessage;
   }

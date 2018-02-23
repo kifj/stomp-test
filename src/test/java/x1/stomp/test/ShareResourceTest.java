@@ -51,8 +51,7 @@ public class ShareResourceTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
-        .withTransitivity().asFile();
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs").withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
         .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
@@ -100,7 +99,8 @@ public class ShareResourceTest {
     assertEquals(key, found.getKey());
 
     List<Share> shares = client.target(baseUrl).path(PATH_SHARES).request(MediaType.APPLICATION_JSON)
-        .get(new GenericType<List<Share>>() {});
+        .get(new GenericType<List<Share>>() {
+        });
     assertEquals(1, shares.size());
 
     Quote quote = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
@@ -110,8 +110,10 @@ public class ShareResourceTest {
     assertNotNull(quote.getPrice());
     assertEquals(quote.getShare().getKey(), share.getKey());
 
-    List<Quote> quotes = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, share.getKey(), TEST_SHARE_INVALID)
-        .request(MediaType.APPLICATION_JSON).get(new GenericType<List<Quote>>() {});
+    List<Quote> quotes = client.target(baseUrl).path(PATH_QUOTES)
+        .queryParam(PARAM_KEY, share.getKey(), TEST_SHARE_INVALID).request(MediaType.APPLICATION_JSON)
+        .get(new GenericType<List<Quote>>() {
+        });
     assertEquals(1, quotes.size());
 
     Response response3 = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)

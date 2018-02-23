@@ -25,6 +25,9 @@ import x1.stomp.model.Share;
 public class QuoteRetriever {
   private static final String URL = "https://quote.cnbc.com/quote-html-webservice/quote.htm";
   private static final String DEFAULT_CURRENCY = "EUR";
+  private static final String PARAM_OUTPUT = "output";
+  private static final String VALUE_OUTPUT_JSON = "json";
+  private static final String PARAM_SYMBOLS = "symbols";
 
   @Inject
   private Logger log;
@@ -86,7 +89,8 @@ public class QuoteRetriever {
 
   private QuickQuoteResult retrieveQuotes(String keys) throws IOException {
     log.debug("Retrieve quotes for {}", keys);
-    WebTarget target = client.target(URL).queryParam("symbols", keys.toUpperCase()).queryParam("output", "json");
+    WebTarget target = client.target(URL).queryParam(PARAM_SYMBOLS, keys.toUpperCase()).queryParam(PARAM_OUTPUT,
+        VALUE_OUTPUT_JSON);
     QuickQuoteResponse response = target.request(MediaType.APPLICATION_JSON).get(QuickQuoteResponse.class);
     log.debug("Received: {}", response);
     return response.getQuickQuoteResult();
