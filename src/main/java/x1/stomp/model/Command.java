@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "command")
 @JsonRootName(value = "command")
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class Command {
