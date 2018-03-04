@@ -4,7 +4,10 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+@XmlRootElement(name = "quote")
+@JsonRootName(value = "quote")
 public class Quote implements Serializable {
   private static final long serialVersionUID = -6139640371442481033L;
 

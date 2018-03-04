@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
-@XmlRootElement
+@XmlRootElement(name = "share")
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
     @Index(columnList = "key", name = "idx_key", unique = false),
     @Index(columnList = "name", name = "idx_name", unique = false) })

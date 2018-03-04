@@ -53,7 +53,7 @@ public class JsonHelperTest {
     q.setShare(share);
     String json = jsonHelper.toJSON(q);
     assertEquals(
-            "{\"Quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,\"currency\":\"EUR\"}}",
+            "{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,\"currency\":\"EUR\"}}",
             json);
   }
 
