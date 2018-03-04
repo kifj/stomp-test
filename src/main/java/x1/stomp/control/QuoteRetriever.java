@@ -1,7 +1,6 @@
 package x1.stomp.control;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.slf4j.Logger;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
@@ -11,6 +10,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
@@ -30,8 +30,7 @@ public class QuoteRetriever {
 
   @PostConstruct
   public void setup() {
-    client = new ResteasyClientBuilder().establishConnectionTimeout(200, TimeUnit.MILLISECONDS).connectionPoolSize(5)
-            .connectionCheckoutTimeout(1, TimeUnit.SECONDS).socketTimeout(2, TimeUnit.SECONDS).build();
+    client = ClientBuilder.newBuilder().connectTimeout(200, TimeUnit.MILLISECONDS).readTimeout(2, TimeUnit.SECONDS).build();
   }
 
   @PreDestroy
