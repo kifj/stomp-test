@@ -1,41 +1,42 @@
 package x1.stomp.control;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import x1.stomp.model.Quote;
-import x1.stomp.model.Share;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
+import org.slf4j.Logger;
+
+import x1.stomp.model.Quote;
+import x1.stomp.model.Share;
 
 @ApplicationScoped
 public class QuoteRetriever {
-  private static final String URL = "https://quote.cnbc.com/quote-html-webservice/quote.htm";
   private static final String DEFAULT_CURRENCY = "EUR";
 
   @Inject
   private Logger log;
-  private Client client;
+
+  private QuickQuoteService quickQuoteService;
+
+  @Inject
+  @ConfigProperty(name = "x1.stomp.control.QuickQuoteService/mp-rest/url")
+  private URL baseUrl;
 
   @PostConstruct
   public void setup() {
-    client = ClientBuilder.newBuilder().connectTimeout(200, TimeUnit.MILLISECONDS).readTimeout(2, TimeUnit.SECONDS).build();
-  }
-
-  @PreDestroy
-  public void tearDown() {
-    client.close();
+    quickQuoteService = RestClientBuilder.newBuilder().baseUrl(baseUrl).build(QuickQuoteService.class);
   }
 
   public Optional<Quote> retrieveQuote(Share share) {
@@ -46,29 +47,36 @@ public class QuoteRetriever {
     if (shares.isEmpty()) {
       return new ArrayList<>();
     }
+    return extractQuotes(shares, retrieveQuotes(joinKeys(shares)));
+  }
+
+  private String joinKeys(List<Share> shares) {
     StringBuilder buffer = new StringBuilder();
     shares.forEach(share -> {
       if (buffer.length() > 0) {
-        buffer.append("%7C");
+        buffer.append("|");
       }
       buffer.append(share.getKey());
     });
-    return extractQuotes(shares, retrieveQuotes(buffer.toString()));
+    return buffer.toString();
   }
 
   private List<Quote> extractQuotes(List<Share> shares, QuickQuoteResult quickQuoteResult) {
     List<Quote> result = new ArrayList<>();
-    quickQuoteResult.getQuotes().forEach(quickQuote ->
-            createQuote(quickQuote, shares).ifPresent(result::add));
+    quickQuoteResult.getQuotes().forEach(quickQuote -> createQuote(quickQuote, shares).ifPresent(result::add));
     return result;
   }
 
   private QuickQuoteResult retrieveQuotes(String keys) {
     log.debug("Retrieve quotes for {}", keys);
-    WebTarget target = client.target(URL).queryParam("symbols", keys.toUpperCase()).queryParam("output", "json");
-    QuickQuoteResponse response = target.request(MediaType.APPLICATION_JSON).get(QuickQuoteResponse.class);
-    log.debug("Received: {}", response);
-    return response.getQuickQuoteResult();
+    Response response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
+    if (Status.OK == Status.fromStatusCode(response.getStatus())) {
+      QuickQuoteResponse quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
+      log.debug("Received: {}", quickQuoteResponse);
+      return quickQuoteResponse.getQuickQuoteResult();
+    } else {
+      throw new WebApplicationException(response);
+    }
   }
 
   private Optional<Quote> createQuote(QuickQuote quickQuote, List<Share> shares) {

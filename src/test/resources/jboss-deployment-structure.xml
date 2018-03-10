@@ -10,6 +10,7 @@
       <module name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" />
       <module name="org.javassist" />
       <module name="com.google.guava" />
+      <module name="org.eclipse.microprofile.restclient" />
     </dependencies>
   </deployment>
 </jboss-deployment-structure>
