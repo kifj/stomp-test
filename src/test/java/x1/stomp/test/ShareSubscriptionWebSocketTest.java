@@ -1,5 +1,15 @@
 package x1.stomp.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static x1.stomp.model.Action.SUBSCRIBE;
+import static x1.stomp.model.Action.UNSUBSCRIBE;
+
+import java.io.File;
+
+import javax.ejb.EJB;
+import javax.inject.Inject;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -11,21 +21,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+
 import x1.stomp.control.QuoteUpdater;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
 import x1.stomp.util.JsonHelper;
-
-import javax.ejb.EJB;
-import javax.inject.Inject;
-import java.io.File;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static x1.stomp.model.Action.SUBSCRIBE;
-import static x1.stomp.model.Action.UNSUBSCRIBE;
 
 @RunWith(Arquillian.class)
 public class ShareSubscriptionWebSocketTest {
@@ -41,6 +43,9 @@ public class ShareSubscriptionWebSocketTest {
 
   @EJB
   private QuoteUpdater quoteUpdater;
+  
+  @Inject
+  private WebSocketClient client;
 
   @Deployment
   public static Archive<?> createTestArchive() {
@@ -63,7 +68,7 @@ public class ShareSubscriptionWebSocketTest {
 
   @Test
   public void testWebSocket() throws Exception {
-    WebSocketClient client = WebSocketClient.openConnection(baseUrl);
+    client.openConnection(baseUrl);
     Command command = new Command(SUBSCRIBE, TEST_SHARE);
     String message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
@@ -99,4 +104,5 @@ public class ShareSubscriptionWebSocketTest {
     assertEquals(UNSUBSCRIBE, event.getAction());
     client.closeConnection();
   }
+
 }
