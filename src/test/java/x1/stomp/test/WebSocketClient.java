@@ -41,12 +41,11 @@ public class WebSocketClient {
     LOG.info("Session {} close because of {}", session.getId(), closeReason);
   }
 
-  public static WebSocketClient openConnection(String url) throws DeploymentException, IOException {
+  public WebSocketClient openConnection(String url) throws DeploymentException, IOException {
     WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-    WebSocketClient client = new WebSocketClient();
     URI uri = URI.create(url);
-    container.connectToServer(client, uri);
-    return client;
+    container.connectToServer(this, uri);
+    return this;
   }
 
   public void sendMessage(String message) throws IOException {
