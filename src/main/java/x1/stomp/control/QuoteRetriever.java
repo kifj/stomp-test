@@ -91,6 +91,7 @@ public class QuoteRetriever {
         Quote quote = new Quote(share);
         quote.setPrice(quickQuote.getLast());
         quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));
+        quote.setFrom(quickQuote.getLastTime());
         return Optional.of(quote);
       }
     }

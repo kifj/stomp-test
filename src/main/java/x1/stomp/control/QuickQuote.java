@@ -1,8 +1,12 @@
 package x1.stomp.control;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,6 +21,7 @@ public class QuickQuote implements Serializable {
   private String countryCode;
   private String currencyCode;
   private String exchange;
+  private Date lastTime;
 
   public Float getLast() {
     return last;
@@ -72,6 +77,16 @@ public class QuickQuote implements Serializable {
 
   public void setExchange(String exchange) {
     this.exchange = exchange;
+  }
+  
+  @JsonProperty("last_time")
+  @JsonFormat(shape = Shape.STRING)
+  public Date getLastTime() {
+    return lastTime;
+  }
+  
+  public void setLastTime(Date lastTime) {
+    this.lastTime = lastTime;
   }
 
   @Override
