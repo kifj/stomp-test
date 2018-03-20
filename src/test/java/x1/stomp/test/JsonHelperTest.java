@@ -10,6 +10,7 @@ import x1.stomp.model.Share;
 import x1.stomp.util.JsonHelper;
 
 import java.io.File;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 import static x1.stomp.model.Action.SUBSCRIBE;
@@ -51,10 +52,10 @@ public class JsonHelperTest {
     q.setCurrency("EUR");
     q.setPrice(1.23f);
     q.setShare(share);
+    q.setFrom(new Date(123000123000L));
     String json = jsonHelper.toJSON(q);
-    assertEquals(
-            "{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,\"currency\":\"EUR\"}}",
-            json);
+    assertEquals("{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,"
+        + "\"currency\":\"EUR\",\"from\":\"1973-11-24T14:42:03.000+0000\"}}", json);
   }
 
   @Test
@@ -93,5 +94,6 @@ public class JsonHelperTest {
     assertEquals("DE", q1.getCountryCode());
     assertEquals("Bayerische Motoren Werke AG", q1.getName());
     assertEquals("XETRA", q1.getExchange());
+    assertNotNull(q1.getLastTime());
   }
 }

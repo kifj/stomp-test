@@ -1,6 +1,7 @@
 package x1.stomp.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,6 +15,7 @@ public class Quote implements Serializable {
   private Share share;
   private Float price;
   private String currency;
+  private Date from;
 
   public Quote() {
   }
@@ -46,9 +48,17 @@ public class Quote implements Serializable {
     this.currency = currency;
   }
 
+  public Date getFrom() {
+    return from;
+  }
+
+  public void setFrom(Date from) {
+    this.from = from;
+  }
+
   @Override
   public String toString() {
-    return "Quote [share=" + share + ", price=" + price + ", currency=" + currency + "]";
+    return "Quote [share=" + share + ", price=" + price + ", currency=" + currency + ", from=" + from + "]";
   }
 
 }
