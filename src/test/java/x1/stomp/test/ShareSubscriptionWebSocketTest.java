@@ -54,7 +54,7 @@ public class ShareSubscriptionWebSocketTest {
             .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
-            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsResource("META-INF/microprofile-config.properties", "META-INF/microprofile-config.properties")            
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
             .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
@@ -62,7 +62,9 @@ public class ShareSubscriptionWebSocketTest {
 
   @Before
   public void setup() {
-    baseUrl = "ws://" + System.getProperty("jboss.bind.address", "127.0.0.1") + ":8080/stomp-test/ws/stocks";
+    String host = System.getProperty("jboss.bind.address", "127.0.0.1");
+    int port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0")) * 100;
+    baseUrl = "ws://" + host + ":" + port + "/stomp-test/ws/stocks";
     log.debug("baseUrl={}", baseUrl);
   }
 

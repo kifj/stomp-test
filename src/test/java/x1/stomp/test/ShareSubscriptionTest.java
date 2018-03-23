@@ -28,7 +28,7 @@ public class ShareSubscriptionTest {
             .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
             .withTransitivity().asFile();
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
-            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsResource("META-INF/microprofile-config.properties", "META-INF/microprofile-config.properties")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
             .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);

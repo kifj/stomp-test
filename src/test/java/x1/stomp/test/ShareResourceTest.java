@@ -53,7 +53,7 @@ public class ShareResourceTest {
             .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
-            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsResource("META-INF/microprofile-config.properties", "META-INF/microprofile-config.properties")            
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
             .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
@@ -61,7 +61,9 @@ public class ShareResourceTest {
 
   @Before
   public void setup() {
-    baseUrl = "http://" + System.getProperty("jboss.bind.address", "127.0.0.1") + ":8080/stomp-test/rest";
+    String host = System.getProperty("jboss.bind.address", "127.0.0.1");
+    int port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0")) * 100;
+    baseUrl = "http://" + host + ":" + port + "/stomp-test/rest";
     log.debug("baseUrl={}", baseUrl);
   }
 

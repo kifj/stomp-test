@@ -43,7 +43,7 @@ public class ResolverTest {
             .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
-            .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsResource("META-INF/microprofile-config.properties", "META-INF/microprofile-config.properties")            
             .addAsResource("service-registry.properties").addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("test-ds.xml").addAsWebInfResource("jboss-deployment-structure.xml")

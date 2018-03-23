@@ -39,5 +39,4 @@ if (outcome != success) of /subsystem=ejb3/service=timer-service/database-data-s
     )
 end-if
 
-/system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:add(value="stomp-test")
 /system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
