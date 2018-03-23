@@ -1,5 +1,5 @@
 node {
-  def mvnHome = tool 'Maven-3.3'
+  def mvnHome = tool 'Maven-3.5'
   
   stage('Checkout') {
     git url: 'https://github.com/kifj/stomp-test.git', branch: 'wildfly-10'
