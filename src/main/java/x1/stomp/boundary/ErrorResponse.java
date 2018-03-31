@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "response")
 public class ErrorResponse {
   public ErrorResponse() {
-    errors = new ArrayList<ErrorMessage>();
+    errors = new ArrayList<>();
   }
 
   public ErrorResponse(List<ErrorMessage> errors) {

@@ -99,7 +99,7 @@ public class ShareResource {
           @ApiParam(
                   value = "provide a Correlation-Id header to receive a response for your operation when it finished.")
           @HeaderParam(value = "Correlation-Id") String correlationId) {
-    log.info("Add share " + share);
+    log.info("Add share {}", share);
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
         ObjectMessage message = session.createObjectMessage(share);
@@ -107,7 +107,7 @@ public class ShareResource {
         message.setStringProperty("type", "share");
         message.setStringProperty("action", Action.SUBSCRIBE.name());
         producer.send(message);
-        log.debug("message sent: " + message);
+        log.debug("message sent: {}", message);
       }
       URI location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
       return Response.created(location).build();

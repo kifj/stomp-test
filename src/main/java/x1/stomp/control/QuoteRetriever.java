@@ -1,10 +1,7 @@
 package x1.stomp.control;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -103,6 +100,6 @@ public class QuoteRetriever {
     if (quotes.isEmpty()) {
       return Optional.empty();
     }
-    return createQuote(quotes.get(0), Arrays.asList(share));
+    return createQuote(quotes.get(0), Collections.singletonList(share));
   }
 }

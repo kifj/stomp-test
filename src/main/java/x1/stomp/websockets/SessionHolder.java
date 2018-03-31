@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
 public class SessionHolder {
-  private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
   public List<Session> values() {
     return new ArrayList<>(sessions.values());
