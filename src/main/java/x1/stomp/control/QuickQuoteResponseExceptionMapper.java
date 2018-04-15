@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class QuickQuoteResponseExceptionMapper implements ResponseExceptionMapper<WebApplicationException> {
-  private Logger LOG = LoggerFactory.getLogger(QuickQuoteResponseExceptionMapper.class);
+  private static final Logger LOG = LoggerFactory.getLogger(QuickQuoteResponseExceptionMapper.class);
 
   @Override
   public boolean handles(int statusCode, MultivaluedMap<String, Object> headers) {

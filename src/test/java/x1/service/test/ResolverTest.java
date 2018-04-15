@@ -39,15 +39,15 @@ public class ResolverTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
-            .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs", "x1.jboss:service-registry")
-            .withTransitivity().asFile();
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs", "x1.jboss:service-registry")
+        .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
-            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-            .addAsResource("META-INF/microprofile-config.properties", "META-INF/microprofile-config.properties")            
-            .addAsResource("service-registry.properties").addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsWebInfResource("test-ds.xml").addAsWebInfResource("jboss-deployment-structure.xml")
-            .addAsLibraries(libraries);
+        .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+        .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
+        .addAsResource("service-registry.properties").addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+        .addAsWebInfResource("test-ds.xml").addAsWebInfResource("jboss-deployment-structure.xml")
+        .addAsLibraries(libraries);
   }
 
   @Before
@@ -63,8 +63,7 @@ public class ResolverTest {
   public void testResolveHttps() throws Exception {
     Resolver resolver = new Resolver();
 
-    List<Node> nodes = resolver.resolve(REST, ShareResource.class, VersionData.MAJOR_MINOR, STAGE,
-            HTTPS);
+    List<Node> nodes = resolver.resolve(REST, ShareResource.class, VersionData.MAJOR_MINOR, STAGE, HTTPS);
     assertTrue(nodes.size() > 0);
     Node node = getNode(nodes, resolver);
     assertNotNull(node);
@@ -86,8 +85,7 @@ public class ResolverTest {
   public void testResolveJms() {
     Resolver resolver = new Resolver();
 
-    List<Node> nodes = resolver.resolve(JMS, ShareMessageListener.class,
-            VersionData.MAJOR_MINOR, STAGE, EJB);
+    List<Node> nodes = resolver.resolve(JMS, ShareMessageListener.class, VersionData.MAJOR_MINOR, STAGE, EJB);
     assertTrue(nodes.size() > 0);
     Node node = getNode(nodes, resolver);
     assertNotNull(node);
