@@ -43,3 +43,5 @@ end-if
 /system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:remove()
 /system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:add(value="stomp-test")
 /system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
+/system-property=x1.service.registry.stage:add(value="kubernetes")
+

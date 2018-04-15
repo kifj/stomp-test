@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Provider
 public class JacksonConfig implements ContextResolver<ObjectMapper> {
-  private ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
   public JacksonConfig() {
     mapper = new ObjectMapper();

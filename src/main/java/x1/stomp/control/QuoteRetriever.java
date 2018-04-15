@@ -1,17 +1,13 @@
 package x1.stomp.control;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -51,32 +47,29 @@ public class QuoteRetriever {
   }
 
   private String joinKeys(List<Share> shares) {
-    StringBuilder buffer = new StringBuilder();
-    shares.forEach(share -> {
-      if (buffer.length() > 0) {
-        buffer.append("|");
-      }
-      buffer.append(share.getKey());
-    });
-    return buffer.toString();
+    StringJoiner sj = new StringJoiner("|");
+    shares.forEach(share -> sj.add(share.getKey()));
+    return sj.toString();
   }
 
   private List<Quote> extractQuotes(List<Share> shares, QuickQuoteResult quickQuoteResult) {
-    List<Quote> result = new ArrayList<>();
-    quickQuoteResult.getQuotes().forEach(quickQuote -> createQuote(quickQuote, shares).ifPresent(result::add));
-    return result;
+    return quickQuoteResult.getQuotes().stream().map(quickQuote -> createQuote(quickQuote, shares))
+        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
   }
 
   private QuickQuoteResult retrieveQuotes(String keys) {
-    log.debug("Retrieve quotes for {}", keys);
-    Response response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
-    if (Status.OK == Status.fromStatusCode(response.getStatus())) {
+    try {
+      log.debug("Retrieve quotes for {}", keys);
+      Response response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
+
       QuickQuoteResponse quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
       log.debug("Received: {}", quickQuoteResponse);
       return quickQuoteResponse.getQuickQuoteResult();
-    } else {
-      throw new WebApplicationException(response);
+    } catch (RuntimeException e) {
+      log.error(e.getMessage());
+      throw e;
     }
+
   }
 
   private Optional<Quote> createQuote(QuickQuote quickQuote, List<Share> shares) {
@@ -103,6 +96,6 @@ public class QuoteRetriever {
     if (quotes.isEmpty()) {
       return Optional.empty();
     }
-    return createQuote(quotes.get(0), Arrays.asList(share));
+    return createQuote(quotes.get(0), Collections.singletonList(share));
   }
 }
