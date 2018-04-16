@@ -10,6 +10,7 @@ import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Quote;
+import x1.stomp.model.Quotes;
 import x1.stomp.model.Share;
 import x1.stomp.util.VersionData;
 
@@ -26,9 +27,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -55,6 +59,10 @@ public class QuoteResource {
   @Resource
   private ManagedExecutorService mes;
 
+  @Inject
+  @ConfigProperty(name = "x1.stomp.boundary.QuoteResource/timeout", defaultValue = "5")
+  private Integer timeout;
+  
   @GET
   @Path("/{key}")
   @ApiOperation(value = "get a quote")
@@ -77,25 +85,23 @@ public class QuoteResource {
   @ApiOperation(value = "get quotes")
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Quotes received", response = Quote[].class),
           @ApiResponse(code = 404, message = "No subscription found")})
-  public void getQuotes(@ApiParam("Stock symbols") @QueryParam("key") String[] keys,
+  public void getQuotes(@ApiParam("Stock symbols") @QueryParam("key") List<String> keys,
                         @Suspended AsyncResponse response) {
     withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys)));
   }
 
-  private Response retrieveQuotes(String[] keys) {
-    List<Share> shares = new ArrayList<>();
-    for (String key : keys) {
-      shareSubscription.find(key).ifPresent(shares::add);
-    }
+  private Response retrieveQuotes(List<String> keys) {
+    List<Share> shares = keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent)
+        .map(Optional::get).collect(Collectors.toList());
     if (shares.isEmpty()) {
       return Response.status(NOT_FOUND).build();
     }
     List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
-    return Response.ok(quotes).build();
+    return Response.ok(new Quotes(quotes)).build();
   }
 
   private ManagedExecutorService withTimeoutHandler(AsyncResponse response) {
-    response.setTimeout(5, SECONDS);
+    response.setTimeout(timeout, SECONDS);
     response.setTimeoutHandler(r -> r.resume(Response.status(SERVICE_UNAVAILABLE).build()));
     return mes;
   }

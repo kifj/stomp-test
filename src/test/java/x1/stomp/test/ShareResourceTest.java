@@ -49,14 +49,13 @@ public class ShareResourceTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
-            .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
-            .withTransitivity().asFile();
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs").withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
-            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-            .addAsResource("META-INF/microprofile-config.properties", "META-INF/microprofile-config.properties")            
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
-            .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
+        .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+        .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
+        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+        .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
   }
 
   @Before
@@ -71,7 +70,7 @@ public class ShareResourceTest {
   public void testFindShareNotFound() {
     Client client = ClientBuilder.newClient();
     Response response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
-            .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get();
+        .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get();
     assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
     response.close();
   }
@@ -86,39 +85,39 @@ public class ShareResourceTest {
 
     Client client = ClientBuilder.newClient();
     Response resp = client.target(baseUrl).path(PATH_SHARES).request()
-            .header(HEADER_CORRELATION_ID, UUID.randomUUID().toString())
-            .post(Entity.entity(share, APPLICATION_JSON));
+        .header(HEADER_CORRELATION_ID, UUID.randomUUID().toString()).post(Entity.entity(share, APPLICATION_JSON));
     assertNotNull(resp);
     assertEquals(CREATED.getStatusCode(), resp.getStatus());
     assertEquals(UriBuilder.fromUri(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).build(share.getKey()).toString(),
-            resp.getLocation().toString());
+        resp.getLocation().toString());
     resp.close();
     Thread.sleep(10000);
     Share found = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
-            .request(APPLICATION_JSON).get(Share.class);
+        .request(APPLICATION_JSON).get(Share.class);
     assertNotNull(found);
     assertNull(found.getId());
     assertEquals(key, found.getKey());
 
     List<Share> shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
-            .get(new GenericType<List<Share>>() {
-            });
+        .get(new GenericType<List<Share>>() {
+        });
     assertEquals(1, shares.size());
 
     Quote quote = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
-            .resolveTemplate(PARAM_KEY, share.getKey()).request(APPLICATION_JSON).get(Quote.class);
+        .resolveTemplate(PARAM_KEY, share.getKey()).request(APPLICATION_JSON).get(Quote.class);
     assertNotNull(quote);
     assertNotNull(quote.getCurrency());
     assertNotNull(quote.getPrice());
     assertEquals(quote.getShare().getKey(), share.getKey());
 
-    List<Quote> quotes = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, share.getKey(), TEST_SHARE_INVALID)
-            .request(APPLICATION_JSON).get(new GenericType<List<Quote>>() {
-            });
+    List<Quote> quotes = client.target(baseUrl).path(PATH_QUOTES)
+        .queryParam(PARAM_KEY, share.getKey(), TEST_SHARE_INVALID).request(APPLICATION_JSON)
+        .get(new GenericType<List<Quote>>() {
+        });
     assertEquals(1, quotes.size());
 
     Response response3 = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
-            .resolveTemplate(PARAM_KEY, share.getKey()).request(APPLICATION_JSON).delete();
+        .resolveTemplate(PARAM_KEY, share.getKey()).request(APPLICATION_JSON).delete();
     assertEquals(OK.getStatusCode(), response3.getStatus());
   }
 
@@ -129,14 +128,14 @@ public class ShareResourceTest {
     share.setKey(key);
     Client client = ClientBuilder.newClient();
     Response response = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
-            .post(Entity.entity(share, MediaType.APPLICATION_XML));
+        .post(Entity.entity(share, MediaType.APPLICATION_XML));
     assertEquals(PRECONDITION_FAILED.getStatusCode(), response.getStatus());
     ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
     assertNotNull(errorResponse);
     assertEquals(2, errorResponse.getErrors().size());
 
     Response response2 = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
-            .request(APPLICATION_JSON).get();
+        .request(APPLICATION_JSON).get();
     assertEquals(NOT_FOUND.getStatusCode(), response2.getStatus());
   }
 
@@ -144,7 +143,7 @@ public class ShareResourceTest {
   public void testGetQuoteNotFound() {
     Client client = ClientBuilder.newClient();
     Response response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
-            .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get();
+        .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get();
     assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
   }
 
@@ -152,7 +151,7 @@ public class ShareResourceTest {
   public void testGetQuotesNotFound() {
     Client client = ClientBuilder.newClient();
     Response response = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, TEST_SHARE, TEST_SHARE_INVALID)
-            .request(APPLICATION_JSON).get();
+        .request(APPLICATION_JSON).get();
     assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
   }
 

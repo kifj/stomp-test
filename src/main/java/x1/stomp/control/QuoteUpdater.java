@@ -22,6 +22,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Singleton
 @Startup
@@ -46,6 +47,10 @@ public class QuoteUpdater {
   @Inject
   private JsonHelper jsonHelper;
 
+  @Inject
+  @ConfigProperty(name = "x1.stomp.control.QuoteUpdater/enable", defaultValue = "true")
+  private boolean schedulerEnabled;
+
   private int lastUpdatedCount;
 
   public int getLastUpdateCount() {
@@ -53,6 +58,12 @@ public class QuoteUpdater {
   }
 
   @Schedule(second = "*/30", minute = "*", hour = "*", persistent = true)
+  public void onSchedule() {
+    if (schedulerEnabled) {
+      updateQuotes();
+    }
+  }
+
   public void updateQuotes() {
     lastUpdatedCount = 0;
     List<Share> shares = shareSubscription.list();
