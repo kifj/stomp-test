@@ -688,6 +688,12 @@
                   </build>
                 </image>
                 <image>
+                  <name>j7beck/x1-collectd-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
+                  <build>
+                    <dockerFileDir>x1-collectd-stomp-test</dockerFileDir>
+                  </build>
+                </image>
+                <image>
                   <name>j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-postgres-stomp-test</dockerFileDir>

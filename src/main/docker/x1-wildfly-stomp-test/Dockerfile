@@ -1,8 +1,6 @@
 FROM j7beck/x1-wildfly-slot0:10.1.0.Final
 MAINTAINER joe <joe@mail.x1>
 
-ADD collectd.conf /etc/collectd.d/stomp-test-slot0.conf
-
 COPY scripts /srv/wildfly/scripts
 COPY maven /srv/wildfly/slot0/deployments
 RUN chown -R jboss.jboss /srv/wildfly
