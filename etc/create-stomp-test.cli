@@ -29,8 +29,6 @@ if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topi
     )
 end-if
 
-<<<<<<< HEAD
-=======
 if (outcome != success) of /subsystem=ejb3/service=timer-service/database-data-store=stocks-clustered-store:read-resource
   /subsystem=ejb3/service=timer-service/database-data-store=stocks-clustered-store:add(\
     allow-execution=true, \
@@ -42,4 +40,3 @@ if (outcome != success) of /subsystem=ejb3/service=timer-service/database-data-s
 end-if
 
 /system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
->>>>>>> 1115c8d... Small refactorings

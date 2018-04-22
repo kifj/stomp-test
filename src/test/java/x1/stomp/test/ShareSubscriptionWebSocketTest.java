@@ -44,16 +44,9 @@ public class ShareSubscriptionWebSocketTest {
         .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
-<<<<<<< HEAD
-        .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+        .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
         .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
-=======
-            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-            .addAsResource("META-INF/microprofile-config.properties", "META-INF/microprofile-config.properties")            
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
-            .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
->>>>>>> 1115c8d... Small refactorings
   }
 
   @Before
