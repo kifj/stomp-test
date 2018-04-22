@@ -28,6 +28,7 @@ import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
 import x1.stomp.util.JsonHelper;
+import x1.stomp.util.VersionData;
 
 @RunWith(Arquillian.class)
 public class ShareSubscriptionWebSocketTest {
@@ -52,7 +53,7 @@ public class ShareSubscriptionWebSocketTest {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
         .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs").withTransitivity().asFile();
 
-    return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
+    return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
         .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
@@ -63,7 +64,7 @@ public class ShareSubscriptionWebSocketTest {
   public void setup() {
     String host = System.getProperty("jboss.bind.address", "127.0.0.1");
     int port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0")) * 100;
-    baseUrl = "ws://" + host + ":" + port + "/stomp-test/ws/stocks";
+    baseUrl = "ws://" + host + ":" + port + "/" + VersionData.APP_NAME_MAJOR_MINOR + "/ws/stocks";
     log.debug("baseUrl={}", baseUrl);
   }
 
