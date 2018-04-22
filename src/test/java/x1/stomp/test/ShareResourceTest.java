@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
-import x1.stomp.rest.ErrorResponse;
+import x1.stomp.boundary.ErrorResponse;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 
@@ -99,8 +99,8 @@ public class ShareResourceTest {
     assertNull(found.getId());
     assertEquals(key, found.getKey());
 
-    List<Share> shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
-            .get(new GenericType<List<Share>>() {
+    List<Share> shares = client.target(baseUrl).path(PATH_SHARES).request(MediaType.APPLICATION_JSON)
+        .get(new GenericType<List<Share>>() {
             });
     assertEquals(1, shares.size());
 

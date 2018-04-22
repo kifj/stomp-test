@@ -19,28 +19,36 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
-@XmlRootElement
+@XmlRootElement(name = "share")
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
     @Index(columnList = "key", name = "idx_key", unique = false),
     @Index(columnList = "name", name = "idx_name", unique = false) })
 @ApiModel(description = "Shares are identified by stock symbols, and may have an name for readability.")
 public class Share implements Serializable {
+  public static final String FIND_BY_KEY = "from Share s where s.key = :key";
+  public static final String LIST_ALL = "from Share s order by s.name";
   private static final long serialVersionUID = -6219237799499789827L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @JsonIgnore
+  @XmlTransient
   private Long id;
 
   @Version
+  @JsonIgnore
+  @XmlTransient
   private Long version;
 
   @NotNull
   @Size(min = 1, max = 25)
-  @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and spaces")
+  @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column
   @ApiModelProperty(required = true, value = "Stock symbol")
   private String key;

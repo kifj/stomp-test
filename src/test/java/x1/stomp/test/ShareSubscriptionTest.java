@@ -1,18 +1,7 @@
 package x1.stomp.test;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
-import javax.inject.Inject;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-
-import x1.stomp.model.Share;
-import x1.stomp.service.QuoteUpdater;
-import x1.stomp.service.ShareSubscription;
-
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -21,14 +10,22 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+import x1.stomp.control.QuoteUpdater;
+import x1.stomp.control.ShareSubscription;
+import x1.stomp.model.Share;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
 public class ShareSubscriptionTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
-        .withTransitivity().asFile();
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs").withTransitivity().asFile();
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
@@ -45,15 +42,15 @@ public class ShareSubscriptionTest {
   private Logger log;
 
   @Test
-  public void testSubscribe() throws Exception {
+  public void testSubscribe() {
     Share share = new Share();
     share.setKey("MSFT");
     share.setName("Microsoft Corpora");
 
     while (true) {
-      Share existing = shareSubscription.find(share.getKey());
-      if (existing != null) {
-        shareSubscription.unsubscribe(existing);
+      Optional<Share> existing = shareSubscription.find(share.getKey());
+      if (existing.isPresent()) {
+        shareSubscription.unsubscribe(existing.get());
       } else {
         break;
       }
@@ -66,12 +63,12 @@ public class ShareSubscriptionTest {
     // nothing happens
     shareSubscription.subscribe(share);
 
-    share = shareSubscription.find(share.getKey());
-    assertNotNull(share);
+    Optional<Share> s = shareSubscription.find(share.getKey());
+    assertTrue(s.isPresent());
     assertEquals(1, shareSubscription.list().size());
-
+    share = s.get();
     shareSubscription.unsubscribe(share);
-    assertNull(shareSubscription.find(share.getKey()));
+    assertFalse(shareSubscription.find(share.getKey()).isPresent());
   }
 
   @Test
@@ -83,7 +80,6 @@ public class ShareSubscriptionTest {
     quoteUpdater.updateQuotes();
     assertEquals(1, quoteUpdater.getLastUpdateCount());
     Thread.sleep(3000);
-    share = shareSubscription.find(share.getKey());
-    shareSubscription.unsubscribe(share);
+    shareSubscription.find(share.getKey()).ifPresent(shareSubscription::unsubscribe);
   }
 }

@@ -3,53 +3,35 @@ package x1.stomp.util;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLStreamException;
-
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jettison.AbstractXMLStreamReader;
-import org.codehaus.jettison.AbstractXMLStreamWriter;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.codehaus.jettison.mapped.MappedNamespaceConvention;
-import org.codehaus.jettison.mapped.MappedXMLStreamReader;
-import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
-public final class JsonHelper {
-  private JsonHelper() {
-  }
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
-  public static String toJSON(Object o) throws JAXBException {
-    if (o == null) {
+public class JsonHelper {
+
+  public String toJSON(Object obj) throws IOException {
+    if (obj == null) {
       return null;
     }
-    JAXBContext context = JAXBContext.newInstance(o.getClass());
-    Marshaller marshaller = context.createMarshaller();
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).enable(SerializationFeature.WRAP_ROOT_VALUE)
+        .setSerializationInclusion(Include.NON_NULL);
     StringWriter sw = new StringWriter();
-    MappedNamespaceConvention con = new MappedNamespaceConvention();
-    AbstractXMLStreamWriter w = new MappedXMLStreamWriter(con, sw);
-    marshaller.marshal(o, w);
+    mapper.writeValue(sw, obj);
     return sw.toString();
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T> T fromJSON(String content, Class<? extends T> resultClass) throws IOException {
+  public <T> T fromJSON(String content, Class<? extends T> resultClass) throws IOException {
     if (StringUtils.isEmpty(content)) {
       return null;
     }
-    try {
-      JSONObject jsonObject = new JSONObject(content);
-      AbstractXMLStreamReader reader = new MappedXMLStreamReader(jsonObject);
-      JAXBContext context = JAXBContext.newInstance(resultClass);
-      Unmarshaller unmarshaller = context.createUnmarshaller();
-      // note: setting schema to null will turn validator off
-      unmarshaller.setSchema(null);
-      return (T) unmarshaller.unmarshal(reader);
-    } catch (JAXBException | JSONException | XMLStreamException e) {
-      throw new IOException(e);
-    }
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY).enable(DeserializationFeature.UNWRAP_ROOT_VALUE)
+        .enable(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS);
+    return mapper.readValue(content, resultClass);
   }
+
 }

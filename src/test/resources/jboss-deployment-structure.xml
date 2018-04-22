@@ -5,7 +5,6 @@
       <module name="org.infinispan" />
       <module name="org.jboss.as.jmx" />
       <module name="org.apache.httpcomponents" />
-      <module name="org.codehaus.jettison" />
       <module name="com.fasterxml.jackson.core.jackson-core" />
       <module name="com.fasterxml.jackson.core.jackson-annotations" />
       <module name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" />

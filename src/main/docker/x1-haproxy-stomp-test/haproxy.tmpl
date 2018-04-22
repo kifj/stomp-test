@@ -35,6 +35,7 @@ defaults
     timeout check           10s
     timeout tunnel          3600s
     maxconn                 3000
+    default-server init-addr last,libc,none
 
 frontend statistics
     bind *:5001 ssl crt /etc/haproxy/node.pem

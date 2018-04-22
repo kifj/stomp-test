@@ -1,5 +1,10 @@
 package x1.stomp.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static x1.stomp.model.Action.SUBSCRIBE;
+import static x1.stomp.model.Action.UNSUBSCRIBE;
+
 import java.io.File;
 
 import javax.ejb.EJB;
@@ -14,15 +19,14 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
+import x1.stomp.control.QuoteUpdater;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
-import x1.stomp.service.QuoteUpdater;
 import x1.stomp.util.JsonHelper;
 
 @RunWith(Arquillian.class)
@@ -34,14 +38,19 @@ public class ShareSubscriptionWebSocketTest {
   @Inject
   private Logger log;
 
+  @Inject
+  private JsonHelper jsonHelper;
+
   @EJB
   private QuoteUpdater quoteUpdater;
+
+  @Inject
+  private WebSocketClient client;
 
   @Deployment
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.apache.httpcomponents:fluent-hc", "org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs")
-        .withTransitivity().asFile();
+        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs").withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
@@ -59,11 +68,9 @@ public class ShareSubscriptionWebSocketTest {
 
   @Test
   public void testWebSocket() throws Exception {
-    WebSocketClient client = WebSocketClient.openConnection(baseUrl);
-    Command command = new Command();
-    command.setAction("SUBSCRIBE");
-    command.setKey(TEST_SHARE);
-    String message = JsonHelper.toJSON(command);
+    client.openConnection(baseUrl);
+    Command command = new Command(SUBSCRIBE, TEST_SHARE);
+    String message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
     Thread.sleep(2500);
@@ -79,22 +86,23 @@ public class ShareSubscriptionWebSocketTest {
     String response = client.getLastMessage();
     assertNotNull(response);
     log.debug("Received: {}", response);
-    Quote received = JsonHelper.fromJSON(response, Quote.class);
+    Quote received = jsonHelper.fromJSON(response, Quote.class);
     assertEquals(quote.getPrice(), received.getPrice());
     assertEquals(quote.getCurrency(), received.getCurrency());
     assertEquals(TEST_SHARE, received.getShare().getKey());
 
-    command.setAction("UNSUBSCRIBE");
-    message = JsonHelper.toJSON(command);
+    command.setAction(UNSUBSCRIBE);
+    message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
     client.sendMessage(message);
 
     Thread.sleep(2500);
     response = client.getLastMessage();
     assertNotNull(response);
-    SubscriptionEvent event = JsonHelper.fromJSON(response, SubscriptionEvent.class);
+    SubscriptionEvent event = jsonHelper.fromJSON(response, SubscriptionEvent.class);
     assertEquals(TEST_SHARE, event.getKey());
-    assertEquals("unsubscribe", event.getAction());
+    assertEquals(UNSUBSCRIBE, event.getAction());
     client.closeConnection();
   }
+
 }

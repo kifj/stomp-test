@@ -25,25 +25,40 @@
     </configuration>
   </container>
 
-  <extension qualifier="jacoco">
-    <property name="includes">x1.*</property>
-  </extension>
+	<container qualifier="docker-stomp-test-it" default="false">
+		<protocol type="Servlet 3.0" />
+		<configuration>
+			<property name="managementAddress">localhost</property>
+			<property name="managementPort">${jboss.managementPort:9990}</property>
+			<property name="username">${jboss.user}</property>
+			<property name="password">${jboss.password}</property>
+		</configuration>
+	</container>
 
-  <extension qualifier="docker">
-    <property name="serverVersion">1.24</property>
-    <property name="serverUri">http://localhost:2375</property>
-    <property name="connectionMode">STARTANDSTOP</property>
-    <property name="definitionFormat">CUBE</property>
-    <property name="dockerContainers">
-      jbossas-remote:
-        buildImage:
-          dockerfileLocation: src/main/docker/integration-tests
-          remove: true
-        exposedPorts: [8080/tcp, 9990/tcp]
-        portBindings: [8080/tcp, 9990/tcp]
+	<extension qualifier="jacoco">
+		<property name="includes">x1.*</property>
+	</extension>
+
+	<extension qualifier="cube">
+	  <property name="connectionMode">STARTANDSTOP</property>
+	</extension>
+
+	<extension qualifier="docker">
+		<property name="serverVersion">1.26</property>
+		<property name="autoStartContainers">stomp-test-it</property>
+		<property name="definitionFormat">CUBE</property>
+		<property name="clean">true</property>
+		<property name="dockerContainers">
+      stomp-test-it:
+        image: j7beck/x1-wildfly-stomp-test-it:1.4
+        alwaysPull: false
+        portBindings: [9990/tcp, 8080/tcp]
         await:
-          strategy: sleeping
-          sleepTime: 20 s
+          strategy: http
+          responseCode: 200
+          url: http://dockerHost:8080
+          sleepPollingTime: 5 s
+          iterations: 10
           stdErr: true
           stdOut: true
         env: [ MANAGEMENT=public HTTP=public ]

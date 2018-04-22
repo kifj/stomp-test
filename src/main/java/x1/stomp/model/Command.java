@@ -1,17 +1,30 @@
 package x1.stomp.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "command")
+@JsonRootName(value = "command")
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class Command {
-  private String action;
+  private Action action;
   private String key;
 
-  public String getAction() {
+  public Command() {
+  }
+
+  public Command(Action action, String key) {
+    this.action = action;
+    this.key = key;
+  }
+
+  public Action getAction() {
     return action;
   }
 
-  public void setAction(String action) {
+  public void setAction(Action action) {
     this.action = action;
   }
 

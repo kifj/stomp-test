@@ -1,18 +1,15 @@
 package x1.stomp.websockets;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
-import java.util.ArrayList;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import javax.websocket.Session;
-
-import org.slf4j.Logger;
+import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
+import java.nio.charset.StandardCharsets;
 
 @Singleton
 @Startup
@@ -21,26 +18,25 @@ public class PingSender {
 
   @PostConstruct
   public void setup() {
-    try {
-      ping = ByteBuffer.wrap("ping".getBytes("UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      ping = null;
-    }
+    ping = ByteBuffer.wrap("ping".getBytes(StandardCharsets.UTF_8));
   }
 
   @Inject
   private Logger log;
 
+  @Inject
+  private SessionHolder sessionHolder;
+
   @Schedule(hour = "*", minute = "*", second = "*/30", persistent = false)
   public void sendPing() {
-    for (Session session : new ArrayList<>(ShareSubscriptionWebSocketServerEndpoint.SESSIONS.values())) {
+    sessionHolder.values().forEach(session -> {
       try {
         session.getBasicRemote().sendPing(ping);
       } catch (ClosedChannelException e) {
-        ShareSubscriptionWebSocketServerEndpoint.SESSIONS.remove(session.getId());
+        sessionHolder.remove(session.getId());
       } catch (Exception e) {
-        log.error(null, e);
+        log.error(e.getMessage(), e);
       }
-    }
+    });
   }
 }

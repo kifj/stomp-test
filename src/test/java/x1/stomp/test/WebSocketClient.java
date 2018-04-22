@@ -1,20 +1,14 @@
 package x1.stomp.test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.websocket.ClientEndpoint;
-import javax.websocket.CloseReason;
-import javax.websocket.ContainerProvider;
-import javax.websocket.DeploymentException;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static javax.websocket.CloseReason.CloseCodes.CLOSED_ABNORMALLY;
+import static javax.websocket.CloseReason.CloseCodes.NORMAL_CLOSURE;
 
 @ClientEndpoint
 public class WebSocketClient {
@@ -25,7 +19,7 @@ public class WebSocketClient {
 
   private WebSocketClient() {
   }
-  
+
   public String getLastMessage() {
     return lastMessage;
   }
@@ -47,12 +41,11 @@ public class WebSocketClient {
     LOG.info("Session {} close because of {}", session.getId(), closeReason);
   }
 
-  public static WebSocketClient openConnection(String url) throws DeploymentException, IOException {
+  public WebSocketClient openConnection(String url) throws DeploymentException, IOException {
     WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-    WebSocketClient client = new WebSocketClient();
     URI uri = URI.create(url);
-    container.connectToServer(client, uri);
-    return client;
+    container.connectToServer(this, uri);
+    return this;
   }
 
   public void sendMessage(String message) throws IOException {
@@ -61,7 +54,7 @@ public class WebSocketClient {
     } catch (IOException ex) {
       LOG.error(null, ex);
       try {
-        session.close(new CloseReason(CloseReason.CloseCodes.CLOSED_ABNORMALLY, ex.getMessage()));
+        session.close(new CloseReason(CLOSED_ABNORMALLY, ex.getMessage()));
       } catch (IOException ignored) {
         LOG.warn("Failed to close failed connection", ignored);
       }
@@ -71,7 +64,7 @@ public class WebSocketClient {
 
   public void closeConnection() {
     try {
-      session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "client requested"));
+      session.close(new CloseReason(NORMAL_CLOSURE, "client requested"));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

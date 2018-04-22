@@ -16,10 +16,10 @@ node {
   stage('Run IT test') {
     docker
       .image('j7beck/x1-wildfly-stomp-test-it:1.4')
-      .withRun('-e MANAGEMENT=public -e HTTP=public') {
+      .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
     c ->
       try {
-        sleep 60
+        waitFor("http://${hostIp(c)}:8080", 5, 12)
         sh "${mvnHome}/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
       } finally {
         junit '**/target/surefire-reports/TEST-*.xml'
@@ -39,4 +39,11 @@ node {
 def hostIp(container) {
   sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
   readFile('hostIp').trim()
+}
+
+def waitFor(target, sleepInSec, retries) {
+  retry (retries) {
+    sleep sleepInSec
+    httpRequest url: target, validResponseCodes: '200'
+  }
 }
