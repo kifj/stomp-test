@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import x1.stomp.control.QuoteUpdater;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Share;
+import x1.stomp.util.VersionData;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -26,7 +27,7 @@ public class ShareSubscriptionTest {
   public static Archive<?> createTestArchive() {
     File[] libraries = Maven.resolver().loadPomFromFile("pom.xml")
         .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs").withTransitivity().asFile();
-    return ShrinkWrap.create(WebArchive.class, "stomp-test.war").addPackages(true, "x1.stomp")
+    return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
         .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
