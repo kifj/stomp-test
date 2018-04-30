@@ -13,11 +13,9 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class QuoteRetriever {
@@ -34,7 +32,7 @@ public class QuoteRetriever {
   @PostConstruct
   public void setup() {
     client = new ResteasyClientBuilder().establishConnectionTimeout(200, TimeUnit.MILLISECONDS).connectionPoolSize(5)
-            .connectionCheckoutTimeout(1, TimeUnit.SECONDS).socketTimeout(2, TimeUnit.SECONDS).build();
+        .connectionCheckoutTimeout(1, TimeUnit.SECONDS).socketTimeout(2, TimeUnit.SECONDS).build();
   }
 
   @PreDestroy
@@ -50,30 +48,32 @@ public class QuoteRetriever {
     if (shares.isEmpty()) {
       return new ArrayList<>();
     }
-    StringBuilder buffer = new StringBuilder();
-    shares.forEach(share -> {
-      if (buffer.length() > 0) {
-        buffer.append("%7C");
-      }
-      buffer.append(share.getKey());
-    });
-    return extractQuotes(shares, retrieveQuotes(buffer.toString()));
+    return extractQuotes(shares, retrieveQuotes(joinKeys(shares)));
+  }
+
+  private String joinKeys(List<Share> shares) {
+    StringJoiner sj = new StringJoiner("|");
+    shares.forEach(share -> sj.add(share.getKey()));
+    return sj.toString();
   }
 
   private List<Quote> extractQuotes(List<Share> shares, QuickQuoteResult quickQuoteResult) {
-    List<Quote> result = new ArrayList<>();
-    quickQuoteResult.getQuotes().forEach(quickQuote ->
-            createQuote(quickQuote, shares).ifPresent(result::add));
-    return result;
+    return quickQuoteResult.getQuotes().stream().map(quickQuote -> createQuote(quickQuote, shares))
+        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
   }
 
   private QuickQuoteResult retrieveQuotes(String keys) {
-    log.debug("Retrieve quotes for {}", keys);
-    WebTarget target = client.target(URL).queryParam(PARAM_SYMBOLS, keys.toUpperCase()).queryParam(PARAM_OUTPUT,
-        VALUE_OUTPUT_JSON);
-    QuickQuoteResponse response = target.request(MediaType.APPLICATION_JSON).get(QuickQuoteResponse.class);
-    log.debug("Received: {}", response);
-    return response.getQuickQuoteResult();
+    try {
+      log.debug("Retrieve quotes for {}", keys);
+      WebTarget target = client.target(URL).queryParam(PARAM_SYMBOLS, keys.toUpperCase()).queryParam(PARAM_OUTPUT,
+          VALUE_OUTPUT_JSON);
+      QuickQuoteResponse response = target.request(MediaType.APPLICATION_JSON).get(QuickQuoteResponse.class);
+      log.debug("Received: {}", response);
+      return response.getQuickQuoteResult();
+    } catch (RuntimeException e) {
+      log.error(e.getMessage());
+      throw e;
+    }
   }
 
   private Optional<Quote> createQuote(QuickQuote quickQuote, List<Share> shares) {
@@ -100,6 +100,6 @@ public class QuoteRetriever {
     if (quotes.isEmpty()) {
       return Optional.empty();
     }
-    return createQuote(quotes.get(0), Arrays.asList(share));
+    return createQuote(quotes.get(0), Collections.singletonList(share));
   }
 }

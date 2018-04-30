@@ -1,11 +1,15 @@
 package x1.stomp.control;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.TimerService;
 
 import org.slf4j.Logger;
 
@@ -26,6 +30,8 @@ import javax.jms.Topic;
 @Singleton
 @Startup
 public class QuoteUpdater {
+  private static final String INFO_TEXT = "updateQuotes";
+
   @Inject
   private Logger log;
 
@@ -46,13 +52,27 @@ public class QuoteUpdater {
   @Inject
   private JsonHelper jsonHelper;
 
+
+  @Resource
+  private TimerService timerService;
+  
   private int lastUpdatedCount;
 
   public int getLastUpdateCount() {
     return lastUpdatedCount;
   }
-
-  @Schedule(second = "*/30", minute = "*", hour = "*", persistent = true)
+  
+  @PostConstruct
+  public void setup() {
+    Date now = new Date();
+    timerService.getAllTimers().forEach(timer -> {
+      if (timer.isPersistent() && INFO_TEXT.equals(timer.getInfo()) && timer.getNextTimeout().before(now)) {
+        timer.cancel();
+      }
+    });
+  }
+  
+  @Schedule(second = "*/30", minute = "*", hour = "*", persistent = true, info = INFO_TEXT)
   public void updateQuotes() {
     lastUpdatedCount = 0;
     List<Share> shares = shareSubscription.list();
