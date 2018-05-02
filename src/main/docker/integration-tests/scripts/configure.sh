@@ -9,6 +9,7 @@ export RUN_CONF=$WILDFLY_DIR/standalone.conf
 export MAIL_SERVER=localhost
 export MANAGEMENT=local
 
+chown jboss.jboss $JBOSS_BASE_DIR/log
 $JBOSS_HOME/bin/add-user.sh -s -u $MGMT_USER -r ManagementRealm -sc $JBOSS_BASE_DIR/configuration -p $MGMT_PASSWORD
 $JBOSS_HOME/bin/add-user.sh -s -a -u $MGMT_USER -g admin,guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p $MGMT_PASSWORD
 $JBOSS_HOME/bin/add-user.sh -s -a -u guest -g guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p guest_12345!
