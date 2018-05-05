@@ -70,7 +70,7 @@ public class QuoteUpdater {
       }
     });
   }
-
+  
   @Schedule(second = "*/30", minute = "*", hour = "*", persistent = true, info = INFO_TEXT)
   public void updateQuotes() {
     lastUpdatedCount = 0;

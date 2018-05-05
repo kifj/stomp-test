@@ -61,7 +61,7 @@ public class ShareSubscriptionWebSocketTest {
   @Before
   public void setup() {
     String host = System.getProperty("jboss.bind.address", "127.0.0.1");
-    int port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0")) * 100;
+    int port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
     baseUrl = "ws://" + host + ":" + port + "/stomp-test/ws/stocks";
     log.debug("baseUrl={}", baseUrl);
   }

@@ -61,7 +61,7 @@ public class ShareResourceTest {
   @Before
   public void setup() {
     String host = System.getProperty("jboss.bind.address", "127.0.0.1");
-    int port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0")) * 100;
+    int port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
     baseUrl = "http://" + host + ":" + port + "/stomp-test/rest";
     log.debug("baseUrl={}", baseUrl);
   }
