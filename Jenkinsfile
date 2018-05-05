@@ -1,49 +1,51 @@
-node {
-  def mvnHome = tool 'Maven-3.5'
-  
-  stage('Checkout') {
-    git url: 'https://github.com/kifj/stomp-test.git', branch: 'wildfly-12'
-  }
-  
-  stage('Build') {
-    sh "${mvnHome}/bin/mvn clean package"
-  }
-  
-  stage('Prepare IT test') {
-    sh "${mvnHome}/bin/mvn -Pdocker-integration-test pre-integration-test"
-  }
-  
-  stage('Run IT test') {
-    docker
-      .image('j7beck/x1-wildfly-stomp-test-it:1.5')
-      .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
-    c ->
-      try {
-        waitFor("http://${hostIp(c)}:8080", 5, 12)
-        sh "${mvnHome}/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
-      } finally {
-        junit '**/target/surefire-reports/TEST-*.xml'
+lock("stomp-test-it") {
+  node {
+    def mvnHome = tool 'Maven-3.5'
+    
+    stage('Checkout') {
+      git url: 'https://github.com/kifj/stomp-test.git', branch: 'wildfly-12'
+    }
+    
+    stage('Build') {
+      sh "${mvnHome}/bin/mvn clean package"
+    }
+    
+    stage('Prepare IT test') {
+      sh "${mvnHome}/bin/mvn -Pdocker-integration-test pre-integration-test"
+    }
+    
+    stage('Run IT test') {
+      docker
+        .image('j7beck/x1-wildfly-stomp-test-it:1.5')
+        .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
+      c ->
+        try {
+          waitFor("http://${hostIp(c)}:8080", 5, 12)
+          sh "${mvnHome}/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
+        } finally {
+          junit '**/target/surefire-reports/TEST-*.xml'
+        }
       }
     }
+    
+    stage('Publish') {
+      sh "${mvnHome}/bin/mvn -Prpm deploy site-deploy -DskipTests"
+    }
+    
+    stage('Create image') {
+      sh "${mvnHome}/bin/mvn -Pdocker install"
+    }
   }
-  
-  stage('Publish') {
-    sh "${mvnHome}/bin/mvn -Prpm deploy site-deploy -DskipTests"
-  }
-  
-  stage('Create image') {
-    sh "${mvnHome}/bin/mvn -Pdocker install"
-  }
-}
 
-def hostIp(container) {
-  sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
-  readFile('hostIp').trim()
-}
+  def hostIp(container) {
+    sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
+    readFile('hostIp').trim()
+  }
 
-def waitFor(target, sleepInSec, retries) {
-  retry (retries) {
-    sleep sleepInSec
-    httpRequest url: target, validResponseCodes: '200'
+  def waitFor(target, sleepInSec, retries) {
+    retry (retries) {
+      sleep sleepInSec
+      httpRequest url: target, validResponseCodes: '200'
+    }
   }
 }
