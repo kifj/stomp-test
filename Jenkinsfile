@@ -36,16 +36,16 @@ lock("stomp-test-it") {
       sh "${mvnHome}/bin/mvn -Pdocker install"
     }
   }
+}
 
-  def hostIp(container) {
-    sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
-    readFile('hostIp').trim()
-  }
+def hostIp(container) {
+  sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
+  readFile('hostIp').trim()
+}
 
-  def waitFor(target, sleepInSec, retries) {
-    retry (retries) {
-      sleep sleepInSec
-      httpRequest url: target, validResponseCodes: '200'
-    }
+def waitFor(target, sleepInSec, retries) {
+  retry (retries) {
+    sleep sleepInSec
+    httpRequest url: target, validResponseCodes: '200'
   }
 }
