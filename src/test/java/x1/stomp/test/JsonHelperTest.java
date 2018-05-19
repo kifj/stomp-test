@@ -12,7 +12,7 @@ import x1.stomp.util.JsonHelper;
 import java.io.File;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static x1.stomp.model.Action.SUBSCRIBE;
 import static x1.stomp.model.Action.UNSUBSCRIBE;
 
@@ -25,7 +25,7 @@ public class JsonHelperTest {
     c.setAction(SUBSCRIBE);
     c.setKey("MSFT");
     String json = jsonHelper.toJSON(c);
-    assertEquals("{\"command\":{\"action\":\"SUBSCRIBE\",\"key\":\"MSFT\"}}", json);
+    assertThat(json).isEqualTo("{\"command\":{\"action\":\"SUBSCRIBE\",\"key\":\"MSFT\"}}");
   }
 
   @Test
@@ -33,13 +33,13 @@ public class JsonHelperTest {
     Command c = new Command();
     c.setAction(UNSUBSCRIBE);
     String json = jsonHelper.toJSON(c);
-    assertEquals("{\"command\":{\"action\":\"UNSUBSCRIBE\"}}", json);
+    assertThat(json).isEqualTo("{\"command\":{\"action\":\"UNSUBSCRIBE\"}}");
   }
 
   @Test
   public void testToJson3() throws Exception {
     String json = jsonHelper.toJSON(null);
-    assertNull(json);
+    assertThat(json).isNull();
   }
 
   @Test
@@ -54,30 +54,30 @@ public class JsonHelperTest {
     q.setShare(share);
     q.setFrom(new Date(123000123000L));
     String json = jsonHelper.toJSON(q);
-    assertEquals("{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,"
-        + "\"currency\":\"EUR\",\"from\":\"1973-11-24T14:42:03.000+0000\"}}", json);
+    assertThat(json).isEqualTo("{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,"
+        + "\"currency\":\"EUR\",\"from\":\"1973-11-24T14:42:03.000+0000\"}}");
   }
 
   @Test
   public void testFromJson1() throws Exception {
     Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"UNSUBSCRIBE\",\"key\":\"MSFT\"}}", Command.class);
-    assertNotNull(c);
-    assertEquals(UNSUBSCRIBE, c.getAction());
-    assertEquals("MSFT", c.getKey());
+    assertThat(c).isNotNull();
+    assertThat(UNSUBSCRIBE).isEqualTo(c.getAction());
+    assertThat(c.getKey()).isEqualTo("MSFT");
   }
 
   @Test
   public void testFromJson2() throws Exception {
     Command c = jsonHelper.fromJSON("{\"command\":{\"action\":\"SUBSCRIBE\"}}", Command.class);
-    assertNotNull(c);
-    assertEquals(SUBSCRIBE, c.getAction());
-    assertNull(c.getKey());
+    assertThat(c).isNotNull();
+    assertThat(SUBSCRIBE).isEqualTo(c.getAction());
+    assertThat(c.getKey()).isNull();
   }
 
   @Test
   public void testFromJson3() throws Exception {
     Command c = jsonHelper.fromJSON(null, Command.class);
-    assertNull(c);
+    assertThat(c).isNull();
   }
 
   @Test
@@ -85,15 +85,15 @@ public class JsonHelperTest {
     File f = new File(getClass().getClassLoader().getResource("quickquoteresult.json").getFile());
     String c = FileUtils.readFileToString(f, "UTF-8");
     QuickQuoteResult q = jsonHelper.fromJSON(c, QuickQuoteResult.class);
-    assertNotNull(q);
-    assertEquals(2, q.getQuotes().size());
+    assertThat(q).isNotNull();
+    assertThat(q.getQuotes()).size().isEqualTo(2);
     QuickQuote q1 = q.getQuotes().get(0);
-    assertEquals("BMW.DE", q1.getSymbol());
-    assertEquals("89.57", q1.getLast().toString());
-    assertEquals("EUR", q1.getCurrencyCode());
-    assertEquals("DE", q1.getCountryCode());
-    assertEquals("Bayerische Motoren Werke AG", q1.getName());
-    assertEquals("XETRA", q1.getExchange());
-    assertNotNull(q1.getLastTime());
+    assertThat(q1.getSymbol()).isEqualTo("BMW.DE");
+    assertThat(q1.getLast().toString()).isEqualTo("89.57");
+    assertThat(q1.getCurrencyCode()).isEqualTo("EUR");
+    assertThat(q1.getCountryCode()).isEqualTo("DE");
+    assertThat(q1.getName()).isEqualTo("Bayerische Motoren Werke AG");
+    assertThat(q1.getExchange()).isEqualTo("XETRA");
+    assertThat(q1.getLastTime()).isNotNull();
   }
 }

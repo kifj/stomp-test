@@ -266,6 +266,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.10.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jboss.arquillian.junit</groupId>
       <artifactId>arquillian-junit-container</artifactId>
       <scope>test</scope>
@@ -351,7 +357,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.9</version>
+        <version>0.8.1</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -514,7 +520,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.9</version>
+          <version>0.8.1</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -544,7 +550,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.9</version>
+          <version>0.8.1</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -596,7 +602,7 @@
         <dependency>
           <groupId>org.jacoco</groupId>
           <artifactId>org.jacoco.core</artifactId>
-          <version>0.7.9</version>
+          <version>0.8.1</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
