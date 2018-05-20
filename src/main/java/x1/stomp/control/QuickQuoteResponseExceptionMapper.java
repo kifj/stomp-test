@@ -19,7 +19,7 @@ public class QuickQuoteResponseExceptionMapper implements ResponseExceptionMappe
 
   @Override
   public WebApplicationException toThrowable(Response response) {
-    WebApplicationException e = new WebApplicationException(response);
+    var e = new WebApplicationException(response);
     LOG.error(e.getMessage());
     throw e;
   }

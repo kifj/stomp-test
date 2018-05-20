@@ -1,10 +1,11 @@
 package x1.stomp.boundary;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
@@ -43,9 +44,8 @@ import static x1.service.registry.Technology.REST;
 
 @Path(QuoteResource.PATH)
 @RequestScoped
-@Api(value = QuoteResource.PATH)
-@Services(services = {@Service(technology = REST, value = RestApplication.ROOT
-        + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
+@Services(services = { @Service(technology = REST, value = RestApplication.ROOT
+    + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class QuoteResource {
   public static final String PATH = "/quotes";
@@ -62,14 +62,16 @@ public class QuoteResource {
   @Inject
   @ConfigProperty(name = "x1.stomp.boundary.QuoteResource/timeout", defaultValue = "5")
   private Integer timeout;
-  
+
   @GET
   @Path("/{key}")
-  @ApiOperation(value = "get a quote")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Quote received", response = Quote.class),
-          @ApiResponse(code = 404, message = "Subscription not found")})
+  @Operation(description = "get a quote")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Quote received", 
+          content = @Content(schema = @Schema(implementation = Quote.class))),
+      @ApiResponse(responseCode = "404", description = "Subscription not found") })
   public Response getQuote(
-          @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
+      @Parameter(description = "Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
       Optional<Quote> quote = quoteRetriever.retrieveQuote(share.get());
@@ -82,11 +84,12 @@ public class QuoteResource {
 
   @GET
   @Path("/")
-  @ApiOperation(value = "get quotes")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Quotes received", response = Quote[].class),
-          @ApiResponse(code = 404, message = "No subscription found")})
-  public void getQuotes(@ApiParam("Stock symbols") @QueryParam("key") List<String> keys,
-                        @Suspended AsyncResponse response) {
+  @Operation(description = "get quotes")
+  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Quotes received", 
+        content = @Content(schema = @Schema(implementation = Quote[].class))),
+      @ApiResponse(responseCode = "404", description = "No subscription found") })
+  public void getQuotes(@Parameter(description = "Stock symbols") @QueryParam("key") List<String> keys,
+      @Suspended AsyncResponse response) {
     withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys)));
   }
 

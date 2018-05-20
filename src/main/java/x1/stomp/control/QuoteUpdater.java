@@ -59,13 +59,13 @@ public class QuoteUpdater {
 
   @Resource
   private TimerService timerService;
-  
+
   private int lastUpdatedCount;
 
   public int getLastUpdateCount() {
     return lastUpdatedCount;
   }
-  
+
   @PostConstruct
   public void setup() {
     Date now = new Date();
@@ -90,21 +90,25 @@ public class QuoteUpdater {
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(quoteTopic)) {
         List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
-        for (Quote quote : quotes) {
-          log.debug("Sending message for {}", quote);
-          producer.send(createMessage(quote, session));
-          lastUpdatedCount++;
-        }
+        quotes.forEach(quote -> {
+          try {
+            log.debug("Sending message for {}", quote);
+            producer.send(createMessage(quote, session));
+            lastUpdatedCount++;
+          } catch (JMSException | IOException e) {
+            log.error(null, e);
+          }
+        });
       }
-    } catch (JMSException | IOException e) {
-      log.error(null, e);
+    } catch (JMSException e) {
+      log.error(e.getErrorCode(), e);
     }
   }
 
   public void updateQuote(Quote quote) {
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(quoteTopic)) {
-        log.debug("Sending message for " + quote);
+        log.debug("Sending message for {}", quote);
         producer.send(createMessage(quote, session));
       }
       lastUpdatedCount++;

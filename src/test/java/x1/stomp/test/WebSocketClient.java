@@ -41,8 +41,8 @@ public class WebSocketClient {
   }
 
   public WebSocketClient openConnection(String url) throws DeploymentException, IOException {
-    WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-    URI uri = URI.create(url);
+    var container = ContainerProvider.getWebSocketContainer();
+    var uri = URI.create(url);
     container.connectToServer(this, uri);
     return this;
   }

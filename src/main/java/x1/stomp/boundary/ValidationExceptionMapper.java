@@ -1,6 +1,5 @@
 package x1.stomp.boundary;
 
-import org.jboss.resteasy.api.validation.ResteasyConstraintViolation;
 import org.jboss.resteasy.api.validation.ResteasyViolationException;
 import org.slf4j.Logger;
 
@@ -18,10 +17,10 @@ public class ValidationExceptionMapper implements ExceptionMapper<ResteasyViolat
 
   @Override
   public Response toResponse(ResteasyViolationException e) {
-    ErrorResponse response = new ErrorResponse();
-    for (ResteasyConstraintViolation violation : e.getViolations()) {
+    var response = new ErrorResponse();
+    e.getViolations().forEach(violation -> {
       response.add(new ErrorMessage(violation.getMessage(), violation.getPath(), violation.getValue()));
-    }
+    });
     log.warn(response.toString());
     return Response.status(PRECONDITION_FAILED).entity(response).build();
   }

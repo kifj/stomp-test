@@ -19,7 +19,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import java.io.IOException;
-import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static x1.service.registry.Protocol.*;
@@ -77,9 +76,9 @@ public class ShareMessageListener implements MessageListener {
   }
 
   private void onMessage(BytesMessage message) throws JMSException, IOException {
-    String body = message.readUTF();
+    var body = message.readUTF();
     log.debug("Received message: {}", body);
-    Command command = jsonHelper.fromJSON(body, Command.class);
+    var command = jsonHelper.fromJSON(body, Command.class);
     if (!isValid(command)) {
       log.warn("Incomplete command: {}", command);
       return;
@@ -103,7 +102,7 @@ public class ShareMessageListener implements MessageListener {
 
   private void unsubscribe(String key) {
     log.info("Unsubscribe: {}", key);
-    Optional<Share> share = shareSubscription.find(key);
+    var share = shareSubscription.find(key);
     if (share.isPresent()) {
       shareSubscription.unsubscribe(share.get());
     } else {
@@ -112,7 +111,7 @@ public class ShareMessageListener implements MessageListener {
   }
 
   private void subscribe(String key) {
-    Share share = new Share();
+    var share = new Share();
     share.setKey(key);
     subscribe(share);
   }

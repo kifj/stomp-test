@@ -20,16 +20,17 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 @XmlRootElement(name = "share")
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
     @Index(columnList = "key", name = "idx_key", unique = false),
     @Index(columnList = "name", name = "idx_name", unique = false) })
-@ApiModel(description = "Shares are identified by stock symbols, and may have an name for readability.")
+@Schema(description = "Shares are identified by stock symbols, and may have an name for readability.")
+@JsonRootName(value = "share")
 public class Share implements Serializable {
   public static final String FIND_BY_KEY = "from Share s where s.key = :key";
   public static final String LIST_ALL = "from Share s order by s.name";
@@ -50,14 +51,14 @@ public class Share implements Serializable {
   @Size(min = 1, max = 25)
   @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column
-  @ApiModelProperty(required = true, value = "Stock symbol")
+  @Schema(required = true, description = "Stock symbol")
   private String key;
 
   @NotNull
   @NotEmpty
   @Size(min = 1, max = 80)
   @Column(length = 80)
-  @ApiModelProperty(required = false, value = "Human readable name")
+  @Schema(required = false, description = "Human readable name")
   private String name;
 
   @XmlTransient

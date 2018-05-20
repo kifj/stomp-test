@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -47,7 +46,7 @@ public class QuoteRetriever {
   }
 
   private String joinKeys(List<Share> shares) {
-    StringJoiner sj = new StringJoiner("|");
+    var sj = new StringJoiner("|");
     shares.forEach(share -> sj.add(share.getKey()));
     return sj.toString();
   }
@@ -60,9 +59,9 @@ public class QuoteRetriever {
   private QuickQuoteResult retrieveQuotes(String keys) {
     try {
       log.debug("Retrieve quotes for {}", keys);
-      Response response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
+      var response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
 
-      QuickQuoteResponse quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
+      var quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
       log.debug("Received: {}", quickQuoteResponse);
       return quickQuoteResponse.getQuickQuoteResult();
     } catch (RuntimeException e) {
@@ -76,12 +75,12 @@ public class QuoteRetriever {
     if (quickQuote.getLast() == null || quickQuote.getName() == null || quickQuote.getSymbol() == null) {
       return Optional.empty();
     }
-    for (Share share : shares) {
-      String key = quickQuote.getSymbol();
+    for (var share : shares) {
+      var key = quickQuote.getSymbol();
       if (share.getKey().equalsIgnoreCase(key)) {
         share.setKey(key.toUpperCase());
         share.setName(quickQuote.getName());
-        Quote quote = new Quote(share);
+        var quote = new Quote(share);
         quote.setPrice(quickQuote.getLast());
         quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));
         quote.setFrom(quickQuote.getLastTime());
@@ -92,7 +91,7 @@ public class QuoteRetriever {
   }
 
   private Optional<Quote> createQuote(QuickQuoteResult quickQuoteResult, Share share) {
-    List<QuickQuote> quotes = quickQuoteResult.getQuotes();
+    var quotes = quickQuoteResult.getQuotes();
     if (quotes.isEmpty()) {
       return Optional.empty();
     }

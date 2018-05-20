@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>x1.jboss</groupId>
   <artifactId>stomp-test</artifactId>
-  <version>1.5.0-SNAPSHOT</version>
+  <version>1.5.0-jdk10-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Stomp Test</name>
   <description>A test run for Websockets on JBoss Wildfly 12</description>
@@ -43,7 +43,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>10</maven.compiler.target>
     <maven.compiler.source>10</maven.compiler.source>
-    <swagger.version>1.5.18</swagger.version>
+    <swagger.version>2.0.0</swagger.version>
   </properties>
 
   <distributionManagement>
@@ -210,6 +210,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
       <scope>provided</scope>
@@ -235,24 +240,8 @@
       <version>1.1.0</version>
     </dependency>
     <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-core</artifactId>
-      <version>${swagger.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-jaxrs</artifactId>
-      <version>${swagger.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jsr311-api</artifactId>
-          <groupId>javax.ws.rs</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-annotations</artifactId>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-jaxrs2</artifactId>
       <version>${swagger.version}</version>
     </dependency>
     <dependency>

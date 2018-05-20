@@ -1,10 +1,12 @@
 package x1.stomp.boundary;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
@@ -46,9 +48,8 @@ import static x1.service.registry.Technology.REST;
 
 @Path(ShareResource.PATH)
 @RequestScoped
-@Api(value = ShareResource.PATH)
-@Services(services = {@Service(technology = REST, value = RestApplication.ROOT
-        + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
+@Services(services = { @Service(technology = REST, value = RestApplication.ROOT
+    + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class ShareResource {
   public static final String PATH = "/shares";
@@ -69,19 +70,23 @@ public class ShareResource {
 
   @GET
   @Wrapped(element = "shares")
-  @ApiOperation(value = "List all subscriptions")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription found", response = Share[].class)})
+  @Operation(description = "List all subscriptions")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Subscription found", 
+          content = @Content(schema = @Schema(implementation = Share[].class))) })
   public List<Share> listAllShares() {
     return shareSubscription.list();
   }
 
   @GET
   @Path("/{key}")
-  @ApiOperation(value = "Find a share subscription")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription found", response = Share.class),
-          @ApiResponse(code = 404, message = "Subscription not found")})
+  @Operation(description = "Find a share subscription")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Subscription found", 
+          content = @Content(schema = @Schema(implementation = Share.class))),
+      @ApiResponse(responseCode = "404", description = "Subscription not found") })
   public Response findShare(
-          @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
+      @Parameter(description = "Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
       return Response.ok(share.get()).build();
@@ -91,14 +96,12 @@ public class ShareResource {
   }
 
   @POST
-  @ApiOperation(value = "Add share to your list of subscriptions")
-  @ApiResponses(value = {@ApiResponse(code = 201, message = "Share queued for subscription"),
-          @ApiResponse(code = 500, message = "Queuing failed")})
+  @Operation(description = "Add share to your list of subscriptions")
+  @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Share queued for subscription"),
+      @ApiResponse(responseCode = "500", description = "Queuing failed") })
   public Response addShare(
-          @ApiParam(required = true, value = "The share which is will be added for subscription") @Valid Share share,
-          @ApiParam(
-                  value = "provide a Correlation-Id header to receive a response for your operation when it finished.")
-          @HeaderParam(value = "Correlation-Id") String correlationId) {
+      @Parameter(required = true, description = "The share which is will be added for subscription") @Valid Share share,
+      @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
     log.info("Add share {}", share);
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
@@ -119,10 +122,12 @@ public class ShareResource {
 
   @DELETE
   @Path("/{key}")
-  @ApiOperation(value = "Remove a subscription to a share")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription removed", response = Share.class),
-          @ApiResponse(code = 404, message = "Subscription was not found")})
-  public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
+  @Operation(description = "Remove a subscription to a share")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Subscription removed", 
+          content = @Content(schema = @Schema(implementation = Share.class))),
+      @ApiResponse(responseCode = "404", description = "Subscription was not found") })
+  public Response removeShare(@Parameter(description = "Stock symbol") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
       shareSubscription.unsubscribe(share.get());
