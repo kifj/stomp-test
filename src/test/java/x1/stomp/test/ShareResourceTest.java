@@ -48,7 +48,7 @@ public class ShareResourceTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.apache.commons:commons-lang3", "io.swagger:swagger-jaxrs", "org.assertj:assertj-core")
+        .resolve("org.apache.commons:commons-lang3", "io.swagger.core.v3:swagger-jaxrs2", "org.assertj:assertj-core")
         .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")

@@ -30,14 +30,11 @@ public class RestApplication extends Application {
       var manifest = new Manifest(servletConfig.getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF"));
       var attributes = manifest.getAttributes("Application");
 
-      var info = new Info()
-          .title(attributes.getValue("Application-Title"))
+      var info = new Info().title(attributes.getValue("Application-Title"))
           .description(attributes.getValue("Application-Description"))
           .version(attributes.getValue("Application-Version"))
-          .contact(new Contact().email(attributes.getValue("Application-Contact")))
-          .license(new License()
-              .name(attributes.getValue("Application-License"))
-              .url(attributes.getValue("Application-LicenseUrl")));
+          .contact(new Contact().email(attributes.getValue("Application-Contact"))).license(new License()
+              .name(attributes.getValue("Application-License")).url(attributes.getValue("Application-LicenseUrl")));
       oas.info(info);
     } catch (Exception e) {
       // ignore
@@ -45,7 +42,7 @@ public class RestApplication extends Application {
 
     // add server by a relative url: works only if using swagger UI deployed with
     // the application
-    var server = new Server().url(servletConfig.getServletContext().getContextPath());
+    Server server = new Server().url(servletConfig.getServletContext().getContextPath());
     oas.addServersItem(server);
 
     var oasConfig = new SwaggerConfiguration().openAPI(oas).prettyPrint(true)
