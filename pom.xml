@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>x1.jboss</groupId>
   <artifactId>stomp-test</artifactId>
-  <version>1.5.0-jdk10-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Stomp Test</name>
-  <description>A test run for Websockets on JBoss Wildfly 12</description>
+  <description>A test run for Websockets on Wildfly 13</description>
   <url>http://maven.x1/site/x1.jboss/stomp-test/${project.version}</url>
   <inceptionYear>2013</inceptionYear>
 
@@ -25,7 +25,7 @@
   </scm>
   <ciManagement>
     <system>Jenkins</system>
-    <url>http://www.x1/jenkins/job/stomp-test-wildfly-12/</url>
+    <url>http://www.x1/jenkins/job/stomp-test-wildfly-13/</url>
     <notifiers>
       <notifier>
         <type>mail</type>
@@ -105,7 +105,7 @@
       <dependency>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-spec-api</artifactId>
-        <version>12.0.0.Final</version>
+        <version>13.0.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -134,8 +134,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.hibernate.javax.persistence</groupId>
-      <artifactId>hibernate-jpa-2.1-api</artifactId>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
