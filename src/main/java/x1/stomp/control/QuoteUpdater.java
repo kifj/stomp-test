@@ -1,10 +1,8 @@
 package x1.stomp.control;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -64,16 +62,6 @@ public class QuoteUpdater {
 
   public int getLastUpdateCount() {
     return lastUpdatedCount;
-  }
-
-  @PostConstruct
-  public void setup() {
-    Date now = new Date();
-    timerService.getAllTimers().forEach(timer -> {
-      if (timer.isPersistent() && INFO_TEXT.equals(timer.getInfo()) && timer.getNextTimeout().before(now)) {
-        timer.cancel();
-      }
-    });
   }
 
   @Schedule(second = "*/30", minute = "*", hour = "*", persistent = true, info = INFO_TEXT)
