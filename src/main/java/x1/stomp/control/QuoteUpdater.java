@@ -3,11 +3,9 @@ package x1.stomp.control;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.TimerService;
 
 import org.slf4j.Logger;
 
@@ -54,9 +52,6 @@ public class QuoteUpdater {
   @Inject
   @ConfigProperty(name = "x1.stomp.control.QuoteUpdater/enable", defaultValue = "true")
   private boolean schedulerEnabled;
-
-  @Resource
-  private TimerService timerService;
 
   private int lastUpdatedCount;
 
