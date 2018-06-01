@@ -17,6 +17,7 @@ import x1.stomp.model.Share;
 import x1.stomp.util.VersionData;
 
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -29,6 +30,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
 import static x1.stomp.test.ResponseAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(Arquillian.class)
 public class ShareResourceTest {
@@ -91,12 +93,23 @@ public class ShareResourceTest {
           .isEqualTo(UriBuilder.fromUri(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).build(share.getKey()));
     }
 
-    Thread.sleep(10000);
-    var found = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
-        .request(APPLICATION_JSON).get(Share.class);
-    assertThat(found).isNotNull();
-    assertThat(found.getId()).isNull();
-    assertThat(found.getKey()).isEqualTo(key);
+    int loop = 0;
+    while (true) {
+      try {
+        var found = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
+            .request(APPLICATION_JSON).get(Share.class);
+        assertThat(found).isNotNull();
+        assertThat(found.getId()).isNull();
+        assertThat(found.getKey()).isEqualTo(key);
+        break;
+      } catch (NotFoundException e) {
+        Thread.sleep(500);
+        loop++;
+        if (loop == 20) {
+          fail(e.getMessage());
+        }
+      }
+    }
 
     var shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON).get(new GenericType<List<Share>>() {
     });

@@ -35,7 +35,7 @@ import static x1.service.registry.Technology.STOMP;
         @Service(technology = STOMP, value = "jms.queue.stocksQueue",
                 version = VersionData.MAJOR_MINOR, protocols = {STOMP_WS, STOMP_WSS})})
 public class ShareMessageListener implements MessageListener {
-
+  
   @Inject
   private Logger log;
 
@@ -53,10 +53,10 @@ public class ShareMessageListener implements MessageListener {
     try {
       if (message instanceof ObjectMessage) {
         log.info("Received ObjectMessage from queue: {}", message.getJMSDestination());
-        onMessage((ObjectMessage) message);
+        handleMessage((ObjectMessage) message);
       } else if (message instanceof BytesMessage) {
         log.info("Received BytesMessage from queue: {}", message.getJMSDestination());
-        onMessage((BytesMessage) message);
+        handleMessage((BytesMessage) message);
       } else {
         log.warn("Message of wrong type: {}", message.getClass().getName());
       }
@@ -65,7 +65,7 @@ public class ShareMessageListener implements MessageListener {
     }
   }
 
-  private void onMessage(ObjectMessage message) throws JMSException {
+  private void handleMessage(ObjectMessage message) throws JMSException {
     // TODO add more actions
     if (message.getStringProperty("type").equalsIgnoreCase("share")
         && message.getStringProperty("action").equals(Action.SUBSCRIBE.name())) {
@@ -75,7 +75,7 @@ public class ShareMessageListener implements MessageListener {
     }
   }
 
-  private void onMessage(BytesMessage message) throws JMSException, IOException {
+  private void handleMessage(BytesMessage message) throws JMSException, IOException {
     var body = message.readUTF();
     log.debug("Received message: {}", body);
     var command = jsonHelper.fromJSON(body, Command.class);
@@ -95,11 +95,11 @@ public class ShareMessageListener implements MessageListener {
         break;
     }
   }
-
+  
   private boolean isValid(Command command) {
     return command != null && command.getAction() != null && isNotEmpty(command.getKey());
   }
-
+  
   private void unsubscribe(String key) {
     log.info("Unsubscribe: {}", key);
     var share = shareSubscription.find(key);

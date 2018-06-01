@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
   <datasource jndi-name="java:jboss/datasources/stockstestDS" pool-name="stockstestDS" enabled="true"
     use-java-context="true" use-ccm="false">
-    <connection-url>jdbc:h2:mem:stomp-test-test;DB_CLOSE_DELAY=-1</connection-url>
+    <connection-url>jdbc:h2:mem:stomp-test-test;DB_CLOSE_ON_EXIT=FALSE</connection-url>
     <driver>h2</driver>
     <security>
       <user-name>sa</user-name>
