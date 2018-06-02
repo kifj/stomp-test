@@ -6,6 +6,6 @@ COPY scripts /srv/wildfly/scripts
 COPY maven /srv/wildfly/slot0/deployments
 RUN /srv/wildfly/scripts/configure.sh /srv/wildfly/slot0
 RUN rm -rf /srv/wildfly/scripts
-USER jboss:jboss
+USER jboss:docker
 
 ENV SERVICE_NAME=stomp-test DB_USER=stocks DB_PASSWORD=stocks
