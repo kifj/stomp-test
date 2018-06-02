@@ -9,15 +9,8 @@ pipeline {
 
   stages {
     stage('Build') {
-      agent {
-        docker {
-          reuseNode true
-          image 'j7beck/x1-maven3:3.5.3'
-          args '-u maven:docker -v maven-data:/home/maven/.m2 ' 
-        }
-      }
       steps {
-        sh 'mvn clean package'
+        sh '${mvnHome}/bin/mvn clean package'
       }
       post {
         success {
@@ -31,16 +24,9 @@ pipeline {
       }
     }
     stage('Test') {
-      agent {
-        docker {
-          reuseNode true
-          image 'j7beck/x1-maven3:3.5.3'
-          args '-v maven-data:/home/maven/.m2 ' 
-        }
-      }
       steps {
         lock("local-server") {
-          sh 'mvn verify -Parq-jbossas-managed -Djboss.home=${wildfly}'
+          sh '${mvnHome}/bin/mvn verify -Parq-jbossas-managed -Djboss.home=${wildfly}'
         }
       }
       post {
@@ -53,17 +39,9 @@ pipeline {
       }
     }
     stage('Publish') {
-      agent {
-        docker {
-          reuseNode true
-          image 'j7beck/x1-maven3:3.5.3'
-          args '-v maven-data:/home/maven/.m2 ' 
-        }
-      }
       steps {
-          sh 'mvn -Prpm deploy site-deploy -DskipTests'
-          // sonar fails currently on JDK 10        
-          // sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch}'
+          sh '${mvnHome}/bin/mvn -Prpm deploy site-deploy -DskipTests'
+          sh '${mvnHome}/bin/mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch}'
       }
     }
     stage('Build image') {
