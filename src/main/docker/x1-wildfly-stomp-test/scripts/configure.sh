@@ -6,6 +6,8 @@ export JBOSS_HOME=/opt/wildfly
 export RUN_CONF=$JBOSS_BASE_DIR/standalone.conf
 export JAVA_HOME=/usr/java/default
 
+chown -R jboss.jboss /srv/wildfly
+
 su jboss -c "$JBOSS_HOME/bin/add-user.sh -s -a -u guest -g guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p guest_12345!"
 
 /usr/local/bin/create-keystore.sh $JBOSS_BASE_DIR/configuration jboss12345 jboss.jboss

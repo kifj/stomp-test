@@ -4,7 +4,6 @@ MAINTAINER joe <joe@mail.x1>
 USER root
 COPY scripts /srv/wildfly/scripts
 COPY maven /srv/wildfly/slot0/deployments
-RUN chown -R jboss.jboss /srv/wildfly
 RUN /srv/wildfly/scripts/configure.sh /srv/wildfly/slot0
 RUN rm -rf /srv/wildfly/scripts
 USER jboss:jboss

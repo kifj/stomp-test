@@ -3,17 +3,11 @@ pipeline {
 
   environment {
     branch = 'wildfly-13'
-    url = 'https://github.com/kifj/stomp-test.git'
     wildfly = '/opt/wildfly-13.0.0.Final'
     mvnHome = tool 'Maven-3.5'
   }
 
   stages {
-    stage('Checkout') {
-      steps {    
-        git url: url, branch: branch, changelog: true
-      }
-    }
     stage('Build') {
       agent {
         docker {
