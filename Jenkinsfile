@@ -66,10 +66,9 @@ pipeline {
           args '-v maven-data:/home/maven/.m2 ' 
         }
       }
-      steps {        
-          sh 'mvn -Prpm deploy -DskipTests'
-          // site and sonar fail currently on JDK 10        
-          // sh 'mvn -Prpm deploy site-deploy -DskipTests'
+      steps {
+          sh 'mvn -Prpm deploy site-deploy -DskipTests'
+          // sonar fails currently on JDK 10        
           // sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch}'
       }
     }
