@@ -1,51 +1,75 @@
-lock("stomp-test-it") {
-  node {
-    def mvnHome = tool 'Maven-3.5'
-    
-    stage('Checkout') {
-      git url: 'https://github.com/kifj/stomp-test.git', branch: 'wildfly-10'
-    }
-    
+pipeline {
+  agent any
+
+  environment {
+    branch = 'wildfly-10'
+    wildfly = '/opt/wildfly-10.1.0.Final'
+    mvnHome = tool 'Maven-3.5'
+  }
+
+  stages {
     stage('Build') {
-      sh "${mvnHome}/bin/mvn clean package"
-    }
-    
-    stage('Prepare IT test') {
-      sh "${mvnHome}/bin/mvn -Pdocker-integration-test pre-integration-test"
-    }
-    
-    stage('Run IT test') {
-      docker
-        .image('j7beck/x1-wildfly-stomp-test-it:1.4')
-        .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
-      c ->
-        try {
-          waitFor("http://${hostIp(c)}:8080", 5, 12)
-          sh "${mvnHome}/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
-        } finally {
-          junit '**/target/surefire-reports/TEST-*.xml'
+      agent {
+        docker {
+          reuseNode true
+          image 'j7beck/x1-maven3:3.5.3'
+          args '-u maven:docker -v maven-data:/home/maven/.m2 ' 
+        }
+      }
+      steps {
+        sh 'mvn clean package'
+      }
+      post {
+        success {
+          archiveArtifacts(artifacts: '**/target/*.war', allowEmptyArchive: true)
         }
       }
     }
-    
+    stage('Pre IT-Test') {
+      steps {
+        sh "${mvnHome}/bin/mvn -Pdocker-integration-test pre-integration-test"
+      }
+    }
+    stage('Test') {
+      agent {
+        docker {
+          reuseNode true
+          image 'j7beck/x1-maven3:3.5.3'
+          args '-v maven-data:/home/maven/.m2 ' 
+        }
+      }
+      steps {
+        lock("local-server") {
+          sh 'mvn verify -Parq-jbossas-managed -Djboss.home=${wildfly}'
+        }
+      }
+      post {
+        always {
+          junit '**/target/surefire-reports/TEST-*.xml'
+        }
+        success {
+          archiveArtifacts(artifacts: '**/target/*.war', allowEmptyArchive: true)
+        }
+      }
+    }
     stage('Publish') {
-      sh "${mvnHome}/bin/mvn -Prpm deploy site-deploy -DskipTests"
+      agent {
+        docker {
+          reuseNode true
+          image 'j7beck/x1-maven3:3.5.3'
+          args '-v maven-data:/home/maven/.m2 ' 
+        }
+      }
+      steps {
+          sh 'mvn -Prpm deploy site-deploy -DskipTests'
+          // sonar fails currently on JDK 10        
+          // sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch}'
+      }
     }
-    
-    stage('Create image') {
-      sh "${mvnHome}/bin/mvn -Pdocker install"
+    stage('Build image') {
+      steps {
+        sh "${mvnHome}/bin/mvn -Pdocker install"
+      }
     }
-  }
-}
-
-def hostIp(container) {
-  sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
-  readFile('hostIp').trim()
-}
-
-def waitFor(target, sleepInSec, retries) {
-  retry (retries) {
-    sleep sleepInSec
-    httpRequest url: target, validResponseCodes: '200'
   }
 }
