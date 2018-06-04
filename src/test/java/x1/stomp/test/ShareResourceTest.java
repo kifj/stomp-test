@@ -2,6 +2,7 @@ package x1.stomp.test;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -10,19 +11,19 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
 import x1.stomp.boundary.ErrorResponse;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.util.VersionData;
 
-import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+
+import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,9 +45,9 @@ public class ShareResourceTest {
 
   private String baseUrl;
 
-  @Inject
-  private Logger log;
-
+  @ArquillianResource
+  private URL url;
+  
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
@@ -61,11 +62,8 @@ public class ShareResourceTest {
   }
 
   @Before
-  public void setup() {
-    var host = System.getProperty("jboss.bind.address", "127.0.0.1");
-    var port = 8080 + Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
-    baseUrl = "http://" + host + ":" + port + "/" + VersionData.APP_NAME_MAJOR_MINOR + "/rest";
-    log.debug("baseUrl={}", baseUrl);
+  public void setup() {    
+    baseUrl = url.toString() + "rest";
   }
 
   @Test
