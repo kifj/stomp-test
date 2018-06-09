@@ -48,7 +48,7 @@ public class ShareSubscription {
 
   public Optional<Share> find(String key) {
     try {
-      var query = em.createQuery(Share.FIND_BY_KEY, Share.class);
+      var query = em.createNamedQuery(Share.FIND_BY_KEY, Share.class);
       query.setParameter("key", key);
       return Optional.of(query.getSingleResult());
     } catch (NoResultException e) {
@@ -57,6 +57,6 @@ public class ShareSubscription {
   }
 
   public List<Share> list() {
-    return em.createQuery(Share.LIST_ALL, Share.class).getResultList();
+    return em.createNamedQuery(Share.LIST_ALL, Share.class).getResultList();
   }
 }

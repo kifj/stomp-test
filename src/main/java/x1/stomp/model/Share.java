@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
@@ -29,11 +30,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
     @Index(columnList = "key", name = "idx_key", unique = false),
     @Index(columnList = "name", name = "idx_name", unique = false) })
+@NamedQuery(name = "Share.findByKey", query = "from Share s where s.key = :key")
+@NamedQuery(name = "Share.listAll", query = "from Share s order by s.name")
 @Schema(description = "Shares are identified by stock symbols, and may have an name for readability.")
 @JsonRootName(value = "share")
 public class Share implements Serializable {
-  public static final String FIND_BY_KEY = "from Share s where s.key = :key";
-  public static final String LIST_ALL = "from Share s order by s.name";
+  public static final String FIND_BY_KEY = "Share.findByKey";
+  public static final String LIST_ALL = "Share.listAll";
   private static final long serialVersionUID = -6219237799499789827L;
 
   @Id
