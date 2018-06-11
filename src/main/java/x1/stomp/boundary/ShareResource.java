@@ -52,7 +52,7 @@ import static x1.service.registry.Technology.REST;
     + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class ShareResource {
-  public static final String PATH = "/shares";
+  protected static final String PATH = "/shares";
 
   @Inject
   private Logger log;

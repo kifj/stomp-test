@@ -7,7 +7,7 @@ import org.assertj.core.api.AbstractAssert;
 
 public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 
-  public ResponseAssert(Response actual) {
+  private ResponseAssert(Response actual) {
     super(actual, ResponseAssert.class);
   }
 
@@ -15,6 +15,7 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
     return new ResponseAssert(actual);
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public ResponseAssert hasStatus(Status status) {
     isNotNull();
     if (actual.getStatus() != status.getStatusCode()) {

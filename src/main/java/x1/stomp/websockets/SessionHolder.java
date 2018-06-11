@@ -14,6 +14,7 @@ public class SessionHolder {
     return new ArrayList<>(sessions.values());
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public Session remove(String key) {
     return sessions.remove(key);
   }

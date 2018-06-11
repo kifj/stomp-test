@@ -71,7 +71,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     var command = jsonHelper.fromJSON(message, Command.class);
     if (command.getAction() == null || StringUtils.isEmpty(command.getKey())) {
       log.warn("Incomplete command: {}", command);
-      return result;
+      return null;
     }
     switch (command.getAction()) {
       case SUBSCRIBE:
@@ -93,6 +93,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     shareSubscription.find(key).ifPresent(shareSubscription::unsubscribe);
   }
 
+  @SuppressWarnings("ConstantConditions")
   private Quote subscribe(String key) {
     log.info("Subscribe: {}", key);
     var share = new Share();
