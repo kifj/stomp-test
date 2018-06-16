@@ -16,11 +16,10 @@ import x1.stomp.model.Share;
 import x1.stomp.util.VersionData;
 
 import javax.annotation.Resource;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -46,7 +45,7 @@ import static x1.service.registry.Technology.REST;
 @RequestScoped
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT
     + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@Transactional(Transactional.TxType.REQUIRES_NEW)
 public class QuoteResource {
   public static final String PATH = "/quotes";
 
