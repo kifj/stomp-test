@@ -46,6 +46,7 @@ pipeline {
       post {
         always {
           junit '**/target/surefire-reports/TEST-*.xml'
+          jacoco(execPattern: '**/**.exec')
         }
         success {
           archiveArtifacts(artifacts: '**/target/*.war', allowEmptyArchive: true)

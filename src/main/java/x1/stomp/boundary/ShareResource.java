@@ -17,8 +17,6 @@ import x1.stomp.model.Share;
 import x1.stomp.util.StockMarket;
 import x1.stomp.util.VersionData;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jms.Connection;
@@ -27,6 +25,7 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -50,7 +49,7 @@ import static x1.service.registry.Technology.REST;
 @RequestScoped
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT
     + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@Transactional(Transactional.TxType.REQUIRES_NEW)
 public class ShareResource {
   protected static final String PATH = "/shares";
 
