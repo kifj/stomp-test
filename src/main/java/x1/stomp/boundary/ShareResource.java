@@ -15,8 +15,7 @@ import x1.stomp.model.Share;
 import x1.stomp.util.StockMarket;
 import x1.stomp.util.VersionData;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.transaction.Transactional;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jms.Connection;
@@ -49,7 +48,7 @@ import static x1.service.registry.Technology.REST;
 @Api(value = ShareResource.PATH)
 @Services(services = {@Service(technology = REST, value = RestApplication.ROOT
         + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@Transactional(Transactional.TxType.REQUIRES_NEW)
 public class ShareResource {
   public static final String PATH = "/shares";
 
@@ -93,7 +92,7 @@ public class ShareResource {
   @POST
   @ApiOperation(value = "Add share to your list of subscriptions")
   @ApiResponses(value = {@ApiResponse(code = 201, message = "Share queued for subscription"),
-          @ApiResponse(code = 500, message = "Queuing failed")})
+          @ApiResponse(code = 500, message = "Queuing failed")})  
   public Response addShare(
           @ApiParam(required = true, value = "The share which is will be added for subscription") @Valid Share share,
           @ApiParam(
