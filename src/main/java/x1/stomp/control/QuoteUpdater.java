@@ -26,7 +26,7 @@ import javax.jms.Topic;
 @Singleton
 @Startup
 public class QuoteUpdater {
-  private static final String INFO_TEXT = "updateQuotes";
+  public static final String INFO_TEXT = "updateQuotes";
 
   @Inject
   private Logger log;
