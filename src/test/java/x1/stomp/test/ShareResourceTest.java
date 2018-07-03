@@ -78,7 +78,7 @@ public class ShareResourceTest {
   @Test
   public void testAddAndFindShare() throws Exception {
     var share = new Share();
-    String key = "BMW.DE";
+    String key = "BMW";
     String name = "Bayerische Motoren Werke AG";
     share.setKey(key);
     share.setName(name);
