@@ -39,4 +39,6 @@ if (outcome != success) of /subsystem=ejb3/service=timer-service/database-data-s
     )
 end-if
 
-/system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
+if (outcome != success) of /system-property=x1.service.registry.etcd:read-resource
+    /system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
+end-if
