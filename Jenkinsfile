@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   environment {
-    branch = 'wildfly-13'
-    wildfly = '/opt/wildfly-13.0.0.Final'
+    branch = 'wildfly-14'
+    wildfly = '/opt/wildfly-14.0.0.Final'
     mvnHome = tool 'Maven-3.5'
   }
 

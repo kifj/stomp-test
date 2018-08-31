@@ -16,4 +16,4 @@ This creates the STOMP acceptor on port 61614
 The application needs a queue, a topic and a datasource.
 
 	etc/create-stomp-test.cli
-	
+
