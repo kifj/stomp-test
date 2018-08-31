@@ -63,8 +63,7 @@ pipeline {
       }
       steps {
           sh 'mvn -Prpm deploy site-deploy -DskipTests'
-          // sonar fails currently on JDK 10        
-          // sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch}'
+          sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch}'
       }
     }
     stage('Build image') {

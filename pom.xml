@@ -445,7 +445,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.21.0</version>
+        <version>2.22.0</version>
         <configuration>
           <testFailureIgnore>true</testFailureIgnore>
         </configuration>
@@ -498,7 +498,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.21.0</version>
+            <version>2.22.0</version>
             <configuration>
               <skip>true</skip>
             </configuration>
@@ -530,7 +530,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.21.0</version>
+            <version>2.22.0</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
@@ -578,7 +578,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.21.0</version>
+            <version>2.22.0</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
@@ -637,7 +637,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.21.0</version>
+            <version>2.22.0</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
