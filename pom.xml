@@ -41,8 +41,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.target>10</maven.compiler.target>
-    <maven.compiler.source>10</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
     <swagger.version>2.0.2</swagger.version>
     <junit.jupiter.version>5.2.0</junit.jupiter.version>
     <jacoco.version>0.8.1</jacoco.version>
@@ -552,6 +552,11 @@
                 <artifactId>junit-jupiter-engine</artifactId>
                 <version>${junit.jupiter.version}</version>
               </dependency>
+              <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+              </dependency>
             </dependencies>
           </plugin>
         </plugins>
@@ -603,6 +608,11 @@
               <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
                 <version>${junit.jupiter.version}</version>
               </dependency>
             </dependencies>
@@ -660,6 +670,11 @@
               <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
                 <version>${junit.jupiter.version}</version>
               </dependency>
             </dependencies>

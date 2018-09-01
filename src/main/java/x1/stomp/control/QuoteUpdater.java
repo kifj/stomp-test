@@ -59,7 +59,7 @@ public class QuoteUpdater {
     return lastUpdatedCount;
   }
 
-  @Schedule(second = "*/30", minute = "*", hour = "*", persistent = true, info = INFO_TEXT)
+  @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
   public void onSchedule() {
     if (schedulerEnabled) {
       updateQuotes();

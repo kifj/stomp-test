@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
+import x1.stomp.control.QuoteUpdater;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
@@ -48,6 +49,9 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   @Inject
   private QuoteRetriever quoteRetriever;
+  
+  @Inject
+  private QuoteUpdater quoteUpdater;
 
   @Inject
   private Logger log;
@@ -62,6 +66,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   public void onConnectionOpen(Session session) {
     log.info("Connection opened for session {}", session.getId());
     sessionHolder.put(session.getId(), session);
+    quoteUpdater.updateQuotes();
   }
 
   @OnMessage

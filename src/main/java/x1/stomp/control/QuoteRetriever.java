@@ -1,16 +1,13 @@
 package x1.stomp.control;
 
-import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.rest.client.RestClientBuilder;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 
 import x1.stomp.model.Quote;
@@ -23,17 +20,10 @@ public class QuoteRetriever {
   @Inject
   private Logger log;
 
-  private QuickQuoteService quickQuoteService;
-
   @Inject
-  @ConfigProperty(name = "x1.stomp.control.QuickQuoteService/mp-rest/url")
-  private URL baseUrl;
-
-  @PostConstruct
-  public void setup() {
-    quickQuoteService = RestClientBuilder.newBuilder().baseUrl(baseUrl).build(QuickQuoteService.class);
-  }
-
+  @RestClient
+  private QuickQuoteService quickQuoteService;
+  
   public Optional<Quote> retrieveQuote(Share share) {
     return createQuote(retrieveQuotes(share.getKey()), share);
   }
