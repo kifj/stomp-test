@@ -100,6 +100,6 @@ public class Share implements Serializable {
 
   @Override
   public String toString() {
-    return "<Share [id=" + id + ", key=" + key + ", name=" + name + "]>";
+    return "Share[id=" + id + ", key=" + key + ", name=" + name + "]";
   }
 }

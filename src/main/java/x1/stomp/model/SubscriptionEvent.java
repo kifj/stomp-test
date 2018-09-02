@@ -37,6 +37,6 @@ public class SubscriptionEvent {
 
   @Override
   public String toString() {
-    return "<Event [action=" + action + ", key=" + key + "]>";
+    return "SubscriptionEvent[action=" + action + ", key=" + key + "]";
   }
 }

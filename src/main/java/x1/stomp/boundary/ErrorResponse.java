@@ -34,7 +34,7 @@ public class ErrorResponse {
 
   @Override
   public String toString() {
-    return "<ErrorResponse [errors=" + errors + "]>";
+    return "ErrorResponse[errors=" + errors + "]";
   }
 
   private List<ErrorMessage> errors;

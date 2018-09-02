@@ -32,6 +32,6 @@ public class QuickQuoteResult implements Serializable {
 
   @Override
   public String toString() {
-    return "QuickQuoteResult [quotes=" + quotes + "]";
+    return "QuickQuoteResult[quotes=" + quotes + "]";
   }
 }

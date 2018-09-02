@@ -91,7 +91,7 @@ public class QuickQuote implements Serializable {
 
   @Override
   public String toString() {
-    return "QuickQuote [last=" + last + ", name=" + name + ", symbol=" + symbol + ", volume=" + volume
+    return "QuickQuote[last=" + last + ", name=" + name + ", symbol=" + symbol + ", volume=" + volume
         + ", countryCode=" + countryCode + ", currencyCode=" + currencyCode + ", exchange=" + exchange + "]";
   }
 

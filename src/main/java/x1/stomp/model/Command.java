@@ -38,6 +38,6 @@ public class Command {
 
   @Override
   public String toString() {
-    return "<Command [action=" + action + ", key=" + key + "]>";
+    return "Command[action=" + action + ", key=" + key + "]";
   }
 }

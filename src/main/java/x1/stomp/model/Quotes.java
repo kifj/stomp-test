@@ -27,4 +27,9 @@ public class Quotes {
   public void setQuotes(List<Quote> quotes) {
     this.quotes = quotes;
   }
+
+  @Override
+  public String toString() {
+    return "Quotes[quotes=" + quotes + "]";
+  }
 }
