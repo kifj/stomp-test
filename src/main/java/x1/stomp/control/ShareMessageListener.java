@@ -66,10 +66,19 @@ public class ShareMessageListener implements MessageListener {
   }
 
   private void handleMessage(ObjectMessage message) throws JMSException {
-    // TODO add more actions
-    if (message.getStringProperty("type").equalsIgnoreCase("share")
-        && message.getStringProperty("action").equals(Action.SUBSCRIBE.name())) {
-      subscribe((Share) message.getObject());
+    if (message.getStringProperty("type").equalsIgnoreCase("share")) {
+      Action action = Action.valueOf(message.getStringProperty("action"));
+      switch (action) {
+        case SUBSCRIBE:
+          subscribe((Share) message.getObject());
+          break;
+        case UNSUBSCRIBE:
+          shareSubscription.unsubscribe((Share) message.getObject());
+          break;
+        default:
+          log.warn("Unsupported action: {}", action);
+          break;
+      }
     } else {
       log.warn("Message of wrong type: {}", message);
     }

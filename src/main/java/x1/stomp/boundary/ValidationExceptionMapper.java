@@ -18,9 +18,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ResteasyViolat
   @Override
   public Response toResponse(ResteasyViolationException e) {
     var response = new ErrorResponse();
-    e.getViolations().forEach(violation -> {
-      response.add(new ErrorMessage(violation.getMessage(), violation.getPath(), violation.getValue()));
-    });
+    e.getViolations().forEach(violation -> response.add(new ErrorMessage(violation.getMessage(), violation.getPath(), violation.getValue())));
     log.warn(response.toString());
     return Response.status(PRECONDITION_FAILED).entity(response).build();
   }

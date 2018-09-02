@@ -41,6 +41,7 @@ public class ShareSubscriptionTest {
   @Inject
   private Logger log;
 
+  @SuppressWarnings("ConstantConditions")
   @Test
   public void testSubscribe() {
     var share = new Share();

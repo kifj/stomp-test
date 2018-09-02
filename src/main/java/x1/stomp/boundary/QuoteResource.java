@@ -47,7 +47,7 @@ import static x1.service.registry.Technology.REST;
     + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 public class QuoteResource {
-  public static final String PATH = "/quotes";
+  protected static final String PATH = "/quotes";
 
   @Inject
   private ShareSubscription shareSubscription;

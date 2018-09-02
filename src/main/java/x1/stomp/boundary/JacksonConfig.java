@@ -17,9 +17,9 @@ public class JacksonConfig implements ContextResolver<ObjectMapper> {
   public JacksonConfig() {
     mapper = new ObjectMapper();
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).setSerializationInclusion(Include.NON_NULL)
-        .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-        .enable(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS)
-        .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
+            .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+            .enable(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS)
+            .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
     mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"));
   }
 

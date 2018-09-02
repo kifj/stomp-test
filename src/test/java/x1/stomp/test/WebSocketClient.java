@@ -40,6 +40,7 @@ public class WebSocketClient {
     LOG.info("Session {} close because of {}", session.getId(), closeReason);
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public WebSocketClient openConnection(String url) throws DeploymentException, IOException {
     var container = ContainerProvider.getWebSocketContainer();
     var uri = URI.create(url);
@@ -47,6 +48,7 @@ public class WebSocketClient {
     return this;
   }
 
+  @SuppressWarnings("CatchMayIgnoreException")
   public void sendMessage(String message) throws IOException {
     try {
       session.getBasicRemote().sendText(message);
