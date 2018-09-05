@@ -65,7 +65,7 @@ public class Quote implements Serializable {
 
   @Override
   public String toString() {
-    return "Quote [share=" + share + ", price=" + price + ", currency=" + currency + ", from=" + from + "]";
+    return "Quote[share=" + share + ", price=" + price + ", currency=" + currency + ", from=" + from + "]";
   }
 
 }

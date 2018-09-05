@@ -43,7 +43,7 @@ public class ErrorMessage {
 
   @Override
   public String toString() {
-    return "<ErrorMessage [message=" + message + ", path=" + path + ", invalidValue=" + invalidValue + "]>";
+    return "ErrorMessage[message=" + message + ", path=" + path + ", invalidValue=" + invalidValue + "]";
   }
 
   private String message;
