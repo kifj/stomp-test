@@ -7,7 +7,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 
 import x1.stomp.model.Quote;
@@ -21,7 +20,6 @@ public class QuoteRetriever {
   private Logger log;
 
   @Inject
-  @RestClient
   private QuickQuoteService quickQuoteService;
   
   public Optional<Quote> retrieveQuote(Share share) {

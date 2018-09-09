@@ -31,6 +31,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
     @Index(columnList = "name", name = "idx_name", unique = false) })
 @NamedQuery(name = "Share.findByKey", query = "from Share s where s.key = :key")
 @NamedQuery(name = "Share.listAll", query = "from Share s order by s.name")
+@NamedQuery(name = "Share.count", query = "select count(s.id) from Share s")
 @Schema(description = "Shares are identified by stock symbols, and may have an name for readability.")
 @JsonRootName(value = "share")
 public class Share implements Serializable {

@@ -1,60 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<arquillian xmlns="http://jboss.org/schema/arquillian"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
+<arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
         http://jboss.org/schema/arquillian
         http://www.jboss.org/schema/arquillian/arquillian_1_0.xsd">
+  <container qualifier="jbossas-remote" default="false">
+    <configuration>
+      <property name="managementAddress">${jboss.managementAddress:localhost}</property>
+      <property name="managementPort">${jboss.managementPort:9990}</property>
+      <property name="username">${jboss.user}</property>
+      <property name="password">${jboss.password}</property>
+    </configuration>
+  </container>
 
-	<container qualifier="jbossas-remote" default="false">
-		<protocol type="Servlet 3.0">
-			<property name="host">${jboss.managementAddress:localhost}</property>
-			<property name="port">${jboss.httpPort:8080}</property>
-		</protocol>
-		<configuration>
-			<property name="managementAddress">${jboss.managementAddress:localhost}</property>
-			<property name="managementPort">${jboss.managementPort:9990}</property>
-			<property name="username">${jboss.user}</property>
-			<property name="password">${jboss.password}</property>
-		</configuration>
-	</container>
+  <container qualifier="jbossas-managed" default="false">
+    <configuration>
+      <property name="allowConnectingToRunningServer">true</property>
+      <property name="username">${jboss.user}</property>
+      <property name="password">${jboss.password}</property>
+      <property name="serverConfig">standalone-full.xml</property>
+      <property name="jbossHome">${jboss.home}</property>
+      <property name="managementPort">${jboss.managementPort:9990}</property>
+      <property name="javaVmArguments">-server -Xms64m -Xmx512m -XX:+UseG1GC -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dactivemq.artemis.client.global.thread.pool.max.size=30 -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n --add-modules=java.se</property>
+      <property name="startupTimeoutInSeconds">240</property>
+    </configuration>
+  </container>
 
-	<container qualifier="jbossas-managed" default="false">
-		<configuration>
-			<property name="allowConnectingToRunningServer">true</property>
-			<property name="managementPort">${jboss.managementPort:9990}</property>
-			<property name="username">${jboss.user}</property>
-			<property name="password">${jboss.password}</property>
-			<property name="serverConfig">standalone-full.xml</property>
-			<property name="jbossHome">${jboss.home}</property>
-			<property name="startupTimeoutInSeconds">240</property>
-			<property name="javaVmArguments">-server -Xms64m -Xmx512m -XX:+UseG1GC -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dactivemq.artemis.client.global.thread.pool.max.size=30 -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n --add-modules=java.se</property>
-		</configuration>
-	</container>
+  <container qualifier="docker-stomp-test-it" default="false">
+    <protocol type="Servlet 3.0" />
+    <configuration>
+      <property name="managementAddress">localhost</property>
+      <property name="managementPort">${jboss.managementPort:9990}</property>
+      <property name="username">${jboss.user}</property>
+      <property name="password">${jboss.password}</property>
+    </configuration>
+  </container>
 
-	<container qualifier="docker-stomp-test-it" default="false">
-		<protocol type="Servlet 3.0" />
-		<configuration>
-			<property name="managementAddress">localhost</property>
-			<property name="managementPort">${jboss.managementPort:9990}</property>
-			<property name="username">${jboss.user}</property>
-			<property name="password">${jboss.password}</property>
-		</configuration>
-	</container>
+  <extension qualifier="jacoco">
+    <property name="includes">x1.*</property>
+  </extension>
 
-	<extension qualifier="jacoco">
-		<property name="includes">x1.*</property>
-	</extension>
+  <extension qualifier="cube">
+    <property name="connectionMode">STARTANDSTOP</property>
+  </extension>
 
-	<extension qualifier="cube">
-	  <property name="connectionMode">STARTANDSTOP</property>
-	</extension>
-
-	<extension qualifier="docker">
-		<property name="serverVersion">1.26</property>
-		<property name="autoStartContainers">stomp-test-it</property>
-		<property name="definitionFormat">CUBE</property>
-		<property name="clean">true</property>
-		<property name="dockerContainers">
+  <extension qualifier="docker">
+    <property name="serverVersion">1.26</property>
+    <property name="autoStartContainers">stomp-test-it</property>
+    <property name="definitionFormat">CUBE</property>
+    <property name="clean">true</property>
+    <property name="dockerContainers">
       stomp-test-it:
         image: j7beck/x1-wildfly-stomp-test-it:1.5
         alwaysPull: false
@@ -69,5 +63,5 @@
           stdOut: true
         env: [ MANAGEMENT=public HTTP=public ]
       </property>
-	</extension>
+  </extension>
 </arquillian>
