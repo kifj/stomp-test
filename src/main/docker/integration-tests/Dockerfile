@@ -1,4 +1,4 @@
-FROM j7beck/x1-wildfly-slot0:14.0.0.Final
+FROM j7beck/x1-wildfly-slot0:14.0.1.Final
 MAINTAINER joe <joe@mail.x1>
 
 USER root
