@@ -2,9 +2,9 @@
 export MAIL_SERVER=localhost
 export MANAGEMENT=local
 export JBOSS_BASE_DIR=$1
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 export JBOSS_HOME=/opt/wildfly
 export RUN_CONF=$JBOSS_BASE_DIR/standalone.conf
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 
 chown -R jboss.jboss /srv/wildfly
 

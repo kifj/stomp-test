@@ -1,13 +1,13 @@
 #!/bin/sh
+export MAIL_SERVER=localhost
+export MANAGEMENT=local
 MGMT_USER=admin
 MGMT_PASSWORD=12345
 
 export JBOSS_BASE_DIR=$1
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 export JBOSS_HOME=/opt/wildfly
-export RUN_CONF=$WILDFLY_DIR/standalone.conf
-export MAIL_SERVER=localhost
-export MANAGEMENT=local
+export RUN_CONF=$JBOSS_BASE_DIR/standalone.conf
 
 chown -R jboss.jboss /srv/wildfly
 
