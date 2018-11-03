@@ -100,7 +100,8 @@ public class ShareResource {
       @ApiResponse(responseCode = "500", description = "Queuing failed") })
   public Response addShare(
       @Parameter(required = true, description = "The share which is will be added for subscription") @Valid Share share,
-      @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.") @HeaderParam(value = "Correlation-Id") String correlationId) {
+      @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.")
+      @HeaderParam(value = "Correlation-Id") String correlationId) {
     log.info("Add share {}", share);
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
@@ -123,7 +124,7 @@ public class ShareResource {
   @Path("/{key}")
   @Operation(description = "Remove a subscription to a share")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Subscription removed", 
+      @ApiResponse(responseCode = "200", description = "Subscription removed",
           content = @Content(schema = @Schema(implementation = Share.class))),
       @ApiResponse(responseCode = "404", description = "Subscription was not found") })
   public Response removeShare(@Parameter(description = "Stock symbol") @PathParam("key") String key) {
