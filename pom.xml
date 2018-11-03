@@ -225,6 +225,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.jboss.spec.javax.xml.bind</groupId>
+      <artifactId>jboss-jaxb-api_2.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>x1.jboss</groupId>
       <artifactId>service-registry</artifactId>
       <version>1.0.3</version>
@@ -298,7 +303,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.0</version>
       </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
@@ -384,7 +389,7 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>3.0.0</version>
+        <version>3.2.0</version>
       </extension>
     </extensions>
   </build>
@@ -447,7 +452,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.6</version>
+        <version>3.1.7</version>
         <configuration>
           <xmlOutput>true</xmlOutput>
           <excludeFilterFile>etc/spotbugs-exclude.xml</excludeFilterFile>
