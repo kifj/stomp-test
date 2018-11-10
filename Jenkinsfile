@@ -42,7 +42,7 @@ pipeline {
     stage('Publish') {
       steps {
           sh '${mvnHome}/bin/mvn -Prpm deploy site-deploy -DskipTests'
-          sh '${mvnHome}/bin/mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch}'
+          sh '${mvnHome}/bin/mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch} -Dsonar.coverage.exclusions="**/*.js"'
       }
     }
     stage('Build image') {
