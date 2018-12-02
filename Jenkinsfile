@@ -4,7 +4,7 @@ pipeline {
   environment {
     branch = 'wildfly-10'
     wildfly = '/opt/wildfly-10.1.0.Final'
-    mvnHome = tool 'Maven-3.5'
+    mvnHome = tool 'Maven-3.6'
   }
 
   stages {

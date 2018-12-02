@@ -294,7 +294,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.2</version>
+      <version>42.2.5</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -579,7 +579,7 @@
         <dependency>
           <groupId>org.arquillian.cube</groupId>
           <artifactId>arquillian-cube-docker</artifactId>
-          <version>1.15.3</version>
+          <version>1.16.0</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -671,7 +671,7 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>fabric8-maven-plugin</artifactId>
-            <version>3.5.33</version>
+            <version>3.5.40</version>
             <executions>
               <execution>
                 <phase>install</phase>
@@ -725,7 +725,7 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>fabric8-maven-plugin</artifactId>
-            <version>3.5.33</version>
+            <version>3.5.40</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
