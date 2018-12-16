@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
@@ -73,6 +76,8 @@ public class ShareResource {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Subscription found", 
           content = @Content(schema = @Schema(implementation = Share[].class))) })
+  @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Metered(name = "get-shares-meter", absolute = true)
   public List<Share> listAllShares() {
     return shareSubscription.list();
   }
@@ -84,6 +89,8 @@ public class ShareResource {
       @ApiResponse(responseCode = "200", description = "Subscription found", 
           content = @Content(schema = @Schema(implementation = Share.class))),
       @ApiResponse(responseCode = "404", description = "Subscription not found") })
+  @Timed(name = "get-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Metered(name = "get-share-meter", absolute = true)
   public Response findShare(
       @Parameter(description = "Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
@@ -98,6 +105,8 @@ public class ShareResource {
   @Operation(description = "Add share to your list of subscriptions")
   @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Share queued for subscription"),
       @ApiResponse(responseCode = "500", description = "Queuing failed") })
+  @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Metered(name = "add-share-meter", absolute = true)
   public Response addShare(
       @Parameter(required = true, description = "The share which is will be added for subscription") @Valid Share share,
       @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.")
@@ -127,6 +136,8 @@ public class ShareResource {
       @ApiResponse(responseCode = "200", description = "Subscription removed",
           content = @Content(schema = @Schema(implementation = Share.class))),
       @ApiResponse(responseCode = "404", description = "Subscription was not found") })
+  @Timed(name = "remove-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Metered(name = "remove-share-meter", absolute = true)
   public Response removeShare(@Parameter(description = "Stock symbol") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {

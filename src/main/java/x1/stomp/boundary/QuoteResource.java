@@ -29,6 +29,9 @@ import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +72,8 @@ public class QuoteResource {
       @ApiResponse(responseCode = "200", description = "Quote received", 
           content = @Content(schema = @Schema(implementation = Quote.class))),
       @ApiResponse(responseCode = "404", description = "Subscription not found") })
+  @Timed(name = "quote-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Metered(name = "quote-meter", absolute = true)
   public Response getQuote(
       @Parameter(description = "Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
@@ -87,6 +92,8 @@ public class QuoteResource {
   @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Quotes received", 
         content = @Content(schema = @Schema(implementation = Quote[].class))),
       @ApiResponse(responseCode = "404", description = "No subscription found") })
+  @Timed(name = "quotes-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Metered(name = "quotes-meter", absolute = true)
   public void getQuotes(@Parameter(description = "Stock symbols") @QueryParam("key") List<String> keys,
       @Suspended AsyncResponse response) {
     withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys)));
