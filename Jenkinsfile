@@ -13,7 +13,7 @@ pipeline {
         docker {
           reuseNode true
           image 'j7beck/x1-maven3:3.6.0'
-          args '-u maven:docker -v maven-data:/home/maven/.m2 ' 
+          args '-v maven-data:/home/maven/.m2' 
         }
       }
       steps {
@@ -35,7 +35,7 @@ pipeline {
         docker {
           reuseNode true
           image 'j7beck/x1-maven3:3.6.0'
-          args '-v maven-data:/home/maven/.m2 ' 
+          args '-v maven-data:/home/maven/.m2 -v wildfly15-data:/opt/wildfly-15.0.0.Final' 
         }
       }
       steps {
