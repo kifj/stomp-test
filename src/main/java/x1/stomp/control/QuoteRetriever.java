@@ -48,7 +48,6 @@ public class QuoteRetriever {
     try {
       log.debug("Retrieve quotes for {}", keys);
       var response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
-
       var quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
       log.debug("Received: {}", quickQuoteResponse);
       return quickQuoteResponse.getQuickQuoteResult();
@@ -68,6 +67,7 @@ public class QuoteRetriever {
       if (share.getKey().equalsIgnoreCase(key)) {
         share.setKey(key.toUpperCase());
         share.setName(quickQuote.getName());
+        
         var quote = new Quote(share);
         quote.setPrice(quickQuote.getLast());
         quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));

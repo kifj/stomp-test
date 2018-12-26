@@ -1,7 +1,6 @@
 package x1.stomp.util;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,9 +18,7 @@ public class JsonHelper {
     var mapper = new ObjectMapper();
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).enable(SerializationFeature.WRAP_ROOT_VALUE)
         .setSerializationInclusion(Include.NON_NULL);
-    var sw = new StringWriter();
-    mapper.writeValue(sw, obj);
-    return sw.toString();
+    return mapper.writeValueAsString(obj);
   }
 
   public <T> T fromJSON(String content, Class<? extends T> resultClass) throws IOException {

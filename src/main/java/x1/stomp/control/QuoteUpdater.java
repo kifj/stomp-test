@@ -1,7 +1,6 @@
 package x1.stomp.control;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -10,7 +9,6 @@ import javax.ejb.Startup;
 import org.slf4j.Logger;
 
 import x1.stomp.model.Quote;
-import x1.stomp.model.Share;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.util.StockMarket;
 
@@ -20,8 +18,9 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.jms.Topic;
+import javax.validation.constraints.NotNull;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Singleton
@@ -68,11 +67,11 @@ public class QuoteUpdater {
 
   public void updateQuotes() {
     lastUpdatedCount = 0;
-    List<Share> shares = shareSubscription.list();
+    var shares = shareSubscription.list();
     log.info("Update quotes for {} shares", shares.size());
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(quoteTopic)) {
-        List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
+        var quotes = quoteRetriever.retrieveQuotes(shares);
         quotes.forEach(quote -> {
           try {
             log.debug("Sending message for {}", quote);
@@ -88,7 +87,7 @@ public class QuoteUpdater {
     }
   }
 
-  public void updateQuote(Quote quote) {
+  public void updateQuote(@NotNull Quote quote) {
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(quoteTopic)) {
         log.debug("Sending message for {}", quote);
@@ -101,7 +100,7 @@ public class QuoteUpdater {
   }
 
   private Message createMessage(Quote quote, Session session) throws JMSException, IOException {
-    TextMessage message = session.createTextMessage(jsonHelper.toJSON(quote));
+    var message = session.createTextMessage(jsonHelper.toJSON(quote));
     message.setStringProperty("type", "quote");
     message.setStringProperty("key", quote.getShare().getKey());
     return message;

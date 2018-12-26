@@ -103,7 +103,7 @@ public class QuoteResource {
     List<Share> shares = keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent)
         .map(Optional::get).collect(Collectors.toList());
     if (shares.isEmpty()) {
-      return Response.status(NOT_FOUND).build();
+      return Response.status(NOT_FOUND).entity(new Quotes()).build();
     }
     List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
     return Response.ok(new Quotes(quotes)).build();

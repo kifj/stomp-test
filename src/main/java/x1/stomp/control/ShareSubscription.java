@@ -9,6 +9,8 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.validation.constraints.NotNull;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +29,7 @@ public class ShareSubscription {
   @Inject
   private Event<SubscriptionEvent> shareEvent;
 
-  public Share subscribe(Share share) {
+  public Share subscribe(@NotNull Share share) {
     if (find(share.getKey()).isPresent()) {
       log.info("Subscription for {} already exists.", share);
       return share;
@@ -38,7 +40,7 @@ public class ShareSubscription {
     return share;
   }
 
-  public Share unsubscribe(Share share) {
+  public Share unsubscribe(@NotNull Share share) {
     log.info("Unsubscribe from {}", share);
     share = em.merge(share);
     em.remove(share);
@@ -46,7 +48,7 @@ public class ShareSubscription {
     return share;
   }
 
-  public Optional<Share> find(String key) {
+  public Optional<Share> find(@NotNull String key) {
     try {
       var query = em.createNamedQuery(Share.FIND_BY_KEY, Share.class);
       query.setParameter("key", key);

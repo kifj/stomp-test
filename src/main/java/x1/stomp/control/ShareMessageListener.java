@@ -111,12 +111,7 @@ public class ShareMessageListener implements MessageListener {
   
   private void unsubscribe(String key) {
     log.info("Unsubscribe: {}", key);
-    var share = shareSubscription.find(key);
-    if (share.isPresent()) {
-      shareSubscription.unsubscribe(share.get());
-    } else {
-      log.warn("Not found: {}", key);
-    }
+    shareSubscription.find(key).ifPresentOrElse(shareSubscription::unsubscribe, () -> log.warn("Not found: {}", key));
   }
 
   private void subscribe(String key) {
