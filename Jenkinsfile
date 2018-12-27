@@ -58,7 +58,7 @@ pipeline {
         docker {
           reuseNode true
           image 'j7beck/x1-maven3:3.6.0'
-          args '-v maven-data:/home/maven/.m2 ' 
+          args '-v maven-data:/home/maven/.m2' 
         }
       }
       steps {
