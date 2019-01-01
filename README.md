@@ -17,3 +17,20 @@ The application needs a queue, a topic and a datasource.
 
 	etc/create-stomp-test.cli
 
+## DDL scripts
+
+The DDL scripts are available for PostgreSQL.
+
+	create-postgresql.cli
+
+## RPM package
+
+A RPM package can be built by 
+
+	mvn -Prpm clean package
+
+## Docker images
+
+Docker images can be can be built by 
+
+	mvn -Pdocker clean install

@@ -102,7 +102,7 @@ public class ShareResource {
   }
 
   @POST
-  @Operation(description = "Add share to your list of subscriptions")
+  @Operation(description = "Add a share to your list of subscriptions")
   @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Share queued for subscription"),
       @ApiResponse(responseCode = "500", description = "Queuing failed") })
   @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
@@ -131,7 +131,7 @@ public class ShareResource {
 
   @DELETE
   @Path("/{key}")
-  @Operation(description = "Remove a subscription to a share")
+  @Operation(description = "Remove a subscription of a share")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Subscription removed",
           content = @Content(schema = @Schema(implementation = Share.class))),

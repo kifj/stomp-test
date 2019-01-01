@@ -43,7 +43,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
-    <swagger.version>2.0.5</swagger.version>
+    <swagger.version>2.0.6</swagger.version>
     <junit.jupiter.version>5.3.2</junit.jupiter.version>
     <jacoco.version>0.8.2</jacoco.version>
   </properties>
@@ -93,7 +93,7 @@
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.4.0.Final</version>
+        <version>1.4.1.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -718,6 +718,9 @@
                   <directory>/usr/share/stomp-test-v${app.majorVersion}.${app.minorVersion}</directory>
                   <directoryIncluded>true</directoryIncluded>
                   <sources>
+                    <source>
+                      <location>${basedir}/README.md</location>
+                    </source>
                     <source>
                       <location>${basedir}/etc/create-postgresql.sql</location>
                     </source>
