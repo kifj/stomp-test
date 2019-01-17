@@ -438,7 +438,7 @@
       <plugin>
         <groupId>x1.maven.plugins</groupId>
         <artifactId>schemaspy-maven-plugin</artifactId>
-        <version>1.7</version>
+        <version>1.8</version>
         <configuration>
           <host>db.x1</host>
           <dbname>stocks</dbname>
