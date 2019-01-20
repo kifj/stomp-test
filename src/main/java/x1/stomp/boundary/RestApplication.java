@@ -52,7 +52,7 @@ public class RestApplication extends Application {
       new JaxrsOpenApiContextBuilder<>().servletConfig(servletConfig).application(this).openApiConfiguration(oasConfig)
           .buildContext(true);
     } catch (OpenApiConfigurationException e) {
-      throw new RuntimeException(e.getMessage(), e);
+      throw new IllegalStateException(e.getMessage(), e);
     }
   }
 }
