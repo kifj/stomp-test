@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   environment {
-    branch = 'wildfly-15'
-    wildfly = '/opt/wildfly-15.0.0.Final'
+    branch = 'wildfly-16'
+    wildfly = '/opt/wildfly-16.0.0.Final'
     mvnHome = tool 'Maven-3.6'
   }
 
@@ -35,7 +35,7 @@ pipeline {
         docker {
           reuseNode true
           image 'j7beck/x1-maven3:3.6.0'
-          args '-v maven-data:/home/maven/.m2 -v wildfly15-data:/opt/wildfly-15.0.0.Final' 
+          args '-v maven-data:/home/maven/.m2 -v wildfly16-data:/opt/wildfly-16.0.0.Final' 
         }
       }
       steps {
