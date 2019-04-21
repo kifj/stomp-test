@@ -12,7 +12,7 @@ pipeline {
       agent {
         docker {
           reuseNode true
-          image 'j7beck/x1-maven3:3.6.0'
+          image 'j7beck/x1-maven3:3.6'
           args '-v maven-data:/home/maven/.m2' 
         }
       }
@@ -34,7 +34,7 @@ pipeline {
       agent {
         docker {
           reuseNode true
-          image 'j7beck/x1-maven3:3.6.0'
+          image 'j7beck/x1-maven3:3.6'
           args '-v maven-data:/home/maven/.m2 -v wildfly16-data:/opt/wildfly-16.0.0.Final' 
         }
       }
@@ -57,7 +57,7 @@ pipeline {
       agent {
         docker {
           reuseNode true
-          image 'j7beck/x1-maven3:3.6.0'
+          image 'j7beck/x1-maven3:3.6'
           args '-v maven-data:/home/maven/.m2' 
         }
       }
