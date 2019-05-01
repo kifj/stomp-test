@@ -1,13 +1,12 @@
 if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
   /subsystem=datasources/data-source=stocksDS:add( \
     jndi-name=java:jboss/datasources/stocksDS, \
-    connection-url=jdbc:postgresql://db.x1/stocks,\
+    connection-url="jdbc:postgresql://db.x1/stocks?ssl=true&sslrootcert=/etc/pki/CA/cacert.pem",\
     user-name=stocks, \
     password=stocks, \
     min-pool-size=2,\
     max-pool-size=5,\
     driver-name=postgresql,\
-    driver-class=org.postgresql.Driver,\
     validate-on-match=true,\
     background-validation=false,\
     share-prepared-statements=false,\
