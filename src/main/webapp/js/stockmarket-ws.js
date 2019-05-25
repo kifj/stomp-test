@@ -9,6 +9,9 @@ function Client() {
 	if (window.location.pathname.length > 1) {
 		path = '/' + window.location.pathname.split( '/' )[1];
 	}
+	if (path == '/index.html') {
+	  path = '';
+	}
 	this.url = protocol + location.host + path + "/ws/stocks";
 }
 

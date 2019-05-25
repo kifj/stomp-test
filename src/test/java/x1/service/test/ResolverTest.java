@@ -37,7 +37,7 @@ public class ResolverTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("io.swagger.core.v3:swagger-jaxrs2", "x1.jboss:service-registry", "org.assertj:assertj-core")
+        .resolve("io.swagger.core.v3:swagger-jaxrs2", "x1.wildfly:service-registry", "org.assertj:assertj-core")
         .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
