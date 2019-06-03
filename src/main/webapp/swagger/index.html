@@ -46,9 +46,9 @@
    			path = '/' + window.location.pathname.split( '/' )[1];
    		}
    		url = window.location.protocol + "//" + location.host + path + "/rest/openapi.json";
-      }      
+      }
 
-      // Build a system
+      // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
         url: url,
         dom_id: '#swagger-ui',
@@ -62,6 +62,7 @@
         ],
         layout: "StandaloneLayout"
       })
+      // End Swagger UI call region
 
       window.ui = ui
     }
