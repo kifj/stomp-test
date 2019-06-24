@@ -47,6 +47,7 @@ import static x1.service.registry.Technology.REST;
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT
     + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
+@Logged
 public class QuoteResource {
   protected static final String PATH = "/quotes";
 

@@ -52,6 +52,7 @@ import static x1.service.registry.Technology.REST;
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT
     + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
+@Logged
 public class ShareResource {
   protected static final String PATH = "/shares";
 
@@ -107,7 +108,6 @@ public class ShareResource {
       @Parameter(required = true, description = "The share which is will be added for subscription") @Valid Share share,
       @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.")
       @HeaderParam(value = "Correlation-Id") String correlationId) {
-    log.info("Add share {}", share);
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
         ObjectMessage message = session.createObjectMessage(share);

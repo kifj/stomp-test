@@ -5,9 +5,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +17,7 @@ import x1.stomp.model.Share;
 import x1.stomp.util.VersionData;
 
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -44,6 +45,7 @@ public class ShareResourceTest {
   private static final String TEST_SHARE_INVALID = "XXXX";
 
   private String baseUrl;
+  private Client client;
 
   @ArquillianResource
   private URL url;
@@ -56,18 +58,24 @@ public class ShareResourceTest {
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
         .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
-        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
+        .addAsWebInfResource("beans.xml").addAsWebInfResource("test-ds.xml")
         .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
   }
 
   @Before
   public void setup() {
     baseUrl = url.toString() + "rest";
+    client = ClientBuilder.newClient();
+  }
+
+  @After
+  public void teardown() {
+    client.close();
+    ;
   }
 
   @Test
   public void testFindShareNotFound() {
-    var client = ClientBuilder.newClient();
     try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
         .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get()) {
       assertThat(response).hasStatus(NOT_FOUND);
@@ -82,7 +90,6 @@ public class ShareResourceTest {
     share.setKey(key);
     share.setName(name);
 
-    var client = ClientBuilder.newClient();
     try (var response = client.target(baseUrl).path(PATH_SHARES).request()
         .header(HEADER_CORRELATION_ID, UUID.randomUUID().toString()).post(Entity.entity(share, APPLICATION_JSON))) {
       assertThat(response).hasStatus(CREATED);
@@ -128,6 +135,11 @@ public class ShareResourceTest {
         .resolveTemplate(PARAM_KEY, share.getKey()).request(APPLICATION_JSON).delete()) {
       assertThat(response).hasStatus(OK);
     }
+
+    try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
+        .request(APPLICATION_JSON).get()) {
+      assertThat(response).hasStatus(NOT_FOUND);
+    }
   }
 
   @Test
@@ -135,7 +147,7 @@ public class ShareResourceTest {
     var share = new Share();
     var key = "GOOG";
     share.setKey(key);
-    var client = ClientBuilder.newClient();
+
     try (var response = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
         .post(Entity.entity(share, MediaType.APPLICATION_XML))) {
       assertThat(response).hasStatus(PRECONDITION_FAILED);
@@ -152,7 +164,6 @@ public class ShareResourceTest {
 
   @Test
   public void testGetQuoteNotFound() {
-    var client = ClientBuilder.newClient();
     try (var response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
         .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get()) {
       assertThat(response).hasStatus(NOT_FOUND);
@@ -161,7 +172,6 @@ public class ShareResourceTest {
 
   @Test
   public void testGetQuotesNotFound() {
-    var client = ClientBuilder.newClient();
     try (var response = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, TEST_SHARE, TEST_SHARE_INVALID)
         .request(APPLICATION_JSON).get()) {
       assertThat(response).hasStatus(NOT_FOUND);
