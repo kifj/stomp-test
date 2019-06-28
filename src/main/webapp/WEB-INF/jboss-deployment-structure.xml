@@ -4,10 +4,12 @@
     <dependencies>
       <module name="org.infinispan" />
       <module name="org.apache.httpcomponents" />
-      <module name="org.apache.commons.codec"/>
+      <module name="org.apache.commons.codec" />
       <module name="com.google.guava" />
       <module name="org.eclipse.microprofile.restclient" />
       <module name="org.apache.commons.lang3" />
+      <module name="com.google.code.gson" />
+      <module name="org.yaml.snakeyaml" />
     </dependencies>
   </deployment>
 </jboss-deployment-structure>
