@@ -231,10 +231,12 @@
     <dependency>
       <groupId>org.jboss.spec.javax.servlet</groupId>
       <artifactId>jboss-servlet-api_4.0_spec</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.spec.javax.interceptor</groupId>
       <artifactId>jboss-interceptors-api_1.2_spec</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.validation</groupId>
@@ -244,7 +246,7 @@
     <dependency>
       <groupId>x1.wildfly</groupId>
       <artifactId>service-registry</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.4</version>
     </dependency>
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
@@ -397,12 +399,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.11</version>
+        <version>3.1.12</version>
       </plugin>
     </plugins>
 
