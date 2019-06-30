@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@XmlRootElement(name = "response")
+@XmlRootElement(name = "errors")
 public class ErrorResponse {
   public ErrorResponse() {
     errors = new ArrayList<>();
