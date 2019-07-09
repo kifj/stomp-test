@@ -2,6 +2,7 @@ package x1.stomp.boundary;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -75,7 +76,7 @@ public class ShareResource {
   @Operation(description = "List all subscriptions")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Subscription found", 
-          content = @Content(schema = @Schema(implementation = Share[].class))) })
+          content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class)))) })
   @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public List<Share> listAllShares() {
     return shareSubscription.list();

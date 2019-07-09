@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @XmlRootElement(name = "quote")
@@ -17,11 +18,12 @@ public class Quote implements Serializable {
 
   @Schema(description = "the share", required = true)
   private Share share;
-  @Schema(description = "the price")
+  @Schema(description = "the price", example = "12.34")
   private Float price;
-  @Schema(description = "currency code")
+  @Schema(description = "currency code", defaultValue = "EUR")
   private String currency;
-  @Schema(description = "date of origin, as ISO8601")
+  @Schema(description = "date of origin, as ISO8601", 
+       externalDocs = @ExternalDocumentation(url = "https://en.wikipedia.org/wiki/ISO_8601"))
   private Date from;
 
   public Quote() {

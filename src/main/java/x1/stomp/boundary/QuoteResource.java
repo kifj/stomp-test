@@ -2,6 +2,7 @@ package x1.stomp.boundary;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -88,7 +89,7 @@ public class QuoteResource {
   @Path("/")
   @Operation(description = "get quotes")
   @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Quotes received", 
-        content = @Content(schema = @Schema(implementation = Quote[].class))),
+        content = @Content(array = @ArraySchema(arraySchema = @Schema(implementation = Quote.class)))),
       @ApiResponse(responseCode = "404", description = "No subscription found") })
   @Metered(name = "quotes-meter", absolute = true)
   public void getQuotes(@Parameter(description = "Stock symbols") @QueryParam("key") List<String> keys,

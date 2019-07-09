@@ -54,7 +54,7 @@ public class Share implements Serializable {
   @Size(min = 1, max = 25)
   @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column
-  @Schema(required = true, description = "Stock symbol")
+  @Schema(required = true, description = "Stock symbol", example = "GOOG")
   private String key;
 
   @NotNull
