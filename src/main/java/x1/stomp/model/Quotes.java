@@ -2,13 +2,13 @@ package x1.stomp.model;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
+import javax.xml.bind.annotation.*;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 @XmlRootElement(name = "quotes")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Quotes {
+  @XmlElement(name = "quote")
   private List<Quote> quotes;
 
   public Quotes() {
@@ -18,7 +18,6 @@ public class Quotes {
     this.quotes = quotes;
   }
 
-  @XmlElement(name = "quote")
   @JsonValue
   public List<Quote> getQuotes() {
     return quotes;

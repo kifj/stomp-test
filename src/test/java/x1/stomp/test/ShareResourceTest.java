@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import x1.stomp.boundary.ErrorResponse;
+import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.util.VersionData;
@@ -65,13 +66,12 @@ public class ShareResourceTest {
   @Before
   public void setup() {
     baseUrl = url.toString() + "rest";
-    client = ClientBuilder.newClient();
+    client = ClientBuilder.newClient().register(JacksonConfig.class);
   }
 
   @After
   public void teardown() {
     client.close();
-    ;
   }
 
   @Test
@@ -105,6 +105,11 @@ public class ShareResourceTest {
         assertThat(found).isNotNull();
         assertThat(found.getId()).isNull();
         assertThat(found.getKey()).isEqualTo(key);
+        assertThat(found.getLinks()).hasSize(2);
+        found.getLinks().forEach(link -> {
+          assertThat(link.getUri()).isNotNull();
+          assertThat(link.getRel()).isNotNull();
+        });
         break;
       } catch (NotFoundException e) {
         Thread.sleep(500);

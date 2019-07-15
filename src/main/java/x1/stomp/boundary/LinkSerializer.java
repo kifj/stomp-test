@@ -19,6 +19,9 @@ public class LinkSerializer extends JsonSerializer<Link> {
     if (link.getTitle() != null) {
       jg.writeStringField("title", link.getTitle());
     }
+    if (link.getParams().get("method") != null) {
+      jg.writeStringField("method", link.getParams().get("method"));
+    }
     jg.writeEndObject();
   }
 }

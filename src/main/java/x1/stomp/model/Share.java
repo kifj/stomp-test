@@ -1,31 +1,26 @@
 package x1.stomp.model;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 @XmlRootElement(name = "share")
+@XmlAccessorType(XmlAccessType.FIELD)
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
     @Index(columnList = "key", name = "idx_key", unique = false),
     @Index(columnList = "name", name = "idx_name", unique = false) })
@@ -55,6 +50,7 @@ public class Share implements Serializable {
   @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column
   @Schema(required = true, description = "Stock symbol", example = "GOOG")
+  @XmlAttribute
   private String key;
 
   @NotNull
@@ -62,9 +58,15 @@ public class Share implements Serializable {
   @Size(min = 1, max = 80)
   @Column(length = 80)
   @Schema(required = false, description = "Human readable name")
+  @XmlAttribute
   private String name;
 
-  @XmlTransient
+  @JsonProperty(value = "links")
+  @XmlElement(name = "link")
+  @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+  @Transient
+  private List<Link> links;
+
   public Long getId() {
     return id;
   }
@@ -89,13 +91,20 @@ public class Share implements Serializable {
     this.name = name;
   }
 
-  @XmlTransient
   public Long getVersion() {
     return version;
   }
 
   public void setVersion(Long version) {
     this.version = version;
+  }
+
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  public void setLinks(List<Link> links) {
+    this.links = links;
   }
 
   @Override
