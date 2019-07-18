@@ -3,6 +3,7 @@ package x1.stomp.boundary;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,12 +32,31 @@ public class ErrorResponse {
   public void add(ErrorMessage errorMessage) {
     errors.add(errorMessage);
   }
+  
+  @XmlAttribute
+  public String getType() {
+    return type;
+  }
+  
+  public void setType(String type) {
+    this.type = type;
+  }
+  
+  @XmlAttribute
+  public String getRequestUri() {
+    return requestUri;
+  }
+  
+  public void setRequestUri(String requestUri) {
+    this.requestUri = requestUri;
+  }
 
   @Override
   public String toString() {
-    return "ErrorResponse[errors=" + errors + "]";
+    return "ErrorResponse[requestUri=" + requestUri + ", errors=" + errors + "]";
   }
 
   private List<ErrorMessage> errors;
-
+  private String requestUri;
+  private String type;
 }

@@ -30,6 +30,7 @@ import javax.jms.Queue;
 import javax.jms.Session;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -92,6 +93,7 @@ public class ShareResource {
           @Parameter(description = "Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
+      log.info("findShare({}) returns {}", key, share.get());
       return Response.ok(addLinks(uriInfo.getBaseUriBuilder(), share.get())).build();
     } else {
       return Response.status(NOT_FOUND).build();
@@ -104,7 +106,7 @@ public class ShareResource {
           @ApiResponse(responseCode = "500", description = "Queuing failed")})
   @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response addShare(
-          @Parameter(required = true, description = "The share which is will be added for subscription") @Valid Share share,
+          @Parameter(required = true, description = "The share which is will be added for subscription") @NotNull @Valid Share share,
           @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.")
           @HeaderParam(value = "Correlation-Id") String correlationId) {
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
