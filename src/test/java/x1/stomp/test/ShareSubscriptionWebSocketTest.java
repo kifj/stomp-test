@@ -69,6 +69,7 @@ public class ShareSubscriptionWebSocketTest {
   @Test
   public void testWebSocket() throws Exception {
     client.openConnection(baseUrl);
+    Thread.sleep(500);
     var command = new Command(SUBSCRIBE, TEST_SHARE);
     var message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
