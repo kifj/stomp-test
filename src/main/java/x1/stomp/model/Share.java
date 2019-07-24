@@ -16,7 +16,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 
 @Entity
 @XmlRootElement(name = "share")
@@ -65,6 +67,7 @@ public class Share implements Serializable {
   @XmlElement(name = "link")
   @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
   @Transient
+  @ArraySchema(arraySchema = @Schema(accessMode = AccessMode.READ_ONLY), schema = @Schema(implementation = Link.class))
   private List<Link> links;
 
   public Long getId() {

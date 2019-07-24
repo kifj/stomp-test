@@ -30,7 +30,7 @@ public class Quote implements Serializable {
   @Schema(description = "currency code", defaultValue = "EUR")
   @XmlAttribute
   private String currency;
-  @Schema(description = "date of origin, as ISO8601", 
+  @Schema(description = "date of origin, as defined in `ISO8601`", 
        externalDocs = @ExternalDocumentation(url = "https://en.wikipedia.org/wiki/ISO_8601"))
   @XmlAttribute
   private Date from;

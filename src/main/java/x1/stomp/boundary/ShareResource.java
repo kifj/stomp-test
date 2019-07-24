@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -45,11 +45,14 @@ import static x1.service.registry.Protocol.HTTPS;
 import static x1.service.registry.Technology.REST;
 
 @Path(ShareResource.PATH)
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @RequestScoped
 @Services(services = {@Service(technology = REST, value = RestApplication.ROOT
         + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
+@Tag(name = "Shares", description = "subscribe to shares on the stock market")
 public class ShareResource {
   protected static final String PATH = "/shares";
 
@@ -73,9 +76,8 @@ public class ShareResource {
   @GET
   @Wrapped(element = "shares")
   @Operation(description = "List all subscriptions")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Subscription found", 
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class)))) })
+  @ApiResponse(responseCode = "200", description = "All subscriptions", 
+      content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class))))
   @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public List<Share> listAllShares() {
     return shareSubscription.list();
@@ -84,13 +86,12 @@ public class ShareResource {
   @GET
   @Path("/{key}")
   @Operation(description = "Find a share subscription")
-  @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Subscription found",
-                  content = @Content(schema = @Schema(implementation = Share.class))),
-          @ApiResponse(responseCode = "404", description = "Subscription not found")})
+  @ApiResponse(responseCode = "200", description = "Subscription found",
+          content = @Content(schema = @Schema(implementation = Share.class)))
+  @ApiResponse(responseCode = "404", description = "Subscription not found")
   @Timed(name = "get-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response findShare(
-          @Parameter(description = "Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
+          @Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)", example = "BMW.DE") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
       log.info("findShare({}) returns {}", key, share.get());
@@ -102,8 +103,9 @@ public class ShareResource {
 
   @POST
   @Operation(description = "Add a share to your list of subscriptions")
-  @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Share queued for subscription"),
-          @ApiResponse(responseCode = "500", description = "Queuing failed")})
+  @ApiResponse(responseCode = "201", description = "Share queued for subscription",
+                  content = @Content(schema = @Schema(implementation = Share.class)))
+  @ApiResponse(responseCode = "500", description = "Queuing failed")
   @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response addShare(
           @Parameter(required = true, description = "The share which is will be added for subscription") @NotNull @Valid Share share,
@@ -129,12 +131,11 @@ public class ShareResource {
   @DELETE
   @Path("/{key}")
   @Operation(description = "Remove a subscription of a share")
-  @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Subscription removed",
-                  content = @Content(schema = @Schema(implementation = Share.class))),
-          @ApiResponse(responseCode = "404", description = "Subscription was not found")})
+  @ApiResponse(responseCode = "200", description = "Subscription removed",
+          content = @Content(schema = @Schema(implementation = Share.class)))
+  @ApiResponse(responseCode = "404", description = "Subscription was not found")
   @Timed(name = "remove-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
-  public Response removeShare(@Parameter(description = "Stock symbol") @PathParam("key") String key) {
+  public Response removeShare(@Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
       shareSubscription.unsubscribe(share.get());
