@@ -1,6 +1,5 @@
 package x1.stomp.boundary;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import javax.ws.rs.container.ContainerRequestContext;
@@ -17,7 +16,7 @@ import org.slf4j.MDC;
 @PreMatching
 public class MDCFilter implements ContainerRequestFilter, ContainerResponseFilter {
   @Override
-  public void filter(ContainerRequestContext requestContext) throws IOException {
+  public void filter(ContainerRequestContext requestContext) {
     String requestId = requestContext.getHeaderString("X-Request-ID");
     if (StringUtils.isEmpty(requestId)) {
       requestId = UUID.randomUUID().toString();
@@ -30,8 +29,7 @@ public class MDCFilter implements ContainerRequestFilter, ContainerResponseFilte
   }
 
   @Override
-  public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
-      throws IOException {
+  public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
     responseContext.getHeaders().putSingle("X-Request-ID", MDC.get("requestId"));
     MDC.remove("requestId");
     MDC.remove("callerId");

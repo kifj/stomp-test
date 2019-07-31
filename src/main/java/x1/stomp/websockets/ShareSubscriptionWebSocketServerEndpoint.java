@@ -98,14 +98,13 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     shareSubscription.find(key).ifPresent(shareSubscription::unsubscribe);
   }
 
-  @SuppressWarnings("ConstantConditions")
   private Quote subscribe(String key) {
     log.info("Subscribe: {}", key);
     var share = new Share();
     share.setKey(key);
     var quote = quoteRetriever.retrieveQuote(share);
     quote.ifPresent(q -> shareSubscription.subscribe(q.getShare()));
-    return quote.get();
+    return quote.orElse(null);
   }
 
   @OnClose

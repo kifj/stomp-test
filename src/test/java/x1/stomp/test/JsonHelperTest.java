@@ -38,11 +38,11 @@ public class JsonHelperTest {
     private T object;
     private String json;
     
-    public String getJson() {
+    protected String getJson() {
       return json;
     }
-    
-    public T getObject() {
+
+    protected T getObject() {
       return object;
     }
     
