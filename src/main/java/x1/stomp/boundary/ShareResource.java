@@ -17,6 +17,7 @@ import x1.service.registry.Services;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Action;
 import x1.stomp.model.Share;
+import x1.stomp.util.Logged;
 import x1.stomp.util.StockMarket;
 import x1.stomp.util.VersionData;
 

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
+import x1.stomp.util.Logged;
 
 @ApplicationScoped
 public class QuoteRetriever {
@@ -25,11 +26,13 @@ public class QuoteRetriever {
   private QuickQuoteService quickQuoteService;
   
   @Timed(name = "retrieve-quote-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Logged
   public Optional<Quote> retrieveQuote(Share share) {
     return createQuote(retrieveQuotes(share.getKey()), share);
   }
 
   @Timed(name = "retrieve-quotes-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @Logged
   public List<Quote> retrieveQuotes(List<Share> shares) {
     if (shares.isEmpty()) {
       return new ArrayList<>();
@@ -49,17 +52,11 @@ public class QuoteRetriever {
   }
 
   private QuickQuoteResult retrieveQuotes(String keys) {
-    try {
-      log.debug("Retrieve quotes for {}", keys);
-      var response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
-      var quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
-      log.debug("Received: {}", quickQuoteResponse);
-      return quickQuoteResponse.getQuickQuoteResult();
-    } catch (RuntimeException e) {
-      log.error(e.getMessage());
-      throw e;
-    }
-
+    log.debug("Retrieve quotes for {}", keys);
+    var response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
+    var quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
+    log.debug("Received: {}", quickQuoteResponse);
+    return quickQuoteResponse.getQuickQuoteResult();
   }
 
   private Optional<Quote> createQuote(QuickQuote quickQuote, List<Share> shares) {

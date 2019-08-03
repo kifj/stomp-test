@@ -1,4 +1,4 @@
-package x1.stomp.boundary;
+package x1.stomp.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

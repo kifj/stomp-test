@@ -14,6 +14,7 @@ import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Quotes;
 import x1.stomp.model.Share;
+import x1.stomp.util.Logged;
 import x1.stomp.util.VersionData;
 
 import javax.annotation.Resource;
