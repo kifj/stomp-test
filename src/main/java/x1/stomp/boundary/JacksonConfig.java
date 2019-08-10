@@ -18,7 +18,7 @@ import static com.fasterxml.jackson.databind.SerializationFeature.*;
 @Provider
 @Produces(APPLICATION_JSON)
 public class JacksonConfig implements ContextResolver<ObjectMapper> {
-  public final static String DATE_FORMAT_STR_ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
+  public static final String DATE_FORMAT_STR_ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ";
 
   private final ObjectMapper mapper;
 

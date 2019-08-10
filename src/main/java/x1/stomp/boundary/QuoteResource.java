@@ -34,6 +34,7 @@ import javax.ws.rs.core.*;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +54,7 @@ import static x1.service.registry.Technology.REST;
         + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
+@Traced
 @Tag(name = "Quotes", description = "receive quotes for shares")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Timed;
+import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
@@ -53,6 +54,7 @@ import static x1.service.registry.Technology.REST;
         + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
+@Traced
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
 public class ShareResource {
   protected static final String PATH = "/shares";
