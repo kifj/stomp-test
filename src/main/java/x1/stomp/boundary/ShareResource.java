@@ -50,8 +50,8 @@ import static x1.service.registry.Technology.REST;
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @RequestScoped
-@Services(services = {@Service(technology = REST, value = RestApplication.ROOT
-        + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
+@Services(services = { @Service(technology = REST, value = RestApplication.ROOT + ShareResource.PATH,
+    version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
 @Traced
@@ -79,22 +79,24 @@ public class ShareResource {
   @GET
   @Wrapped(element = "shares")
   @Operation(description = "List all subscriptions")
-  @ApiResponse(responseCode = "200", description = "All subscriptions", 
+  @ApiResponse(responseCode = "200", description = "All subscriptions",
       content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class))))
   @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public List<Share> listAllShares() {
-    return shareSubscription.list();
+    List<Share> shares = shareSubscription.list();
+    shares.forEach(share -> addLinks(uriInfo.getBaseUriBuilder(), share));
+    return shares;
   }
 
   @GET
   @Path("/{key}")
   @Operation(description = "Find a share subscription")
   @ApiResponse(responseCode = "200", description = "Subscription found",
-          content = @Content(schema = @Schema(implementation = Share.class)))
+      content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "404", description = "Subscription not found")
   @Timed(name = "get-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
-  public Response findShare(
-          @Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)", example = "BMW.DE") @PathParam("key") String key) {
+  public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
+      example = "BMW.DE") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
       log.info("findShare({}) returns {}", key, share.get());
@@ -107,13 +109,14 @@ public class ShareResource {
   @POST
   @Operation(description = "Add a share to your list of subscriptions")
   @ApiResponse(responseCode = "201", description = "Share queued for subscription",
-                  content = @Content(schema = @Schema(implementation = Share.class)))
+      content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "500", description = "Queuing failed")
   @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response addShare(
-          @Parameter(required = true, description = "The share which is will be added for subscription") @NotNull @Valid Share share,
-          @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.")
-          @HeaderParam(value = "Correlation-Id") String correlationId) {
+      @Parameter(required = true,
+          description = "The share which is will be added for subscription") @NotNull @Valid Share share,
+      @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.") 
+      @HeaderParam(value = "Correlation-Id") String correlationId) {
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
         ObjectMessage message = session.createObjectMessage(share);
@@ -135,7 +138,7 @@ public class ShareResource {
   @Path("/{key}")
   @Operation(description = "Remove a subscription of a share")
   @ApiResponse(responseCode = "200", description = "Subscription removed",
-          content = @Content(schema = @Schema(implementation = Share.class)))
+      content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "404", description = "Subscription was not found")
   @Timed(name = "remove-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response removeShare(@Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") String key) {
@@ -149,9 +152,9 @@ public class ShareResource {
   }
 
   private Share addLinks(UriBuilder baseUriBuilder, Share share) {
-    Link self = Link.fromUriBuilder(baseUriBuilder.path(PATH).path(share.getKey())).rel("self").build();
-    Link delete = Link.fromUriBuilder(baseUriBuilder.path(PATH).path(share.getKey())).rel("unsubscribe")
-            .param("method", HttpMethod.DELETE).build();
+    Link self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("self").build();
+    Link delete = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("unsubscribe")
+        .param("method", HttpMethod.DELETE).build();
     share.setLinks(Arrays.asList(self, delete));
     return share;
   }

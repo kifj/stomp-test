@@ -2,6 +2,7 @@ package x1.stomp.boundary;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +13,7 @@ import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Quote;
+import x1.stomp.model.QuoteWrapper;
 import x1.stomp.model.Quotes;
 import x1.stomp.model.Share;
 import x1.stomp.util.Logged;
@@ -50,8 +52,8 @@ import static x1.service.registry.Technology.REST;
 
 @Path(QuoteResource.PATH)
 @RequestScoped
-@Services(services = {@Service(technology = REST, value = RestApplication.ROOT
-        + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
+@Services(services = { @Service(technology = REST, value = RestApplication.ROOT + QuoteResource.PATH,
+    version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
 @Traced
@@ -84,11 +86,11 @@ public class QuoteResource {
   @Path("/{key}")
   @Operation(description = "get a quote")
   @ApiResponse(responseCode = "200", description = "Quote received",
-          content = @Content(schema = @Schema(implementation = Quote.class)))
+      content = @Content(schema = @Schema(implementation = Quote.class)))
   @ApiResponse(responseCode = "404", description = "Subscription not found")
   @Metered(name = "quote-meter", absolute = true)
-  public Response getQuote(
-          @Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)", example = "BMW.DE") @PathParam("key") String key) {
+  public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
+      example = "BMW.DE") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
       Optional<Quote> quote = quoteRetriever.retrieveQuote(share.get());
@@ -103,12 +105,16 @@ public class QuoteResource {
   @GET
   @Path("/")
   @Operation(description = "get quotes")
-  @ApiResponse(responseCode = "200", description = "Quotes received",         
-        content = @Content(schema = @Schema(implementation = Quotes.class)))
+  @ApiResponse(responseCode = "200", description = "Quotes received",
+      content = {
+          @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = MediaType.APPLICATION_XML),
+          @Content(array = @ArraySchema(schema = @Schema(implementation = Quote.class)),
+              mediaType = MediaType.APPLICATION_JSON) })
   @ApiResponse(responseCode = "404", description = "No subscription found")
   @Metered(name = "quotes-meter", absolute = true)
-  public void getQuotes(@Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") List<String> keys,
-                        @Suspended AsyncResponse response) {
+  public void getQuotes(
+      @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") List<String> keys,
+      @Suspended AsyncResponse response) {
     UriBuilder baseUriBuilder = uriInfo.getBaseUriBuilder();
     withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys, baseUriBuilder)));
   }
@@ -120,7 +126,7 @@ public class QuoteResource {
         shares = shareSubscription.list();
       } else {
         shares = keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent).map(Optional::get)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
       }
       if (shares.isEmpty()) {
         return Response.status(NOT_FOUND).entity(new Quotes()).build();
@@ -141,7 +147,8 @@ public class QuoteResource {
   }
 
   private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
-    Link self = Link.fromUriBuilder(baseUriBuilder.path(PATH).path(quote.getShare().getKey())).rel("self").build();
+    Link self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel("self")
+        .build();
     quote.setLinks(Arrays.asList(self));
     return quote;
   }

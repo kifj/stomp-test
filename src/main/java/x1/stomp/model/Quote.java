@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 
 @XmlRootElement(name = "quote")
 @JsonRootName(value = "quote")
@@ -37,6 +39,7 @@ public class Quote implements Serializable {
   @JsonProperty(value = "links")
   @XmlElement(name = "link")
   @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+  @ArraySchema(schema = @Schema(implementation = SimpleLink.class, accessMode = AccessMode.READ_ONLY))
   private List<Link> links;
 
   public Quote() {

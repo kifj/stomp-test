@@ -51,7 +51,7 @@ public class Share implements Serializable {
   @Size(min = 1, max = 25)
   @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column
-  @Schema(required = true, description = "Stock symbol", example = "GOOG")
+  @Schema(required = true, description = "Stock symbol", example = "MSFT")
   @XmlAttribute
   private String key;
 
@@ -59,7 +59,7 @@ public class Share implements Serializable {
   @NotEmpty
   @Size(min = 1, max = 80)
   @Column(length = 80)
-  @Schema(required = false, description = "Human readable name")
+  @Schema(required = false, description = "Human readable name", example = "Microsoft Corp.")
   @XmlAttribute
   private String name;
 
@@ -67,7 +67,7 @@ public class Share implements Serializable {
   @XmlElement(name = "link")
   @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
   @Transient
-  @ArraySchema(arraySchema = @Schema(accessMode = AccessMode.READ_ONLY), schema = @Schema(implementation = Link.class))
+  @ArraySchema(schema = @Schema(implementation = SimpleLink.class, accessMode = AccessMode.READ_ONLY))
   private List<Link> links;
 
   public Long getId() {
