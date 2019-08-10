@@ -63,7 +63,7 @@ pipeline {
       }
       steps {
           sh 'mvn -Prpm deploy site-deploy -DskipTests'
-          sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.branch=${branch} -Dsonar.coverage.exclusions="**/*.js"'
+          sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch} -Dsonar.coverage.exclusions="**/*.js"'
       }
     }
     stage('Build image') {
