@@ -10,8 +10,11 @@ import x1.stomp.control.QuickQuoteResult;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
+import x1.stomp.model.SimpleLink;
 import x1.stomp.util.JsonHelper;
 
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.util.Date;
 import java.util.stream.Stream;
@@ -124,5 +127,21 @@ public class JsonHelperTest {
         () -> assertThat(q1.getCurrencyCode()).isEqualTo("EUR"), () -> assertThat(q1.getCountryCode()).isEqualTo("DE"),
         () -> assertThat(q1.getName()).isEqualTo("Bayerische Motoren Werke AG"),
         () -> assertThat(q1.getExchange()).isEqualTo("XETRA"), () -> assertThat(q1.getLastTime()).isNotNull());
+  }
+
+  @Test
+  @DisplayName("from JSON to SimpleLink")
+  void testSimpleLinkToJson() throws Exception {
+    var link = new SimpleLink();
+    link.setHref("https://google.com");
+    link.setRel("self");
+    link.setMethod(HttpMethod.GET);
+    link.setTitle("Google");
+    link.setType(MediaType.TEXT_HTML);
+
+    var json = jsonHelper.toJSON(link);
+    assertThat(json)
+            .isEqualTo("{\"SimpleLink\":{\"href\":\"https://google.com\",\"rel\":\"self\",\"title\":\"Google\"," +
+                    "\"type\":\"text/html\",\"method\":\"GET\"}}");
   }
 }

@@ -1,6 +1,5 @@
 package x1.stomp.boundary;
 
-import java.net.URI;
 import java.util.Arrays;
 
 import javax.servlet.ServletContext;

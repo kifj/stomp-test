@@ -6,7 +6,6 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.lang.management.MemoryMXBean;
 import java.lang.management.ManagementFactory;
 
 @ApplicationScoped
