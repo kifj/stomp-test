@@ -18,7 +18,7 @@ public class DatabaseCheck implements HealthCheck {
   @Override
   public HealthCheckResponse call() {
     try {
-      Long count = em.createNamedQuery("Share.count", Long.class).getSingleResult();
+      var count = em.createNamedQuery("Share.count", Long.class).getSingleResult();
       return HealthCheckResponse.named("database").withData("shares", count).up().build();
     } catch (Exception e) {
       return HealthCheckResponse.named("database").withData("error", e.getMessage()).down().build();

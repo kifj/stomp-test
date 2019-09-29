@@ -91,9 +91,9 @@ public class QuoteResource {
   @Metered(name = "quote-meter", absolute = true)
   public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") String key) {
-    Optional<Share> share = shareSubscription.find(key);
+    var share = shareSubscription.find(key);
     if (share.isPresent()) {
-      Optional<Quote> quote = quoteRetriever.retrieveQuote(share.get());
+      var quote = quoteRetriever.retrieveQuote(share.get());
       if (quote.isPresent()) {
         UriBuilder baseUriBuilder = uriInfo.getBaseUriBuilder();
         return Response.ok(addLinks(baseUriBuilder, quote.get())).build();
@@ -115,7 +115,7 @@ public class QuoteResource {
   public void getQuotes(
       @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") List<String> keys,
       @Suspended AsyncResponse response) {
-    UriBuilder baseUriBuilder = uriInfo.getBaseUriBuilder();
+    var baseUriBuilder = uriInfo.getBaseUriBuilder();
     withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys, baseUriBuilder)));
   }
 
@@ -131,7 +131,7 @@ public class QuoteResource {
       if (shares.isEmpty()) {
         return Response.status(NOT_FOUND).entity(new Quotes()).build();
       }
-      List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
+      var quotes = quoteRetriever.retrieveQuotes(shares);
       quotes.forEach(quote -> addLinks(baseUriBuilder, quote));
       return Response.ok(new Quotes(quotes)).build();
     } catch (RuntimeException e) {
@@ -147,7 +147,7 @@ public class QuoteResource {
   }
 
   private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
-    Link self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel("self")
+    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel("self")
         .build();
     quote.setLinks(Arrays.asList(self));
     return quote;

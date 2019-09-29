@@ -67,7 +67,7 @@ public class ShareMessageListener implements MessageListener {
 
   private void handleMessage(ObjectMessage message) throws JMSException {
     if (message.getStringProperty("type").equalsIgnoreCase("share")) {
-      Action action = Action.valueOf(message.getStringProperty("action"));
+      var action = Action.valueOf(message.getStringProperty("action"));
       switch (action) {
         case SUBSCRIBE:
           subscribe((Share) message.getObject());

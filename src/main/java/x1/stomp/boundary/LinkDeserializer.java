@@ -13,12 +13,12 @@ public class LinkDeserializer extends JsonDeserializer<Link> implements LinkCons
 
   @Override
   public Link deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-    ObjectCodec oc = jp.getCodec();
+    var oc = jp.getCodec();
     JsonNode node = oc.readTree(jp);
-    String href = node.get(PARAM_HREF) != null ? node.get(PARAM_HREF).asText() : "";
-    String rel = node.get(PARAM_REL) != null ? node.get(PARAM_REL).asText() : null;
-    String title = node.get(PARAM_TITLE) != null ? node.get(PARAM_TITLE).asText() : null;
-    Link.Builder builder = Link.fromUri(href);
+    var href = node.get(PARAM_HREF) != null ? node.get(PARAM_HREF).asText() : "";
+    var rel = node.get(PARAM_REL) != null ? node.get(PARAM_REL).asText() : null;
+    var title = node.get(PARAM_TITLE) != null ? node.get(PARAM_TITLE).asText() : null;
+    var builder = Link.fromUri(href);
     if (rel != null) {
       builder = builder.rel(rel);
     }

@@ -36,12 +36,12 @@ public class RootResource {
   @Operation(description = "Link to available resources")
   @Produces({ APPLICATION_JSON, APPLICATION_XML })
   public Response index() {
-    Link self = Link.fromUriBuilder(uriInfo.getRequestUriBuilder()).rel("self").build();
-    Link swagger = Link
+    var self = Link.fromUriBuilder(uriInfo.getRequestUriBuilder()).rel("self").build();
+    var swagger = Link
         .fromUriBuilder(uriInfo.getRequestUriBuilder().replacePath(context.getContextPath()).path("swagger"))
         .rel("documentation").type(TEXT_HTML).build();
-    Link quotes = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(QuoteResource.PATH)).rel("quotes").build();
-    Link shares = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(ShareResource.PATH)).rel("shares").build();
+    var quotes = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(QuoteResource.PATH)).rel("quotes").build();
+    var shares = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(ShareResource.PATH)).rel("shares").build();
 
     return Response.ok(new IndexResponse(Arrays.asList(self, swagger, quotes, shares))).build();
   }
@@ -50,7 +50,7 @@ public class RootResource {
   @Operation(description = "Link to Swagger UI")
   @Produces(TEXT_HTML)
   public Response swagger() {
-    URI uri = uriInfo.getRequestUriBuilder().replacePath(context.getContextPath()).path("swagger").build();
+    var uri = uriInfo.getRequestUriBuilder().replacePath(context.getContextPath()).path("swagger").build();
     return Response.status(Status.MOVED_PERMANENTLY).location(uri).build();
   }
 

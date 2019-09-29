@@ -39,6 +39,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -83,7 +84,7 @@ public class ShareResource {
       content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class))))
   @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public List<Share> listAllShares() {
-    List<Share> shares = shareSubscription.list();
+    var shares = shareSubscription.list();
     shares.forEach(share -> addLinks(uriInfo.getBaseUriBuilder(), share));
     return shares;
   }
@@ -97,7 +98,7 @@ public class ShareResource {
   @Timed(name = "get-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") String key) {
-    Optional<Share> share = shareSubscription.find(key);
+    var share = shareSubscription.find(key);
     if (share.isPresent()) {
       log.info("findShare({}) returns {}", key, share.get());
       return Response.ok(addLinks(uriInfo.getBaseUriBuilder(), share.get())).build();
@@ -117,16 +118,16 @@ public class ShareResource {
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
       @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.") 
       @HeaderParam(value = "Correlation-Id") String correlationId) {
-    try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
-        ObjectMessage message = session.createObjectMessage(share);
-        message.setJMSCorrelationID(correlationId);
+    try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
+      try (var producer = session.createProducer(stockMarketQueue)) {
+        var message = session.createObjectMessage(share);
+        message.setJMSCorrelationID(correlationId != null ? correlationId : UUID.randomUUID().toString());
         message.setStringProperty("type", "share");
         message.setStringProperty("action", Action.SUBSCRIBE.name());
         producer.send(message);
         log.debug("message sent: {}", message);
       }
-      URI location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
+      var location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
       return Response.created(location).build();
     } catch (JMSException e) {
       log.error(e.getErrorCode(), e);
@@ -142,7 +143,7 @@ public class ShareResource {
   @ApiResponse(responseCode = "404", description = "Subscription was not found")
   @Timed(name = "remove-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response removeShare(@Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") String key) {
-    Optional<Share> share = shareSubscription.find(key);
+    var share = shareSubscription.find(key);
     if (share.isPresent()) {
       shareSubscription.unsubscribe(share.get());
       return Response.ok(share.get()).build();
@@ -152,8 +153,8 @@ public class ShareResource {
   }
 
   private Share addLinks(UriBuilder baseUriBuilder, Share share) {
-    Link self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("self").build();
-    Link delete = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("unsubscribe")
+    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("self").build();
+    var delete = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("unsubscribe")
         .param("method", HttpMethod.DELETE).build();
     share.setLinks(Arrays.asList(self, delete));
     return share;

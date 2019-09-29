@@ -41,9 +41,7 @@ public class QuoteRetriever {
   }
 
   private String joinKeys(List<Share> shares) {
-    var sj = new StringJoiner("|");
-    shares.forEach(share -> sj.add(share.getKey()));
-    return sj.toString();
+    return shares.stream().map(Share::getKey).collect(Collectors.joining("|"));
   }
 
   private List<Quote> extractQuotes(List<Share> shares, QuickQuoteResult quickQuoteResult) {

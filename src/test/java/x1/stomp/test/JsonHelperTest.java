@@ -72,12 +72,12 @@ public class JsonHelperTest {
     share.setId(1L);
     share.setKey("BMW.DE");
     share.setName("Bayerische Motorenwerke AG");
-    Quote q = new Quote();
+    var q = new Quote();
     q.setCurrency("EUR");
     q.setPrice(1.23f);
     q.setShare(share);
     q.setFrom(new Date(123000123000L));
-    String json = jsonHelper.toJSON(q);
+    var json = jsonHelper.toJSON(q);
     assertThat(json)
         .isEqualTo("{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,"
             + "\"currency\":\"EUR\",\"from\":\"1973-11-24T14:42:03.000+0000\"}}");

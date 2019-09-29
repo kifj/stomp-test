@@ -14,7 +14,6 @@ public class SubscriptionEvent {
   }
 
   public SubscriptionEvent(Action action, String key) {
-    super();
     this.key = key;
     this.action = action;
   }

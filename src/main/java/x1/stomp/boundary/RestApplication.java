@@ -42,7 +42,7 @@ public class RestApplication extends Application {
 
     // add server by a relative url: works only if using swagger UI deployed with
     // the application
-    Server server = new Server().description("stage").url(servletConfig.getServletContext().getContextPath());
+    var server = new Server().description("stage").url(servletConfig.getServletContext().getContextPath());
     oas.addServersItem(server);
 
     var oasConfig = new SwaggerConfiguration().openAPI(oas).prettyPrint(true)

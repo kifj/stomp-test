@@ -15,23 +15,29 @@ import org.slf4j.MDC;
 @Provider
 @PreMatching
 public class MDCFilter implements ContainerRequestFilter, ContainerResponseFilter {
+
+  public static final String X_REQUEST_ID = "X-Request-ID";
+  public static final String X_CALLER_ID = "X-Caller-ID";
+  public static final String REQUEST_ID = "requestId";
+  public static final String CALLER_ID = "callerId";
+
   @Override
   public void filter(ContainerRequestContext requestContext) {
-    String requestId = requestContext.getHeaderString("X-Request-ID");
+    String requestId = requestContext.getHeaderString(X_REQUEST_ID);
     if (StringUtils.isEmpty(requestId)) {
       requestId = UUID.randomUUID().toString();
     }
-    MDC.put("requestId", requestId);
-    String callerId = requestContext.getHeaderString("X-Caller-ID");
+    MDC.put(REQUEST_ID, requestId);
+    String callerId = requestContext.getHeaderString(X_CALLER_ID);
     if (StringUtils.isNotEmpty(callerId)) {
-      MDC.put("callerId", callerId);
+      MDC.put(CALLER_ID, callerId);
     }
   }
 
   @Override
   public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-    responseContext.getHeaders().putSingle("X-Request-ID", MDC.get("requestId"));
-    MDC.remove("requestId");
-    MDC.remove("callerId");
+    responseContext.getHeaders().putSingle(X_REQUEST_ID, MDC.get(REQUEST_ID));
+    MDC.remove(REQUEST_ID);
+    MDC.remove(CALLER_ID);
   }
 }

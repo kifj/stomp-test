@@ -20,7 +20,7 @@ public class LoggingInterceptor {
     try {
       return ctx.proceed();
     } catch (RuntimeException e) {      
-      String argLine = ctx.getMethod() + ": " + Arrays.toString(ctx.getParameters());
+      var argLine = ctx.getMethod() + ": " + Arrays.toString(ctx.getParameters());
       log.error("Error at " + argLine, e);
       throw e;
     }
