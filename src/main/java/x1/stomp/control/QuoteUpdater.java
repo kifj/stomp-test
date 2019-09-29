@@ -69,8 +69,8 @@ public class QuoteUpdater {
     lastUpdatedCount = 0;
     var shares = shareSubscription.list();
     log.info("Update quotes for {} shares", shares.size());
-    try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      try (MessageProducer producer = session.createProducer(quoteTopic)) {
+    try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
+      try (var producer = session.createProducer(quoteTopic)) {
         var quotes = quoteRetriever.retrieveQuotes(shares);
         quotes.forEach(quote -> {
           try {
@@ -88,8 +88,8 @@ public class QuoteUpdater {
   }
 
   public void updateQuote(@NotNull Quote quote) {
-    try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      try (MessageProducer producer = session.createProducer(quoteTopic)) {
+    try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
+      try (var producer = session.createProducer(quoteTopic)) {
         log.debug("Sending message for {}", quote);
         producer.send(createMessage(quote, session));
       }

@@ -278,6 +278,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -555,23 +567,6 @@
                                 <arquillian.launch>jbossas-managed</arquillian.launch>
                             </systemPropertyVariables>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.junit.vintage</groupId>
-                                <artifactId>junit-vintage-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.junit.jupiter</groupId>
-                                <artifactId>junit-jupiter-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.junit.vintage</groupId>
-                                <artifactId>junit-vintage-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
@@ -613,23 +608,6 @@
                                 <jboss.password>12345</jboss.password>
                             </systemPropertyVariables>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.junit.vintage</groupId>
-                                <artifactId>junit-vintage-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.junit.jupiter</groupId>
-                                <artifactId>junit-jupiter-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.junit.vintage</groupId>
-                                <artifactId>junit-vintage-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
