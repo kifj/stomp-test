@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.opentracing.Traced;
+import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
@@ -75,6 +76,7 @@ public class ShareResource {
 
   @GET
   @Wrapped(element = "shares")
+  @Formatted
   @Operation(description = "List all subscriptions")
   @ApiResponse(responseCode = "200", description = "All subscriptions",
       content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class))))
@@ -87,6 +89,7 @@ public class ShareResource {
 
   @GET
   @Path("/{key}")
+  @Formatted
   @Operation(description = "Find a share subscription")
   @ApiResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
@@ -104,7 +107,8 @@ public class ShareResource {
   }
 
   @POST
-  @Operation(description = "Add a share to your list of subscriptions")
+  @Formatted
+  @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare")
   @ApiResponse(responseCode = "201", description = "Share queued for subscription",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "500", description = "Queuing failed")
@@ -133,6 +137,7 @@ public class ShareResource {
 
   @DELETE
   @Path("/{key}")
+  @Formatted
   @Operation(description = "Remove a subscription of a share")
   @ApiResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
@@ -152,7 +157,9 @@ public class ShareResource {
     var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("self").build();
     var delete = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("unsubscribe")
         .param("method", HttpMethod.DELETE).build();
-    share.setLinks(Arrays.asList(self, delete));
+    var quote = Link.fromUriBuilder(baseUriBuilder.clone().path(QuoteResource.PATH).path(share.getKey()))
+        .rel("quote").build();
+    share.setLinks(Arrays.asList(self, delete, quote));
     return share;
   }
 }

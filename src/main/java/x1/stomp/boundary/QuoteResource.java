@@ -37,6 +37,7 @@ import javax.ws.rs.core.*;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.opentracing.Traced;
+import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
 import java.util.Arrays;
 import java.util.List;
@@ -84,6 +85,7 @@ public class QuoteResource {
 
   @GET
   @Path("/{key}")
+  @Formatted
   @Operation(description = "get a quote")
   @ApiResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
@@ -104,6 +106,7 @@ public class QuoteResource {
 
   @GET
   @Path("/")
+  @Formatted
   @Operation(description = "get quotes")
   @ApiResponse(responseCode = "200", description = "Quotes received",
       content = {
@@ -149,7 +152,9 @@ public class QuoteResource {
   private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
     var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel("self")
         .build();
-    quote.setLinks(Arrays.asList(self));
+    Link share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
+        .rel("parent").build();
+    quote.setLinks(Arrays.asList(self, share));
     return quote;
   }
 }
