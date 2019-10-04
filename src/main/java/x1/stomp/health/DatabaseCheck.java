@@ -1,15 +1,15 @@
 package x1.stomp.health;
 
-import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Readiness;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 @ApplicationScoped
-@Health
+@Readiness
 public class DatabaseCheck implements HealthCheck {
 
   @Inject

@@ -1,6 +1,6 @@
 package x1.stomp.health;
 
-import org.eclipse.microprofile.health.Health;
+import org.eclipse.microprofile.health.Readiness;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import java.lang.management.ManagementFactory;
 
 @ApplicationScoped
-@Health
+@Readiness
 public class CheckMemory implements HealthCheck {
   @Override
   public HealthCheckResponse call() {

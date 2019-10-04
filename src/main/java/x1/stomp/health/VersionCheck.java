@@ -1,6 +1,6 @@
 package x1.stomp.health;
 
-import org.eclipse.microprofile.health.Health;
+import org.eclipse.microprofile.health.Liveness;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 
@@ -9,7 +9,7 @@ import x1.stomp.util.VersionData;
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@Health
+@Liveness
 public class VersionCheck implements HealthCheck {
   @Override
   public HealthCheckResponse call() {
