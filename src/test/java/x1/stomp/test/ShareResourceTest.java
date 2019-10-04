@@ -105,7 +105,7 @@ public class ShareResourceTest {
         assertThat(found).isNotNull();
         assertThat(found.getId()).isNull();
         assertThat(found.getKey()).isEqualTo(key);
-        assertThat(found.getLinks()).hasSize(2);
+        assertThat(found.getLinks()).hasSize(3);
         found.getLinks().forEach(link -> {
           assertThat(link.getUri()).isNotNull();
           assertThat(link.getRel()).isNotNull();

@@ -575,6 +575,7 @@
                             <skip>false</skip>
                             <systemPropertyVariables>
                                 <arquillian.launch>jbossas-managed</arquillian.launch>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -616,6 +617,7 @@
                                 <jboss.httpPort>8080</jboss.httpPort>
                                 <jboss.user>admin</jboss.user>
                                 <jboss.password>12345</jboss.password>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>

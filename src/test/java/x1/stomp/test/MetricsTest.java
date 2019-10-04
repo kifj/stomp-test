@@ -93,6 +93,7 @@ public class MetricsTest {
     assertThat(body).isNotNull();
     
     var o = new JsonParser().parse(body).getAsJsonObject();
+    assertThat(o).isNotNull();
     assertThat(o.getAsJsonObject("add-share-timer").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("get-share-timer").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("remove-share-timer").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
@@ -103,12 +104,13 @@ public class MetricsTest {
   public void testHealth() {
     var response = client.target(metricsBaseUrl).path("health").request(APPLICATION_JSON).get();
     assertThat(response).hasStatus(OK);
-    
+
     var body = response.readEntity(String.class);
     assertThat(body).isNotNull();
-    
+
     var o = new JsonParser().parse(body).getAsJsonObject();
-    assertThat(o.get("outcome").getAsString()).isEqualTo("UP");
+    assertThat(o).isNotNull();
+    assertThat(o.get("status").getAsString()).isEqualTo("UP");
     var checks = o.getAsJsonArray("checks");
     assertThat(checks).hasSize(3);
   }
