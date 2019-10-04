@@ -663,6 +663,7 @@
                                 <arquillian.launch>docker-stomp-test-it</arquillian.launch>
                                 <jboss.user>admin</jboss.user>
                                 <jboss.password>12345</jboss.password>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                         <dependencies>
