@@ -8,11 +8,13 @@ import javax.ws.rs.QueryParam;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 @Produces(APPLICATION_JSON)
 @RegisterProvider(QuickQuoteResponseExceptionMapper.class)
 @Dependent
+@Traced(value = false)
 public interface QuickQuoteService {
   @GET
   @Path("/quote.htm")

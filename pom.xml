@@ -45,7 +45,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <swagger.version>2.0.9</swagger.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
-        <jacoco.version>0.8.3</jacoco.version>
+        <jacoco.version>0.8.4</jacoco.version>
     </properties>
 
     <distributionManagement>
@@ -258,7 +258,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>service-registry</artifactId>
-            <version>1.2.4</version>
+            <version>1.2.5</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
@@ -340,7 +340,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
+            <version>42.2.8</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
