@@ -45,7 +45,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <swagger.version>2.0.9</swagger.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
-        <jacoco.version>0.8.4</jacoco.version>
+        <jacoco.version>0.8.3</jacoco.version>
     </properties>
 
     <distributionManagement>
