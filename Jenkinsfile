@@ -4,7 +4,7 @@ node {
   def branch = 'wildfly-18'
 
   stage('Checkout') {
-    git url: 'ssh://git@github.com:kifj/stomp-test.git', branch: 'wildfly-18'
+    git url: 'ssh://git@github.com/kifj/stomp-test.git', branch: 'wildfly-18'
   }
   
   stage('Build') {
