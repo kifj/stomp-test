@@ -1,75 +1,53 @@
-pipeline {
-  agent any
+node {
+  def mvnHome = tool 'Maven-3.6'
+  env.JAVA_HOME = tool 'JDK-11'
+  def branch = 'wildfly-18'
 
-  environment {
-    branch = 'wildfly-18'
-    wildfly = '/opt/wildfly-18.0.0.Final'
-    mvnHome = tool 'Maven-3.6'
+  stage('Checkout') {
+    git url: 'ssh://git@github.com:kifj/stomp-test.git', branch: 'wildfly-18'
+  }
+  
+  stage('Build') {
+    sh "${mvnHome}/bin/mvn -Pdocker-integration-test clean package"
+  }
+  
+  stage('Pre IT-Test') {
+    sh "${mvnHome}/bin/mvn -Pdocker-integration-test pre-integration-test"
   }
 
-  stages {
-    stage('Build') {
-      agent {
-        docker {
-          reuseNode true
-          image 'j7beck/x1-maven3:3.6'
-          args '-v maven-data:/home/maven/.m2' 
-        }
-      }
-      steps {
-        sh 'mvn clean package'
-      }
-      post {
-        success {
-          archiveArtifacts(artifacts: '**/target/*.war', allowEmptyArchive: true)
-        }
+  stage('Run IT test') {
+    docker
+      .image('j7beck/x1-wildfly-stomp-test-it:2.3')
+      .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
+    c ->
+      try {
+        waitFor("http://${hostIp(c)}:8080", 10, 6)
+        sh "${mvnHome}/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
+      } finally {
+        junit '**/target/surefire-reports/TEST-*.xml'
+        jacoco(execPattern: '**/**.exec')
       }
     }
-    stage('Pre IT-Test') {
-      steps {
-        sh "${mvnHome}/bin/mvn -Pdocker-integration-test pre-integration-test"
-      }
-    }
-    stage('Test') {
-      agent {
-        docker {
-          reuseNode true
-          image 'j7beck/x1-maven3:3.6'
-          args '-v maven-data:/home/maven/.m2 -v wildfly18-data:/opt/wildfly-18.0.0.Final'
-        }
-      }
-      steps {
-        lock("local-server") {
-          sh 'mvn verify -Parq-jbossas-managed -Djboss.home=${wildfly}'
-        }
-      }
-      post {
-        always {
-          junit '**/target/surefire-reports/TEST-*.xml'
-          jacoco(execPattern: '**/**.exec')
-        }
-        success {
-          archiveArtifacts(artifacts: '**/target/*.war', allowEmptyArchive: true)
-        }
-      }
-    }
-    stage('Publish') {
-      agent {
-        docker {
-          reuseNode true
-          image 'j7beck/x1-maven3:3.6'
-          args '-v maven-data:/home/maven/.m2' 
-        }
-      }
-      steps {
-          sh 'mvn -Prpm deploy site-deploy -DskipTests'
-          sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch} -Dsonar.coverage.exclusions="**/*.js"'
-      }
-    }
-    stage('Build image') {
-      steps {
-        sh "${mvnHome}/bin/mvn -Pdocker install"
-      }
-    }
+  }
+  
+  stage('Publish') {
+    sh "${mvnHome}/bin/mvn -Prpm deploy site-deploy -DskipTests"
+    sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch}"
+  }
+  
+  stage('Create image') {
+    sh "${mvnHome}/bin/mvn -Pdocker install fabric8:push"
+  }
+}
+
+def hostIp(container) {
+  sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
+  readFile('hostIp').trim()
+}
+
+def waitFor(target, sleepInSec, retries) {
+  retry (retries) {
+    sleep sleepInSec
+    httpRequest url: target, validResponseCodes: '200'
   }
 }
