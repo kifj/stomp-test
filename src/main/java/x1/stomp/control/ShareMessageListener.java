@@ -1,5 +1,6 @@
 package x1.stomp.control;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
@@ -35,6 +36,7 @@ import static x1.service.registry.Technology.STOMP;
     @Service(technology = STOMP, value = "jms.queue.stocksQueue", version = VersionData.MAJOR_MINOR, protocols = {
         STOMP_WS, STOMP_WSS }) })
 public class ShareMessageListener implements MessageListener {
+  private static final String CORRELATION_ID = "correlationId";
 
   @Inject
   private Logger log;
@@ -51,31 +53,44 @@ public class ShareMessageListener implements MessageListener {
   @Override
   public void onMessage(Message message) {
     try {
+      String correlationId = message.getJMSCorrelationID();
+      MDC.put(CORRELATION_ID, correlationId);
       if (message instanceof ObjectMessage) {
-        log.info("Received ObjectMessage from queue: {}", message.getJMSDestination());
-        onMessage((ObjectMessage) message);
+        log.info("Received ObjectMessage {} from queue: {}", correlationId, message.getJMSDestination());
+        handleMessage((ObjectMessage) message);
       } else if (message instanceof BytesMessage) {
-        log.info("Received BytesMessage from queue: {}", message.getJMSDestination());
-        onMessage((BytesMessage) message);
+        log.info("Received BytesMessage {} from queue: {}", correlationId, message.getJMSDestination());
+        handleMessage((BytesMessage) message);
       } else {
-        log.warn("Message of wrong type: {}", message.getClass().getName());
+        log.warn("Message {} of wrong type: {}", correlationId, message.getClass().getName());
       }
     } catch (Exception e) {
       throw new EJBException(e);
+    } finally {
+      MDC.remove(CORRELATION_ID);
     }
   }
 
-  private void onMessage(ObjectMessage message) throws JMSException {
-    // TODO add more actions
-    if (message.getStringProperty("type").equalsIgnoreCase("share")
-        && message.getStringProperty("action").equals(Action.SUBSCRIBE.name())) {
-      subscribe((Share) message.getObject());
+  private void handleMessage(ObjectMessage message) throws JMSException {
+    if (message.getStringProperty("type").equalsIgnoreCase("share")) {
+      Action action = Action.valueOf(message.getStringProperty("action"));
+      switch (action) {
+      case SUBSCRIBE:
+        subscribe((Share) message.getObject());
+        break;
+      case UNSUBSCRIBE:
+        shareSubscription.unsubscribe((Share) message.getObject());
+        break;
+      default:
+        log.warn("Unsupported action: {}", action);
+        break;
+      }
     } else {
       log.warn("Message of wrong type: {}", message);
     }
   }
 
-  private void onMessage(BytesMessage message) throws JMSException, IOException {
+  private void handleMessage(BytesMessage message) throws JMSException, IOException {
     String body = message.readUTF();
     log.debug("Received message: {}", body);
     Command command = jsonHelper.fromJSON(body, Command.class);

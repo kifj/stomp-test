@@ -3,6 +3,7 @@ package x1.stomp.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
@@ -11,14 +12,12 @@ import static javax.websocket.CloseReason.CloseCodes.CLOSED_ABNORMALLY;
 import static javax.websocket.CloseReason.CloseCodes.NORMAL_CLOSURE;
 
 @ClientEndpoint
+@ApplicationScoped
 public class WebSocketClient {
   private static final Logger LOG = LoggerFactory.getLogger(WebSocketClient.class.getName());
 
   private Session session;
   private String lastMessage;
-
-  private WebSocketClient() {
-  }
 
   public String getLastMessage() {
     return lastMessage;

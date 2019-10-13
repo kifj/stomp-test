@@ -3,7 +3,7 @@ package x1.stomp.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -12,9 +12,13 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 public class Quote implements Serializable {
   private static final long serialVersionUID = -6139640371442481033L;
 
+  @XmlElement
   private Share share;
+  @XmlAttribute
   private Float price;
+  @XmlAttribute
   private String currency;
+  @XmlAttribute
   private Date from;
 
   public Quote() {
@@ -58,7 +62,7 @@ public class Quote implements Serializable {
 
   @Override
   public String toString() {
-    return "Quote [share=" + share + ", price=" + price + ", currency=" + currency + ", from=" + from + "]";
+    return "Quote[share=" + share + ", price=" + price + ", currency=" + currency + ", from=" + from + "]";
   }
 
 }

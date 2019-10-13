@@ -14,7 +14,6 @@ public class SubscriptionEvent {
   }
 
   public SubscriptionEvent(Action action, String key) {
-    super();
     this.key = key;
     this.action = action;
   }
@@ -37,6 +36,6 @@ public class SubscriptionEvent {
 
   @Override
   public String toString() {
-    return "<Event [action=" + action + ", key=" + key + "]>";
+    return "SubscriptionEvent[action=" + action + ", key=" + key + "]";
   }
 }

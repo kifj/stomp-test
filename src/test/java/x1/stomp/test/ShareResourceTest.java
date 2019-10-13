@@ -141,7 +141,7 @@ public class ShareResourceTest {
     Client client = ClientBuilder.newClient();
     Response response = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
         .post(Entity.entity(share, MediaType.APPLICATION_XML));
-    assertEquals(PRECONDITION_FAILED.getStatusCode(), response.getStatus());
+    assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
     ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
     assertNotNull(errorResponse);
     assertEquals(2, errorResponse.getErrors().size());

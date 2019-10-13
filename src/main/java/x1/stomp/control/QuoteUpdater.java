@@ -2,6 +2,7 @@ package x1.stomp.control;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -87,6 +88,7 @@ public class QuoteUpdater {
 
   private Message createMessage(Quote quote, Session session) throws JMSException, IOException {
     TextMessage message = session.createTextMessage(jsonHelper.toJSON(quote));
+    message.setJMSCorrelationID(UUID.randomUUID().toString());
     message.setStringProperty("type", "quote");
     message.setStringProperty("key", quote.getShare().getKey());
     return message;

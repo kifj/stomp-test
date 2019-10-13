@@ -14,8 +14,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -26,6 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @XmlRootElement(name = "share")
+@XmlAccessorType(XmlAccessType.FIELD)
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
     @Index(columnList = "key", name = "idx_key", unique = false),
     @Index(columnList = "name", name = "idx_name", unique = false) })
@@ -51,6 +51,7 @@ public class Share implements Serializable {
   @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column
   @ApiModelProperty(required = true, value = "Stock symbol")
+  @XmlAttribute
   private String key;
 
   @NotNull
@@ -58,9 +59,9 @@ public class Share implements Serializable {
   @Size(min = 1, max = 80)
   @Column(length = 80)
   @ApiModelProperty(required = false, value = "Human readable name")
+  @XmlAttribute
   private String name;
 
-  @XmlTransient
   public Long getId() {
     return id;
   }
@@ -85,7 +86,6 @@ public class Share implements Serializable {
     this.name = name;
   }
 
-  @XmlTransient
   public Long getVersion() {
     return version;
   }
@@ -96,6 +96,6 @@ public class Share implements Serializable {
 
   @Override
   public String toString() {
-    return "<Share [id=" + id + ", key=" + key + ", name=" + name + "]>";
+    return "Share[id=" + id + ", key=" + key + ", name=" + name + "]";
   }
 }

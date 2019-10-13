@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
@@ -44,7 +45,10 @@ import static x1.service.registry.Technology.REST;
         + QuoteResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 public class QuoteResource {
-  public static final String PATH = "/quotes";
+  protected static final String PATH = "/quotes";
+
+  @Inject
+  private Logger log;
 
   @Inject
   private ShareSubscription shareSubscription;
@@ -83,15 +87,20 @@ public class QuoteResource {
   }
 
   private Response retrieveQuotes(List<String> keys) {
-    List<Share> shares = keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent)
-        .map(Optional::get).collect(Collectors.toList());
-    if (shares.isEmpty()) {
-      return Response.status(NOT_FOUND).build();
+    try {
+      List<Share> shares = keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent)
+          .map(Optional::get).collect(Collectors.toList());
+      if (shares.isEmpty()) {
+        return Response.status(NOT_FOUND).entity(new Quotes()).build();
+      }
+      List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
+      return Response.ok(new Quotes(quotes)).build();
+    } catch (RuntimeException e) {
+      log.error(null, e);
+      throw e;
     }
-    List<Quote> quotes = quoteRetriever.retrieveQuotes(shares);
-    return Response.ok(new Quotes(quotes)).build();
   }
-  
+
   private ManagedExecutorService withTimeoutHandler(AsyncResponse response) {
     response.setTimeout(5, SECONDS);
     response.setTimeoutHandler(r -> r.resume(Response.status(SERVICE_UNAVAILABLE).build()));

@@ -31,7 +31,7 @@ public class SwaggerServlet extends HttpServlet {
     }
     beanConfig.setSchemes(new String[] { "https", "http" });
     beanConfig.setBasePath(servletConfig.getServletContext().getContextPath() + "/rest");
-    beanConfig.setResourcePackage("x1.stomp.rest");
+    beanConfig.setResourcePackage("x1.stomp.boundary");
     beanConfig.setScan(true);
   }
 }

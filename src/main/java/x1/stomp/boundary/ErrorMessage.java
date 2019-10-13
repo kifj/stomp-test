@@ -1,5 +1,6 @@
 package x1.stomp.boundary;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "error")
@@ -17,6 +18,7 @@ public class ErrorMessage {
     this.invalidValue = (invalidValue == null) ? null : invalidValue.toString();
   }
 
+  @XmlAttribute
   public String getMessage() {
     return message;
   }
@@ -25,6 +27,7 @@ public class ErrorMessage {
     this.message = message;
   }
 
+  @XmlAttribute
   public String getPath() {
     return path;
   }
@@ -33,6 +36,7 @@ public class ErrorMessage {
     this.path = path;
   }
 
+  @XmlAttribute
   public String getInvalidValue() {
     return invalidValue;
   }
@@ -43,7 +47,7 @@ public class ErrorMessage {
 
   @Override
   public String toString() {
-    return "<ErrorMessage [message=" + message + ", path=" + path + ", invalidValue=" + invalidValue + "]>";
+    return "ErrorMessage[message=" + message + ", path=" + path + ", invalidValue=" + invalidValue + "]";
   }
 
   private String message;

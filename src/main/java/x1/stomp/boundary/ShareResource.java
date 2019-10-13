@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
+import org.slf4j.MDC;
+
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.ShareSubscription;
@@ -36,6 +38,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -50,7 +53,9 @@ import static x1.service.registry.Technology.REST;
         + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 public class ShareResource {
-  public static final String PATH = "/shares";
+  private static final String CORRELATION_ID = "correlationId";
+
+public static final String PATH = "/shares";
 
   @Inject
   private Logger log;
@@ -83,6 +88,7 @@ public class ShareResource {
           @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {
+      log.info("findShare({}) returns {}", key, share.get());
       return Response.ok(share.get()).build();
     } else {
       return Response.status(NOT_FOUND).build();
@@ -98,21 +104,23 @@ public class ShareResource {
           @ApiParam(
                   value = "provide a Correlation-Id header to receive a response for your operation when it finished.")
           @HeaderParam(value = "Correlation-Id") String correlationId) {
-    log.info("Add share " + share);
     try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (MessageProducer producer = session.createProducer(stockMarketQueue)) {
         ObjectMessage message = session.createObjectMessage(share);
-        message.setJMSCorrelationID(correlationId);
+        message.setJMSCorrelationID(correlationId != null ? correlationId : UUID.randomUUID().toString());        
         message.setStringProperty("type", "share");
         message.setStringProperty("action", Action.SUBSCRIBE.name());
         producer.send(message);
-        log.debug("message sent: " + message);
+        MDC.put(CORRELATION_ID, message.getJMSCorrelationID());
+        log.debug("message sent: {}", message);
       }
       URI location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
       return Response.created(location).build();
     } catch (JMSException e) {
       log.error(e.getErrorCode(), e);
-      return Response.status(INTERNAL_SERVER_ERROR).entity(e.getErrorCode()).build();
+      return Response.status(INTERNAL_SERVER_ERROR).build();
+    } finally {
+      MDC.remove(CORRELATION_ID);
     }
   }
 

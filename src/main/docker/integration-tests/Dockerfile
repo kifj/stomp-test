@@ -8,5 +8,3 @@ RUN chown -R jboss.jboss /srv/wildfly
 RUN rm -rf /srv/wildfly/scripts
 USER jboss:docker
 ENV SERVICE_NAME=stomp-test-arquillian
-
-ENV SERVICE_NAME=stomp-test-arquillian
