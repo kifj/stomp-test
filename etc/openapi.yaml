@@ -14,7 +14,9 @@ openAPI:
       name: Johannes Beck
       email: mail@johannes-beck.name
   servers:
-  - url: http://localhost:8080/stomp-test-v1.6
-    name: local
-  - url: https://home.johannes-beck.name/stomp-test-v1.6
-    name: prod
+  - url: /stomp-test-v1.6/rest
+    description: local
+  - url: https://home.johannes-beck.name/stomp-test-v1.6/rest
+    description: test
+  - url: https://stomp-test.docker.x1/rest
+    description: prod
