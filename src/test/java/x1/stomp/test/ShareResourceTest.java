@@ -32,6 +32,7 @@ import java.util.UUID;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
 import static x1.stomp.test.ResponseAssert.assertThat;
+import static x1.stomp.test.ErrorResponseAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
@@ -157,8 +158,7 @@ public class ShareResourceTest {
         .post(Entity.entity(share, MediaType.APPLICATION_XML))) {
       assertThat(response).hasStatus(BAD_REQUEST);
       var errorResponse = response.readEntity(ErrorResponse.class);
-      assertThat(errorResponse).isNotNull();
-      assertThat(errorResponse.getErrors()).size().isEqualTo(2);
+      assertThat(errorResponse).isNotNull().containsErrors(2).hasRequestUri().hasType("Invalid data");
     }
 
     try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)

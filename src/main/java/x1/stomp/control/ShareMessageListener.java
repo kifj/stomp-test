@@ -1,5 +1,6 @@
 package x1.stomp.control;
 
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
@@ -25,17 +26,18 @@ import static x1.service.registry.Protocol.*;
 import static x1.service.registry.Technology.JMS;
 import static x1.service.registry.Technology.STOMP;
 
-@MessageDriven(name = "ShareMessageListener", activationConfig = {
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+@MessageDriven(name = "ShareMessageListener",
+    activationConfig = { @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
-        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")})
+        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @Services(services = {
-        @Service(technology = JMS, value = "java:/jms/queue/stocks",
-                version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = EJB),
-        @Service(technology = STOMP, value = "jms.queue.stocksQueue",
-                version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = {STOMP_WS, STOMP_WSS})})
+    @Service(technology = JMS, value = "java:/jms/queue/stocks", version = VersionData.APP_VERSION_MAJOR_MINOR,
+        protocols = EJB),
+    @Service(technology = STOMP, value = "jms.queue.stocksQueue", version = VersionData.APP_VERSION_MAJOR_MINOR,
+        protocols = { STOMP_WS, STOMP_WSS }) })
 public class ShareMessageListener implements MessageListener {
-  
+  private static final String CORRELATION_ID = "correlationId";
+
   @Inject
   private Logger log;
 
@@ -51,17 +53,21 @@ public class ShareMessageListener implements MessageListener {
   @Override
   public void onMessage(Message message) {
     try {
+      var correlationId = message.getJMSCorrelationID();
+      MDC.put(CORRELATION_ID, correlationId);
       if (message instanceof ObjectMessage) {
-        log.info("Received ObjectMessage from queue: {}", message.getJMSDestination());
+        log.info("Received ObjectMessage {} from queue: {}", correlationId, message.getJMSDestination());
         handleMessage((ObjectMessage) message);
       } else if (message instanceof BytesMessage) {
-        log.info("Received BytesMessage from queue: {}", message.getJMSDestination());
+        log.info("Received BytesMessage {} from queue: {}", correlationId, message.getJMSDestination());
         handleMessage((BytesMessage) message);
       } else {
-        log.warn("Message of wrong type: {}", message.getClass().getName());
+        log.warn("Message {} of wrong type: {}", correlationId, message.getClass().getName());
       }
     } catch (Exception e) {
       throw new EJBException(e);
+    } finally {
+      MDC.remove(CORRELATION_ID);
     }
   }
 
@@ -69,15 +75,15 @@ public class ShareMessageListener implements MessageListener {
     if (message.getStringProperty("type").equalsIgnoreCase("share")) {
       var action = Action.valueOf(message.getStringProperty("action"));
       switch (action) {
-        case SUBSCRIBE:
-          subscribe((Share) message.getObject());
-          break;
-        case UNSUBSCRIBE:
-          shareSubscription.unsubscribe((Share) message.getObject());
-          break;
-        default:
-          log.warn("Unsupported action: {}", action);
-          break;
+      case SUBSCRIBE:
+        subscribe((Share) message.getObject());
+        break;
+      case UNSUBSCRIBE:
+        shareSubscription.unsubscribe((Share) message.getObject());
+        break;
+      default:
+        log.warn("Unsupported action: {}", action);
+        break;
       }
     } else {
       log.warn("Message of wrong type: {}", message);
@@ -93,22 +99,22 @@ public class ShareMessageListener implements MessageListener {
       return;
     }
     switch (command.getAction()) {
-      case SUBSCRIBE:
-        subscribe(command.getKey());
-        break;
-      case UNSUBSCRIBE:
-        unsubscribe(command.getKey());
-        break;
-      default:
-        log.warn("Unknown command: {}", body);
-        break;
+    case SUBSCRIBE:
+      subscribe(command.getKey());
+      break;
+    case UNSUBSCRIBE:
+      unsubscribe(command.getKey());
+      break;
+    default:
+      log.warn("Unknown command: {}", body);
+      break;
     }
   }
-  
+
   private boolean isValid(Command command) {
     return command != null && command.getAction() != null && isNotEmpty(command.getKey());
   }
-  
+
   private void unsubscribe(String key) {
     log.info("Unsubscribe: {}", key);
     shareSubscription.find(key).ifPresentOrElse(shareSubscription::unsubscribe, () -> log.warn("Not found: {}", key));

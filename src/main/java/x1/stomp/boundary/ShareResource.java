@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.opentracing.Traced;
+import org.jboss.logging.MDC;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
@@ -55,6 +56,8 @@ import static x1.service.registry.Technology.REST;
 @Traced
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
 public class ShareResource {
+  private static final String CORRELATION_ID = "correlationId";
+
   protected static final String PATH = "/shares";
 
   @Inject
@@ -123,10 +126,11 @@ public class ShareResource {
     try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (var producer = session.createProducer(stockMarketQueue)) {
         var message = session.createObjectMessage(share);
-        message.setJMSCorrelationID(correlationId != null ? correlationId : UUID.randomUUID().toString());
+        message.setJMSCorrelationID(correlationId != null ? correlationId : UUID.randomUUID().toString());        
         message.setStringProperty("type", "share");
         message.setStringProperty("action", Action.SUBSCRIBE.name());
         producer.send(message);
+        MDC.put(CORRELATION_ID, message.getJMSCorrelationID());
         log.debug("message sent: {}", message);
       }
       var location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
@@ -134,6 +138,8 @@ public class ShareResource {
     } catch (JMSException e) {
       log.error(e.getErrorCode(), e);
       return Response.status(INTERNAL_SERVER_ERROR).build();
+    } finally {
+      MDC.remove(CORRELATION_ID);
     }
   }
 

@@ -17,7 +17,7 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
   @Override
   public Response toResponse(RuntimeException e) {
     var response = new ErrorResponse();
-    response.setType(e.getClass().getName());
+    response.setType(e.getClass().getSimpleName());
     response.setRequestUri(uriInfo.getRequestUri().toString());
     response.add(new ErrorMessage(e.getMessage()));
     return Response.status(INTERNAL_SERVER_ERROR).entity(response).build();

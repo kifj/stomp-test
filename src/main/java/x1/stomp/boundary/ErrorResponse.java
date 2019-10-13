@@ -17,10 +17,6 @@ public class ErrorResponse {
     errors = new ArrayList<>();
   }
 
-  public ErrorResponse(List<ErrorMessage> errors) {
-    this.errors = errors;
-  }
-
   @XmlElementRef(name = "error")
   @JsonProperty(value = "error")
   public List<ErrorMessage> getErrors() {
@@ -57,7 +53,7 @@ public class ErrorResponse {
 
   @Override
   public String toString() {
-    return "ErrorResponse[requestUri=" + requestUri + ", errors=" + errors + "]";
+    return "ErrorResponse[requestUri=" + requestUri + ", type=" + type + ", errors=" + errors + "]";
   }
 
   private List<ErrorMessage> errors;

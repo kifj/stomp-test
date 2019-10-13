@@ -23,12 +23,12 @@ public class MDCFilter implements ContainerRequestFilter, ContainerResponseFilte
 
   @Override
   public void filter(ContainerRequestContext requestContext) {
-    String requestId = requestContext.getHeaderString(X_REQUEST_ID);
+    var requestId = requestContext.getHeaderString(X_REQUEST_ID);
     if (StringUtils.isEmpty(requestId)) {
       requestId = UUID.randomUUID().toString();
     }
     MDC.put(REQUEST_ID, requestId);
-    String callerId = requestContext.getHeaderString(X_CALLER_ID);
+    var callerId = requestContext.getHeaderString(X_CALLER_ID);
     if (StringUtils.isNotEmpty(callerId)) {
       MDC.put(CALLER_ID, callerId);
     }

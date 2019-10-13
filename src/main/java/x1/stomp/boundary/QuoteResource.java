@@ -152,7 +152,7 @@ public class QuoteResource {
   private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
     var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel("self")
         .build();
-    Link share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
+    var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
         .rel("parent").build();
     quote.setLinks(Arrays.asList(self, share));
     return quote;

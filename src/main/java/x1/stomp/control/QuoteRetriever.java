@@ -61,10 +61,11 @@ public class QuoteRetriever {
     if (quickQuote.getLast() == null || quickQuote.getName() == null || quickQuote.getSymbol() == null) {
       return Optional.empty();
     }
+    
     for (var share : shares) {
-      var key = quickQuote.getSymbol();
+      var key = quickQuote.getSymbol().toUpperCase();
       if (share.getKey().equalsIgnoreCase(key)) {
-        share.setKey(key.toUpperCase());
+        share.setKey(key);
         share.setName(quickQuote.getName());
         
         var quote = new Quote(share);
@@ -79,9 +80,6 @@ public class QuoteRetriever {
 
   private Optional<Quote> createQuote(QuickQuoteResult quickQuoteResult, Share share) {
     var quotes = quickQuoteResult.getQuotes();
-    if (quotes.isEmpty()) {
-      return Optional.empty();
-    }
-    return createQuote(quotes.get(0), Collections.singletonList(share));
+    return quotes.isEmpty() ? Optional.empty() : createQuote(quotes.get(0), Collections.singletonList(share));
   }
 }
