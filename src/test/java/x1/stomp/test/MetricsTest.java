@@ -28,7 +28,7 @@ import com.google.gson.JsonParser;
 
 import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.model.Share;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 @RunWith(Arquillian.class)
 public class MetricsTest {

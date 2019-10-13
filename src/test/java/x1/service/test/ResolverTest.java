@@ -15,7 +15,7 @@ import x1.service.client.Resolver;
 import x1.service.etcd.Node;
 import x1.stomp.boundary.ShareResource;
 import x1.stomp.control.ShareMessageListener;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 import java.net.InetAddress;
 import java.net.URL;
@@ -61,7 +61,7 @@ public class ResolverTest {
   public void testResolveHttps() throws Exception {
     var resolver = new Resolver();
 
-    var nodes = resolver.resolve(REST, ShareResource.class, VersionData.MAJOR_MINOR, STAGE, HTTPS);
+    var nodes = resolver.resolve(REST, ShareResource.class, VersionData.APP_VERSION_MAJOR_MINOR, STAGE, HTTPS);
     assertThat(nodes).size().isPositive();
     var node = getNode(nodes, resolver);
     assertThat(node).isNotNull();
@@ -78,7 +78,7 @@ public class ResolverTest {
   public void testResolveJms() {
     var resolver = new Resolver();
 
-    var nodes = resolver.resolve(JMS, ShareMessageListener.class, VersionData.MAJOR_MINOR, STAGE, EJB);
+    var nodes = resolver.resolve(JMS, ShareMessageListener.class, VersionData.APP_VERSION_MAJOR_MINOR, STAGE, EJB);
     assertThat(nodes).size().isPositive();
     var node = getNode(nodes, resolver);
     assertThat(node).isNotNull();

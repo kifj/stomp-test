@@ -24,7 +24,7 @@ import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
 import x1.stomp.util.JsonHelper;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

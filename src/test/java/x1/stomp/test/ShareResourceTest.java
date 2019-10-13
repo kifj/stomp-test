@@ -15,7 +15,7 @@ import x1.stomp.boundary.ErrorResponse;
 import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
@@ -155,7 +155,7 @@ public class ShareResourceTest {
 
     try (var response = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
         .post(Entity.entity(share, MediaType.APPLICATION_XML))) {
-      assertThat(response).hasStatus(PRECONDITION_FAILED);
+      assertThat(response).hasStatus(BAD_REQUEST);
       var errorResponse = response.readEntity(ErrorResponse.class);
       assertThat(errorResponse).isNotNull();
       assertThat(errorResponse.getErrors()).size().isEqualTo(2);

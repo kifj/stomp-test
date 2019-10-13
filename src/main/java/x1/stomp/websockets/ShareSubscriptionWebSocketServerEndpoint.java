@@ -11,7 +11,7 @@ import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.util.JsonHelper;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -36,11 +36,11 @@ import static x1.service.registry.Technology.*;
 @ServerEndpoint("/ws/stocks")
 @Services(services = {
         @Service(technology = JMS, value = "java:/jms/topic/quotes",
-                version = VersionData.MAJOR_MINOR, protocols = EJB),
+                version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = EJB),
         @Service(technology = WEBSOCKETS, value = "/ws/stocks",
-                version = VersionData.MAJOR_MINOR, protocols = {WS, WSS}),
+                version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = {WS, WSS}),
         @Service(technology = STOMP, value = "jms.topic.quotesTopic",
-                version = VersionData.MAJOR_MINOR, protocols = {STOMP_WS, STOMP_WSS})
+                version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = {STOMP_WS, STOMP_WSS})
 })
 public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener {
 

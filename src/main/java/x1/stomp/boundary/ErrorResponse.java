@@ -8,8 +8,10 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @XmlRootElement(name = "errors")
+@Schema(description = "Error response")
 public class ErrorResponse {
   public ErrorResponse() {
     errors = new ArrayList<>();
@@ -34,6 +36,7 @@ public class ErrorResponse {
   }
   
   @XmlAttribute
+  @Schema(description = "Error type")
   public String getType() {
     return type;
   }
@@ -43,6 +46,7 @@ public class ErrorResponse {
   }
   
   @XmlAttribute
+  @Schema(description = "Request URI")
   public String getRequestUri() {
     return requestUri;
   }

@@ -17,7 +17,7 @@ import x1.stomp.model.QuoteWrapper;
 import x1.stomp.model.Quotes;
 import x1.stomp.model.Share;
 import x1.stomp.util.Logged;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
@@ -54,7 +54,7 @@ import static x1.service.registry.Technology.REST;
 @Path(QuoteResource.PATH)
 @RequestScoped
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT + QuoteResource.PATH,
-    version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
+    version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
 @Traced

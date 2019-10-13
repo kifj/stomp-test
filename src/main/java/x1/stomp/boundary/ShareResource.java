@@ -21,7 +21,7 @@ import x1.stomp.model.Action;
 import x1.stomp.model.Share;
 import x1.stomp.util.Logged;
 import x1.stomp.util.StockMarket;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -49,7 +49,7 @@ import static x1.service.registry.Technology.REST;
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @RequestScoped
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT + ShareResource.PATH,
-    version = VersionData.MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
+    version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
 @Traced
@@ -110,8 +110,10 @@ public class ShareResource {
   @Formatted
   @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare")
   @ApiResponse(responseCode = "201", description = "Share queued for subscription",
-      content = @Content(schema = @Schema(implementation = Share.class)))
+          content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "500", description = "Queuing failed")
+  @ApiResponse(responseCode = "400", description = "Invalid data",
+          content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
   @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response addShare(
       @Parameter(required = true,

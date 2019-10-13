@@ -1,10 +1,20 @@
-openapi: "3.0.0"
-info:
-  version: 1.5
-  title: Stomp Test
-  license:
-    name: The Apache Software License, Version 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.txt
-servers:
-- url: http://localhost:8080/stomp-test-v1.5
-  name: local
+resourcePackages:
+  - x1.stomp
+prettyPrint: true
+cacheTTL: 0
+openAPI:
+  info:
+    version: 1.6
+    title: Stomp Test
+    description: A sample application for websockets and stomp on Wildfly
+    license:
+      name: The Apache Software License, Version 2.0
+      url: http://www.apache.org/licenses/LICENSE-2.0.txt
+    contact:
+      name: Johannes Beck
+      email: mail@johannes-beck.name
+  servers:
+  - url: http://localhost:8080/stomp-test-v1.6
+    name: local
+  - url: https://home.johannes-beck.name/stomp-test-v1.6
+    name: prod

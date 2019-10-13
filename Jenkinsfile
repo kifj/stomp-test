@@ -8,7 +8,7 @@ node {
   }
   
   stage('Build') {
-    sh "${mvnHome}/bin/mvn -Pdocker-integration-test clean package"
+    sh "${mvnHome}/bin/mvn clean package"
   }
   
   stage('Pre IT-Test') {

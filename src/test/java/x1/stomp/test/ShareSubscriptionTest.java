@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import x1.stomp.control.QuoteUpdater;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Share;
-import x1.stomp.util.VersionData;
+import x1.stomp.version.VersionData;
 
 import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;

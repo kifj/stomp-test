@@ -11,7 +11,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import static javax.ws.rs.core.Response.Status.PRECONDITION_FAILED;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 @Provider
 public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
@@ -29,6 +29,6 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
     e.getConstraintViolations().forEach(violation -> response.add(
         new ErrorMessage(violation.getMessage(), violation.getPropertyPath().toString(), violation.getInvalidValue())));
     log.warn("Request failed because of invalid parameters:\n{}", response.toString());
-    return Response.status(PRECONDITION_FAILED).entity(response).build();
+    return Response.status(BAD_REQUEST).entity(response).build();
   }
 }

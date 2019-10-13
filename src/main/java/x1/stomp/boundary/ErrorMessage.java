@@ -1,9 +1,12 @@
 package x1.stomp.boundary;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "error")
+@Schema(description = "Structured error message")
 public class ErrorMessage {
   public ErrorMessage() {
   }
@@ -19,6 +22,7 @@ public class ErrorMessage {
   }
   
   @XmlAttribute
+  @Schema(description = "The error message")
   public String getMessage() {
     return message;
   }
@@ -28,6 +32,7 @@ public class ErrorMessage {
   }
 
   @XmlAttribute
+  @Schema(description = "On validation errors: the property which was invalid")
   public String getPath() {
     return path;
   }
@@ -37,6 +42,7 @@ public class ErrorMessage {
   }
 
   @XmlAttribute
+  @Schema(description = "On validation errors: the value which was invalid")
   public String getInvalidValue() {
     return invalidValue;
   }

@@ -352,6 +352,38 @@
                 <version>3.8.0</version>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <id>filter-src</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>2.0.10</version>
+                <configuration>
+                    <outputFileName>openapi</outputFileName>
+                    <outputPath>${project.build.directory}</outputPath>
+                    <outputFormat>YAML</outputFormat>
+                    <configurationFilePath>${project.basedir}/etc/openapi.yaml</configurationFilePath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.3</version>
                 <configuration>
@@ -367,6 +399,7 @@
                                 <manifestEntries>
                                     <Application-Title>${project.name}</Application-Title>
                                     <Application-Description>${project.description}</Application-Description>
+                                    <Application-Name>${project.artifactId}</Application-Name>
                                     <Application-Version>${app.majorVersion}.${app.minorVersion}</Application-Version>
                                     <Application-License>${project.licenses[0].name}</Application-License>
                                     <Application-LicenseUrl>${project.licenses[0].url}</Application-LicenseUrl>
