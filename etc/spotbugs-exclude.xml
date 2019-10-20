@@ -46,8 +46,12 @@
   <Match classregex="x1.*" >
     <BugPattern name="SE_BAD_FIELD" />
   </Match>
-  
+
   <Match classregex="x1.*" >
     <BugPattern name="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match classregex="x1.*" >
+    <BugPattern name="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE" />
   </Match>
 </FindBugsFilter>

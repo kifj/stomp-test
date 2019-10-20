@@ -12,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 public class VersionCheck implements HealthCheck {
   @Override
   public HealthCheckResponse call() {
-    return HealthCheckResponse.named(x1.stomp.version.VersionData.APP_NAME).withData("version", VersionData.APP_VERSION_MAJOR_MINOR).up().build();
+    return HealthCheckResponse.named(x1.stomp.version.VersionData.APP_NAME)
+      .withData("version", VersionData.APP_VERSION_MAJOR_MINOR).up().build();
   }
 }
