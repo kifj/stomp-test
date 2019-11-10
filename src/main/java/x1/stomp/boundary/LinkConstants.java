@@ -6,4 +6,6 @@ public interface LinkConstants {
   String PARAM_REL = "rel";
   String PARAM_TITLE = "title";
   String PARAM_METHOD = "method";
+  
+  String REL_SELF = "self";
 }

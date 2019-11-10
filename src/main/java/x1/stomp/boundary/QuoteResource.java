@@ -2,6 +2,7 @@ package x1.stomp.boundary;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,6 +34,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.*;
+import static javax.ws.rs.core.MediaType.*;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.annotation.Metered;
@@ -59,8 +61,8 @@ import static x1.service.registry.Technology.REST;
 @Logged
 @Traced
 @Tag(name = "Quotes", description = "receive quotes for shares")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({ APPLICATION_JSON, APPLICATION_XML })
+@Consumes({ APPLICATION_JSON, APPLICATION_XML })
 public class QuoteResource {
   protected static final String PATH = "/quotes";
 
@@ -86,7 +88,9 @@ public class QuoteResource {
   @GET
   @Path("/{key}")
   @Formatted
-  @Operation(description = "get a quote")
+  @Operation(description = "get a quote",
+      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
   @ApiResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
   @ApiResponse(responseCode = "404", description = "Subscription not found")
@@ -107,12 +111,14 @@ public class QuoteResource {
   @GET
   @Path("/")
   @Formatted
-  @Operation(description = "get quotes")
+  @Operation(description = "get quotes",
+      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
   @ApiResponse(responseCode = "200", description = "Quotes received",
       content = {
-          @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = MediaType.APPLICATION_XML),
+          @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = APPLICATION_XML),
           @Content(array = @ArraySchema(schema = @Schema(implementation = Quote.class)),
-              mediaType = MediaType.APPLICATION_JSON) })
+              mediaType = APPLICATION_JSON) })
   @ApiResponse(responseCode = "404", description = "No subscription found")
   @Metered(name = "quotes-meter", absolute = true)
   public void getQuotes(
@@ -150,8 +156,8 @@ public class QuoteResource {
   }
 
   private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
-    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel("self")
-        .build();
+    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey()))
+        .rel(LinkConstants.REL_SELF).build();
     var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
         .rel("parent").build();
     quote.setLinks(Arrays.asList(self, share));

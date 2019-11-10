@@ -65,17 +65,21 @@ public class QuoteRetriever {
     for (var share : shares) {
       var key = quickQuote.getSymbol().toUpperCase();
       if (share.getKey().equalsIgnoreCase(key)) {
-        share.setKey(key);
-        share.setName(quickQuote.getName());
-        
-        var quote = new Quote(share);
-        quote.setPrice(quickQuote.getLast());
-        quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));
-        quote.setFrom(quickQuote.getLastTime());
-        return Optional.of(quote);
+        return Optional.of(convertTo(quickQuote, share));
       }
     }
     return Optional.empty();
+  }
+
+  private Quote convertTo(QuickQuote quickQuote, Share share) {
+    share.setKey(quickQuote.getSymbol().toUpperCase());
+    share.setName(quickQuote.getName());
+    
+    var quote = new Quote(share);
+    quote.setPrice(quickQuote.getLast());
+    quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));
+    quote.setFrom(quickQuote.getLastTime());
+    return quote;
   }
 
   private Optional<Quote> createQuote(QuickQuoteResult quickQuoteResult, Share share) {

@@ -64,7 +64,7 @@ public class ShareMessageListener implements MessageListener {
       } else {
         log.warn("Message {} of wrong type: {}", correlationId, message.getClass().getName());
       }
-    } catch (Exception e) {
+    } catch (JMSException | IOException e) {
       throw new EJBException(e);
     } finally {
       MDC.remove(CORRELATION_ID);

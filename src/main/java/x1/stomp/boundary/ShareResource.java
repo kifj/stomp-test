@@ -2,6 +2,7 @@ package x1.stomp.boundary;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,10 +12,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.opentracing.Traced;
-import org.jboss.logging.MDC;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
+import org.slf4j.MDC;
+
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.ShareSubscription;
@@ -35,19 +37,19 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import static javax.ws.rs.core.MediaType.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
 import static x1.service.registry.Protocol.HTTP;
 import static x1.service.registry.Protocol.HTTPS;
 import static x1.service.registry.Technology.REST;
 
 @Path(ShareResource.PATH)
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({ APPLICATION_JSON, APPLICATION_XML })
+@Consumes({ APPLICATION_JSON, APPLICATION_XML })
 @RequestScoped
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT + ShareResource.PATH,
     version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
@@ -80,7 +82,9 @@ public class ShareResource {
   @GET
   @Wrapped(element = "shares")
   @Formatted
-  @Operation(description = "List all subscriptions")
+  @Operation(description = "List all subscriptions",
+      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
   @ApiResponse(responseCode = "200", description = "All subscriptions",
       content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class))))
   @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
@@ -93,7 +97,9 @@ public class ShareResource {
   @GET
   @Path("/{key}")
   @Formatted
-  @Operation(description = "Find a share subscription")
+  @Operation(description = "Find a share subscription",
+      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
   @ApiResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "404", description = "Subscription not found")
@@ -105,13 +111,15 @@ public class ShareResource {
       log.info("findShare({}) returns {}", key, share.get());
       return Response.ok(addLinks(uriInfo.getBaseUriBuilder(), share.get())).build();
     } else {
-      return Response.status(NOT_FOUND).build();
+      throw new NotFoundException();
     }
   }
 
   @POST
   @Formatted
-  @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare")
+  @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare",
+      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
   @ApiResponse(responseCode = "201", description = "Share queued for subscription",
           content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "500", description = "Queuing failed")
@@ -146,7 +154,9 @@ public class ShareResource {
   @DELETE
   @Path("/{key}")
   @Formatted
-  @Operation(description = "Remove a subscription of a share")
+  @Operation(description = "Remove a subscription of a share",
+      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
   @ApiResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @ApiResponse(responseCode = "404", description = "Subscription was not found")
@@ -162,9 +172,10 @@ public class ShareResource {
   }
 
   private Share addLinks(UriBuilder baseUriBuilder, Share share) {
-    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("self").build();
+    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel(LinkConstants.REL_SELF)
+        .build();
     var delete = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("unsubscribe")
-        .param("method", HttpMethod.DELETE).build();
+        .param(LinkConstants.PARAM_METHOD, HttpMethod.DELETE).build();
     var quote = Link.fromUriBuilder(baseUriBuilder.clone().path(QuoteResource.PATH).path(share.getKey()))
         .rel("quote").build();
     share.setLinks(Arrays.asList(self, delete, quote));

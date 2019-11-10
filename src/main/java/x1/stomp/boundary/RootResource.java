@@ -46,7 +46,7 @@ public class RootResource {
   @Produces({ APPLICATION_JSON, APPLICATION_XML })
   @Formatted
   public Response index() {
-    var self = Link.fromUriBuilder(uriInfo.getRequestUriBuilder()).rel("self").build();
+    var self = Link.fromUriBuilder(uriInfo.getRequestUriBuilder()).rel(LinkConstants.REL_SELF).build();
     var swagger = Link
         .fromUriBuilder(uriInfo.getRequestUriBuilder().replacePath(context.getContextPath()).path("swagger"))
         .rel("documentation").type(TEXT_HTML).build();
