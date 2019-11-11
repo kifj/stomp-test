@@ -13,6 +13,7 @@ function Client() {
 	  path = '';
 	}
 	this.url = protocol + location.host + path + "/ws/stocks";
+	this.debug = false;
 }
 
 //---------------------------------------------------------------------
@@ -106,7 +107,9 @@ Client.prototype.onmessage = function(message) {
 		if (event.action == 'UNSUBSCRIBE') {
 			$("#" + id).remove();
 		}
-		console.log('Received event ' + event.action  + ' for ' + event.key );
+		if (this.debug) {
+		    console.log('Received event ' + event.action  + ' for ' + event.key );
+		}
 	}
 	if (quote) {
 		id = "key_" + quote.share.key.replace('.', '');
@@ -118,7 +121,9 @@ Client.prototype.onmessage = function(message) {
 		row += "<td>" + quote.currency + "</td></tr>";
 		$("#tbl_quotes").append(row);
 		this.messageOn('Received quote for ' + quote.share.key + '.');
-		console.log('Received quote ' + quote.share.key );
+		if (this.debug) {
+  		    console.log('Received quote ' + quote.share.key );
+  		 }
 	}
 }
 
