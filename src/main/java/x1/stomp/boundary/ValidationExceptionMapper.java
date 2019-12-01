@@ -27,7 +27,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
     response.setRequestUri(uriInfo.getRequestUri().toString());
     e.getConstraintViolations().forEach(violation -> response.add(
         new ErrorMessage(violation.getMessage(), violation.getPropertyPath().toString(), violation.getInvalidValue())));
-    log.warn("Request failed because of invalid parameters:\n{}", response.toString());
+    log.info("Request failed because of invalid parameters:\n{}", response.toString());
     return Response.status(BAD_REQUEST).entity(response).build();
   }
 }

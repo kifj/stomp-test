@@ -20,6 +20,7 @@ public class MDCFilter implements ContainerRequestFilter, ContainerResponseFilte
   public static final String X_CALLER_ID = "X-Caller-ID";
   public static final String REQUEST_ID = "requestId";
   public static final String CALLER_ID = "callerId";
+  public static final String HTTP_STATUS_CODE = "http_response_code";
 
   @Override
   public void filter(ContainerRequestContext requestContext) {

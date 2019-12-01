@@ -15,7 +15,6 @@ public class Resources {
 
   @Produces
   public QuickQuoteService createQuickQuoteService() {
-    return RestClientBuilder.newBuilder().baseUrl(baseUrl).register(QuickQuoteResponseExceptionMapper.class)
-        .build(QuickQuoteService.class);
+    return RestClientBuilder.newBuilder().baseUrl(baseUrl).build(QuickQuoteService.class);
   }
 }
