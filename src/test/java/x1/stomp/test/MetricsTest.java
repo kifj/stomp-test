@@ -65,17 +65,17 @@ public class MetricsTest {
     client.close();
   }
   
-  protected String getBaseUrlForMetrics() {
+  private String getBaseUrlForMetrics() {
     var host = getHost();
     var port = 9990 + getPortOffset();
     return "http://" + host + ":" + port;
   }
   
-  protected Integer getPortOffset() {
+  private Integer getPortOffset() {
     return Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
   }
 
-  protected String getHost() {
+  private String getHost() {
     return System.getProperty("jboss.bind.address", "127.0.0.1");
   }
 
