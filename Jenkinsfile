@@ -4,13 +4,18 @@ pipeline {
   environment {
     branch = 'wildfly-10'
     wildfly = '/opt/wildfly-10.1.0.Final'
-    mvnHome = tool 'Maven-3.6'
+    JAVA_HOME = tool 'JDK-1.8'
+  }
+
+  tools { 
+    maven 'Maven-36' 
+    jdk 'JDK-1.8' 
   }
 
   stages {
     stage('Build') {
       steps {
-        sh '${mvnHome}/bin/mvn clean package'
+        sh 'mvn clean package'
       }
       post {
         success {
@@ -20,13 +25,13 @@ pipeline {
     }
     stage('Pre IT-Test') {
       steps {
-        sh "${mvnHome}/bin/mvn -Pdocker-integration-test pre-integration-test"
+        sh "mvn -Pdocker-integration-test pre-integration-test"
       }
     }
     stage('Test') {
       steps {
         lock("local-server") {
-          sh '${mvnHome}/bin/mvn verify -Parq-jbossas-managed -Djboss.home=${wildfly}'
+          sh 'mvn verify -Parq-jbossas-managed -Djboss.home=${wildfly}'
         }
       }
       post {
@@ -41,13 +46,13 @@ pipeline {
     }
     stage('Publish') {
       steps {
-          sh '${mvnHome}/bin/mvn -Prpm deploy site-deploy -DskipTests'
-          sh '${mvnHome}/bin/mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch} -Dsonar.coverage.exclusions="**/*.js"'
+          sh 'mvn -Prpm deploy site-deploy -DskipTests'
+          sh 'mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch} -Dsonar.coverage.exclusions="**/*.js"'
       }
     }
     stage('Build image') {
       steps {
-        sh "${mvnHome}/bin/mvn -Pdocker install"
+        sh "mvn -Pdocker install"
       }
     }
   }
