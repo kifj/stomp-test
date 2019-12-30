@@ -4,11 +4,10 @@ pipeline {
   environment {
     branch = 'wildfly-10'
     wildfly = '/opt/wildfly-10.1.0.Final'
-    JAVA_HOME = tool 'JDK-1.8'
   }
 
   tools { 
-    maven 'Maven-36' 
+    maven 'Maven-3.6' 
     jdk 'JDK-1.8' 
   }
 
