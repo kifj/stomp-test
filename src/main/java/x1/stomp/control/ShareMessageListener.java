@@ -1,7 +1,8 @@
 package x1.stomp.control;
 
-import org.jboss.logging.MDC;
 import org.slf4j.Logger;
+import org.slf4j.MDC;
+
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.model.Action;

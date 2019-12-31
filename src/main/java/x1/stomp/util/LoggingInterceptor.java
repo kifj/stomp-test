@@ -7,9 +7,9 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.ws.rs.WebApplicationException;
 
-import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import x1.stomp.boundary.MDCFilter;
 
@@ -51,7 +51,7 @@ public class LoggingInterceptor {
   private void logFailure(InvocationContext ctx, WebApplicationException e) {
     var response = e.getResponse();
     try {
-      MDC.put(MDCFilter.HTTP_STATUS_CODE, response.getStatus());
+      MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(response.getStatus()));
       var argLine = ctx.getMethod() + ": " + Arrays.toString(ctx.getParameters()) + " -> status="
           + response.getStatus();
       var log = getLogger(ctx);

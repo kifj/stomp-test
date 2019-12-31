@@ -5,8 +5,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.jboss.logging.MDC;
 import org.slf4j.Logger;
+import org.slf4j.MDC;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -23,7 +23,7 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
   @Override
   public Response toResponse(WebApplicationException e) {
     try {
-      MDC.put(MDCFilter.HTTP_STATUS_CODE, e.getResponse().getStatus());
+      MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(e.getResponse().getStatus()));
       var response = new ErrorResponse();
       response.setRequestUri(uriInfo.getRequestUri().toString());
       response.setType(e.getResponse().getStatusInfo().getReasonPhrase());
