@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -18,7 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 
 @XmlRootElement(name = "quote")
 @JsonRootName(value = "quote")
-@Schema(description = "A quote is the current price for a share")
+@Schema(description = "A quote is the current price for a share", accessMode = AccessMode.READ_ONLY)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Quote implements Serializable {
   private static final long serialVersionUID = -6139640371442481033L;
@@ -45,7 +46,7 @@ public class Quote implements Serializable {
   public Quote() {
   }
 
-  public Quote(Share share) {
+  public Quote(@NotNull Share share) {
     this.share = share;
   }
 
@@ -53,7 +54,7 @@ public class Quote implements Serializable {
     return share;
   }
 
-  public void setShare(Share share) {
+  public void setShare(@NotNull Share share) {
     this.share = share;
   }
 

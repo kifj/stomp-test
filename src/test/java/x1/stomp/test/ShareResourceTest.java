@@ -98,7 +98,7 @@ public class ShareResourceTest {
           .isEqualTo(UriBuilder.fromUri(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).build(share.getKey()));
     }
 
-    int loop = 0;
+    var loop = 0;
     while (true) {
       try {
         var found = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
@@ -150,9 +150,8 @@ public class ShareResourceTest {
 
   @Test
   public void testAddShareInvalid() {
-    var share = new Share();
     var key = "GOOG";
-    share.setKey(key);
+    var share = new Share(key);
 
     try (var response = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
         .post(Entity.entity(share, MediaType.APPLICATION_XML))) {

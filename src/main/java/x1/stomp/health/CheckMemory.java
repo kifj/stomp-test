@@ -17,9 +17,8 @@ public class CheckMemory implements HealthCheck {
     var memoryBean = ManagementFactory.getMemoryMXBean();
     var memUsed = memoryBean.getHeapMemoryUsage().getUsed();
     var memMax = memoryBean.getHeapMemoryUsage().getMax();
-    HealthCheckResponseBuilder builder = HealthCheckResponse.named("heap-memory")
-            .withData("used", memUsed)
-            .withData("max", memMax);
+    HealthCheckResponseBuilder builder = HealthCheckResponse.named("heap-memory").withData("used", memUsed)
+        .withData("max", memMax);
     // status is is down is used memory is greater than 90% of max memory.
     builder = (memUsed < memMax * 0.9) ? builder.up() : builder.down();
     return builder.build();

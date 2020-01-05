@@ -26,15 +26,24 @@ import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
     @Index(columnList = "key", name = "idx_key", unique = false),
     @Index(columnList = "name", name = "idx_name", unique = false) })
-@NamedQuery(name = "Share.findByKey", query = "from Share s where s.key = :key")
-@NamedQuery(name = "Share.listAll", query = "from Share s order by s.name")
-@NamedQuery(name = "Share.count", query = "select count(s.id) from Share s")
+@NamedQuery(name = Share.FIND_BY_KEY, query = "from Share s where s.key = :key")
+@NamedQuery(name = Share.LIST_ALL, query = "from Share s order by s.name")
+@NamedQuery(name = Share.COUNT_ALL, query = "select count(s.id) from Share s")
 @Schema(description = "Shares are identified by stock symbols, and may have an name for readability.")
 @JsonRootName(value = "share")
 public class Share implements Serializable {
   public static final String FIND_BY_KEY = "Share.findByKey";
   public static final String LIST_ALL = "Share.listAll";
+  public static final String COUNT_ALL = "Share.count";
   private static final long serialVersionUID = -6219237799499789827L;
+
+  public Share() {
+  }
+  
+  public Share(@NotNull @Size(min = 1, max = 25) @Pattern(regexp = "[A-Z0-9.]*",
+      message = "must contain only letters and dots") String key) {    
+    this.key = key;
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)

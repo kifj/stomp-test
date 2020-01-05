@@ -100,8 +100,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   private Quote subscribe(String key) {
     log.info("Subscribe: {}", key);
-    var share = new Share();
-    share.setKey(key);
+    var share = new Share(key);
     var quote = quoteRetriever.retrieveQuote(share);
     quote.ifPresent(q -> shareSubscription.subscribe(q.getShare()));
     return quote.orElse(null);

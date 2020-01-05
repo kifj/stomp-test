@@ -79,8 +79,7 @@ public class ShareSubscriptionWebSocketTest {
     var quote = new Quote();
     quote.setCurrency("USD");
     quote.setPrice(10.0f);
-    var share = new Share();
-    share.setKey(TEST_SHARE);
+    var share = new Share(TEST_SHARE);
     quote.setShare(share);
     quoteUpdater.updateQuote(quote);
     Thread.sleep(1500);

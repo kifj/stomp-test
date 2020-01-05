@@ -4,6 +4,8 @@ import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 
+import x1.stomp.model.Share;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -18,7 +20,7 @@ public class DatabaseCheck implements HealthCheck {
   @Override
   public HealthCheckResponse call() {
     try {
-      var count = em.createNamedQuery("Share.count", Long.class).getSingleResult();
+      var count = em.createNamedQuery(Share.COUNT_ALL, Long.class).getSingleResult();
       return HealthCheckResponse.named("database").withData("shares", count).up().build();
     } catch (Exception e) {
       return HealthCheckResponse.named("database").withData("error", e.getMessage()).down().build();
