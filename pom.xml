@@ -43,8 +43,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
-    <swagger.version>2.1.0</swagger.version>
-    <junit.jupiter.version>5.5.2</junit.jupiter.version>
+    <swagger.version>2.1.1</swagger.version>
+    <junit.jupiter.version>5.6.0</junit.jupiter.version>
     <jacoco.version>0.8.3</jacoco.version>
   </properties>
 
@@ -93,7 +93,7 @@
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.5.0.Final</version>
+        <version>1.6.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -336,7 +336,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.22.jbossorg-1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
