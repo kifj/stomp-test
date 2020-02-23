@@ -808,12 +808,6 @@
               <registry>registry.x1</registry>
               <images>
                 <image>
-                  <name>j7beck/x1-haproxy-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
-                  <build>
-                    <dockerFileDir>x1-haproxy-stomp-test</dockerFileDir>
-                  </build>
-                </image>
-                <image>
                   <name>j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-postgres-stomp-test</dockerFileDir>
