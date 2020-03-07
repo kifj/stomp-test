@@ -330,7 +330,7 @@
     <dependency>
       <groupId>org.jboss.arquillian.extension</groupId>
       <artifactId>arquillian-jacoco</artifactId>
-      <version>1.0.0</version>
+      <version>1.1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -663,7 +663,6 @@
                 <arquillian.launch>jbossas-remote</arquillian.launch>
                 <jboss.managementAddress>127.0.0.1</jboss.managementAddress>
                 <jboss.managementPort>9990</jboss.managementPort>
-                <jboss.httpPort>8080</jboss.httpPort>
                 <jboss.user>admin</jboss.user>
                 <jboss.password>12345</jboss.password>
                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
@@ -710,6 +709,7 @@
               <systemPropertyVariables>
                 <org.jboss.logging.provider>slf4j</org.jboss.logging.provider>
                 <arquillian.launch>docker-stomp-test-it</arquillian.launch>
+                <jboss.managementPort>10090</jboss.managementPort>
                 <jboss.user>admin</jboss.user>
                 <jboss.password>12345</jboss.password>
                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>

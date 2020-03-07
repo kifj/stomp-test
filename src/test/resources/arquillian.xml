@@ -52,12 +52,12 @@
       stomp-test-it:
         image: j7beck/x1-wildfly-stomp-test-it:1.6
         alwaysPull: false
-        portBindings: [9990/tcp, 8080/tcp]
+        portBindings: [10090->9990/tcp,8180->8080/tcp]
         await:
           strategy: http
           responseCode: 200
-          url: http://dockerHost:8080
-          sleepPollingTime: 5 s
+          url: http://dockerHost:8180
+          sleepPollingTime: 5s
           iterations: 10
           stdErr: true
           stdOut: true
