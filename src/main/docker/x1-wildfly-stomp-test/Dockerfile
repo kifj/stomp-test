@@ -1,4 +1,4 @@
-FROM registry.x1/j7beck/x1-wildfly-slot0:18.0.1.Final
+FROM j7beck/x1-wildfly-slot0:18.0.1.Final
 MAINTAINER joe <joe@mail.x1>
 
 USER root
