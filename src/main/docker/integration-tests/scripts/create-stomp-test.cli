@@ -1,3 +1,5 @@
+embed-server --admin-only --server-config=profile-slot0.xml --std-out=echo
+
 if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:read-resource
   /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:add(\
     durable=true,\
@@ -11,4 +13,7 @@ if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topi
     )
 end-if
 
+if (outcome == success) of /system-property=x1.service.registry.etcd:read-resource
+	/system-property=x1.service.registry.etcd:remove()
+end-if
 /system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
