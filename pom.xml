@@ -441,7 +441,8 @@
                 </artifact>
               </artifacts>
             </configuration>
-          </execution>        </executions>
+          </execution>
+        </executions>
         <configuration>
           <propertyPrefix>app</propertyPrefix>
         </configuration>

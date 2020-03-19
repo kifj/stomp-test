@@ -1,3 +1,5 @@
+embed-server --admin-only --server-config=profile-slot0.xml --std-out=echo
+
 if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
   /subsystem=datasources/data-source=stocksDS:add( \
     jndi-name=java:jboss/datasources/stocksDS, \
@@ -40,8 +42,17 @@ if (outcome != success) of /subsystem=ejb3/service=timer-service/database-data-s
     )
 end-if
 
-/system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:remove()
+if (outcome == success) of /system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:read-resource
+	/system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:remove()
+end-if
 /system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:add(value="stomp-test")
-/system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
-/system-property=x1.service.registry.stage:add(value="kubernetes")
 
+if (outcome == success) of /system-property=x1.service.registry.etcd:read-resource
+  /system-property=x1.service.registry.etcd:remove()
+end-if
+/system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
+
+if (outcome == success) of /system-property=x1.service.registry.stage:read-resource
+  /system-property=x1.service.registry.stage:remove()
+end-if
+/system-property=x1.service.registry.stage:add(value="kubernetes")
