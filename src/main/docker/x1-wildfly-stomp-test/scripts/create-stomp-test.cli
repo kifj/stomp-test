@@ -48,11 +48,11 @@ end-if
 /system-property=net.logstash.logging.formatter.LogstashUtilFormatter.tags:add(value="stomp-test")
 
 if (outcome == success) of /system-property=x1.service.registry.etcd:read-resource
-	/system-property=x1.service.registry.etcd:remove()
+  /system-property=x1.service.registry.etcd:remove()
 end-if
 /system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
 
 if (outcome == success) of /system-property=x1.service.registry.stage:read-resource
-	/system-property=x1.service.registry.stage:remove()
+  /system-property=x1.service.registry.stage:remove()
 end-if
 /system-property=x1.service.registry.stage:add(value="kubernetes")
