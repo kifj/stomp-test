@@ -7,8 +7,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
@@ -22,12 +20,10 @@ public class QuoteRetriever {
   @Inject
   private QuickQuoteService quickQuoteService;
   
-  @Timed(name = "retrieve-quote-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Optional<Quote> retrieveQuote(Share share) {
     return createQuote(retrieveQuotes(share.getKey()), share);
   }
 
-  @Timed(name = "retrieve-quotes-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public List<Quote> retrieveQuotes(List<Share> shares) {
     if (shares.isEmpty()) {
       return new ArrayList<>();
