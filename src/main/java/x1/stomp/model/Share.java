@@ -16,9 +16,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Entity
 @XmlRootElement(name = "share")
@@ -29,7 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 @NamedQuery(name = Share.FIND_BY_KEY, query = "from Share s where s.key = :key")
 @NamedQuery(name = Share.LIST_ALL, query = "from Share s order by s.name")
 @NamedQuery(name = Share.COUNT_ALL, query = "select count(s.id) from Share s")
-@Schema(description = "Shares are identified by stock symbols, and may have an name for readability.")
+@Schema(name = "share", description = "Shares are identified by stock symbols, and may have an name for readability.")
 @JsonRootName(value = "share")
 public class Share implements Serializable {
   public static final String FIND_BY_KEY = "Share.findByKey";
@@ -76,7 +75,7 @@ public class Share implements Serializable {
   @XmlElement(name = "link")
   @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
   @Transient
-  @ArraySchema(schema = @Schema(implementation = SimpleLink.class, accessMode = AccessMode.READ_ONLY))
+  @Schema(type=SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
   private List<Link> links;
 
   public Long getId() {

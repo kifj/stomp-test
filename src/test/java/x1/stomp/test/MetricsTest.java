@@ -40,8 +40,8 @@ public class MetricsTest {
 
   @Deployment
   public static Archive<?> createTestArchive() {
-    var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("io.swagger.core.v3:swagger-jaxrs2", "org.assertj:assertj-core").withTransitivity().asFile();
+    var libraries = Maven.resolver().loadPomFromFile("pom.xml").resolve("org.assertj:assertj-core").withTransitivity()
+        .asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")

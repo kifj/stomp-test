@@ -2,7 +2,7 @@ package x1.stomp.model;
 
 import javax.ws.rs.core.MediaType;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name = "link", description = "HTTP Link")
 public class SimpleLink {

@@ -8,10 +8,10 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @XmlRootElement(name = "errors")
-@Schema(description = "Error response")
+@Schema(name = "errors", description = "Error response")
 public class ErrorResponse {
   public ErrorResponse() {
     errors = new ArrayList<>();

@@ -1,12 +1,12 @@
 package x1.stomp.boundary;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "error")
-@Schema(description = "Structured error message")
+@Schema(name = "error", description = "Structured error message")
 public class ErrorMessage {
   public ErrorMessage() {
   }

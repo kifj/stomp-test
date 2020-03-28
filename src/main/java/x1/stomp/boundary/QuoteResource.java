@@ -1,13 +1,14 @@
 package x1.stomp.boundary;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
@@ -88,12 +89,12 @@ public class QuoteResource {
   @GET
   @Path("/{key}")
   @Formatted
-  @Operation(description = "get a quote",
-      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
-          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
-  @ApiResponse(responseCode = "200", description = "Quote received",
+  @Operation(description = "get a quote")
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+    @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
+  @APIResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
-  @ApiResponse(responseCode = "404", description = "Subscription not found")
+  @APIResponse(responseCode = "404", description = "Subscription not found")
   @Metered(name = "quote-meter", absolute = true)
   public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") String key) {
@@ -111,15 +112,15 @@ public class QuoteResource {
   @GET
   @Path("/")
   @Formatted
-  @Operation(description = "get quotes",
-      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+  @Operation(description = "get quotes")
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
           @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
-  @ApiResponse(responseCode = "200", description = "Quotes received",
+  @APIResponse(responseCode = "200", description = "Quotes received",
       content = {
           @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = APPLICATION_XML),
-          @Content(array = @ArraySchema(schema = @Schema(implementation = Quote.class)),
+          @Content(schema = @Schema(type=SchemaType.ARRAY, implementation = Quote.class),
               mediaType = APPLICATION_JSON) })
-  @ApiResponse(responseCode = "404", description = "No subscription found")
+  @APIResponse(responseCode = "404", description = "No subscription found")
   @Metered(name = "quotes-meter", absolute = true)
   public void getQuotes(
       @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") List<String> keys,

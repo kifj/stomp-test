@@ -18,16 +18,15 @@ import static javax.ws.rs.core.MediaType.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
 import javax.ws.rs.core.UriInfo;
 
 import static org.jboss.resteasy.spi.CorsHeaders.*;
-
-import io.swagger.v3.oas.annotations.Operation;
 
 @Path(RootResource.PATH)
 public class RootResource {
@@ -41,7 +40,7 @@ public class RootResource {
 
   @GET
   @Operation(description = "Link to available resources")
-  @ApiResponse(responseCode = "200", description = "The root resource",
+  @APIResponse(responseCode = "200", description = "The root resource",
     content = @Content(schema = @Schema(implementation = IndexResponse.class)))
   @Produces({ APPLICATION_JSON, APPLICATION_XML })
   @Formatted

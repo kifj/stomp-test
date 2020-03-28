@@ -12,14 +12,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
+import org.eclipse.microprofile.openapi.annotations.ExternalDocumentation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @XmlRootElement(name = "quote")
 @JsonRootName(value = "quote")
-@Schema(description = "A quote is the current price for a share", accessMode = AccessMode.READ_ONLY)
+@Schema(name = "quote", description = "A quote is the current price for a share", readOnly = true)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Quote implements Serializable {
   private static final long serialVersionUID = -6139640371442481033L;
@@ -40,7 +39,7 @@ public class Quote implements Serializable {
   @JsonProperty(value = "links")
   @XmlElement(name = "link")
   @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-  @ArraySchema(schema = @Schema(implementation = SimpleLink.class, accessMode = AccessMode.READ_ONLY))
+  @Schema(type=SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
   private List<Link> links;
 
   public Quote() {

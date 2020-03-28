@@ -1,13 +1,14 @@
 package x1.stomp.boundary;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -22,6 +23,7 @@ import x1.service.registry.Services;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Action;
 import x1.stomp.model.Share;
+import x1.stomp.model.ShareWrapper;
 import x1.stomp.util.Logged;
 import x1.stomp.util.StockMarket;
 import x1.stomp.version.VersionData;
@@ -57,6 +59,7 @@ import static x1.service.registry.Technology.REST;
 @Logged
 @Traced
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
+
 public class ShareResource {
   private static final String CORRELATION_ID = "correlationId";
 
@@ -82,11 +85,12 @@ public class ShareResource {
   @GET
   @Wrapped(element = "shares")
   @Formatted
-  @Operation(description = "List all subscriptions",
-      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+  @Operation(description = "List all subscriptions")
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
           @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
-  @ApiResponse(responseCode = "200", description = "All subscriptions",
-      content = @Content(array = @ArraySchema(schema = @Schema(implementation = Share.class))))
+  @APIResponse(responseCode = "200", description = "All subscriptions", content = {
+          @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class), mediaType = APPLICATION_JSON),
+          @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML)})
   @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public List<Share> listAllShares() {
     var shares = shareSubscription.list();
@@ -97,12 +101,12 @@ public class ShareResource {
   @GET
   @Path("/{key}")
   @Formatted
-  @Operation(description = "Find a share subscription",
-      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+  @Operation(description = "Find a share subscription")
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
           @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
-  @ApiResponse(responseCode = "200", description = "Subscription found",
+  @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
-  @ApiResponse(responseCode = "404", description = "Subscription not found")
+  @APIResponse(responseCode = "404", description = "Subscription not found")
   @Timed(name = "get-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") String key) {
@@ -117,13 +121,13 @@ public class ShareResource {
 
   @POST
   @Formatted
-  @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare",
-      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+  @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare")
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
           @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
-  @ApiResponse(responseCode = "201", description = "Share queued for subscription",
+  @APIResponse(responseCode = "201", description = "Share queued for subscription",
           content = @Content(schema = @Schema(implementation = Share.class)))
-  @ApiResponse(responseCode = "500", description = "Queuing failed")
-  @ApiResponse(responseCode = "400", description = "Invalid data",
+  @APIResponse(responseCode = "500", description = "Queuing failed")
+  @APIResponse(responseCode = "400", description = "Invalid data",
           content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
   @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response addShare(
@@ -154,12 +158,12 @@ public class ShareResource {
   @DELETE
   @Path("/{key}")
   @Formatted
-  @Operation(description = "Remove a subscription of a share",
-      parameters = { @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
+  @Operation(description = "Remove a subscription of a share")
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
           @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
-  @ApiResponse(responseCode = "200", description = "Subscription removed",
+  @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
-  @ApiResponse(responseCode = "404", description = "Subscription was not found")
+  @APIResponse(responseCode = "404", description = "Subscription was not found")
   @Timed(name = "remove-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
   public Response removeShare(@Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") String key) {
     var share = shareSubscription.find(key);

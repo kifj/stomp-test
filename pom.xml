@@ -43,7 +43,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
-    <swagger.version>2.1.1</swagger.version>
     <junit.jupiter.version>5.6.0</junit.jupiter.version>
     <jacoco.version>0.8.3</jacoco.version>
   </properties>
@@ -189,6 +188,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.eclipse.microprofile.openapi</groupId>
+      <artifactId>microprofile-openapi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxb-provider</artifactId>
       <scope>provided</scope>
@@ -257,21 +261,6 @@
       <groupId>x1.wildfly</groupId>
       <artifactId>service-registry</artifactId>
       <version>1.2.5</version>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-jaxrs2</artifactId>
-      <version>${swagger.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.xml.bind</groupId>
-          <artifactId>jaxb-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.validation</groupId>
-          <artifactId>validation-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -369,25 +358,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>io.swagger.core.v3</groupId>
-        <artifactId>swagger-maven-plugin</artifactId>
-        <version>${swagger.version}</version>
-        <configuration>
-          <outputFileName>openapi</outputFileName>
-          <outputPath>${project.build.directory}</outputPath>
-          <outputFormat>YAML</outputFormat>
-          <configurationFilePath>${project.basedir}/etc/openapi.yaml</configurationFilePath>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>resolve</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>3.2.3</version>
         <configuration>
@@ -425,22 +395,6 @@
             <goals>
               <goal>parse-version</goal>
             </goals>
-          </execution>
-          <execution>
-            <id>attach-artifacts</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>${project.build.directory}/openapi.yaml</file>
-                  <type>yaml</type>
-                  <classifier>openapi</classifier>
-                </artifact>
-              </artifacts>
-            </configuration>
           </execution>
         </executions>
         <configuration>
@@ -809,13 +763,13 @@
               <registry>registry.x1</registry>
               <images>
                 <image>
-                  <name>j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
+                  <name>registry.x1/j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-postgres-stomp-test</dockerFileDir>
                   </build>
                 </image>
                 <image>
-                  <name>j7beck/x1-wildfly-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
+                  <name>registry.x1/j7beck/x1-wildfly-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-wildfly-stomp-test</dockerFileDir>
                     <assembly>
