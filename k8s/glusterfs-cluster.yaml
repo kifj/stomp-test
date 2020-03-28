@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: glusterfs-cluster 
+  namespace: stomp-test
+spec:
+  ports:
+  - port: 1

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: wildfly
+  name: wildfly
+  namespace: stomp-test
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 8443
+    protocol: TCP
+    targetPort: 8443
+  - name: management-http
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    deploymentconfig: wildfly
+  sessionAffinity: None

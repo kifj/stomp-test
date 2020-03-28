@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: wildfly
+  labels:
+    app: wildfly
+  namespace: stomp-test
+spec:
+  selector:
+    matchLabels:
+      app: wildfly
+  endpoints:
+  - port: management-http
+    path: /metrics
+    interval: 60s

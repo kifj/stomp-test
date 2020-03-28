@@ -1,0 +1,119 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: postgresql-persistent
+  name: postgresql
+  namespace: stomp-test
+spec:
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        deployment: postgresql
+        deploymentconfig: postgresql
+        name: postgresql
+    spec:
+      securityContext:
+        fsGroup: 26
+      containers:
+      - env:
+        - name: SERVICE_ELASTICSEARCH
+          value: elasticsearch.x1
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: postgresql
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: postgresql
+        - name: DB_NAME
+          value: stocks
+        image: registry.x1/j7beck/x1-postgres-stomp-test:1.6
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - 'pg_isready'
+            - '-q'
+            - '--host'
+            - 'localhost'
+          failureThreshold: 5
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: postgresql
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - 'pg_isready'
+            - '-q'
+            - '--host'
+            - 'localhost'
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 256Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - name: postgresql-data
+          mountPath: /var/lib/pgsql/data
+        - name: pki-secret
+          mountPath: /var/run/x1
+      - name: postgresql-exporter
+        args:
+          - "--web.listen-address=:9104"
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: postgresql
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: postgresql
+        - name: DB_NAME
+          value: stocks
+        - name: DATA_SOURCE_NAME
+          value: postgresql://$(DB_USER):$(DB_PASSWORD)@postgresql:5432/$(DB_NAME)
+        image: wrouesnel/postgres_exporter:v0.8.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9104
+          name: metrics
+      - name: filebeat
+        image: registry.x1/j7beck/x1-filebeat-postgres
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: pki-secret
+          mountPath: /var/run/x1
+        - name: postgresql-data
+          mountPath: /var/lib/pgsql/data
+        env:
+        - name: SERVICE_ELASTICSEARCH
+          value: elasticsearch.x1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: postgresql-data
+        persistentVolumeClaim:
+          claimName: postgresql
+      - name: pki-secret
+        secret:
+          secretName: pki-postgresql-secret
+          defaultMode: 0400

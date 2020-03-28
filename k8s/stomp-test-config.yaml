@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: wildfly
+  name: stomp-test-config
+  namespace: stomp-test
+data:
+  # Replace each character that is neither alphanumeric nor _ with _
+  x1_stomp_control_QuickQuoteService_mp_rest_url: https://quote.cnbc.com/quote-html-webservice
+  x1_stomp_control_QuoteUpdater_enable: 'true'

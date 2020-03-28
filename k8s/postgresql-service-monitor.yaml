@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: postgresql
+  labels:
+    app: postgresql
+  namespace: stomp-test
+spec:
+  selector:
+    matchLabels:
+      app: postgresql-persistent
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 60s

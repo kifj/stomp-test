@@ -1,0 +1,112 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: wildfly
+  name: wildfly
+  namespace: stomp-test
+spec:
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        deployment: wildfly
+        deploymentconfig: wildfly
+        app: wildfly
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: wildfly
+      containers:
+      - name: wildfly
+        image: registry.x1/j7beck/x1-wildfly-stomp-test:1.6
+        imagePullPolicy: Always
+        env:
+        - name: DB_SERVER
+          value: postgresql
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: postgresql
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: postgresql
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: JAEGER_SERVICE_NAME
+          value: hikingtracks
+        - name: JAEGER_ENDPOINT
+          value: http://jaeger-simple-collector.observability:14268/api/traces
+        - name: JAEGER_SAMPLER_TYPE
+          value: probabilistic
+        - name: JAEGER_SAMPLER_PARAM
+          value: "0.1"
+        resources:
+          limits:
+            memory: "640Mi"
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/live
+            port: 9990
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 30
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        volumeMounts:
+        - name: pki-secret
+          mountPath: /var/run/x1
+        - name: application-config
+          mountPath: /srv/wildfly/slot0/configuration/application
+        - name: log
+          mountPath: /srv/wildfly/slot0/log
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/ready
+            port: 9990
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 30
+      - name: filebeat
+        image: registry.x1/j7beck/x1-filebeat-wildfly
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: pki-secret
+          mountPath: /var/run/x1
+        - name: log
+          mountPath: /var/log/wildfly
+        env:
+        - name: SERVICE_ELASTICSEARCH
+          value: elasticsearch.x1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: pki-secret
+        secret:
+          secretName: pki-wildfly-secret
+      - name: log
+        emptyDir: {}
+      - name: application-config
+        configMap:
+          name: stomp-test-config  
+        
