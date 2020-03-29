@@ -1,12 +1,14 @@
 package x1.stomp.util;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -19,12 +21,16 @@ public class LoggingInterceptor {
 
   @AroundInvoke
   public Object log(InvocationContext ctx) throws Exception {
+    var keys = new ArrayList<String>();
     try {
-      Logged annotation = ctx.getMethod().getAnnotation(Logged.class);
+      var annotation = ctx.getMethod().getAnnotation(Logged.class);
       if (annotation == null) {
         annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Logged.class);
       }
-      Object result = ctx.proceed();
+      if (annotation != null) {
+        keys = withMdc(ctx);
+      }
+      var result = ctx.proceed();
       if (annotation != null && !annotation.onlyFailures()) {
         logCall(ctx, result);
       }
@@ -35,16 +41,18 @@ public class LoggingInterceptor {
     } catch (Exception e) {
       logFailure(ctx, e);
       throw e;
+    } finally {
+      clearMdc(keys);
     }
   }
 
   private void logCall(InvocationContext ctx, Object result) {
-    var argLine = ctx.getMethod() + ": " + Arrays.toString(ctx.getParameters()) + " -> " + result;
+    var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") -> " + result;
     getLogger(ctx).debug(argLine);
   }
 
   private void logFailure(InvocationContext ctx, Exception e) {
-    var argLine = ctx.getMethod() + ": " + Arrays.toString(ctx.getParameters()) + " failed";
+    var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") failed";
     getLogger(ctx).error(argLine, e);
   }
 
@@ -52,7 +60,7 @@ public class LoggingInterceptor {
     var response = e.getResponse();
     try {
       MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(response.getStatus()));
-      var argLine = ctx.getMethod() + ": " + Arrays.toString(ctx.getParameters()) + " -> status="
+      var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") -> status="
           + response.getStatus();
       var log = getLogger(ctx);
       switch (response.getStatusInfo().getFamily()) {
@@ -77,4 +85,32 @@ public class LoggingInterceptor {
   private Logger getLogger(InvocationContext ctx) {
     return LoggerFactory.getLogger(ctx.getMethod().getDeclaringClass().getName());
   }
+
+  private ArrayList<String> withMdc(InvocationContext ctx) {
+    var keys = new ArrayList<String>();
+    var method = ctx.getMethod();
+    var parameters = method.getParameters();
+
+    int i = 0;
+    for (var annotations : method.getParameterAnnotations()) {
+      for (var annotation : annotations) {
+        if (annotation instanceof MDCKey) {
+          MDCKey mdcKey = (MDCKey) annotation;
+          String key = StringUtils.defaultIfEmpty(mdcKey.value(), parameters[i].getName());
+          String value = Objects.toString(ctx.getParameters()[i], null);
+          if (value != null) {
+            keys.add(key);
+            MDC.put(key, value);
+          }
+        }
+      }
+      i++;
+    }
+    return keys;
+  }
+
+  private void clearMdc(ArrayList<String> keys) {
+    keys.forEach(MDC::remove);
+  }
+
 }

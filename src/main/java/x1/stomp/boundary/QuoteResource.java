@@ -19,6 +19,7 @@ import x1.stomp.model.QuoteWrapper;
 import x1.stomp.model.Quotes;
 import x1.stomp.model.Share;
 import x1.stomp.util.Logged;
+import x1.stomp.util.MDCKey;
 import x1.stomp.version.VersionData;
 
 import javax.annotation.Resource;
@@ -38,7 +39,8 @@ import javax.ws.rs.core.*;
 import static javax.ws.rs.core.MediaType.*;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
@@ -66,6 +68,7 @@ import static x1.service.registry.Technology.REST;
 @Consumes({ APPLICATION_JSON, APPLICATION_XML })
 public class QuoteResource {
   protected static final String PATH = "/quotes";
+  private static final String MDC_KEY = "quote";
 
   @Inject
   private Logger log;
@@ -95,9 +98,9 @@ public class QuoteResource {
   @APIResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @Metered(name = "quote-meter", absolute = true)
+  @SimplyTimed(name = "get-quote", absolute = true, unit = MetricUnits.SECONDS)
   public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
-      example = "BMW.DE") @PathParam("key") String key) {
+      example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
     if (share.isPresent()) {
       var quote = quoteRetriever.retrieveQuote(share.get());
@@ -121,9 +124,9 @@ public class QuoteResource {
           @Content(schema = @Schema(type=SchemaType.ARRAY, implementation = Quote.class),
               mediaType = APPLICATION_JSON) })
   @APIResponse(responseCode = "404", description = "No subscription found")
-  @Metered(name = "quotes-meter", absolute = true)
+  @SimplyTimed(name = "get-quotes", absolute = true, unit = MetricUnits.SECONDS)
   public void getQuotes(
-      @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") List<String> keys,
+      @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,
       @Suspended AsyncResponse response) {
     var baseUriBuilder = uriInfo.getBaseUriBuilder();
     withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys, baseUriBuilder)));

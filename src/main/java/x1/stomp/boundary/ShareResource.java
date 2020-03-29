@@ -11,7 +11,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Timed;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
@@ -25,6 +25,7 @@ import x1.stomp.model.Action;
 import x1.stomp.model.Share;
 import x1.stomp.model.ShareWrapper;
 import x1.stomp.util.Logged;
+import x1.stomp.util.MDCKey;
 import x1.stomp.util.StockMarket;
 import x1.stomp.version.VersionData;
 
@@ -59,10 +60,9 @@ import static x1.service.registry.Technology.REST;
 @Logged
 @Traced
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
-
 public class ShareResource {
+  private static final String MDC_KEY = "share";
   private static final String CORRELATION_ID = "correlationId";
-
   protected static final String PATH = "/shares";
 
   @Inject
@@ -91,7 +91,7 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "All subscriptions", content = {
           @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class), mediaType = APPLICATION_JSON),
           @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML)})
-  @Timed(name = "get-shares-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @SimplyTimed(name = "get-shares", absolute = true, unit = MetricUnits.SECONDS)
   public List<Share> listAllShares() {
     var shares = shareSubscription.list();
     shares.forEach(share -> addLinks(uriInfo.getBaseUriBuilder(), share));
@@ -107,12 +107,11 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @Timed(name = "get-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @SimplyTimed(name = "get-share", absolute = true, unit = MetricUnits.SECONDS)
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
-      example = "BMW.DE") @PathParam("key") String key) {
+      example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
     if (share.isPresent()) {
-      log.info("findShare({}) returns {}", key, share.get());
       return Response.ok(addLinks(uriInfo.getBaseUriBuilder(), share.get())).build();
     } else {
       throw new NotFoundException();
@@ -129,7 +128,7 @@ public class ShareResource {
   @APIResponse(responseCode = "500", description = "Queuing failed")
   @APIResponse(responseCode = "400", description = "Invalid data",
           content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-  @Timed(name = "add-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @SimplyTimed(name = "add-share", absolute = true, unit = MetricUnits.SECONDS)
   public Response addShare(
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
@@ -143,6 +142,7 @@ public class ShareResource {
         message.setStringProperty("action", Action.SUBSCRIBE.name());
         producer.send(message);
         MDC.put(CORRELATION_ID, message.getJMSCorrelationID());
+        MDC.put(MDC_KEY, share.getKey());
         log.debug("message sent: {}", message);
       }
       var location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
@@ -152,6 +152,7 @@ public class ShareResource {
       return Response.status(INTERNAL_SERVER_ERROR).build();
     } finally {
       MDC.remove(CORRELATION_ID);
+      MDC.remove(MDC_KEY);
     }
   }
 
@@ -164,8 +165,10 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")
-  @Timed(name = "remove-share-timer", absolute = true, unit = MetricUnits.MILLISECONDS)
-  public Response removeShare(@Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") String key) {
+  @SimplyTimed(name = "remove-share", absolute = true, unit = MetricUnits.SECONDS)
+  public Response removeShare(
+      @Parameter(description = "Stock symbol", example = "GOOG") 
+      @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
     if (share.isPresent()) {
       shareSubscription.unsubscribe(share.get());

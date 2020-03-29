@@ -9,7 +9,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Timed;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -22,6 +22,6 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 public interface QuickQuoteService {
   @GET
   @Path("/quote.htm")
-  @Timed(name = "quickquote-retrieve", absolute = true, unit = MetricUnits.MILLISECONDS)
+  @SimplyTimed(name = "retrieve-quickquote", absolute = true, unit = MetricUnits.SECONDS)
   Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
 }
