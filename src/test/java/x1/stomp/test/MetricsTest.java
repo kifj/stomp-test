@@ -85,19 +85,18 @@ public class MetricsTest {
     });
     assertThat(shares).isEmpty();
 
-    var response = client.target(metricsBaseUrl).path("metrics").path("application").request(APPLICATION_JSON)
-        .get();
+    var response = client.target(metricsBaseUrl).path("metrics").path("application").request(APPLICATION_JSON).get();
     assertThat(response).hasStatus(OK);
-    
+
     var body = response.readEntity(String.class);
     assertThat(body).isNotNull();
-    
+
     var o = new JsonParser().parse(body).getAsJsonObject();
     assertThat(o).isNotNull();
-    assertThat(o.getAsJsonObject("add-share-timer").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
-    assertThat(o.getAsJsonObject("get-share-timer").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
-    assertThat(o.getAsJsonObject("remove-share-timer").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
-    assertThat(o.getAsJsonObject("get-shares-timer").getAsJsonPrimitive("count").getAsInt()).isEqualTo(1);
+    assertThat(o.getAsJsonObject("add-share").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
+    assertThat(o.getAsJsonObject("get-share").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
+    assertThat(o.getAsJsonObject("remove-share").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
+    assertThat(o.getAsJsonObject("get-shares").getAsJsonPrimitive("count").getAsInt()).isEqualTo(1);
   }
 
   @Test
