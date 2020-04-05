@@ -14,8 +14,7 @@ import org.eclipse.microprofile.openapi.models.OpenAPI;
 
 @WebListener
 public class OpenAPIModelBuilder implements OASModelReader, ServletContextListener {
-  public static final String ROOT = "/rest";
-  private static final CountDownLatch LOCK = new CountDownLatch(1);;
+  private static final CountDownLatch LOCK = new CountDownLatch(1);
   private static ServletContext servletContext;
   
   @Override
@@ -27,12 +26,7 @@ public class OpenAPIModelBuilder implements OASModelReader, ServletContextListen
   @Override
   public OpenAPI buildModel() {
     var openAPI =  OASFactory.createOpenAPI();
-    try {
-      LOCK.await();
-    } catch (InterruptedException e1) {
-     return openAPI;
-    }
-    
+	
     // read info from manifest
     try {
       var manifest = new Manifest(servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));
@@ -47,6 +41,12 @@ public class OpenAPIModelBuilder implements OASModelReader, ServletContextListen
       openAPI.info(info);
     } catch (Exception e) {
       // ignore
+    }
+
+    try {
+      LOCK.await();
+    } catch (InterruptedException e1) {
+     return openAPI;
     }
 
     // add server by a relative url: works only if using swagger UI deployed with
