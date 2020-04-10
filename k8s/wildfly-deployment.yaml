@@ -44,13 +44,7 @@ spec:
               apiVersion: v1
               fieldPath: metadata.namespace
         - name: JAEGER_SERVICE_NAME
-          value: hikingtracks
-        - name: JAEGER_ENDPOINT
-          value: http://jaeger-simple-collector.observability:14268/api/traces
-        - name: JAEGER_SAMPLER_TYPE
-          value: probabilistic
-        - name: JAEGER_SAMPLER_PARAM
-          value: "0.1"
+          value: stomp-test
         resources:
           limits:
             memory: "640Mi"

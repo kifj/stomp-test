@@ -10,9 +10,9 @@ end-if
 if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
   /subsystem=datasources/data-source=stocksDS:add( \
     jndi-name=java:jboss/datasources/stocksDS, \
-    connection-url=jdbc:postgresql://${env.DB_SERVER}/stocks,\
-    user-name=${env.DB_USER}, \
-    password=${env.DB_PASSWORD}, \
+    connection-url=jdbc:postgresql://${env.DB_SERVER:postgresql}:${env.DB_PORT:5432}/stocks,\
+    user-name=${env.DB_USER:stocks}, \
+    password=${env.DB_PASSWORD:stocks}, \
     statistics-enabled=true,\
     min-pool-size=2,\
     max-pool-size=5,\
@@ -63,3 +63,14 @@ if (outcome == success) of /system-property=x1.service.registry.stage:read-resou
   /system-property=x1.service.registry.stage:remove()
 end-if
 /system-property=x1.service.registry.stage:add(value="kubernetes")
+
+if (outcome != success) of /subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger-operator:read-resource
+  /subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger-operator:add(\
+    sampler-type=probabilistic,\
+    sampler-param=0.1,\
+    tags={{service=stomp-test,deployment=wildfly}},\
+    sender-endpoint="http://jaeger-simple-collector.observability:14268/api/traces")
+end-if
+
+/subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=stomp-test)
+

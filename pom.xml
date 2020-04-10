@@ -806,7 +806,7 @@
               <registry>registry.x1</registry>
               <images>
                 <image>
-                  <name>j7beck/x1-wildfly-stomp-test-it:${app.majorVersion}.${app.minorVersion}</name>
+                  <name>registry.x1/j7beck/x1-wildfly-stomp-test-it:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>integration-tests</dockerFileDir>
                   </build>
