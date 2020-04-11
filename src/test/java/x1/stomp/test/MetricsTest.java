@@ -93,10 +93,10 @@ public class MetricsTest {
 
     var o = new JsonParser().parse(body).getAsJsonObject();
     assertThat(o).isNotNull();
-    assertThat(o.getAsJsonObject("add-share").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
-    assertThat(o.getAsJsonObject("get-share").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
-    assertThat(o.getAsJsonObject("remove-share").getAsJsonPrimitive("count").getAsInt()).isEqualTo(0);
-    assertThat(o.getAsJsonObject("get-shares").getAsJsonPrimitive("count").getAsInt()).isEqualTo(1);
+    assertThat(o.getAsJsonObject("add-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
+    assertThat(o.getAsJsonObject("get-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
+    assertThat(o.getAsJsonObject("remove-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
+    assertThat(o.getAsJsonObject("get-shares").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(1);
   }
 
   @Test
