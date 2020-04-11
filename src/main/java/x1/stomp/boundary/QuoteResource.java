@@ -39,6 +39,7 @@ import javax.ws.rs.core.*;
 import static javax.ws.rs.core.MediaType.*;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.opentracing.Traced;
@@ -98,7 +99,8 @@ public class QuoteResource {
   @APIResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @SimplyTimed(name = "get-quote", absolute = true, unit = MetricUnits.SECONDS)
+  @SimplyTimed(name = "get-quote", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=QuoteResource"})
+  @Bulkhead(value = 5)
   public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
@@ -124,7 +126,8 @@ public class QuoteResource {
           @Content(schema = @Schema(type=SchemaType.ARRAY, implementation = Quote.class),
               mediaType = APPLICATION_JSON) })
   @APIResponse(responseCode = "404", description = "No subscription found")
-  @SimplyTimed(name = "get-quotes", absolute = true, unit = MetricUnits.SECONDS)
+  @SimplyTimed(name = "get-quotes", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=QuoteResource"})
+  @Bulkhead(value = 5)
   public void getQuotes(
       @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,
       @Suspended AsyncResponse response) {

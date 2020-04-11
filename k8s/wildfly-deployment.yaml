@@ -5,6 +5,9 @@ metadata:
     app: wildfly
   name: wildfly
   namespace: stomp-test
+  annotations:
+    #reloader.stakater.com/auto: "true"
+    configmap.reloader.stakater.com/reload: stomp-test-config
 spec:
   replicas: 0
   template:

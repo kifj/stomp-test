@@ -9,7 +9,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.opentracing.Traced;
@@ -91,7 +91,8 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "All subscriptions", content = {
           @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class), mediaType = APPLICATION_JSON),
           @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML)})
-  @SimplyTimed(name = "get-shares", absolute = true, unit = MetricUnits.SECONDS)
+  @SimplyTimed(name = "get-shares", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
+  @Bulkhead(value = 5)
   public List<Share> listAllShares() {
     var shares = shareSubscription.list();
     shares.forEach(share -> addLinks(uriInfo.getBaseUriBuilder(), share));
@@ -107,7 +108,8 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @SimplyTimed(name = "get-share", absolute = true, unit = MetricUnits.SECONDS)
+  @SimplyTimed(name = "get-share", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
+  @Bulkhead(value = 5)
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
@@ -128,7 +130,7 @@ public class ShareResource {
   @APIResponse(responseCode = "500", description = "Queuing failed")
   @APIResponse(responseCode = "400", description = "Invalid data",
           content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-  @SimplyTimed(name = "add-share", absolute = true, unit = MetricUnits.SECONDS)
+  @SimplyTimed(name = "add-share", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
   public Response addShare(
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
@@ -165,7 +167,7 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")
-  @SimplyTimed(name = "remove-share", absolute = true, unit = MetricUnits.SECONDS)
+  @SimplyTimed(name = "remove-share", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
   public Response removeShare(
       @Parameter(description = "Stock symbol", example = "GOOG") 
       @PathParam("key") @MDCKey(MDC_KEY) String key) {

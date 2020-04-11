@@ -18,10 +18,10 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @RegisterProvider(QuickQuoteResponseExceptionMapper.class)
 @RegisterRestClient
 @Dependent
-@Traced(value = true)
+@Traced
 public interface QuickQuoteService {
   @GET
   @Path("/quote.htm")
-  @SimplyTimed(name = "retrieve-quickquote", absolute = true, unit = MetricUnits.SECONDS)
+  @SimplyTimed(name = "retrieve-quickquote", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=QuickQuoteService"})
   Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
 }

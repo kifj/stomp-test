@@ -1,8 +1,5 @@
 embed-server --admin-only --server-config=profile-slot0.xml --std-out=echo
 
-#/extension=org.wildfly.extension.microprofile.openapi-smallrye:add
-#/subsystem=microprofile-openapi-smallrye:add
-
 if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:read-resource
   /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:add(\
     durable=true,\

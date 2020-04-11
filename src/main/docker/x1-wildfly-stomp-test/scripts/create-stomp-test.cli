@@ -1,8 +1,5 @@
 embed-server --admin-only --server-config=profile-slot0.xml --std-out=echo
 
-#/extension=org.wildfly.extension.microprofile.openapi-smallrye:add
-#/subsystem=microprofile-openapi-smallrye:add
-
 if (outcome != success) of /subsystem=microprofile-config-smallrye/config-source=stomp-test:read-resource
   /subsystem=microprofile-config-smallrye/config-source=stomp-test:add(dir={path="/srv/wildfly/slot0/configuration/application"}, ordinal=200)
 end-if

@@ -64,7 +64,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   @OnOpen
   public void onConnectionOpen(Session session) {
-    log.info("Connection opened for session {}", session.getId());
+    log.debug("Connection opened for session {}", session.getId());
     sessionHolder.put(session.getId(), session);
     quoteUpdater.updateQuotes();
   }
@@ -108,7 +108,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   @OnClose
   public void onConnectionClose(Session session) {
-    log.info("Connection close for session {}", session.getId());
+    log.debug("Connection close for session {}", session.getId());
     sessionHolder.remove(session.getId());
   }
 
