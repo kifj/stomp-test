@@ -72,5 +72,5 @@ if (outcome != success) of /subsystem=microprofile-opentracing-smallrye/jaeger-t
     sender-endpoint="http://jaeger-simple-collector.observability:14268/api/traces")
 end-if
 
-/subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=stomp-test)
+/subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-operator)
 
