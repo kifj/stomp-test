@@ -26,7 +26,7 @@ public class OpenAPIModelBuilder implements OASModelReader, ServletContextListen
   @Override
   public OpenAPI buildModel() {
     var openAPI =  OASFactory.createOpenAPI();
-	
+
     // read info from manifest
     try {
       var manifest = new Manifest(servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));

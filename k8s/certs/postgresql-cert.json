@@ -1,5 +1,6 @@
 {
   "hosts": [
+    "postgresql",
     "postgresql.stomp-test.svc.cluster.local",
     "postgresql.stomp-test.pod.cluster.local"
   ],

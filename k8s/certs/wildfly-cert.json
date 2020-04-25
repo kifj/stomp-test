@@ -1,5 +1,7 @@
 {
   "hosts": [
+    "wildfly",
+    "wildfly.stomp-test",
     "wildfly.stomp-test.svc.cluster.local",
     "wildfly.stomp-test.pod.cluster.local",
     "stomp-test.docker.x1",
