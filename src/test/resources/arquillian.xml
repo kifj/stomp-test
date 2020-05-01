@@ -50,7 +50,7 @@
     <property name="clean">true</property>
     <property name="dockerContainers">
       stomp-test-it:
-        image: j7beck/x1-wildfly-stomp-test-it:1.6
+        image: registry.x1/j7beck/x1-wildfly-stomp-test-it:1.6
         alwaysPull: false
         portBindings: [10090->9990/tcp,8180->8080/tcp]
         await:
