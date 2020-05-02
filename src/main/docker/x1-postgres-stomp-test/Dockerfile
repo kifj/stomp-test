@@ -1,4 +1,4 @@
-FROM j7beck/x1-postgres
+FROM registry.x1/j7beck/x1-postgres
 MAINTAINER joe <joe@mail.x1>
 
 USER root
