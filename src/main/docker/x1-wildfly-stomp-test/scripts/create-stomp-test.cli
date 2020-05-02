@@ -1,7 +1,7 @@
-embed-server --admin-only --server-config=profile-slot0.xml --std-out=echo
+embed-server --admin-only --server-config=profile.xml --std-out=echo
 
 if (outcome != success) of /subsystem=microprofile-config-smallrye/config-source=stomp-test:read-resource
-  /subsystem=microprofile-config-smallrye/config-source=stomp-test:add(dir={path="/srv/wildfly/slot0/configuration/application"}, ordinal=200)
+  /subsystem=microprofile-config-smallrye/config-source=stomp-test:add(dir={path="/srv/wildfly/configuration/application"}, ordinal=200)
 end-if
 
 if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
@@ -70,4 +70,3 @@ if (outcome != success) of /subsystem=microprofile-opentracing-smallrye/jaeger-t
 end-if
 
 /subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-operator)
-

@@ -1,9 +1,9 @@
-FROM registry.x1/j7beck/x1-wildfly-slot0:19.0.0.Final
+FROM registry.x1/j7beck/x1-wildfly-profile:19.0.0.Final
 MAINTAINER joe <joe@mail.x1>
 
 USER root
 COPY scripts /srv/wildfly/scripts
-RUN /srv/wildfly/scripts/configure.sh /srv/wildfly/slot0
+RUN /srv/wildfly/scripts/configure.sh /srv/wildfly
 
 RUN rm -rf /srv/wildfly/scripts
 USER jboss:docker

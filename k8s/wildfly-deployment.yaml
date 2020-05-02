@@ -70,9 +70,9 @@ spec:
         - name: pki-secret
           mountPath: /var/run/x1
         - name: application-config
-          mountPath: /srv/wildfly/slot0/configuration/application
+          mountPath: /srv/wildfly/configuration/application
         - name: log
-          mountPath: /srv/wildfly/slot0/log
+          mountPath: /srv/wildfly/log
         readinessProbe:
           failureThreshold: 3
           httpGet:
