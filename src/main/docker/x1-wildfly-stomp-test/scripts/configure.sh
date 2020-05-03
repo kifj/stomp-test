@@ -12,7 +12,7 @@ su jboss -c "$JBOSS_HOME/bin/add-user.sh -s -a -u guest -g guest -r ApplicationR
 
 /usr/local/bin/create-keystore.sh $JBOSS_BASE_DIR/configuration jboss12345 jboss.jboss
 
-su jboss -c "$JBOSS_HOME/bin/standalone.sh -c profile-slot0.xml --admin-only" &
+su jboss -c "$JBOSS_HOME/bin/standalone.sh -c profile.xml --admin-only" &
 timeout 30 bash -c 'until echo > /dev/tcp/localhost/9990; do sleep 1; done' >& /dev/null || exit -1
 
 su jboss -c "$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:9990 --file=$JBOSS_BASE_DIR/../scripts/create-stomp-test.cli"
