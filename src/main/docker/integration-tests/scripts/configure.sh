@@ -3,7 +3,6 @@ MGMT_USER=admin
 MGMT_PASSWORD=12345
 
 export JBOSS_BASE_DIR=$1
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 export JBOSS_HOME=/opt/wildfly
 export RUN_CONF=$WILDFLY_DIR/standalone.conf
 export MAIL_SERVER=localhost

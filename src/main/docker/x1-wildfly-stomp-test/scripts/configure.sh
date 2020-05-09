@@ -4,7 +4,6 @@ export MANAGEMENT=local
 export JBOSS_BASE_DIR=$1
 export JBOSS_HOME=/opt/wildfly
 export RUN_CONF=$JBOSS_BASE_DIR/standalone.conf
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 
 chown -R jboss.jboss /srv/wildfly
 
