@@ -6,4 +6,11 @@ if [ -z "$NAME" ]; then
   exit 1
 fi
 
-cat "$NAME-cert.json" | cfssl genkey - | cfssljson -bare "$NAME"
+if [ -f "$NAME-key.pem" ]
+then
+  echo "Create CSR for $NAME"
+  cat "$NAME-cert.json" | cfssl gencsr -key "$NAME-key.pem" - | cfssljson -bare "$NAME"
+else
+  echo "Create Key and CSR for $NAME"
+  cat "$NAME-cert.json" | cfssl genkey - | cfssljson -bare "$NAME"
+fi

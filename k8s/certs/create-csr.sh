@@ -17,7 +17,7 @@ kind: CertificateSigningRequest
 metadata:
   name: $NAME.$NAMESPACE
 spec:
-  request: $(cat "$NAME".csr | base64 | tr -d '\n')
+  request: $(cat "$NAME.csr" | base64 | tr -d '\n')
   usages:
   - digital signature
   - key encipherment
