@@ -99,7 +99,7 @@
       <dependency>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-spec-api</artifactId>
-        <version>19.0.0.Final</version>
+        <version>19.1.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

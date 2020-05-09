@@ -1,4 +1,4 @@
-FROM registry.x1/j7beck/x1-wildfly-profile:19.0.0.Final
+FROM registry.x1/j7beck/x1-wildfly-profile:19.1.0.Final
 MAINTAINER joe <joe@mail.x1>
 
 USER root
