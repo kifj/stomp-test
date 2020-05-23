@@ -1,6 +1,7 @@
 package x1.stomp.control;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.slf4j.Logger;
 import x1.stomp.model.Quote;
@@ -40,6 +41,7 @@ public class QuoteRetriever {
     client.close();
   }
 
+  @SimplyTimed(tags = {"interface=QuoteRetriever", "method=retrieveQuote"}, name = "quotes", absolute = true)
   public Optional<Quote> retrieveQuote(Share share) {
     return createQuote(retrieveQuotes(share.getKey()), share);
   }

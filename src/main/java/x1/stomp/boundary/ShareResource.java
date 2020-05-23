@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
@@ -52,6 +55,7 @@ import static x1.service.registry.Technology.REST;
 @Services(services = {@Service(technology = REST, value = RestApplication.ROOT
         + ShareResource.PATH, version = VersionData.MAJOR_MINOR, protocols = {HTTP, HTTPS})})
 @Transactional(Transactional.TxType.REQUIRES_NEW)
+@Timed(tags = {"interface=ShareResource"})
 public class ShareResource {
   private static final String CORRELATION_ID = "correlationId";
 
@@ -75,6 +79,7 @@ public static final String PATH = "/shares";
   @Wrapped(element = "shares")
   @ApiOperation(value = "List all subscriptions")
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription found", response = Share[].class)})
+  @SimplyTimed(name = "get-shares", absolute = true, tags = {"interface=ShareResource"})
   public List<Share> listAllShares() {
     return shareSubscription.list();
   }
@@ -84,6 +89,7 @@ public static final String PATH = "/shares";
   @ApiOperation(value = "Find a share subscription")
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription found", response = Share.class),
           @ApiResponse(code = 404, message = "Subscription not found")})
+  @SimplyTimed(name = "get-share", absolute = true, tags = {"interface=ShareResource"})
   public Response findShare(
           @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
@@ -98,7 +104,8 @@ public static final String PATH = "/shares";
   @POST
   @ApiOperation(value = "Add share to your list of subscriptions")
   @ApiResponses(value = {@ApiResponse(code = 201, message = "Share queued for subscription"),
-          @ApiResponse(code = 500, message = "Queuing failed")})  
+          @ApiResponse(code = 500, message = "Queuing failed")})
+  @SimplyTimed(name = "add-share", absolute = true, tags = {"interface=ShareResource"})
   public Response addShare(
           @ApiParam(required = true, value = "The share which is will be added for subscription") @Valid Share share,
           @ApiParam(
@@ -129,6 +136,7 @@ public static final String PATH = "/shares";
   @ApiOperation(value = "Remove a subscription to a share")
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Subscription removed", response = Share.class),
           @ApiResponse(code = 404, message = "Subscription was not found")})
+  @SimplyTimed(name = "remove-share", absolute = true, tags = {"interface=ShareResource"})
   public Response removeShare(@ApiParam("Stock symbol") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
     if (share.isPresent()) {

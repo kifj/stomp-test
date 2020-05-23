@@ -34,11 +34,11 @@ Client.prototype.init = function() {
 
 Client.prototype.connect = function() {
 	var caller = this;
-	var client = Stomp.client(this.url);
+	var stompClient = Stomp.client(this.url);
 	
 	if (this.debug) {
 		// this allows to display debug logs directly on the web page
-		client.debug = function(str) {
+		stompClient.debug = function(str) {
 			$("#debug").append(str + "\n");
 		};
 	} else {
@@ -53,7 +53,7 @@ Client.prototype.connect = function() {
 		$('#button_disconnect').fadeIn();
 		$('#l_share').removeAttr('disabled');
 
-		client.subscribe(caller.quotesTopic, function(message) {
+		stompClient.subscribe(caller.quotesTopic, function(message) {
 			caller.onmessage(JSON.parse(message.body));
 		});	
 	};
@@ -68,10 +68,10 @@ Client.prototype.connect = function() {
 
 Client.prototype.disconnect = function() {
 	var caller = this;
-	var client = this.stompClient;
-	if (client) {
+	var stompClient = this.stompClient;
+	if (stompClient) {
 		this.stompClient = null;
-		client.disconnect(function() {
+		stompClient.disconnect(function() {
 			$('#button_disconnect').fadeOut({
 				duration : 'fast'
 			});
@@ -83,21 +83,21 @@ Client.prototype.disconnect = function() {
 }
 
 Client.prototype.subscribe = function(key) {
-	var client = this.stompClient;
-	if (client && key) {
+	var stompClient = this.stompClient;
+	if (stompClient && key) {
 		this.messageOn('Subscribe ' + key);
 		var data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
-		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
+		stompClient.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
 		$('#l_share').val("");
 	}
 }
 
 Client.prototype.unsubscribe = function(key) {
-	var client = this.stompClient;
-	if (client && key) {
+	var stompClient = this.stompClient;
+	if (stompClient && key) {
 		this.messageOn('Unsubscribe ' + key);
 		var data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
-		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
+		stompClient.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
 		$('#l_share').val("");
 		var id = "key_" + key.replace('.', '');
 		$("#" + id).remove();

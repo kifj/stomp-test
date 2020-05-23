@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.slf4j.Logger;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
@@ -64,6 +66,7 @@ public class QuoteResource {
   @ApiOperation(value = "get a quote")
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Quote received", response = Quote.class),
           @ApiResponse(code = 404, message = "Subscription not found")})
+  @SimplyTimed(name = "get-quote", absolute = true, tags = {"interface=QuoteResource"})
   public Response getQuote(
           @ApiParam("Stock symbol (e.g. BMW.DE), see https://quote.cnbc.com") @PathParam("key") String key) {
     Optional<Share> share = shareSubscription.find(key);
@@ -81,6 +84,7 @@ public class QuoteResource {
   @ApiOperation(value = "get quotes")
   @ApiResponses(value = {@ApiResponse(code = 200, message = "Quotes received", response = Quote[].class),
           @ApiResponse(code = 404, message = "No subscription found")})
+  @SimplyTimed(name = "get-quotes", absolute = true, tags = {"interface=QuoteResource"})
   public void getQuotes(@ApiParam("Stock symbols") @QueryParam("key") List<String> keys,
                         @Suspended AsyncResponse response) {
     withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys)));
