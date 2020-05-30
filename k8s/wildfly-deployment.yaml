@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -10,11 +10,14 @@ metadata:
     configmap.reloader.stakater.com/reload: stomp-test-config
 spec:
   replicas: 0
+  selector:
+    matchLabels:
+      deployment: wildfly
+      app: wildfly
   template:
     metadata:
       labels:
         deployment: wildfly
-        deploymentconfig: wildfly
         app: wildfly
     spec:
       affinity:

@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -7,11 +7,14 @@ metadata:
   namespace: stomp-test
 spec:
   replicas: 0
+  selector:
+    matchLabels:
+      deployment: postgresql
+      name: postgresql
   template:
     metadata:
       labels:
         deployment: postgresql
-        deploymentconfig: postgresql
         name: postgresql
     spec:
       securityContext:

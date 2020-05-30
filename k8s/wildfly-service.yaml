@@ -21,5 +21,5 @@ spec:
     protocol: TCP
     targetPort: 9990
   selector:
-    deploymentconfig: wildfly
+    deployment: wildfly
   sessionAffinity: None
