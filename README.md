@@ -25,12 +25,16 @@ The DDL scripts are available for PostgreSQL.
 
 ## RPM package
 
-A RPM package can be built by 
+RPM package can be built by executing
 
 	mvn -Prpm clean package
 
 ## Docker images
 
-Docker images can be can be built by 
+Docker images can be built by executing
 
 	mvn -Pdocker clean install
+
+## Kubernetes resources
+
+are located in folder etc/k8s

@@ -26,7 +26,7 @@ import static x1.stomp.model.Action.UNSUBSCRIBE;
 
 @DisplayName("test JSON mapping")
 public class JsonHelperTest {
-  private JsonHelper jsonHelper = new JsonHelper();
+  private final JsonHelper jsonHelper = new JsonHelper();
 
   private TestData<Command> test(Command object, String json) {    
     return new TestData<>(object, json);
@@ -38,8 +38,8 @@ public class JsonHelperTest {
       this.json = json;
     }
     
-    private T object;
-    private String json;
+    private final T object;
+    private final String json;
     
     protected String getJson() {
       return json;

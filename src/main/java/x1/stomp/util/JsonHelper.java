@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.fasterxml.jackson.databind.SerializationFeature.*;
 
 public class JsonHelper {
-  private ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
   public JsonHelper() {
     mapper = new ObjectMapper().enable(WRAP_ROOT_VALUE).enable(ACCEPT_SINGLE_VALUE_AS_ARRAY).enable(UNWRAP_ROOT_VALUE)
