@@ -28,6 +28,7 @@ import x1.stomp.util.Logged;
 import x1.stomp.util.MDCKey;
 import x1.stomp.util.StockMarket;
 import x1.stomp.version.VersionData;
+import static x1.stomp.boundary.MDCFilter.*;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -86,8 +87,8 @@ public class ShareResource {
   @Wrapped(element = "shares")
   @Formatted
   @Operation(description = "List all subscriptions")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
-          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
+          @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
   @APIResponse(responseCode = "200", description = "All subscriptions", content = {
           @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class), mediaType = APPLICATION_JSON),
           @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML)})
@@ -103,8 +104,8 @@ public class ShareResource {
   @Path("/{key}")
   @Formatted
   @Operation(description = "Find a share subscription")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
-          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
   @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
@@ -123,8 +124,8 @@ public class ShareResource {
   @POST
   @Formatted
   @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
-          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
   @APIResponse(responseCode = "201", description = "Share queued for subscription",
           content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "500", description = "Queuing failed")
@@ -162,8 +163,8 @@ public class ShareResource {
   @Path("/{key}")
   @Formatted
   @Operation(description = "Remove a subscription of a share")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
-          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
   @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")
@@ -185,8 +186,8 @@ public class ShareResource {
         .build();
     var delete = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("unsubscribe")
         .param(LinkConstants.PARAM_METHOD, HttpMethod.DELETE).build();
-    var quote = Link.fromUriBuilder(baseUriBuilder.clone().path(QuoteResource.PATH).path(share.getKey()))
-        .rel("quote").build();
+    var quote = Link.fromUriBuilder(baseUriBuilder.clone().path(QuoteResource.PATH).path(share.getKey())).rel("quote")
+        .build();
     share.setLinks(Arrays.asList(self, delete, quote));
     return share;
   }

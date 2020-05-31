@@ -57,28 +57,32 @@ public class LoggingInterceptor {
   }
 
   private void logFailure(InvocationContext ctx, WebApplicationException e) {
-    var response = e.getResponse();
     try {
-      MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(response.getStatus()));
-      var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") -> status="
-          + response.getStatus();
-      var log = getLogger(ctx);
-      switch (response.getStatusInfo().getFamily()) {
-      case INFORMATIONAL:
-      case SUCCESSFUL:
-      case REDIRECTION:
-        log.debug(argLine);
-        break;
-      case CLIENT_ERROR:
-      case OTHER:
-        log.warn(argLine);
-        break;
-      case SERVER_ERROR:
-        log.error(argLine, e);
-        break;
-      }
+      MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(e.getResponse().getStatus()));
+      logResponse(ctx, e);
     } finally {
       MDC.remove(MDCFilter.HTTP_STATUS_CODE);
+    }
+  }
+
+  private void logResponse(InvocationContext ctx, WebApplicationException e) {
+    var response = e.getResponse();
+    var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") -> status="
+        + response.getStatus();
+    var log = getLogger(ctx);
+    switch (response.getStatusInfo().getFamily()) {
+    case INFORMATIONAL:
+    case SUCCESSFUL:
+    case REDIRECTION:
+      log.debug(argLine);
+      break;
+    case CLIENT_ERROR:
+    case OTHER:
+      log.warn(argLine);
+      break;
+    case SERVER_ERROR:
+      log.error(argLine, e);
+      break;
     }
   }
 

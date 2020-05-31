@@ -15,6 +15,10 @@ public class Quotes extends QuoteWrapper {
     setQuotes(quotes);
   }
 
+  public static Quotes from(List<Quote> quotes) {
+    return new Quotes(quotes);
+  }
+
   @JsonValue
   public List<Quote> asJson() {
     return getQuotes();

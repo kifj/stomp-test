@@ -17,6 +17,7 @@ import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Quote;
 import x1.stomp.model.QuoteWrapper;
 import x1.stomp.model.Quotes;
+import static x1.stomp.model.Quotes.from;
 import x1.stomp.model.Share;
 import x1.stomp.util.Logged;
 import x1.stomp.util.MDCKey;
@@ -45,7 +46,7 @@ import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -149,7 +150,7 @@ public class QuoteResource {
       }
       var quotes = quoteRetriever.retrieveQuotes(shares);
       quotes.forEach(quote -> addLinks(baseUriBuilder, quote));
-      return Response.ok(new Quotes(quotes)).build();
+      return Response.ok(from(quotes)).build();
     } catch (RuntimeException e) {
       log.error(null, e);
       throw e;
@@ -167,7 +168,7 @@ public class QuoteResource {
         .rel(LinkConstants.REL_SELF).build();
     var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
         .rel("parent").build();
-    quote.setLinks(Arrays.asList(self, share));
+    quote.setLinks(asList(self, share));
     return quote;
   }
 }

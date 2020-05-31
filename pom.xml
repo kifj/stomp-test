@@ -389,6 +389,21 @@
           </archive>
         </configuration>
       </plugin>
+	  <plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>buildnumber-maven-plugin</artifactId>
+	    <version>1.4</version>
+	    <executions>
+		  <execution>
+			<goals>
+			  <goal>create</goal>
+			</goals>
+		  </execution>
+	   </executions>
+	   <configuration>
+		<shortRevisionLength>8</shortRevisionLength>
+	   </configuration>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -771,12 +786,18 @@
                   <name>registry.x1/j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-postgres-stomp-test</dockerFileDir>
+					<tags>
+					  <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
+					</tags>
                   </build>
                 </image>
                 <image>
                   <name>registry.x1/j7beck/x1-wildfly-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-wildfly-stomp-test</dockerFileDir>
+					<tags>
+					  <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
+					</tags>
                     <assembly>
                       <descriptorRef>rootWar</descriptorRef>
                     </assembly>
