@@ -72,7 +72,6 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   @OnMessage
   public String onMessage(String message, Session session) throws IOException {
     log.debug("Received message: {}", message);
-    String result = null;
     var command = jsonHelper.fromJSON(message, Command.class);
     if (command.getAction() == null || StringUtils.isEmpty(command.getKey())) {
       log.warn("Incomplete command: {}", command);
@@ -81,8 +80,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     switch (command.getAction()) {
       case SUBSCRIBE:
         Quote quote = subscribe(command.getKey());
-        result = jsonHelper.toJSON(quote);
-        break;
+        return jsonHelper.toJSON(quote);
       case UNSUBSCRIBE:
         unsubscribe(command.getKey());
         break;
@@ -90,7 +88,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
         log.warn("Unknown command: {}", message);
         break;
     }
-    return result;
+    return null;
   }
 
   private void unsubscribe(String key) {
@@ -122,7 +120,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   public void onMessage(Message message) {
     try {
       log.debug("Received quote for {}", message.getStringProperty("key"));
-      TextMessage textMessage = (TextMessage) message;
+      var textMessage = (TextMessage) message;
       sessionHolder.values().forEach(session -> sendMessage(textMessage, session));
     } catch (JMSException e) {
       log.error(e.getErrorCode(), e);
