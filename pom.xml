@@ -25,7 +25,7 @@
   </scm>
   <ciManagement>
     <system>Jenkins</system>
-    <url>https://www.x1/jenkins/job/stomp-test-wildfly-19/</url>
+    <url>https://www.x1/jenkins/job/stomp-test-wildfly-20/</url>
     <notifiers>
       <notifier>
         <type>mail</type>
@@ -99,7 +99,7 @@
       <dependency>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-spec-api</artifactId>
-        <version>19.1.0.Final</version>
+        <version>20.0.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -303,7 +303,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.15.0</version>
+      <version>3.16.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -335,7 +335,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.10</version>
+      <version>42.2.13</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -786,18 +786,18 @@
                   <name>registry.x1/j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-postgres-stomp-test</dockerFileDir>
-					<tags>
-					  <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
-					</tags>
+                    <tags>
+                      <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
+                    </tags>
                   </build>
                 </image>
                 <image>
                   <name>registry.x1/j7beck/x1-wildfly-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
                     <dockerFileDir>x1-wildfly-stomp-test</dockerFileDir>
-					<tags>
-					  <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
-					</tags>
+                    <tags>
+                      <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
+                    </tags>
                     <assembly>
                       <descriptorRef>rootWar</descriptorRef>
                     </assembly>

@@ -1,10 +1,10 @@
 node {
   def mvnHome = tool 'Maven-3.6'
   env.JAVA_HOME = tool 'JDK-11'
-  def branch = 'wildfly-19'
+  def branch = 'wildfly-20'
 
   stage('Checkout') {
-    git url: 'ssh://git@github.com/kifj/stomp-test.git', branch: 'wildfly-19'
+    git url: 'ssh://git@github.com/kifj/stomp-test.git', branch: 'wildfly-20'
   }
   
   stage('Build') {
