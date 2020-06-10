@@ -80,7 +80,6 @@
         	<property name="allowMissingThrowsTags" value="true" />
         	<!-- property name="logLoadErrors" value="true" / -->
         	<property name="suppressLoadErrors" value="true" />
-            <property name="allowMissingJavadoc" value="true" />
         </module>
         <!-- <module name="JavadocType"/> -->
         <!--
