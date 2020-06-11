@@ -91,7 +91,7 @@ public class MetricsTest {
     var body = response.readEntity(String.class);
     assertThat(body).isNotNull();
 
-    var o = new JsonParser().parse(body).getAsJsonObject();
+    var o = JsonParser.parseString(body).getAsJsonObject();
     assertThat(o).isNotNull();
     assertThat(o.getAsJsonObject("add-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("get-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
@@ -107,7 +107,7 @@ public class MetricsTest {
     var body = response.readEntity(String.class);
     assertThat(body).isNotNull();
 
-    var o = new JsonParser().parse(body).getAsJsonObject();
+    var o = JsonParser.parseString(body).getAsJsonObject();
     assertThat(o).isNotNull();
     assertThat(o.get("status").getAsString()).isEqualTo("UP");
     var checks = o.getAsJsonArray("checks");
