@@ -343,7 +343,7 @@
     <finalName>${project.artifactId}-v${app.majorVersion}.${app.minorVersion}</finalName>
     <plugins>
       <plugin>
-      	<artifactId>maven-resources-plugins</artifactId>
+      	<artifactId>maven-resources-plugin</artifactId>
       	<version>3.1.0</version>
       </plugin>
       <plugin>
