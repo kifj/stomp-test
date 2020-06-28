@@ -60,10 +60,10 @@ spec:
             path: /health/live
             port: 9990
             scheme: HTTP
-          initialDelaySeconds: 180
+          initialDelaySeconds: 120
           periodSeconds: 60
           successThreshold: 1
-          timeoutSeconds: 30
+          timeoutSeconds: 10
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -85,7 +85,7 @@ spec:
           initialDelaySeconds: 60
           periodSeconds: 60
           successThreshold: 1
-          timeoutSeconds: 30
+          timeoutSeconds: 10
       - name: filebeat
         image: registry.x1/j7beck/x1-filebeat-wildfly
         imagePullPolicy: Always
