@@ -11,6 +11,8 @@ spec:
     matchLabels:
       deployment: postgresql
       name: postgresql
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
