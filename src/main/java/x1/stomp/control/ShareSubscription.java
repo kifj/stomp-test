@@ -50,9 +50,7 @@ public class ShareSubscription {
 
   public Optional<Share> find(@NotNull String key) {
     try {
-      var query = em.createNamedQuery(Share.FIND_BY_KEY, Share.class);
-      query.setParameter("key", key);
-      return Optional.of(query.getSingleResult());
+      return Optional.of(em.createNamedQuery(Share.FIND_BY_KEY, Share.class).setParameter("key", key).getSingleResult());
     } catch (NoResultException e) {
       return Optional.empty();
     }

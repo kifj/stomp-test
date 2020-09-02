@@ -21,6 +21,6 @@ public class QuickQuoteResponseExceptionMapper implements ResponseExceptionMappe
   public WebApplicationException toThrowable(Response response) {
     var e = new WebApplicationException(response);
     LOG.error(e.getMessage());
-    throw e;
+    return e;
   }
 }

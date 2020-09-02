@@ -22,8 +22,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
   
   @Override
   public Response toResponse(ConstraintViolationException e) {
-    var response = new ErrorResponse();
-    response.setType("Invalid data");
+    var response = new ErrorResponse("Invalid data");
     response.setRequestUri(uriInfo.getRequestUri().toString());
     e.getConstraintViolations().forEach(violation -> response.add(
         new ErrorMessage(violation.getMessage(), violation.getPropertyPath().toString(), violation.getInvalidValue())));

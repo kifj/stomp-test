@@ -16,6 +16,11 @@ public class ErrorResponse {
   public ErrorResponse() {
     errors = new ArrayList<>();
   }
+  
+  public ErrorResponse(String type) {
+    errors = new ArrayList<>();
+    this.type = type;
+  }
 
   @XmlElementRef(name = "error")
   @JsonProperty(value = "error")

@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
@@ -18,6 +19,7 @@ public class QuoteRetriever {
   private static final String DEFAULT_CURRENCY = "EUR";
 
   @Inject
+  @RestClient
   private QuickQuoteService quickQuoteService;
   
   public Optional<Quote> retrieveQuote(Share share) {
