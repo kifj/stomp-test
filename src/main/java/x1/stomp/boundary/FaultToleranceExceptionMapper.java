@@ -5,20 +5,22 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
+
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 
 import javax.ws.rs.core.Context;
 
 @Provider
-public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
+public class FaultToleranceExceptionMapper implements ExceptionMapper<FaultToleranceException> {
   @Context
   private UriInfo uriInfo;
   
   @Override
-  public Response toResponse(RuntimeException e) {
+  public Response toResponse(FaultToleranceException e) {
     var response = new ErrorResponse(e.getClass().getSimpleName());
     response.setRequestUri(uriInfo.getRequestUri().toString());
     response.add(new ErrorMessage(e.getMessage()));
-    return Response.status(INTERNAL_SERVER_ERROR).entity(response).build();
+    return Response.status(SERVICE_UNAVAILABLE).entity(response).build();
   }
 }

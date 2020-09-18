@@ -47,6 +47,7 @@ import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
 import static java.util.Arrays.asList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

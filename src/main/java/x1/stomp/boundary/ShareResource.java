@@ -10,6 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.opentracing.Traced;
@@ -42,6 +43,8 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import static javax.ws.rs.core.MediaType.*;
+
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -60,6 +63,7 @@ import static x1.service.registry.Technology.REST;
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
 @Traced
+@Timeout(value = 5, unit = ChronoUnit.SECONDS)
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
 public class ShareResource {
   private static final String MDC_KEY = "share";
