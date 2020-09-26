@@ -863,6 +863,7 @@
 											<permissions>auto</permissions>
 											<excludeFinalOutputArtifact>true</excludeFinalOutputArtifact>
 											<exportTargetDir>false</exportTargetDir>
+											<user>jboss:jboss:jboss</user>
 										</assembly>
 									</build>
 								</image>
