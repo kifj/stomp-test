@@ -278,6 +278,16 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+   	  <groupId>org.jboss.resteasy</groupId>
+   	  <artifactId>resteasy-client-microprofile</artifactId>
+   	  <scope>provided</scope>
+    </dependency>
+    <dependency>
+   	  <groupId>org.jboss.resteasy</groupId>
+   	  <artifactId>resteasy-client</artifactId>
+   	  <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.jupiter.version}</version>
@@ -767,11 +777,12 @@
     <profile>
       <id>docker</id>
       <build>
+	    <finalName>ROOT</finalName>
         <plugins>
           <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>fabric8-maven-plugin</artifactId>
-            <version>4.4.1</version>
+            <groupId>org.eclipse.jkube</groupId>
+            <artifactId>kubernetes-maven-plugin</artifactId>
+            <version>1.0.0</version>
             <executions>
               <execution>
                 <phase>install</phase>
@@ -782,14 +793,17 @@
               </execution>
             </executions>
             <configuration>
-              <mode>kubernetes</mode>
               <verbose>true</verbose>
               <registry>registry.x1</registry>
               <images>
                 <image>
                   <name>registry.x1/j7beck/x1-postgres-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
-                    <dockerFileDir>x1-postgres-stomp-test</dockerFileDir>
+                    <contextDir>x1-postgres-stomp-test</contextDir>
+                    <assembly>
+                      <name>.</name>
+                      <permissions>auto</permissions>
+                    </assembly>
                     <tags>
                       <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
                     </tags>
@@ -798,12 +812,13 @@
                 <image>
                   <name>registry.x1/j7beck/x1-wildfly-stomp-test:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
-                    <dockerFileDir>x1-wildfly-stomp-test</dockerFileDir>
+                    <contextDir>x1-wildfly-stomp-test</contextDir>
                     <tags>
                       <tag>${app.majorVersion}.${app.minorVersion}-${buildNumber}</tag>
                     </tags>
                     <assembly>
-                      <descriptorRef>rootWar</descriptorRef>
+                      <excludeFinalOutputArtifact>false</excludeFinalOutputArtifact>
+                      <permissions>auto</permissions>
                     </assembly>
                   </build>
                 </image>
@@ -818,9 +833,9 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>fabric8-maven-plugin</artifactId>
-            <version>4.4.1</version>
+            <groupId>org.eclipse.jkube</groupId>
+            <artifactId>kubernetes-maven-plugin</artifactId>
+            <version>1.0.0</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
@@ -831,14 +846,17 @@
               </execution>
             </executions>
             <configuration>
-              <mode>kubernetes</mode>
               <verbose>true</verbose>
               <registry>registry.x1</registry>
               <images>
                 <image>
                   <name>registry.x1/j7beck/x1-wildfly-stomp-test-it:${app.majorVersion}.${app.minorVersion}</name>
                   <build>
-                    <dockerFileDir>integration-tests</dockerFileDir>
+                    <contextDir>integration-tests</contextDir>
+                    <assembly>
+                      <name>.</name>
+                      <permissions>auto</permissions>
+                    </assembly>
                   </build>
                 </image>
               </images>

@@ -36,7 +36,7 @@ node {
   }
   
   stage('Create image') {
-    sh "${mvnHome}/bin/mvn -Pdocker install fabric8:push"
+    sh "${mvnHome}/bin/mvn -Pdocker clean install k8s:push"
   }
 }
 

@@ -65,6 +65,7 @@ import static x1.service.registry.Technology.REST;
 @Traced
 @Timeout(value = 5, unit = ChronoUnit.SECONDS)
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
+@RestRequestStatusCounted
 public class ShareResource {
   private static final String MDC_KEY = "share";
   private static final String CORRELATION_ID = "correlationId";

@@ -1,6 +1,6 @@
 package x1.stomp.control;
 
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -8,6 +8,8 @@ import javax.ws.rs.core.Response.Status;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import x1.stomp.boundary.MDCFilter;
 
 public class QuickQuoteResponseExceptionMapper implements ResponseExceptionMapper<WebApplicationException> {
   private static final Logger LOG = LoggerFactory.getLogger(QuickQuoteResponseExceptionMapper.class);
@@ -19,8 +21,18 @@ public class QuickQuoteResponseExceptionMapper implements ResponseExceptionMappe
 
   @Override
   public WebApplicationException toThrowable(Response response) {
-    var e = new WebApplicationException(response);
-    LOG.error(e.getMessage());
-    return e;
+    WebApplicationException e;
+    MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(response.getStatus()));
+    if (response.getStatus() < Status.INTERNAL_SERVER_ERROR.getStatusCode()) {
+      // all 4xx errors are mapped to ClientErrorException and these are skipped in the circuit breaker
+      e = new ClientErrorException(response);
+      LOG.warn(e.getMessage());
+    } else {
+      // all 5xx are treated as server errors
+      e = new ServerErrorException(response);
+      LOG.error(e.getMessage());
+    }
+    MDC.remove(MDCFilter.HTTP_STATUS_CODE);
+    throw e;
   }
 }

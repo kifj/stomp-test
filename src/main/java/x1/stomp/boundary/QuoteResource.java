@@ -69,6 +69,7 @@ import static x1.service.registry.Technology.REST;
 @Tag(name = "Quotes", description = "receive quotes for shares")
 @Produces({ APPLICATION_JSON, APPLICATION_XML })
 @Consumes({ APPLICATION_JSON, APPLICATION_XML })
+@RestRequestStatusCounted
 public class QuoteResource {
   protected static final String PATH = "/quotes";
   private static final String MDC_KEY = "quote";
