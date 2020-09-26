@@ -4,7 +4,7 @@ LABEL maintainer="joe@mail.x1"
 USER root
 ADD sql/ /tmp/sql/
 ADD create-db.sh /tmp/create-db.sh
-RUN chown -R postgres /tmp/create-db.sh /tmp/sql/
+RUN chown -R postgres /tmp/create-db.sh /tmp/sql/ && chmod 775 /tmp/create-db.sh
 RUN su postgres -l -s /bin/bash -c "/tmp/create-db.sh stocks"
 RUN rm -rf /tmp/create-db.sh /tmp/sql
 USER postgres

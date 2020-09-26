@@ -3,7 +3,7 @@ LABEL maintainer="joe@mail.x1"
 
 USER root
 COPY scripts /srv/wildfly/scripts
-COPY maven /srv/wildfly/deployments
+COPY ROOT.war /srv/wildfly/deployments/ROOT.war
 RUN chmod 755 /srv/wildfly/scripts/configure.sh && /srv/wildfly/scripts/configure.sh /srv/wildfly
 RUN rm -rf /srv/wildfly/scripts
 USER jboss:docker

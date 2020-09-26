@@ -25,6 +25,7 @@ public class FaulToleranceExceptionMapper implements ExceptionMapper<FaultTolera
     var response = new ErrorResponse();
     response.setType(e.getClass().getSimpleName());
     response.setRequestUri(uriInfo.getRequestUri().toString());
+    response.add(new ErrorMessage(e.getMessage()));
     log.warn("Service not available due to:\n{}", response.toString());
     return Response.status(SERVICE_UNAVAILABLE).entity(response).build();
   }
