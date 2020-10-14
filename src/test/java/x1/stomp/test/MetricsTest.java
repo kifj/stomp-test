@@ -111,6 +111,6 @@ public class MetricsTest {
     assertThat(o).isNotNull();
     assertThat(o.get("status").getAsString()).isEqualTo("UP");
     var checks = o.getAsJsonArray("checks");
-    assertThat(checks).hasSize(3);
+    assertThat(checks).hasSize(6);
   }
 }
