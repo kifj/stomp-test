@@ -1,7 +1,7 @@
 var client = new Client();
 
 function Client() {
-	var protocol = 'ws://';
+	let protocol = 'ws://';
 	if (window.location.protocol == 'https:') {
 		protocol = 'wss://';
 	}
@@ -45,7 +45,7 @@ Client.prototype.connect = function() {
 		$("#sidebar").fadeOut();
 	}
 	// the client is notified when it is connected to the server.
-	var onconnect = function(frame) {
+	let onconnect = function(frame) {
     caller.messageOn("Connected.");
 		$('#button_connect').fadeOut({
 			duration : 'fast'
@@ -57,7 +57,7 @@ Client.prototype.connect = function() {
 			caller.onmessage(JSON.parse(message.body));
 		});	
 	};
-	var onerror = function(error) {
+	let onerror = function(error) {
 		caller.messageOn(error.headers.message + ": " + error.body);
   		aller.disconnect();
 	};
@@ -86,7 +86,7 @@ Client.prototype.subscribe = function(key) {
 	var client = this.stompClient;
 	if (client && key) {
 		this.messageOn('Subscribe ' + key);
-		var data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
+		let data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
 		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
 		$('#l_share').val("");
 	}
@@ -96,20 +96,20 @@ Client.prototype.unsubscribe = function(key) {
 	var client = this.stompClient;
 	if (client && key) {
 		this.messageOn('Unsubscribe ' + key);
-		var data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
+		let data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
 		client.send(this.stocksQueue, {foo: 1}, JSON.stringify(data));
 		$('#l_share').val("");
-		var id = "key_" + key.replace('.', '');
+		let id = "key_" + key.replace('.', '');
 		$("#" + id).remove();
 	}
 }
 
 Client.prototype.onmessage = function(message) {
 	this.messageOn('Received quotes.');
-	var quote = message.quote;
-	var id = "key_" + quote.share.key.replace('.', '');
+	let quote = message.quote;
+	let id = "key_" + quote.share.key.replace('.', '');
 	$("#" + id).remove();
-	var row = "<tr id='" + id + "'>";
+	let row = "<tr id='" + id + "'>";
 	row += "<td>" + quote.share.key + "</td>";
 	row += "<td>" + quote.share.name + "</td>";
 	row += "<td>" + quote.price + "</td>";
@@ -121,31 +121,31 @@ Client.prototype.onmessage = function(message) {
 //---------------------------------------------------------------------
 
 Client.prototype.messageOn = function(msg) {
-	var message = $('#message');
+	let message = $('#message');
 	message[0].innerHTML = msg;
 	message[0].className = 'messageOn';
 }
 
 Client.prototype.messageOff = function() {
-	var message = $('#message');
+	let message = $('#message');
 	message[0].innerHTML = '';
 	message[0].className = 'messageOff';
 }
 
 Client.prototype.statusOn = function(msg) {
-	var status = $('#status');
+	let status = $('#status');
 	status[0].innerHTML = msg;
 	status[0].className = 'statusOn';
 }
 
 Client.prototype.errorStatusOn = function(msg) {
-	var status = $('#status');
+	let status = $('#status');
 	status[0].innerHTML = msg;
 	status[0].className = 'errorStatusOn';
 }
 
 Client.prototype.statusOff = function() {
-	var status = $('#status');
+	let status = $('#status');
 	status[0].innerHTML = '';
 	status[0].className = 'statusOff';
 }

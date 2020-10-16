@@ -1,11 +1,11 @@
 var client = new Client();
 
 function Client() {
-	var protocol = 'ws://';
+	let protocol = 'ws://';
 	if (window.location.protocol == 'https:') {
 		protocol = 'wss://';
 	}
-	var path = '';
+	let path = '';
 	if (window.location.pathname.length > 1) {
 		path = '/' + window.location.pathname.split( '/' )[1];
 	}
@@ -38,7 +38,7 @@ Client.prototype.init = function() {
 Client.prototype.connect = function() {
 	this.statusOff();
 	var caller = this;
-	var connection = new WebSocket(this.url);
+	let connection = new WebSocket(this.url);
 	$("#sidebar").fadeOut();
 	
 	connection.onopen = function() {
@@ -63,7 +63,7 @@ Client.prototype.connect = function() {
 
 Client.prototype.disconnect = function(isClosed) {
 	var caller = this;
-	var connection = this.connection;
+	let connection = this.connection;
 	if (connection) {
 		if (!isClosed) {
 			connection.close();
@@ -79,29 +79,29 @@ Client.prototype.disconnect = function(isClosed) {
 }
 
 Client.prototype.subscribe = function(key) {
-	var connection = this.connection;
+	let connection = this.connection;
 	if (connection && key) {
 		this.messageOn('Subscribe ' + key);
-		var data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
+		let data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
 		connection.send(JSON.stringify(data));
 		$('#l_share').val("");
 	}
 }
 
 Client.prototype.unsubscribe = function(key) {
-	var connection = this.connection;
+	let connection = this.connection;
 	if (connection && key) {
 		this.messageOn('Unsubscribe ' + key);
-		var data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
+		let data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
 		connection.send(JSON.stringify(data));
 		$('#l_share').val("");
 	}
 }
 
 Client.prototype.onmessage = function(message) {
-	var quote = message.quote;
-	var event = message.subscriptionEvent;
-	var id;
+	let quote = message.quote;
+	let event = message.subscriptionEvent;
+	let id;
 	if (event) {
 		id = "key_" + event.key.replace('.', '');
 		if (event.action == 'UNSUBSCRIBE') {
@@ -114,7 +114,7 @@ Client.prototype.onmessage = function(message) {
 	if (quote) {
 		id = "key_" + quote.share.key.replace('.', '');
 		$("#" + id).remove();
-		var row = "<tr id='" + id + "'>";
+		let row = "<tr id='" + id + "'>";
 		row += "<td>" + quote.share.key + "</td>";
 		row += "<td>" + quote.share.name + "</td>";
 		row += "<td>" + quote.price + "</td>";
@@ -130,31 +130,31 @@ Client.prototype.onmessage = function(message) {
 //---------------------------------------------------------------------
 
 Client.prototype.messageOn = function(msg) {
-	var message = $('#message');
+	let message = $('#message');
 	message[0].innerHTML = msg;
 	message[0].className = 'messageOn';
 }
 
 Client.prototype.messageOff = function() {
-	var message = $('#message');
+	let message = $('#message');
 	message[0].innerHTML = '';
 	message[0].className = 'messageOff';
 }
 
 Client.prototype.statusOn = function(msg) {
-	var status = $('#status');
+	let status = $('#status');
 	status[0].innerHTML = msg;
 	status[0].className = 'statusOn';
 }
 
 Client.prototype.errorStatusOn = function(msg) {
-	var status = $('#status');
+	let status = $('#status');
 	status[0].innerHTML = msg;
 	status[0].className = 'errorStatusOn';
 }
 
 Client.prototype.statusOff = function() {
-	var status = $('#status');
+	let status = $('#status');
 	status[0].innerHTML = '';
 	status[0].className = 'statusOff';
 }
