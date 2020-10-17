@@ -1,4 +1,4 @@
-if (outcome != success) of /microprofile-openapi-smallrye:read-resource
+if (outcome != success) of /subsystem=microprofile-openapi-smallrye:read-resource
   /extension=org.wildfly.extension.microprofile.openapi-smallrye:add
   /subsystem=microprofile-openapi-smallrye:add
 end-if
