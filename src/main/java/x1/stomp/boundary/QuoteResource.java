@@ -114,7 +114,7 @@ public class QuoteResource {
     if (share.isPresent()) {
       var quote = quoteRetriever.retrieveQuote(share.get());
       if (quote.isPresent()) {
-        UriBuilder baseUriBuilder = uriInfo.getBaseUriBuilder();
+        var baseUriBuilder = uriInfo.getBaseUriBuilder();
         return Response.ok(addLinks(baseUriBuilder, quote.get())).build();
       }
     }

@@ -16,8 +16,6 @@ if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-reso
     driver-name=postgresql,\
     driver-class=org.postgresql.Driver,\
     validate-on-match=true,\
-    background-validation=false,\
-    share-prepared-statements=false,\
     check-valid-connection-sql="select current_timestamp",\
     statistics-enabled=true\
     )
