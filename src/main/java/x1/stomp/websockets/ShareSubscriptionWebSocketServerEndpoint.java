@@ -25,6 +25,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import static x1.service.registry.Protocol.*;
 import static x1.service.registry.Technology.*;
@@ -79,8 +80,8 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     }
     switch (command.getAction()) {
       case SUBSCRIBE:
-        Quote quote = subscribe(command.getKey());
-        return jsonHelper.toJSON(quote);
+        Optional<Quote> quote = subscribe(command.getKey());
+        return jsonHelper.toJSON(quote.orElse(null));
       case UNSUBSCRIBE:
         unsubscribe(command.getKey());
         break;
@@ -96,12 +97,12 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     shareSubscription.find(key).ifPresent(shareSubscription::unsubscribe);
   }
 
-  private Quote subscribe(String key) {
+  private Optional<Quote> subscribe(String key) {
     log.info("Subscribe: {}", key);
     var share = new Share(key);
     var quote = quoteRetriever.retrieveQuote(share);
     quote.ifPresent(q -> shareSubscription.subscribe(q.getShare()));
-    return quote.orElse(null);
+    return quote;
   }
 
   @OnClose

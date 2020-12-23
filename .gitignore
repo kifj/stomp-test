@@ -11,3 +11,4 @@ MANIFEST.MF
 /.factorypath
 /nb-configuration.xml
 /.tern-project
+.vscode/settings.json

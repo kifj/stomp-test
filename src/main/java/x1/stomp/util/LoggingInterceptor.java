@@ -1,6 +1,7 @@
 package x1.stomp.util;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.interceptor.AroundInvoke;
@@ -100,8 +101,8 @@ public class LoggingInterceptor {
       for (var annotation : annotations) {
         if (annotation instanceof MDCKey) {
           MDCKey mdcKey = (MDCKey) annotation;
-          String key = StringUtils.defaultIfEmpty(mdcKey.value(), parameters[i].getName());
-          String value = Objects.toString(ctx.getParameters()[i], null);
+          var key = StringUtils.defaultIfEmpty(mdcKey.value(), parameters[i].getName());
+          var value = Objects.toString(ctx.getParameters()[i], null);
           if (value != null) {
             keys.add(key);
             MDC.put(key, value);
@@ -113,7 +114,7 @@ public class LoggingInterceptor {
     return keys;
   }
 
-  private void clearMdc(ArrayList<String> keys) {
+  private void clearMdc(List<String> keys) {
     keys.forEach(MDC::remove);
   }
 
