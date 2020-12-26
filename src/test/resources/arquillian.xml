@@ -44,7 +44,7 @@
   </extension>
 
   <extension qualifier="docker">
-    <property name="serverVersion">1.26</property>
+    <property name="serverVersion">1.41</property>
     <property name="autoStartContainers">stomp-test-it</property>
     <property name="definitionFormat">CUBE</property>
     <property name="clean">true</property>
@@ -56,7 +56,7 @@
         await:
           strategy: http
           responseCode: 200
-          url: http://dockerHost:8180
+          url: http://dockerHost:10090/health/ready
           sleepPollingTime: 5s
           iterations: 10
           stdErr: true
