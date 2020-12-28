@@ -1,36 +1,25 @@
 package x1.stomp.boundary;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.MDC;
-
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-
 @Provider
-public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplicationException> {
+public class WebApplicationExceptionMapper extends ExceptionMapperBase
+    implements ExceptionMapper<WebApplicationException> {
   @Context
   private UriInfo uriInfo;
 
-  @Inject
-  private Logger log;
-
   @Override
   public Response toResponse(WebApplicationException e) {
-    try {
-      MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(e.getResponse().getStatus()));
-      var response = new ErrorResponse(e.getResponse().getStatusInfo().getReasonPhrase());
-      response.setRequestUri(uriInfo.getRequestUri().toString());
-      response.add(new ErrorMessage(e.getMessage()));
-      log.warn(response.toString());
-      return Response.status(e.getResponse().getStatus()).entity(response).build();
-    } finally {
-      MDC.remove(MDCFilter.HTTP_STATUS_CODE);
-    }
+    var response = new ErrorResponse(e.getResponse().getStatusInfo().getReasonPhrase());
+    response.setRequestUri(uriInfo.getRequestUri().toString());
+    response.add(new ErrorMessage(e.getMessage()));
+    warn(Status.fromStatusCode(e.getResponse().getStatus()), response.toString());
+    return Response.status(e.getResponse().getStatus()).entity(response).build();
   }
 }

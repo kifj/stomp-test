@@ -1,27 +1,19 @@
 package x1.stomp.boundary;
 
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
-import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
-import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
-import org.eclipse.microprofile.openapi.annotations.media.Content;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.slf4j.Logger;
-import x1.service.registry.Service;
-import x1.service.registry.Services;
-import x1.stomp.control.QuoteRetriever;
-import x1.stomp.control.ShareSubscription;
-import x1.stomp.model.Quote;
-import x1.stomp.model.QuoteWrapper;
-import x1.stomp.model.Quotes;
+import static java.util.Arrays.asList;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
+import static x1.service.registry.Protocol.HTTP;
+import static x1.service.registry.Protocol.HTTPS;
+import static x1.service.registry.Technology.REST;
 import static x1.stomp.model.Quotes.from;
-import x1.stomp.model.Share;
-import x1.stomp.util.Logged;
-import x1.stomp.util.MDCKey;
-import x1.stomp.version.VersionData;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
@@ -36,28 +28,40 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.*;
-import static javax.ws.rs.core.MediaType.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Link;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
+import org.slf4j.Logger;
 
-import static java.util.Arrays.asList;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
-import static x1.service.registry.Protocol.HTTP;
-import static x1.service.registry.Protocol.HTTPS;
-import static x1.service.registry.Technology.REST;
+import x1.service.registry.Service;
+import x1.service.registry.Services;
+import x1.stomp.control.QuoteRetriever;
+import x1.stomp.control.ShareSubscription;
+import x1.stomp.model.Quote;
+import x1.stomp.model.QuoteWrapper;
+import x1.stomp.model.Quotes;
+import x1.stomp.model.Share;
+import x1.stomp.util.Logged;
+import x1.stomp.util.MDCKey;
+import x1.stomp.version.VersionData;
 
 @Path(QuoteResource.PATH)
 @RequestScoped

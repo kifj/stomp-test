@@ -1,10 +1,12 @@
 package x1.stomp.boundary;
 
+import java.io.IOException;
+
+import javax.ws.rs.core.Link;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
-import javax.ws.rs.core.Link;
 
 public class LinkSerializer extends JsonSerializer<Link> implements LinkConstants {
 

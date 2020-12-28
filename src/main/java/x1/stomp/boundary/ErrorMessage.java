@@ -1,9 +1,9 @@
 package x1.stomp.boundary;
 
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @XmlRootElement(name = "error")
 @Schema(name = "error", description = "Structured error message")

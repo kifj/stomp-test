@@ -28,7 +28,7 @@ public class QuoteRetriever {
 
   public List<Quote> retrieveQuotes(List<Share> shares) {
     if (shares.isEmpty()) {
-      return new ArrayList<>();
+      return Collections.emptyList();
     }
     return extractQuotes(shares, retrieveQuotes(joinKeys(shares)));
   }

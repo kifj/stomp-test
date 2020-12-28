@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import x1.stomp.boundary.MDCFilter;
+import static x1.stomp.boundary.MDCFilter.HTTP_STATUS_CODE;
 
 @Interceptor
 @Logged
@@ -59,10 +59,10 @@ public class LoggingInterceptor {
 
   private void logFailure(InvocationContext ctx, WebApplicationException e) {
     try {
-      MDC.put(MDCFilter.HTTP_STATUS_CODE, Integer.toString(e.getResponse().getStatus()));
+      MDC.put(HTTP_STATUS_CODE, Integer.toString(e.getResponse().getStatus()));
       logResponse(ctx, e);
     } finally {
-      MDC.remove(MDCFilter.HTTP_STATUS_CODE);
+      MDC.remove(HTTP_STATUS_CODE);
     }
   }
 
@@ -96,7 +96,7 @@ public class LoggingInterceptor {
     var method = ctx.getMethod();
     var parameters = method.getParameters();
 
-    int i = 0;
+    var i = 0;
     for (var annotations : method.getParameterAnnotations()) {
       for (var annotation : annotations) {
         if (annotation instanceof MDCKey) {

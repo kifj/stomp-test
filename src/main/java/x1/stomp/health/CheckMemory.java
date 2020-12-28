@@ -2,7 +2,6 @@ package x1.stomp.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Liveness;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -17,8 +16,7 @@ public class CheckMemory implements HealthCheck {
     var memoryBean = ManagementFactory.getMemoryMXBean();
     var memUsed = memoryBean.getHeapMemoryUsage().getUsed();
     var memMax = memoryBean.getHeapMemoryUsage().getMax();
-    HealthCheckResponseBuilder builder = HealthCheckResponse.named("heap-memory").withData("used", memUsed)
-        .withData("max", memMax);
+    var builder = HealthCheckResponse.named("heap-memory").withData("used", memUsed).withData("max", memMax);
     if (memMax > 0) {
       // status is is down is used memory is greater than 90% of max memory.
       builder = (memUsed < memMax * 0.9) ? builder.up() : builder.down();

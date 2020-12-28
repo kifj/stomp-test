@@ -1,12 +1,13 @@
 package x1.stomp.boundary;
 
+import java.io.IOException;
+
+import javax.ws.rs.core.Link;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import javax.ws.rs.core.Link;
-import java.io.IOException;
 
 public class LinkDeserializer extends JsonDeserializer<Link> implements LinkConstants {
 

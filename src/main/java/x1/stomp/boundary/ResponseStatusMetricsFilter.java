@@ -50,8 +50,7 @@ public class ResponseStatusMetricsFilter implements ContainerRequestFilter, Cont
     var metadata = Metadata.builder().withName(metricID.getName()).build();
     var tags = new ArrayList<>(metricID.getTagsAsList());
     tags.add(statusTag);
-    var counter = registry.counter(metadata, tags.toArray(new Tag[tags.size()]));
-    counter.inc();
+    registry.counter(metadata, tags.toArray(new Tag[tags.size()])).inc();
   }
 
   private Optional<MetricID> getMetricID(Class<?> resourceClass, Method resourceMethod) {
