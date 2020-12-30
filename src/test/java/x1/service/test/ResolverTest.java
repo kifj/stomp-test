@@ -20,7 +20,6 @@ import x1.stomp.version.VersionData;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +38,7 @@ public class ResolverTest {
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
         .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core").withTransitivity().asFile();
-    System.out.println(Arrays.toString(libraries));
+
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
         .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")

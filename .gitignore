@@ -12,3 +12,4 @@ MANIFEST.MF
 /nb-configuration.xml
 /.tern-project
 .vscode/settings.json
+*.crt

@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wildfly-arquillian
+  name: wildfly-arquillian
+  namespace: stomp-test
+spec:
+  replicas: 0
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+      deployment: wildfly-arquillian
+      app: wildfly-arquillian
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        deployment: wildfly-arquillian
+        app: wildfly-arquillian
+    spec:
+      containers:
+      - name: wildfly-arquillian
+        image: registry.x1/j7beck/x1-wildfly-stomp-test-it:1.6
+        imagePullPolicy: Always
+        env:
+        - name: MANAGEMENT
+          value: all
+        - name: HTTP
+          value: public
+        - name: MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS
+          value: UP
+        - name: KUBERNETES_LABELS
+          value: app=wildfly-arquillian
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        resources:
+          limits:
+            memory: "768Mi"
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/live
+            port: 9990
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        volumeMounts:
+        - name: log
+          mountPath: /srv/wildfly/log
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/ready
+            port: 9990
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: log
+        emptyDir: {}
+        

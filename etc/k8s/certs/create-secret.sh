@@ -13,7 +13,7 @@ fi
 
 cp "$NAME.crt" tls.crt
 cp "$NAME-key.pem" tls.key
-kubectl --cluster=default-cluster --namespace "$NAMESPACE" delete secret "pki-$NAME-secret"
-kubectl --cluster=default-cluster create secret tls "pki-$NAME-secret" --cert=tls.crt --key=tls.key --certificate-authority=/etc/pki/CA/cacert.pem --namespace=$NAMESPACE
+kubectl --namespace "$NAMESPACE" delete secret "pki-$NAME-secret"
+kubectl create secret tls "pki-$NAME-secret" --cert=tls.crt --key=tls.key --certificate-authority=kind-ca.crt --namespace=$NAMESPACE
 rm -f tls.crt tls.key
 
