@@ -59,8 +59,6 @@
           url: http://dockerHost:10090/health/ready
           sleepPollingTime: 5s
           iterations: 10
-          stdErr: true
-          stdOut: true
         env: [ MANAGEMENT=public HTTP=public ]
       </property>
   </extension>
