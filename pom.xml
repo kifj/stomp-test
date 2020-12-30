@@ -666,6 +666,17 @@
             <id>arq-jbossas-docker</id>
             <dependencies>
                 <dependency>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <version>3.0.1.Final</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
                     <groupId>org.arquillian.cube</groupId>
                     <artifactId>arquillian-cube-docker</artifactId>
                     <version>1.18.2</version>
@@ -675,17 +686,6 @@
 		    <groupId>org.yaml</groupId>
                     <artifactId>snakeyaml</artifactId>
 		    <version>1.19</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>3.0.1.Final</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
