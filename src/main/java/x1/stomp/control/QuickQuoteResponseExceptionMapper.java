@@ -9,7 +9,7 @@ import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import static x1.stomp.boundary.MDCFilter.HTTP_STATUS_CODE;;
+import static x1.stomp.boundary.MDCFilter.HTTP_STATUS_CODE;
 
 public class QuickQuoteResponseExceptionMapper implements ResponseExceptionMapper<WebApplicationException> {
   private static final Logger LOG = LoggerFactory.getLogger(QuickQuoteResponseExceptionMapper.class);

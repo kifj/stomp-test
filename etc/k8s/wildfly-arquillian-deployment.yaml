@@ -7,7 +7,7 @@ metadata:
   namespace: stomp-test
 spec:
   replicas: 0
-  minReadySeconds: 30
+  minReadySeconds: 15
   selector:
     matchLabels:
       deployment: wildfly-arquillian
@@ -40,6 +40,8 @@ spec:
               fieldPath: metadata.namespace
         resources:
           limits:
+            memory: "1024Mi"
+          requests:
             memory: "768Mi"
         livenessProbe:
           failureThreshold: 3
@@ -48,7 +50,7 @@ spec:
             port: 9990
             scheme: HTTP
           initialDelaySeconds: 30
-          periodSeconds: 60
+          periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
         ports:
@@ -66,7 +68,7 @@ spec:
             port: 9990
             scheme: HTTP
           initialDelaySeconds: 30
-          periodSeconds: 60
+          periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10
       dnsPolicy: ClusterFirst

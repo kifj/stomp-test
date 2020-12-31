@@ -58,7 +58,9 @@ spec:
           value: stomp-test
         resources:
           limits:
-            memory: "640Mi"
+            memory: "1024Mi"
+          requests:
+            memory: "768Mi"
         livenessProbe:
           failureThreshold: 3
           httpGet:
