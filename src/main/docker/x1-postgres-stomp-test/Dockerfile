@@ -1,7 +1,6 @@
 FROM registry.x1/j7beck/x1-postgres
 LABEL maintainer="joe@mail.x1"
 
-USER root
 ADD --chown=postgres sql/ /tmp/sql/
 ADD --chown=postgres create-db.sh /tmp/create-db.sh
 RUN chmod 755 /tmp/create-db.sh && /tmp/create-db.sh stocks
