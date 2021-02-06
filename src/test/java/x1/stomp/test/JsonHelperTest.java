@@ -28,19 +28,19 @@ import static x1.stomp.model.Action.UNSUBSCRIBE;
 public class JsonHelperTest {
   private final JsonHelper jsonHelper = new JsonHelper();
 
-  private TestData<Command> test(Command object, String json) {    
+  private TestData<Command> test(Command object, String json) {
     return new TestData<>(object, json);
   }
-  
+
   private static class TestData<T> {
     private TestData(T object, String json) {
       this.object = object;
       this.json = json;
     }
-    
+
     private final T object;
     private final String json;
-    
+
     protected String getJson() {
       return json;
     }
@@ -48,7 +48,7 @@ public class JsonHelperTest {
     protected T getObject() {
       return object;
     }
-    
+
     @Override
     public String toString() {
       return "TestData [object=" + object + ", json=" + json + "]";
@@ -58,11 +58,9 @@ public class JsonHelperTest {
   @TestFactory
   @DisplayName("from Command to JSON")
   Stream<DynamicTest> testCommandToJson() {
-    return Stream
-        .of(test(new Command(UNSUBSCRIBE, null), "{\"command\":{\"action\":\"UNSUBSCRIBE\"}}"),
-            test(new Command(SUBSCRIBE, "MSFT"), "{\"command\":{\"action\":\"SUBSCRIBE\",\"key\":\"MSFT\"}}"),
-            test(null, null))
-        .map(testData -> DynamicTest.dynamicTest(testData.toString(), () -> {
+    return Stream.of(test(new Command(UNSUBSCRIBE, null), "{\"command\":{\"action\":\"UNSUBSCRIBE\"}}"),
+        test(new Command(SUBSCRIBE, "MSFT"), "{\"command\":{\"action\":\"SUBSCRIBE\",\"key\":\"MSFT\"}}"),
+        test(null, null)).map(testData -> DynamicTest.dynamicTest(testData.toString(), () -> {
           String json = jsonHelper.toJSON(testData.getObject());
           assertThat(json).isEqualTo(testData.getJson());
         }));
@@ -75,17 +73,17 @@ public class JsonHelperTest {
     share.setId(1L);
     share.setKey("BMW.DE");
     share.setName("Bayerische Motorenwerke AG");
-    
+
     var q = new Quote();
     q.setCurrency("EUR");
     q.setPrice(1.23f);
     q.setShare(share);
     q.setFrom(new Date(123000123000L));
-    
+
     var json = jsonHelper.toJSON(q);
     assertThat(json)
         .isEqualTo("{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,"
-            + "\"currency\":\"EUR\",\"from\":\"1973-11-24T14:42:03.000+0000\"}}");
+            + "\"currency\":\"EUR\",\"from\":\"1973-11-24T14:42:03.000+00:00\"}}");
   }
 
   @TestFactory
@@ -97,9 +95,7 @@ public class JsonHelperTest {
         .map(testData -> DynamicTest.dynamicTest(testData.toString(), () -> {
           var c = jsonHelper.fromJSON(testData.getJson(), Command.class);
           Command expected = testData.getObject();
-          assertAll(
-              () -> assertThat(c).isNotNull(), 
-              () -> assertThat(c.getAction()).isEqualTo(expected.getAction()),
+          assertAll(() -> assertThat(c).isNotNull(), () -> assertThat(c.getAction()).isEqualTo(expected.getAction()),
               () -> assertThat(c.getKey()).isEqualTo(expected.getKey()));
         }));
   }
@@ -118,13 +114,10 @@ public class JsonHelperTest {
     var c = FileUtils.readFileToString(f, "UTF-8");
     var q = jsonHelper.fromJSON(c, QuickQuoteResult.class);
 
-    assertAll(
-        () -> assertThat(q).isNotNull(), 
-        () -> assertThat(q.getQuotes()).size().isEqualTo(2));
+    assertAll(() -> assertThat(q).isNotNull(), () -> assertThat(q.getQuotes()).size().isEqualTo(2));
 
     var q1 = q.getQuotes().get(0);
-    assertAll(
-        () -> assertThat(q1.getSymbol()).isEqualTo("BMW.DE"),
+    assertAll(() -> assertThat(q1.getSymbol()).isEqualTo("BMW.DE"),
         () -> assertThat(q1.getLast().toString()).isEqualTo("89.57"),
         () -> assertThat(q1.getCurrencyCode()).isEqualTo("EUR"), () -> assertThat(q1.getCountryCode()).isEqualTo("DE"),
         () -> assertThat(q1.getName()).isEqualTo("Bayerische Motoren Werke AG"),
@@ -142,8 +135,7 @@ public class JsonHelperTest {
     link.setType(MediaType.TEXT_HTML);
 
     var json = jsonHelper.toJSON(link);
-    assertThat(json)
-            .isEqualTo("{\"SimpleLink\":{\"href\":\"https://google.com\",\"rel\":\"self\",\"title\":\"Google\"," +
-                    "\"type\":\"text/html\",\"method\":\"GET\"}}");
+    assertThat(json).isEqualTo("{\"SimpleLink\":{\"href\":\"https://google.com\",\"rel\":\"self\",\"title\":\"Google\","
+        + "\"type\":\"text/html\",\"method\":\"GET\"}}");
   }
 }

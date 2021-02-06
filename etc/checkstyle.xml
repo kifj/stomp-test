@@ -60,7 +60,7 @@
     <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
     <!--
     <module name="NewlineAtEndOfFile"/>
- 		-->
+        -->
 
     <!-- Checks that property files contain the same keys.         -->
     <!-- See http://checkstyle.sf.net/config_misc.html#Translation -->
@@ -81,9 +81,9 @@
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
         <module name="JavadocMethod">
-        	<property name="scope" value="package" />
-        	<property name="allowMissingParamTags" value="true" />
-        	<property name="allowMissingReturnTag" value="true" />
+            <property name="scope" value="package" />
+            <property name="allowMissingParamTags" value="true" />
+            <property name="allowMissingReturnTag" value="true" />
         </module>
         <!-- <module name="JavadocType"/> -->
         <!--
@@ -182,7 +182,7 @@
         <module name="LeftCurly"/>
         <!-- <module name="NeedBraces"/> -->
         <module name="RightCurly">
-        	<!-- <property name="option" value="alone"/> -->
+            <!-- <property name="option" value="alone"/> -->
         </module>
 
 

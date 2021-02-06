@@ -1,15 +1,17 @@
 package x1.service.test;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import x1.service.Constants;
 import x1.service.client.Resolver;
 import x1.service.etcd.Node;
@@ -29,7 +31,8 @@ import static x1.service.registry.Protocol.HTTPS;
 import static x1.service.registry.Technology.JMS;
 import static x1.service.registry.Technology.REST;
 
-@RunWith(Arquillian.class)
+@ExtendWith(ArquillianExtension.class)
+@DisplayName("Resolver Test")
 public class ResolverTest {
   private static final String STAGE = "local";
   private String hostname;
@@ -37,7 +40,8 @@ public class ResolverTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core").withTransitivity().asFile();
+        .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core", "org.hamcrest:hamcrest-library")
+        .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
@@ -47,7 +51,7 @@ public class ResolverTest {
         .addAsLibraries(libraries);
   }
 
-  @Before
+  @BeforeEach
   public void setup() {
     try {
       hostname = InetAddress.getLocalHost().getHostName();

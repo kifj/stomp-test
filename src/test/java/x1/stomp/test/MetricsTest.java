@@ -13,16 +13,17 @@ import javax.ws.rs.core.GenericType;
 import static javax.ws.rs.core.Response.Status.*;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.gson.JsonParser;
 
@@ -30,17 +31,18 @@ import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.model.Share;
 import x1.stomp.version.VersionData;
 
-@RunWith(Arquillian.class)
+@ExtendWith(ArquillianExtension.class)
+@DisplayName("Metrics Test")
 public class MetricsTest {
   private static final String PATH_SHARES = "shares";
-  
+
   private String baseUrl;
   private String metricsBaseUrl;
   private Client client;
 
   @Deployment
   public static Archive<?> createTestArchive() {
-    var libraries = Maven.resolver().loadPomFromFile("pom.xml").resolve("org.assertj:assertj-core").withTransitivity()
+    var libraries = Maven.resolver().loadPomFromFile("pom.xml").resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-library").withTransitivity()
         .asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
@@ -52,17 +54,17 @@ public class MetricsTest {
 
   @ArquillianResource
   private URL url;
-  
-  @Before
+
+  @BeforeEach
   public void setup() {
-    client = ClientBuilder.newClient().register(JacksonConfig.class);
-    baseUrl = url.toString() + "rest";
-    metricsBaseUrl = getBaseUrlForMetrics();
+      client = ClientBuilder.newClient().register(JacksonConfig.class);
+      baseUrl = url.toString() + "rest";
+      metricsBaseUrl = getBaseUrlForMetrics();
   }
 
-  @After
+  @AfterEach
   public void teardown() {
-    client.close();
+      client.close();
   }
   
   private String getBaseUrlForMetrics() {
@@ -80,6 +82,7 @@ public class MetricsTest {
   }
 
   @Test
+  @DisplayName("test metrics")
   public void testMetrics() {
     var shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON).get(new GenericType<List<Share>>() {
     });
@@ -100,6 +103,7 @@ public class MetricsTest {
   }
 
   @Test
+  @DisplayName("test health")
   public void testHealth() {
     var response = client.target(metricsBaseUrl).path("health").request(APPLICATION_JSON).get();
     assertThat(response).hasStatus(OK);

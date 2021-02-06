@@ -1,16 +1,17 @@
 package x1.stomp.test;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import x1.stomp.boundary.ErrorResponse;
 import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.model.Quote;
@@ -36,7 +37,8 @@ import static x1.stomp.test.ErrorResponseAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-@RunWith(Arquillian.class)
+@ExtendWith(ArquillianExtension.class)
+@DisplayName("ShareResource Test")
 public class ShareResourceTest {
   private static final String HEADER_CORRELATION_ID = "Correlation-Id";
   private static final String PATH_QUOTES = "quotes";
@@ -55,7 +57,7 @@ public class ShareResourceTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.assertj:assertj-core").withTransitivity().asFile();
+        .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-library").withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
@@ -64,13 +66,13 @@ public class ShareResourceTest {
         .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
   }
 
-  @Before
+  @BeforeEach
   public void setup() {
     baseUrl = url.toString() + "rest";
     client = ClientBuilder.newClient().register(JacksonConfig.class);
   }
 
-  @After
+  @AfterEach
   public void teardown() {
     client.close();
   }
