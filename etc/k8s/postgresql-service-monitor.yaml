@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: postgresql-persistent
+      app: postgresql
   endpoints:
   - port: metrics
     path: /metrics

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: postgresql-persistent
+    app: postgresql
   name: postgresql
   namespace: stomp-test
 spec:

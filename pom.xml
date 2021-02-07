@@ -92,7 +92,7 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.7.0.Alpha6</version>
+                <version>1.7.0.Alpha7</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -319,13 +319,11 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <version>1.7.0.Final-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-core</artifactId>
-            <version>1.7.0.Final-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>

@@ -2,12 +2,13 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    app: postgresql-persistent
+    app: postgresql
   name: postgresql
   namespace: stomp-test
 spec:
   accessModes:
   - ReadWriteOnce
+  storageClassName: longhorn
   resources:
     requests:
       storage: 1Gi

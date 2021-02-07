@@ -7,6 +7,7 @@
     <configuration>
       <property name="managementAddress">${jboss.managementAddress:localhost}</property>
       <property name="managementPort">${jboss.managementPort:9990}</property>
+      <property name="managementProtocol">${jboss.managementProtocol:remote-http}</property>
       <property name="username">${jboss.user}</property>
       <property name="password">${jboss.password}</property>
     </configuration>

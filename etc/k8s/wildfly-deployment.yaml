@@ -61,16 +61,6 @@ spec:
             memory: "1024Mi"
           requests:
             memory: "768Mi"
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /health/live
-            port: 9990
-            scheme: HTTP
-          initialDelaySeconds: 120
-          periodSeconds: 60
-          successThreshold: 1
-          timeoutSeconds: 10
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -90,6 +80,16 @@ spec:
             port: 9990
             scheme: HTTP
           initialDelaySeconds: 60
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/live
+            port: 9990
+            scheme: HTTP
+          initialDelaySeconds: 120
           periodSeconds: 60
           successThreshold: 1
           timeoutSeconds: 10
