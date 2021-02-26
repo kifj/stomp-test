@@ -77,4 +77,3 @@ spec:
       volumes:
       - name: log
         emptyDir: {}
-        

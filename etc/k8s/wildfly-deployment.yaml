@@ -116,4 +116,3 @@ spec:
       - name: application-config
         configMap:
           name: stomp-test-config  
-        
