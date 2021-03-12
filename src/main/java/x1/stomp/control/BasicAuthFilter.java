@@ -11,7 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
-import org.jboss.resteasy.microprofile.client.utils.ClientRequestContextUtils;
+import org.jboss.resteasy.client.jaxrs.internal.ClientInvocation;
+import org.jboss.resteasy.client.jaxrs.internal.ClientRequestContextImpl;
 
 public class BasicAuthFilter implements ClientRequestFilter {
   private BasicAuthentication delegate;
@@ -30,9 +31,10 @@ public class BasicAuthFilter implements ClientRequestFilter {
   private void checkDelegate(ClientRequestContext requestContext) {
     if (hasDelegate == null) {
       Config config = CDI.current().select(Config.class).get();
-      Class<?> clazz = ClientRequestContextUtils.getDeclaringClass(requestContext);
+      Class<?> clazz = getDeclaringClass(requestContext);
       RegisterRestClient annotation = clazz.getAnnotation(RegisterRestClient.class);
-      String configKey = annotation != null ? StringUtils.defaultIfEmpty(annotation.configKey(), clazz.getName()) : clazz.getName();
+      String configKey = annotation != null ? StringUtils.defaultIfEmpty(annotation.configKey(), clazz.getName())
+          : clazz.getName();
       Optional<String> username = config.getOptionalValue(configKey + "/mp-rest/username", String.class);
       Optional<String> password = config.getOptionalValue(configKey + "/mp-rest/password", String.class);
       if (username.isPresent() && password.isPresent()) {
@@ -42,5 +44,14 @@ public class BasicAuthFilter implements ClientRequestFilter {
         hasDelegate = Boolean.FALSE;
       }
     }
+  }
+
+  private Class<?> getDeclaringClass(ClientRequestContext requestContext) {
+    if (requestContext instanceof ClientRequestContextImpl == false) {
+      throw new RuntimeException(
+          "Failed to get ClientInvocation from request context. Is RestEasy client used underneath?");
+    }
+    ClientInvocation invocation = ((ClientRequestContextImpl) requestContext).getInvocation();
+    return invocation.getClientInvoker().getDeclaring();
   }
 }
