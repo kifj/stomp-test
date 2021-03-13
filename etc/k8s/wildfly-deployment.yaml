@@ -56,6 +56,8 @@ spec:
               fieldPath: metadata.namespace
         - name: JAEGER_SERVICE_NAME
           value: stomp-test
+        - name: MP_METRICS_TAGS
+          value: "_app=stomp-test,version=1.6"
         resources:
           limits:
             memory: "1024Mi"
