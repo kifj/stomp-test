@@ -145,8 +145,8 @@ public class ShareResource {
   @POST
   @Formatted
   @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
-      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
+  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, example = "test", allowEmptyValue = true),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, example = "12345", allowEmptyValue = true) })
   @APIResponse(responseCode = "201", description = "Share queued for subscription",
           content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "500", description = "Queuing failed")
@@ -156,7 +156,8 @@ public class ShareResource {
   public Response addShare(
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
-      @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.") 
+      @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.", 
+        allowEmptyValue = true, example = "12345") 
       @HeaderParam(value = "Correlation-Id") String correlationId) {
     try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
       try (var producer = session.createProducer(stockMarketQueue)) {

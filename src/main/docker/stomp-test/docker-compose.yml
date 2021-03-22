@@ -1,0 +1,30 @@
+version: '3'
+services:
+  activemq-artemis:
+    image: registry.x1/j7beck/x1-activemq-artemis
+    hostname: activemq-artemis
+    domainname: docker.x1
+    container_name: activemq-artemis
+    network_mode: bridge
+    environment:
+     - SERVICE_NAME=activemq-artemis
+    volumes:
+     - /opt/docker/x1/certs/activemq-artemis.key:/etc/pki/tls/private/node.key:ro
+     - /opt/docker/x1/certs/activemq-artemis.crt:/etc/pki/tls/certs/node.crt:ro
+  wildfly:
+    image: registry.x1/j7beck/x1-wildfly-bootable-stomp-test
+    domainname: docker.x1
+    network_mode: bridge
+    environment:
+     - X1_SERVICE_REGISTRY_ETCD=http://etcd.x1:4001
+     - X1_SERVICE_REGISTRY_STAGE=docker
+     - DB_SERVER=db.x1
+     - ACTIVEMQ_SERVER=activemq-artemis
+     - GC_MAX_METASPACE_SIZE=256
+     - GC_METASPACE_SIZE=96
+     - SERVICE_NAME=stomp-test
+    volumes:
+     - /opt/docker/x1/certs/docker.key:/etc/pki/tls/private/node.key:ro
+     - /opt/docker/x1/certs/docker.crt:/etc/pki/tls/certs/node.crt:ro
+    links:
+      - activemq-artemis:activemq-artemis

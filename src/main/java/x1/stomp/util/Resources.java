@@ -27,11 +27,11 @@ public class Resources {
   }
 
   @Produces
-  @Resource(mappedName = "java:/ConnectionFactory")
+  @Resource(lookup = "java:/JmsXA")
   private ConnectionFactory connectionFactory;
 
   @StockMarket
-  @Resource(mappedName = "java:/jms/queue/stocks")
+  @Resource(name = "java:/jms/queue/stocks")
   private Queue stockMarketQueue;
 
   @Produces
@@ -41,7 +41,7 @@ public class Resources {
   }
 
   @StockMarket
-  @Resource(mappedName = "java:/jms/topic/quotes")
+  @Resource(name = "java:/jms/topic/quotes")
   private Topic quoteTopic;
 
   @Produces

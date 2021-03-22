@@ -71,10 +71,13 @@ spec:
         volumeMounts:
         - name: pki-secret
           mountPath: /var/run/x1
+          readOnly: true
         - name: application-config
           mountPath: /srv/wildfly/configuration/application
+          readOnly: true
         - name: log
           mountPath: /srv/wildfly/log
+          readOnly: false
         readinessProbe:
           failureThreshold: 3
           httpGet:
@@ -101,6 +104,7 @@ spec:
         volumeMounts:
         - name: pki-secret
           mountPath: /var/run/x1
+          readOnly: true
         - name: log
           mountPath: /var/log/wildfly
         env:

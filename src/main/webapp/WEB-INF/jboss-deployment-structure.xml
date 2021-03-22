@@ -6,7 +6,6 @@
       <module name="org.apache.httpcomponents" />
       <module name="org.apache.commons.codec" />
       <module name="com.google.guava" />
-      <module name="org.apache.commons.lang3" />
       <module name="com.google.code.gson" />
     </dependencies>
   </deployment>

@@ -24,6 +24,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static x1.service.Constants.*;
 import static x1.service.registry.Protocol.EJB;
@@ -36,6 +38,9 @@ import static x1.service.registry.Technology.REST;
 public class ResolverTest {
   private static final String STAGE = "local";
   private String hostname;
+  
+  @Inject
+  private Resolver resolver;
 
   @Deployment
   public static Archive<?> createTestArchive() {
@@ -62,8 +67,6 @@ public class ResolverTest {
 
   @Test
   public void testResolveHttps() throws Exception {
-    var resolver = new Resolver();
-
     var nodes = resolver.resolve(REST, ShareResource.class, VersionData.APP_VERSION_MAJOR_MINOR, STAGE, HTTPS);
     assertThat(nodes).size().isPositive();
     var node = getNode(nodes, resolver);
@@ -79,8 +82,6 @@ public class ResolverTest {
 
   @Test
   public void testResolveJms() {
-    var resolver = new Resolver();
-
     var nodes = resolver.resolve(JMS, ShareMessageListener.class, VersionData.APP_VERSION_MAJOR_MINOR, STAGE, EJB);
     assertThat(nodes).size().isPositive();
     var node = getNode(nodes, resolver);
