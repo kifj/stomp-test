@@ -9,6 +9,7 @@ import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 import static x1.service.registry.Protocol.HTTP;
 import static x1.service.registry.Protocol.HTTPS;
 import static x1.service.registry.Technology.REST;
+import static x1.stomp.boundary.LinkConstants.*;
 import static x1.stomp.model.Quotes.from;
 
 import java.util.List;
@@ -170,8 +171,8 @@ public class QuoteResource {
   }
 
   private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
-    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey()))
-        .rel(LinkConstants.REL_SELF).build();
+    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel(REL_SELF)
+        .build();
     var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
         .rel("parent").build();
     quote.setLinks(asList(self, share));

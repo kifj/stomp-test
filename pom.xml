@@ -92,7 +92,7 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.7.0.Alpha8</version>
+                <version>1.7.0.Alpha9</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -296,6 +296,12 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
@@ -896,7 +902,7 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
-                        <version>3.0.2.Final</version>
+                        <version>4.0.1.Final</version>
                         <configuration>
                             <feature-packs>
                                 <feature-pack>

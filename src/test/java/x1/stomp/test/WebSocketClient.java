@@ -1,10 +1,11 @@
 package x1.stomp.test;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.websocket.*;
+
+import org.slf4j.Logger;
+
 import java.io.IOException;
 import java.net.URI;
 
@@ -14,8 +15,9 @@ import static javax.websocket.CloseReason.CloseCodes.NORMAL_CLOSURE;
 @ClientEndpoint
 @ApplicationScoped
 public class WebSocketClient {
-  private static final Logger LOG = LoggerFactory.getLogger(WebSocketClient.class.getName());
-
+  @Inject
+  private Logger log;
+  
   private Session session;
   private String lastMessage;
 
@@ -26,18 +28,18 @@ public class WebSocketClient {
   @OnOpen
   public void onOpen(Session session) {
     this.session = session;
-    LOG.debug("onOpen {}", session.getId());
+    log.debug("onOpen {}", session.getId());
   }
 
   @OnMessage
   public void onMessage(String message, Session session) {
-    LOG.info("onMessage {}: {}", session.getId(), message);
+    log.info("onMessage {}: {}", session.getId(), message);
     lastMessage = message;
   }
 
   @OnClose
   public void onClose(Session session, CloseReason closeReason) {
-    LOG.info("Session {} close because of {}", session.getId(), closeReason);
+    log.info("Session {} close because of {}", session.getId(), closeReason);
   }
 
   @SuppressWarnings("UnusedReturnValue")
@@ -53,11 +55,11 @@ public class WebSocketClient {
     try {
       session.getBasicRemote().sendText(message);
     } catch (IOException ex) {
-      LOG.error(null, ex);
+      log.error(null, ex);
       try {
         session.close(new CloseReason(CLOSED_ABNORMALLY, ex.getMessage()));
       } catch (IOException ignored) {
-        LOG.warn("Failed to close failed connection", ignored);
+        log.warn("Failed to close failed connection", ignored);
       }
       throw ex;
     }

@@ -2,13 +2,13 @@ package x1.stomp.boundary;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static x1.service.registry.Protocol.HTTP;
 import static x1.service.registry.Protocol.HTTPS;
 import static x1.service.registry.Technology.REST;
 import static x1.stomp.boundary.MDCFilter.X_CALLER_ID;
 import static x1.stomp.boundary.MDCFilter.X_REQUEST_ID;
+import static x1.stomp.boundary.LinkConstants.*;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -17,10 +17,9 @@ import java.util.UUID;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jms.Connection;
-import javax.jms.JMSException;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
 import javax.jms.Queue;
-import javax.jms.Session;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -76,7 +75,7 @@ import x1.stomp.version.VersionData;
 @RequestScoped
 @Services(services = { @Service(technology = REST, value = RestApplication.ROOT + ShareResource.PATH,
     version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
-@Transactional(Transactional.TxType.REQUIRES_NEW)
+@Transactional
 @Logged
 @Traced
 @Timeout(value = 5, unit = ChronoUnit.SECONDS)
@@ -94,8 +93,8 @@ public class ShareResource {
   private ShareSubscription shareSubscription;
 
   @Inject
-  @StockMarket
-  private Connection connection;
+  @JMSConnectionFactory("java:/JmsXA")
+  private JMSContext context;
 
   @Inject
   @StockMarket
@@ -109,11 +108,13 @@ public class ShareResource {
   @Formatted
   @Operation(description = "List all subscriptions")
   @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
-          @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
-  @APIResponse(responseCode = "200", description = "All subscriptions", content = {
-          @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class), mediaType = APPLICATION_JSON),
-          @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML)})
-  @SimplyTimed(name = "get-shares", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
+  @APIResponse(responseCode = "200", description = "All subscriptions",
+      content = {
+          @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class),
+              mediaType = APPLICATION_JSON),
+          @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML) })
+  @SimplyTimed(name = "get-shares", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
   @Bulkhead(value = 5)
   public List<Share> listAllShares() {
     var shares = shareSubscription.list();
@@ -130,7 +131,7 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @SimplyTimed(name = "get-share", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
+  @SimplyTimed(name = "get-share", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
   @Bulkhead(value = 5)
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
@@ -148,33 +149,26 @@ public class ShareResource {
   @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, example = "test", allowEmptyValue = true),
       @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, example = "12345", allowEmptyValue = true) })
   @APIResponse(responseCode = "201", description = "Share queued for subscription",
-          content = @Content(schema = @Schema(implementation = Share.class)))
+      content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "500", description = "Queuing failed")
   @APIResponse(responseCode = "400", description = "Invalid data",
-          content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-  @SimplyTimed(name = "add-share", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
+      content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  @SimplyTimed(name = "add-share", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
   public Response addShare(
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
-      @Parameter(description = "provide a Correlation-Id header to receive a response for your operation when it finished.", 
-        allowEmptyValue = true, example = "12345") 
-      @HeaderParam(value = "Correlation-Id") String correlationId) {
-    try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      try (var producer = session.createProducer(stockMarketQueue)) {
-        var message = session.createObjectMessage(share);
-        message.setJMSCorrelationID(correlationId != null ? correlationId : UUID.randomUUID().toString());        
-        message.setStringProperty("type", "share");
-        message.setStringProperty("action", Action.SUBSCRIBE.name());
-        producer.send(message);
-        MDC.put(CORRELATION_ID, message.getJMSCorrelationID());
-        MDC.put(MDC_KEY, share.getKey());
-        log.debug("message sent: {}", message);
-      }
+      @Parameter(
+          description = "provide a Correlation-Id header to receive a response for your operation when it finished.",
+          allowEmptyValue = true, example = "12345") @HeaderParam(value = "Correlation-Id") String correlationId) {
+    try {
+      var jmsCorrelationId = correlationId != null ? correlationId : UUID.randomUUID().toString();
+      context.createProducer().setJMSCorrelationID(jmsCorrelationId).setProperty("type", "share")
+          .setProperty("action", Action.SUBSCRIBE.name()).send(stockMarketQueue, share);
+      MDC.put(CORRELATION_ID, jmsCorrelationId);
+      MDC.put(MDC_KEY, share.getKey());
+      log.debug("message sent: {}", share);
       var location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
       return Response.created(location).build();
-    } catch (JMSException e) {
-      log.error(e.getErrorCode(), e);
-      return Response.status(INTERNAL_SERVER_ERROR).build();
     } finally {
       MDC.remove(CORRELATION_ID);
       MDC.remove(MDC_KEY);
@@ -190,10 +184,9 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")
-  @SimplyTimed(name = "remove-share", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=ShareResource"})
+  @SimplyTimed(name = "remove-share", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
   public Response removeShare(
-      @Parameter(description = "Stock symbol", example = "GOOG") 
-      @PathParam("key") @MDCKey(MDC_KEY) String key) {
+      @Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
     if (share.isPresent()) {
       shareSubscription.unsubscribe(share.get());
@@ -204,10 +197,9 @@ public class ShareResource {
   }
 
   private Share addLinks(UriBuilder baseUriBuilder, Share share) {
-    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel(LinkConstants.REL_SELF)
-        .build();
+    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel(REL_SELF).build();
     var delete = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(share.getKey())).rel("unsubscribe")
-        .param(LinkConstants.PARAM_METHOD, HttpMethod.DELETE).build();
+        .param(PARAM_METHOD, HttpMethod.DELETE).build();
     var quote = Link.fromUriBuilder(baseUriBuilder.clone().path(QuoteResource.PATH).path(share.getKey())).rel("quote")
         .build();
     share.setLinks(Arrays.asList(self, delete, quote));

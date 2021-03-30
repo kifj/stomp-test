@@ -24,6 +24,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.google.gson.JsonParser;
 
@@ -81,6 +83,38 @@ public class MetricsTest {
     return System.getProperty("jboss.bind.address", "127.0.0.1");
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = { "memory.committedHeap", "memory.committedNonHeap", "memory.maxHeap", "memory.maxNonHeap",
+      "memory.usedHeap", "memory.usedNonHeap" })
+  @DisplayName("test JVM memory metrics")
+  public void testMemoryMetrics(String key) {
+    var response = client.target(metricsBaseUrl).path("metrics").path("base").request(APPLICATION_JSON).get();
+    assertThat(response).hasStatus(OK);
+
+    var body = response.readEntity(String.class);
+    assertThat(body).isNotNull();
+
+    var o = JsonParser.parseString(body).getAsJsonObject();
+    assertThat(o).isNotNull();
+    assertThat(o.getAsJsonPrimitive(key).getAsLong()).isNotEqualTo(0);
+  }
+
+  @Test
+  @DisplayName("test health")
+  public void testHealth() {
+    var response = client.target(metricsBaseUrl).path("health").request(APPLICATION_JSON).get();
+    assertThat(response).hasStatus(OK);
+
+    var body = response.readEntity(String.class);
+    assertThat(body).isNotNull();
+
+    var o = JsonParser.parseString(body).getAsJsonObject();
+    assertThat(o).isNotNull();
+    assertThat(o.get("status").getAsString()).isEqualTo("UP");
+    var checks = o.getAsJsonArray("checks");
+    assertThat(checks).hasSize(6);
+  }
+  
   @Test
   @DisplayName("test metrics")
   public void testMetrics() {
@@ -100,21 +134,5 @@ public class MetricsTest {
     assertThat(o.getAsJsonObject("get-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("remove-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("get-shares").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(1);
-  }
-
-  @Test
-  @DisplayName("test health")
-  public void testHealth() {
-    var response = client.target(metricsBaseUrl).path("health").request(APPLICATION_JSON).get();
-    assertThat(response).hasStatus(OK);
-
-    var body = response.readEntity(String.class);
-    assertThat(body).isNotNull();
-
-    var o = JsonParser.parseString(body).getAsJsonObject();
-    assertThat(o).isNotNull();
-    assertThat(o.get("status").getAsString()).isEqualTo("UP");
-    var checks = o.getAsJsonArray("checks");
-    assertThat(checks).hasSize(6);
   }
 }

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
+import com.google.gson.JsonParser;
+
 import x1.stomp.control.QuickQuoteResult;
 import x1.stomp.model.Command;
 import x1.stomp.model.Quote;
@@ -16,6 +18,7 @@ import x1.stomp.util.JsonHelper;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -111,7 +114,7 @@ public class JsonHelperTest {
   @DisplayName("from JSON to QuickQuoteResult")
   void testFromJson4() throws Exception {
     var f = new File(getClass().getClassLoader().getResource("quickquoteresult.json").getFile());
-    var c = FileUtils.readFileToString(f, "UTF-8");
+    var c = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
     var q = jsonHelper.fromJSON(c, QuickQuoteResult.class);
 
     assertAll(() -> assertThat(q).isNotNull(), () -> assertThat(q.getQuotes()).size().isEqualTo(2));
@@ -124,8 +127,8 @@ public class JsonHelperTest {
         () -> assertThat(q1.getExchange()).isEqualTo("XETRA"), () -> assertThat(q1.getLastTime()).isNotNull());
   }
 
-  @Test
   @DisplayName("from JSON to SimpleLink")
+  @Test
   void testSimpleLinkToJson() throws Exception {
     var link = new SimpleLink();
     link.setHref("https://google.com");
@@ -135,7 +138,12 @@ public class JsonHelperTest {
     link.setType(MediaType.TEXT_HTML);
 
     var json = jsonHelper.toJSON(link);
-    assertThat(json).isEqualTo("{\"SimpleLink\":{\"href\":\"https://google.com\",\"rel\":\"self\",\"title\":\"Google\","
-        + "\"type\":\"text/html\",\"method\":\"GET\"}}");
+    var o = JsonParser.parseString(json).getAsJsonObject().get("SimpleLink").getAsJsonObject();
+    assertThat(o).isNotNull();    
+    assertThat(o.get("href").getAsString()).isEqualTo("https://google.com");
+    assertThat(o.get("rel").getAsString()).isEqualTo("self");
+    assertThat(o.get("title").getAsString()).isEqualTo("Google");
+    assertThat(o.get("type").getAsString()).isEqualTo(MediaType.TEXT_HTML);
+    assertThat(o.get("method").getAsString()).isEqualTo(HttpMethod.GET);
   }
 }

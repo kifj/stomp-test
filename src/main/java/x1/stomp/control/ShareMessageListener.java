@@ -122,8 +122,7 @@ public class ShareMessageListener implements MessageListener {
   }
 
   private void subscribe(String key) {
-    var share = new Share(key);
-    subscribe(share);
+    subscribe(new Share(key));
   }
 
   private void subscribe(Share share) {

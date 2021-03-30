@@ -14,10 +14,9 @@ import x1.stomp.util.JsonHelper;
 import x1.stomp.util.StockMarket;
 
 import javax.inject.Inject;
-import javax.jms.Connection;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.JMSProducer;
 import javax.jms.Topic;
 import javax.validation.constraints.NotNull;
 
@@ -38,8 +37,8 @@ public class QuoteUpdater {
   private ShareSubscription shareSubscription;
 
   @Inject
-  @StockMarket
-  private Connection connection;
+  @JMSConnectionFactory("java:/JmsXA")
+  private JMSContext context;
 
   @Inject
   @StockMarket
@@ -69,41 +68,30 @@ public class QuoteUpdater {
     lastUpdatedCount = 0;
     var shares = shareSubscription.list();
     log.info("Update quotes for {} shares", shares.size());
-    try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      try (var producer = session.createProducer(quoteTopic)) {
-        var quotes = quoteRetriever.retrieveQuotes(shares);
-        quotes.forEach(quote -> {
-          try {
-            log.debug("Sending message for {}", quote);
-            producer.send(createMessage(quote, session));
-            lastUpdatedCount++;
-          } catch (JMSException | IOException e) {
-            log.error(null, e);
-          }
-        });
+    var quotes = quoteRetriever.retrieveQuotes(shares);
+    quotes.forEach(quote -> {
+      try {
+        log.debug("Sending message for {}", quote);
+        send(quote, context.createProducer(), quoteTopic);
+        lastUpdatedCount++;
+      } catch (IOException e) {
+        log.error(e.getMessage(), e);
       }
-    } catch (JMSException e) {
-      log.error(e.getErrorCode(), e);
-    }
+    });
   }
 
   public void updateQuote(@NotNull Quote quote) {
-    try (var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-      try (var producer = session.createProducer(quoteTopic)) {
-        log.debug("Sending message for {}", quote);
-        producer.send(createMessage(quote, session));
-      }
+    try {
+      log.debug("Sending message for {}", quote);
+      send(quote, context.createProducer(), quoteTopic);
       lastUpdatedCount++;
-    } catch (JMSException | IOException e) {
-      log.error(null, e);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
     }
   }
 
-  private Message createMessage(Quote quote, Session session) throws JMSException, IOException {
-    var message = session.createTextMessage(jsonHelper.toJSON(quote));
-    message.setJMSCorrelationID(UUID.randomUUID().toString());
-    message.setStringProperty("type", "quote");
-    message.setStringProperty("key", quote.getShare().getKey());
-    return message;
+  private void send(Quote quote, JMSProducer producer, Topic topic) throws IOException {
+    producer.setJMSCorrelationID(UUID.randomUUID().toString()).setProperty("type", "quote")
+        .setProperty("key", quote.getShare().getKey()).send(topic, jsonHelper.toJSON(quote));
   }
 }

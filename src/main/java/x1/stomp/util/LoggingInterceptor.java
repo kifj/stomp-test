@@ -100,7 +100,7 @@ public class LoggingInterceptor {
     for (var annotations : method.getParameterAnnotations()) {
       for (var annotation : annotations) {
         if (annotation instanceof MDCKey) {
-          MDCKey mdcKey = (MDCKey) annotation;
+          var mdcKey = (MDCKey) annotation;
           var key = StringUtils.defaultIfEmpty(mdcKey.value(), parameters[i].getName());
           var value = Objects.toString(ctx.getParameters()[i], null);
           if (value != null) {
