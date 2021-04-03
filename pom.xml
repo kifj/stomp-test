@@ -398,14 +398,14 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.1.4</version>
+        <version>4.2.2</version>
       </plugin>
     </plugins>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>3.4.2</version>
+        <version>3.4.3</version>
       </extension>
     </extensions>
   </build>
@@ -473,7 +473,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
         <configuration>
           <configLocation>etc/checkstyle.xml</configLocation>
         </configuration>
