@@ -32,7 +32,7 @@ public class ResponseStatusMetricsFilter implements ContainerRequestFilter, Cont
   private MetricRegistry registry;
 
   @Override
-  public void filter(ContainerRequestContext requestContext) throws IOException {
+  public void filter(ContainerRequestContext requestContext) {
     getMetricID(resourceInfo.getResourceClass(), resourceInfo.getResourceMethod())
         .ifPresent(metricID -> requestContext.setProperty(METRIC_ID_PARAM, metricID));
   }
@@ -50,7 +50,7 @@ public class ResponseStatusMetricsFilter implements ContainerRequestFilter, Cont
     var metadata = Metadata.builder().withName(metricID.getName()).build();
     var tags = new ArrayList<>(metricID.getTagsAsList());
     tags.add(statusTag);
-    registry.counter(metadata, tags.toArray(new Tag[tags.size()])).inc();
+    registry.counter(metadata, tags.toArray(new Tag[0])).inc();
   }
 
   private Optional<MetricID> getMetricID(Class<?> resourceClass, Method resourceMethod) {

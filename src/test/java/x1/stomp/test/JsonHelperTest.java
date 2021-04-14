@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -113,7 +114,7 @@ public class JsonHelperTest {
   @Test
   @DisplayName("from JSON to QuickQuoteResult")
   void testFromJson4() throws Exception {
-    var f = new File(getClass().getClassLoader().getResource("quickquoteresult.json").getFile());
+    var f = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("quickquoteresult.json")).getFile());
     var c = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
     var q = jsonHelper.fromJSON(c, QuickQuoteResult.class);
 
