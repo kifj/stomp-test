@@ -14,6 +14,6 @@ fi
 cp "$NAME.crt" tls.crt
 cp "$NAME-key.pem" tls.key
 kubectl --namespace "$NAMESPACE" delete secret "pki-$NAME-secret"
-kubectl create secret tls "pki-$NAME-secret" --cert=tls.crt --key=tls.key --certificate-authority=kind-ca.crt --namespace=$NAMESPACE
+kubectl create secret tls "pki-$NAME-secret" --cert=tls.crt --key=tls.key --certificate-authority=/etc/pki/CA/cacert.pem --namespace=$NAMESPACE
 rm -f tls.crt tls.key
 
