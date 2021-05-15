@@ -64,7 +64,7 @@ if (outcome != success) of /subsystem=microprofile-opentracing-smallrye/jaeger-t
     sampler-type=probabilistic,\
     sampler-param=0.1,\
     tags={{service=stomp-test,deployment=wildfly}},\
-    sender-endpoint="http://jaeger-simple-collector.observability:14268/api/traces")
+    sender-endpoint="http://jaeger-all-in-one-collector.observability:14268/api/traces")
 end-if
 
 /subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-operator)
