@@ -25,6 +25,7 @@ spec:
         deployment: wildfly
         app: wildfly
     spec:
+      serviceAccountName: jgroups-kubeping-service-account
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
