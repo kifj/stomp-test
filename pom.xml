@@ -99,7 +99,7 @@
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-spec-api</artifactId>
-                <version>23.0.1.Final</version>
+                <version>23.0.2.Final</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -906,7 +906,7 @@
                         <configuration>
                             <feature-packs>
                                 <feature-pack>
-                                    <location>wildfly@maven(org.jboss.universe:community-universe)#23.0.0.Final</location>
+                                    <location>wildfly@maven(org.jboss.universe:community-universe)#23.0.2.Final</location>
                                 </feature-pack>
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
