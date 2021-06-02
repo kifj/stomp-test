@@ -32,7 +32,10 @@
     password="${env.ACTIVEMQ_PASSWORD:artemis}",\
     enable-amq1-prefix=false,\
     transaction="xa",\
-    statistics-enabled="true"\
+    statistics-enabled="true",\
+    call-timeout="5000",\
+    initial-connect-attempts="10",\
+    reconnect-attempts="10"\
     )
     
 /subsystem=messaging-activemq/external-jms-queue=stocksQueue:add(entries=[java:/jms/queue/stocks])

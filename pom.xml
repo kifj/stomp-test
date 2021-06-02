@@ -74,7 +74,7 @@
             <id>joe</id>
             <name>Johannes Beck</name>
             <email>mail@johannes-beck.name</email>
-            <url>http://johannes-beck.name</url>
+            <url>https://johannes-beck.name</url>
             <organization>X1</organization>
             <organizationUrl>https://www.x1</organizationUrl>
             <roles>
@@ -345,7 +345,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.19</version>
+            <version>42.2.20</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
