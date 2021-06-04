@@ -2,7 +2,7 @@
 
 Sample application how to use Wildfly with Websockets and Stomp
 
-See details: [http://blog.johannes-beck.name/?p=285](http://blog.johannes-beck.name/?p=285)
+See details: [https://blog.johannes-beck.name/?p=285](https://blog.johannes-beck.name/?p=285)
 
 ## CLI-Scripts for Wildfly
 
@@ -17,11 +17,37 @@ The application needs a queue, a topic and a datasource.
 
 	etc/create-stomp-test.cli
 
+## Docker images
+
+Docker images can be built by executing
+
+	mvn -Pdocker clean install
+
+## CLI-Scripts for Wildfly as Bootable JAR
+
+The application can be packaged as a bootable JAR for Wildfly in Docker with
+
+	mvn -Pbootable-jar clean package
+
+The CLI scripts for this version are located at
+
+	etc/create-bootable-jar.cli
+
+This versions requires an external ActiveMQ Artemis broker 
+which is configured by environment variables:
+
+```
+ACTIVEMQ_SERVER (default activemq-artemis)
+ACTIVEMQ_PORT (default 61616)
+ACTIVEMQ_USER (default artemis)
+ACTIVEMQ_PASSWORD (default artemis)
+```
+
 ## DDL scripts
 
 The DDL scripts are available for PostgreSQL.
 
-	create-postgresql.cli
+	create-postgresql.sql
 
 ## RPM package
 
@@ -29,12 +55,13 @@ RPM package can be built by executing
 
 	mvn -Prpm clean package
 
-## Docker images
 
-Docker images can be built by executing
-
-	mvn -Pdocker clean install
 
 ## Kubernetes resources
 
-are located in folder etc/k8s
+are located in folder `etc/k8s`. The scripts for the certificates require the `cfssl` binary. 
+
+## OpenAPI and manual testing
+
+In Wildfly the OpenAPI spec can be loaded under the `/openapi` URL.
+Swagger-UI is located under the application root URL `/stomp-test-v1.6/swagger-ui`.

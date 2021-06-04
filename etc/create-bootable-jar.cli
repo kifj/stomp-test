@@ -23,7 +23,7 @@
 
 /subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-operator)
 
-/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-artemis:add(host="${env.ACTIVEMQ_SERVER:activemq-artemis}", port=61616)
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-artemis:add(host="${env.ACTIVEMQ_SERVER:activemq-artemis}", port="${env.ACTIVEMQ_PORT:61616}")
 /subsystem=messaging-activemq/remote-connector=remote-artemis:add(socket-binding=remote-artemis)
 /subsystem=messaging-activemq/pooled-connection-factory=activemq-ra:add(\
     connectors=[remote-artemis],\

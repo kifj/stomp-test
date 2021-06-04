@@ -43,8 +43,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <junit.jupiter.version>5.7.1</junit.jupiter.version>
+        <wildfly.version>23.0.2.Final</wildfly.version>
+        <junit.jupiter.version>5.7.2</junit.jupiter.version>
         <jacoco.version>0.8.3</jacoco.version>
+        <arquillian.version>1.7.0.Alpha9</arquillian.version>
+        <jkube.version>1.2.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -92,14 +95,14 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.7.0.Alpha9</version>
+                <version>${arquillian.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-spec-api</artifactId>
-                <version>23.0.2.Final</version>
+                <version>${wildfly.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -220,7 +223,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.11</version><!--$NO-MVN-MAN-VER$ -->
+            <version>3.12.0</version><!--$NO-MVN-MAN-VER$ -->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -473,12 +476,12 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.2.2</version>
+                <version>4.2.3</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
-                <version>2.4.1</version>
+                <version>2.5.1</version>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -801,7 +804,7 @@
                     <plugin>
                         <groupId>org.eclipse.jkube</groupId>
                         <artifactId>kubernetes-maven-plugin</artifactId>
-                        <version>1.1.1</version>
+                        <version>${jkube.version}</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
@@ -858,7 +861,7 @@
                     <plugin>
                         <groupId>org.eclipse.jkube</groupId>
                         <artifactId>kubernetes-maven-plugin</artifactId>
-                        <version>1.1.1</version>
+                        <version>${jkube.version}</version>
                         <executions>
                             <execution>
                                 <phase>pre-integration-test</phase>
@@ -902,16 +905,16 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
-                        <version>4.0.1.Final</version>
+                        <version>4.0.3.Final</version>
                         <configuration>
                             <feature-packs>
                                 <feature-pack>
-                                    <location>wildfly@maven(org.jboss.universe:community-universe)#23.0.2.Final</location>
+                                    <location>wildfly@maven(org.jboss.universe:community-universe)#${wildfly.version}</location>
                                 </feature-pack>
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-datasources-galleon-pack</artifactId>
                                     <version>1.2.3.Final</version>
+                                    <artifactId>wildfly-datasources-galleon-pack</artifactId>
                                 </feature-pack>
                             </feature-packs>
                             <layers>
@@ -946,7 +949,7 @@
                     <plugin>
                         <groupId>org.eclipse.jkube</groupId>
                         <artifactId>kubernetes-maven-plugin</artifactId>
-                        <version>1.1.1</version>
+                        <version>${jkube.version}</version>
                         <configuration>
                             <namespace>stomp-test</namespace>
                             <verbose>true</verbose>
