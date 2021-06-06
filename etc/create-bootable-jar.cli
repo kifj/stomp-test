@@ -19,7 +19,7 @@
     sampler-type=probabilistic,\
     sampler-param=0.1,\
     tags={{service=stomp-test,deployment=wildfly}},\
-    sender-endpoint="http://jaeger-simple-collector.observability:14268/api/traces")
+    sender-endpoint="http://jaeger-all-in-one-collector.observability:14268/api/traces")
 
 /subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-operator)
 
@@ -48,3 +48,6 @@
     database=postgresql, \
     partition=default\
     )
+
+/system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
+/system-property=x1.service.registry.stage:add(value="kubernetes")
