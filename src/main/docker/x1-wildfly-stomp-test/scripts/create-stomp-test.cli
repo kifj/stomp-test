@@ -52,7 +52,7 @@ end-if
 if (outcome == success) of /system-property=x1.service.registry.etcd:read-resource
   /system-property=x1.service.registry.etcd:remove()
 end-if
-/system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
+/system-property=x1.service.registry.etcd:add(value="http://${env.ETCD_SERVER:etcd.x1}:${env.ETCD_PORT:4001}")
 
 if (outcome == success) of /system-property=x1.service.registry.stage:read-resource
   /system-property=x1.service.registry.stage:remove()

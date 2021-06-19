@@ -62,7 +62,7 @@
           url: http://dockerHost:10090/health/ready
           sleepPollingTime: 5s
           iterations: 10
-        env: [ MANAGEMENT=public HTTP=public ]
+        env: [ MANAGEMENT=public, HTTP=public, ETCD_SERVER=${env.ETCD_SERVER:etcd.x1}]
       </property>
   </extension>
 </arquillian>
