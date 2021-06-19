@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: activemq-artemis
+  labels:
+    app: activemq-artemis
+  namespace: stomp-test
+spec:
+  selector:
+    matchLabels:
+      app: activemq-artemis
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 60s
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true

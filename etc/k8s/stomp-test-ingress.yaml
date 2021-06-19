@@ -13,6 +13,9 @@ spec:
   - hosts:
     - stomp-test.docker.x1
     secretName: pki-wildfly-secret
+  - hosts:
+    - activemq-artemis.docker.x1
+    secretName: pki-activemq-artemis-secret
   rules:
   - host: stomp-test.docker.x1
     http:
@@ -21,3 +24,10 @@ spec:
         backend:
           serviceName: wildfly
           servicePort: https
+  - host: activemq-artemis.docker.x1
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: activemq-artemis
+          servicePort: http

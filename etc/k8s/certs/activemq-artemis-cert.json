@@ -1,0 +1,14 @@
+{
+  "hosts": [
+    "activemq-artemis",
+    "activemq-artemis.stomp-test.svc.cluster.local",
+    "activemq-artemis.stomp-test.pod.cluster.local",
+    "activemq-artemis.docker.x1",
+    "activemq-artemis.x1"
+  ],
+  "CN": "activemq-artemis.stomp-test.pod.cluster.local",
+  "key": {
+    "algo": "ecdsa",
+    "size": 256
+  }
+}

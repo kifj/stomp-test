@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: activemq-artemis
+  name: activemq-artemis
+  namespace: stomp-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: activemq-artemis
+      name: activemq-artemis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        deployment: activemq-artemis
+        name: activemq-artemis
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - env:
+        - name: ARTEMIS_USER
+          valueFrom:
+            secretKeyRef:
+              key: artemis-user
+              name: activemq-artemis
+        - name: ARTEMIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: artemis-password
+              name: activemq-artemis
+        name: activemq-artemis
+        image: registry.x1/j7beck/x1-activemq-artemis
+        imagePullPolicy: Always
+#        command: ["/bin/sh", "-ec", "sleep 1000"]
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          tcpSocket:
+            port: core
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        ports:
+        - name: http
+          containerPort: 8161
+          protocol: TCP
+        - name: metrics
+          containerPort: 9404
+          protocol: TCP
+        - name: core
+          containerPort: 61616
+          protocol: TCP
+        - name: hornetq
+          containerPort: 5445
+          protocol: TCP
+        - name: amqp
+          containerPort: 5672
+          protocol: TCP
+        - name: mqtt
+          containerPort: 1883
+          protocol: TCP
+        - name: stomp
+          containerPort: 61613
+          protocol: TCP
+        resources:
+          limits:
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - name: activemq-artemis-data
+          mountPath: /var/lib/artemis-instance
+        - name: pki-secret
+          mountPath: /var/run/x1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: activemq-artemis-data
+        persistentVolumeClaim:
+          claimName: activemq-artemis
+      - name: pki-secret
+        secret:
+          secretName: pki-activemq-artemis-secret
+          defaultMode: 0400

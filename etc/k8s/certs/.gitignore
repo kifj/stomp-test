@@ -1,8 +1,4 @@
-/postgresql-csr.yaml
-/postgresql-key.pem
-/postgresql.crt
-/postgresql.csr
-/wildfly-csr.yaml
-/wildfly-key.pem
-/wildfly.crt
-/wildfly.csr
+/*-csr.yaml
+/*-key.pem
+/*.crt
+/*.csr
