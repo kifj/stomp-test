@@ -13,7 +13,7 @@ jobs:
         with:
           java-version: 11
       - name: Build with Maven
-        run: mvn -Pgithub -B clean package
+        run: mvn -Pgithub,default -B clean package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish Unit Test Results
