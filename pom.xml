@@ -1031,5 +1031,17 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>github</github>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/kifj/service-registry</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
     </profiles>
 </project>
