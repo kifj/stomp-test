@@ -10,16 +10,16 @@
       <!-- 
       <property name="managementProtocol">${jboss.managementProtocol}</property>
       -->
-      <property name="username">${jboss.user}</property>
-      <property name="password">${jboss.password}</property>
+      <property name="username">${jboss.user:admin}</property>
+      <property name="password">${jboss.password:12345}</property>
     </configuration>
   </container>
 
   <container qualifier="jbossas-managed" default="false">
     <configuration>
       <property name="allowConnectingToRunningServer">true</property>
-      <property name="username">${jboss.user}</property>
-      <property name="password">${jboss.password}</property>
+      <property name="username">${jboss.user:admin}</property>
+      <property name="password">${jboss.password:12345}</property>
       <property name="serverConfig">standalone-full.xml</property>
       <property name="jbossHome">${jboss.home}</property>
       <property name="managementPort">${jboss.managementPort:9990}</property>
@@ -31,10 +31,10 @@
   <container qualifier="docker-stomp-test-it" default="false">
     <protocol type="Servlet 3.0" />
     <configuration>
-      <property name="managementAddress">localhost</property>
+      <property name="managementAddress">${jboss.managementAddress:localhost}</property>
       <property name="managementPort">${jboss.managementPort:9990}</property>
-      <property name="username">${jboss.user}</property>
-      <property name="password">${jboss.password}</property>
+      <property name="username">${jboss.user:admin}</property>
+      <property name="password">${jboss.password:12345}</property>
     </configuration>
   </container>
 

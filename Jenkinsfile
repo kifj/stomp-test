@@ -40,7 +40,7 @@ node {
   stage('Publish') {
     withMaven(maven: 'Maven-3.6', mavenSettingsConfig: mavenSetting) {
       sh "mvn -Prpm deploy site-deploy -DskipTests"
-      sh "mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch}"
+      sh "mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch} -Dsonar.projectName=stomp-test:${branch}"
     }
   }
   
