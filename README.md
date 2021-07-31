@@ -29,11 +29,11 @@ Docker images can be built by executing
 
 The application can be packaged as a bootable JAR for Wildfly in Docker with
 
-	mvn -Pbootable-jar clean package
+	mvn -Pwildfly-jar clean package
 
 The CLI scripts for this version are located at
 
-	etc/create-bootable-jar.cli
+	etc/create-wildfly-jar.cli
 
 This versions requires an external ActiveMQ Artemis broker 
 which is configured by environment variables:

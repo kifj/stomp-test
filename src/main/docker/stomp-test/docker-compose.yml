@@ -26,7 +26,7 @@ services:
      - /opt/docker/x1/certs/activemq-artemis.key:/etc/pki/tls/private/node.key:ro
      - /opt/docker/x1/certs/activemq-artemis.crt:/etc/pki/tls/certs/node.crt:ro
   wildfly:
-    image: registry.x1/j7beck/x1-wildfly-bootable-stomp-test
+    image: registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.6.0-SNAPSHOT
     domainname: docker.x1
     network_mode: bridge
     environment:
