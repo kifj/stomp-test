@@ -9,7 +9,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-import org.jboss.resteasy.client.jaxrs.BasicAuthentication;
+import org.jboss.resteasy.client.jaxrs.internal.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.internal.ClientRequestContextImpl;
 
 public class BasicAuthFilter implements ClientRequestFilter {

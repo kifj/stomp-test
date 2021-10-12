@@ -25,7 +25,7 @@
     </scm>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://www.x1/jenkins/job/stomp-test-wildfly-24/</url>
+        <url>https://www.x1/jenkins/job/stomp-test-wildfly-25/</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <wildfly.version>24.0.0.Final</wildfly.version>
+        <wildfly.version>25.0.0.Final</wildfly.version>
         <junit.jupiter.version>5.7.2</junit.jupiter.version>
         <jacoco.version>0.8.3</jacoco.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
@@ -131,11 +131,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
             <scope>provided</scope>
@@ -206,6 +201,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-core-spi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-api</artifactId>
             <scope>provided</scope>
@@ -223,7 +223,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version><!--$NO-MVN-MAN-VER$ -->
+            <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
