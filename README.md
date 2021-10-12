@@ -1,6 +1,5 @@
 [![Actions Status](https://github.com/kifj/stomp-test/workflows/Java%20CI/badge.svg)](https://github.com/kifj/stomp-test/actions) ![Licence](https://img.shields.io/github/license/kifj/stomp-test) ![Issues](https://img.shields.io/github/issues/kifj/stomp-test) ![Stars](https://img.shields.io/github/stars/kifj/stomp-test)
 
-
 # stomp-test
 
 Sample application how to use Wildfly with Websockets and Stomp
@@ -30,11 +29,11 @@ Docker images can be built by executing
 
 The application can be packaged as a bootable JAR for Wildfly in Docker with
 
-	mvn -Pbootable-jar clean package
+	mvn -Pwildfly-jar clean package
 
 The CLI scripts for this version are located at
 
-	etc/create-bootable-jar.cli
+	etc/create-wildfly-jar.cli
 
 This versions requires an external ActiveMQ Artemis broker 
 which is configured by environment variables:
@@ -57,8 +56,6 @@ The DDL scripts are available for PostgreSQL.
 RPM package can be built by executing
 
 	mvn -Prpm clean package
-
-
 
 ## Kubernetes resources
 

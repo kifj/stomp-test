@@ -4,4 +4,4 @@ embed-server --admin-only --server-config=profile.xml --std-out=echo
 /subsystem=messaging-activemq/server=default/jms-topic=quotesTopic:add(entries=[java:/jms/topic/quotes])
 /subsystem=logging/logger=x1.service.registry:write-attribute(name=level,value=DEBUG)
 /system-property=x1.service.registry.etcd:add(value="http://${env.ETCD_SERVER:etcd.x1}:${env.ETCD_PORT:4001}")
-/system-property=x1.service.registry.stage:add(value="docker")
+/system-property=x1.service.registry.stage:add(value="local")
