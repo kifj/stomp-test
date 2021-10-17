@@ -1,6 +1,6 @@
 node {
-  def mvnHome = tool 'Maven-3.6'
-  env.JAVA_HOME = tool 'JDK-11'
+  def mvnHome = tool 'Maven-3.8'
+  env.JAVA_HOME = tool 'JDK-17'
   def branch = 'wildfly-25'
   def mavenSetting = 'dfe73d5e-dd12-4ed1-965f-7c8dcebd9101'
 
@@ -9,13 +9,13 @@ node {
   }
   
   stage('Build') {
-    withMaven(maven: 'Maven-3.6', mavenSettingsConfig: mavenSetting) {
+    withMaven(maven: 'Maven-3.8', mavenSettingsConfig: mavenSetting) {
       sh "mvn clean package"
     }
   }
   
   stage('Pre IT-Test') {
-    withMaven(maven: 'Maven-3.6', mavenSettingsConfig: mavenSetting) {
+    withMaven(maven: 'Maven-3.8', mavenSettingsConfig: mavenSetting) {
       sh "mvn -Pdocker-integration-test pre-integration-test"
     }
   }
@@ -27,7 +27,7 @@ node {
     c ->
       try {
         waitFor("http://${hostIp(c)}:9990/health/ready", 10, 6)
-        withMaven(maven: 'Maven-3.6', mavenSettingsConfig: mavenSetting) {
+        withMaven(maven: 'Maven-3.8', mavenSettingsConfig: mavenSetting) {
           sh "mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
         }
       } finally {
@@ -38,14 +38,14 @@ node {
   }
   
   stage('Publish') {
-    withMaven(maven: 'Maven-3.6', mavenSettingsConfig: mavenSetting) {
+    withMaven(maven: 'Maven-3.8', mavenSettingsConfig: mavenSetting) {
       sh "mvn -Prpm deploy site-deploy -DskipTests"
       sh "mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:${branch} -Dsonar.projectName=stomp-test:${branch}"
     }
   }
   
   stage('Create image') {
-    withMaven(maven: 'Maven-3.6', mavenSettingsConfig: mavenSetting) {
+    withMaven(maven: 'Maven-3.8', mavenSettingsConfig: mavenSetting) {
       sh "mvn -Pdocker clean install k8s:push"
     }
   }
