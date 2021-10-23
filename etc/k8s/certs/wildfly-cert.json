@@ -4,7 +4,7 @@
     "wildfly.stomp-test",
     "wildfly.stomp-test.svc.cluster.local",
     "wildfly.stomp-test.pod.cluster.local",
-    "stomp-test.docker.x1",
+    "stomp-test.k8s.x1",
     "stomp-test.x1"
   ],
   "CN": "wildfly.stomp-test.pod.cluster.local",

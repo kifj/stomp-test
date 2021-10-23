@@ -11,20 +11,20 @@ metadata:
 spec:
   tls:
   - hosts:
-    - stomp-test.docker.x1
+    - stomp-test.k8s.x1
     secretName: pki-wildfly-secret
   - hosts:
-    - activemq-artemis.docker.x1
+    - activemq-artemis.k8s.x1
     secretName: pki-activemq-artemis-secret
   rules:
-  - host: stomp-test.docker.x1
+  - host: stomp-test.k8s.x1
     http:
       paths:
       - path: /
         backend:
           serviceName: wildfly
           servicePort: https
-  - host: activemq-artemis.docker.x1
+  - host: activemq-artemis.k8s.x1
     http:
       paths:
       - path: /
