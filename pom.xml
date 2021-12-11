@@ -44,10 +44,10 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
         <wildfly.version>25.0.0.Final</wildfly.version>
-        <junit.jupiter.version>5.8.1</junit.jupiter.version>
+        <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <jacoco.version>0.8.7</jacoco.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <jkube.version>1.4.0</jkube.version>
+        <jkube.version>1.5.1</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -481,7 +481,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.4.1</version>
+                <version>4.5.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -533,7 +533,7 @@
                     <schema>stocks</schema>
                     <username>stocks</username>
                     <password>stocks</password>
-                    <type>pgsql</type>
+                    <type>pgsql</type>                    
                 </configuration>
             </plugin>
             <plugin>
@@ -603,7 +603,7 @@
                         <artifactId>cyclonedx-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <phase>verify</phase>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>makeBom</goal>
                                 </goals>
