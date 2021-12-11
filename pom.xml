@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
-        <wildfly.version>25.0.0.Final</wildfly.version>
+        <wildfly.version>25.0.1.Final</wildfly.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <jacoco.version>0.8.7</jacoco.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
