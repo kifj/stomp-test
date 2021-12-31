@@ -913,6 +913,7 @@
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
                         <version>5.0.1.Final</version>
                         <configuration>
+                            
                             <feature-packs>
                                 <feature-pack>
                                     <location>wildfly@maven(org.jboss.universe:community-universe)#${wildfly.version}</location>

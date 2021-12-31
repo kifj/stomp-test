@@ -2,7 +2,7 @@
 
 /subsystem=datasources/data-source=stocksDS:add( \
     jndi-name=java:jboss/datasources/stocksDS, \
-    connection-url=jdbc:postgresql://${env.DB_SERVER:postgresql}:${env.DB_PORT:5432}/stocks,\
+    connection-url=jdbc:postgresql://${env.DB_SERVER:postgresql}:${env.DB_PORT:5432}/${env.DB_NAME:stocks},\
     user-name=${env.DB_USER:stocks}, \
     password=${env.DB_PASSWORD:stocks}, \
     statistics-enabled=true,\
