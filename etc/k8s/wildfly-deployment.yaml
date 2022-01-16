@@ -50,6 +50,18 @@ spec:
             secretKeyRef:
               key: database-password
               name: postgresql
+        - name: ACTIVEMQ_SERVER
+          value: activemq-artemis
+        - name: ARTEMIS_USER
+          valueFrom:
+            secretKeyRef:
+              key: artemis-user
+              name: activemq-artemis
+        - name: ARTEMIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: artemis-password
+              name: activemq-artemis
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:

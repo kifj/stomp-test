@@ -904,6 +904,10 @@
             <properties>
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%v</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
+                <jkube.enricher.jkube-service.name>wildfly</jkube.enricher.jkube-service.name>
+                <jkube.enricher.jkube-service.type>ClusterIP</jkube.enricher.jkube-service.type>
+                <jkube.enricher.jkube-service.port>8080,8443,9990</jkube.enricher.jkube-service.port>
+                <jkube.enricher.jkube-service.multiPort>true</jkube.enricher.jkube-service.multiPort>
             </properties>
             <build>
                 <finalName>${project.artifactId}</finalName>
@@ -913,7 +917,6 @@
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
                         <version>5.0.1.Final</version>
                         <configuration>
-                            
                             <feature-packs>
                                 <feature-pack>
                                     <location>wildfly@maven(org.jboss.universe:community-universe)#${wildfly.version}</location>
