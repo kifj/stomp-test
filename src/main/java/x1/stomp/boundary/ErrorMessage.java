@@ -1,5 +1,6 @@
 package x1.stomp.boundary;
 
+import javax.validation.ConstraintViolation;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,17 +9,27 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @XmlRootElement(name = "error")
 @Schema(name = "error", description = "Structured error message")
 public class ErrorMessage {
-  public ErrorMessage() {
+  public static ErrorMessage of(String message) {
+    return new ErrorMessage(message);
   }
 
-  public ErrorMessage(String message) {
+  public static ErrorMessage from(Exception e) {
+    return new ErrorMessage(e.getMessage());
+  }
+
+  private ErrorMessage() {
+  }
+
+  private ErrorMessage(String message) {
     this.message = message;
   }
 
-  public ErrorMessage(String message, String path, Object invalidValue) {
-    this.message = message;
-    this.path = path;
-    this.invalidValue = (invalidValue == null) ? null : invalidValue.toString();
+  public static ErrorMessage of(ConstraintViolation<?> violation) {
+    ErrorMessage errorMessage = new ErrorMessage();
+    errorMessage.message = violation.getMessage();
+    errorMessage.path = violation.getPropertyPath().toString();
+    errorMessage.invalidValue = (violation.getInvalidValue() == null) ? null : violation.getInvalidValue().toString();
+    return errorMessage;
   }
   
   @XmlAttribute

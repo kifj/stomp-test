@@ -17,7 +17,7 @@ public class FaultToleranceExceptionMapper extends ExceptionMapperBase implement
     var status = SERVICE_UNAVAILABLE;
     response.setType(e.getClass().getSimpleName());
     response.setRequestUri(uriInfo.getRequestUri().toString());
-    response.add(new ErrorMessage(e.getMessage()));
+    response.add(ErrorMessage.from(e));
     warn(status, "Service not available due to:\n{}", response.toString());
     return Response.status(status).entity(response).build();
   }

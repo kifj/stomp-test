@@ -18,7 +18,7 @@ public class WebApplicationExceptionMapper extends ExceptionMapperBase
   public Response toResponse(WebApplicationException e) {
     var response = new ErrorResponse(e.getResponse().getStatusInfo().getReasonPhrase());
     response.setRequestUri(uriInfo.getRequestUri().toString());
-    response.add(new ErrorMessage(e.getMessage()));
+    response.add(ErrorMessage.from(e));
     warn(Status.fromStatusCode(e.getResponse().getStatus()), response.toString());
     return Response.status(e.getResponse().getStatus()).entity(response).build();
   }
