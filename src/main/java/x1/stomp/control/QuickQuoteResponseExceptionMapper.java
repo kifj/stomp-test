@@ -33,6 +33,6 @@ public class QuickQuoteResponseExceptionMapper implements ResponseExceptionMappe
       LOG.error(e.getMessage());
     }
     MDC.remove(HTTP_STATUS_CODE);
-    throw e;
+    return e;
   }
 }
