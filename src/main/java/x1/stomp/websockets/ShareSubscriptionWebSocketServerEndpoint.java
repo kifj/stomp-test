@@ -79,15 +79,9 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
       return null;
     }
     switch (command.getAction()) {
-      case SUBSCRIBE:
-        Optional<Quote> quote = subscribe(command.getKey());
-        return jsonHelper.toJSON(quote.orElse(null));
-      case UNSUBSCRIBE:
-        unsubscribe(command.getKey());
-        break;
-      default:
-        log.warn("Unknown command: {}", message);
-        break;
+      case SUBSCRIBE ->  jsonHelper.toJSON(subscribe(command.getKey()).orElse(null));
+      case UNSUBSCRIBE -> unsubscribe(command.getKey());
+      default -> log.warn("Unknown command: {}", message);
     }
     return null;
   }

@@ -56,12 +56,12 @@ public class ShareMessageListener implements MessageListener {
     try {
       var correlationId = message.getJMSCorrelationID();
       MDC.put(CORRELATION_ID, correlationId);
-      if (message instanceof ObjectMessage) {
+      if (message instanceof ObjectMessage objectMessage) {
         log.info("Received ObjectMessage {} from queue: {}", correlationId, message.getJMSDestination());
-        handleMessage((ObjectMessage) message);
-      } else if (message instanceof BytesMessage) {
+        handleMessage(objectMessage);
+      } else if (message instanceof BytesMessage byteMessage) {
         log.info("Received BytesMessage {} from queue: {}", correlationId, message.getJMSDestination());
-        handleMessage((BytesMessage) message);
+        handleMessage(byteMessage);
       } else {
         log.warn("Message {} of wrong type: {}", correlationId, message.getClass().getName());
       }
@@ -76,15 +76,9 @@ public class ShareMessageListener implements MessageListener {
     if (message.getStringProperty("type").equalsIgnoreCase("share")) {
       var action = Action.valueOf(message.getStringProperty("action"));
       switch (action) {
-      case SUBSCRIBE:
-        subscribe((Share) message.getObject());
-        break;
-      case UNSUBSCRIBE:
-        shareSubscription.unsubscribe((Share) message.getObject());
-        break;
-      default:
-        log.warn("Unsupported action: {}", action);
-        break;
+      case SUBSCRIBE -> subscribe((Share) message.getObject());
+      case UNSUBSCRIBE -> shareSubscription.unsubscribe((Share) message.getObject());
+      default -> log.warn("Unsupported action: {}", action);
       }
     } else {
       log.warn("Message of wrong type: {}", message);
@@ -100,15 +94,9 @@ public class ShareMessageListener implements MessageListener {
       return;
     }
     switch (command.getAction()) {
-    case SUBSCRIBE:
-      subscribe(command.getKey());
-      break;
-    case UNSUBSCRIBE:
-      unsubscribe(command.getKey());
-      break;
-    default:
-      log.warn("Unknown command: {}", body);
-      break;
+    case SUBSCRIBE -> subscribe(command.getKey());
+    case UNSUBSCRIBE -> unsubscribe(command.getKey());
+    default -> log.warn("Unknown command: {}", body);
     }
   }
 

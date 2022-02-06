@@ -13,6 +13,7 @@ import org.jboss.resteasy.client.jaxrs.internal.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.internal.ClientRequestContextImpl;
 
 public class BasicAuthFilter implements ClientRequestFilter {
+  private static final String MP_REST = "/mp-rest/"; 
   private BasicAuthentication delegate;
   private Boolean hasDelegate = null;
 
@@ -33,8 +34,8 @@ public class BasicAuthFilter implements ClientRequestFilter {
       var annotation = clazz.getAnnotation(RegisterRestClient.class);
       var configKey = annotation != null ? StringUtils.defaultIfEmpty(annotation.configKey(), clazz.getName())
           : clazz.getName();
-      var username = config.getOptionalValue(configKey + "/mp-rest/username", String.class);
-      var password = config.getOptionalValue(configKey + "/mp-rest/password", String.class);
+      var username = config.getOptionalValue(configKey + MP_REST + "username", String.class);
+      var password = config.getOptionalValue(configKey + MP_REST + "password", String.class);
       if (username.isPresent() && password.isPresent()) {
         delegate = new BasicAuthentication(username.get(), password.get());
         hasDelegate = Boolean.TRUE;

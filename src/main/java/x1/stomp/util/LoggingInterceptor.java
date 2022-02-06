@@ -72,18 +72,9 @@ public class LoggingInterceptor {
         + response.getStatus();
     var log = getLogger(ctx);
     switch (response.getStatusInfo().getFamily()) {
-    case INFORMATIONAL:
-    case SUCCESSFUL:
-    case REDIRECTION:
-      log.debug(argLine);
-      break;
-    case CLIENT_ERROR:
-    case OTHER:
-      log.warn(argLine);
-      break;
-    case SERVER_ERROR:
-      log.error(argLine, e);
-      break;
+    case INFORMATIONAL, SUCCESSFUL, REDIRECTION -> log.debug(argLine);
+    case CLIENT_ERROR, OTHER -> log.warn(argLine);
+    case SERVER_ERROR -> log.error(argLine, e);
     }
   }
 
@@ -99,8 +90,7 @@ public class LoggingInterceptor {
     var i = 0;
     for (var annotations : method.getParameterAnnotations()) {
       for (var annotation : annotations) {
-        if (annotation instanceof MDCKey) {
-          var mdcKey = (MDCKey) annotation;
+        if (annotation instanceof MDCKey mdcKey) {
           var key = StringUtils.defaultIfEmpty(mdcKey.value(), parameters[i].getName());
           var value = Objects.toString(ctx.getParameters()[i], null);
           if (value != null) {
