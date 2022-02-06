@@ -814,9 +814,6 @@
                             <execution>
                                 <phase>install</phase>
                                 <goals>
-<!--                                
-                                    <goal>resource</goal>
--->                                    
                                     <goal>build</goal>
                                 </goals>
                             </execution>
@@ -873,7 +870,6 @@
                             <execution>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>resource</goal>
                                     <goal>build</goal>
                                 </goals>
                             </execution>
