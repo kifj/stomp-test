@@ -429,7 +429,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>parse-version</id>
@@ -561,6 +561,7 @@
                     <excludeFilterFile>etc/spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -576,6 +577,7 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
