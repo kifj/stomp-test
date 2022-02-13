@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<QuickQuoteResult xmlns="http://quote.cnbc.com/services/MultiQuote/2006" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <QuickQuote>
+    <symbol>GOOG</symbol>
+    <symbolType>symbol</symbolType>
+    <cnbcId>0</cnbcId>
+    <code>0</code>
+    <name>Alphabet Class C</name>
+    <shortName>GOOG</shortName>
+    <onAirName>Alphabet Class C</onAirName>
+    <altName>Alphabet Class C</altName>
+    <last>2682.6001</last>
+    <last_time>2022-02-11</last_time>
+    <reg_last_time>2022-02-11T16:00:00.000-05:00</reg_last_time>
+    <last_time_msec>1644555600000</last_time_msec>
+    <exchange>NASDAQ</exchange>
+    <source>Last NASDAQ LS, VOL From CTA</source>
+    <open>2775.00</open>
+    <high>2785.665</high>
+    <low>2665.77</low>
+    <change>-89.4499</change>
+    <change_pct>-3.2269</change_pct>
+    <currencyCode>USD</currencyCode>
+    <timeZone>EST</timeZone>
+    <countryCode>US</countryCode>
+    <volume>1867976</volume>
+    <fullVolume>1940440</fullVolume>
+    <provider>CNBC QUOTE CACHE</provider>
+    <previous_day_closing>2772.05</previous_day_closing>
+    <todays_closing>2682.6</todays_closing>
+    <prev_prev_closing>2772.05</prev_prev_closing>
+    <providerSymbol xsi:nil="true"/>
+    <mappedSymbol xsi:nil="true"/>
+    <altSymbol>GOOG.O</altSymbol>
+    <cacheServed>false</cacheServed>
+    <responseTime>Sun Feb 13 08:27:50 EST 2022</responseTime>
+    <realTime>true</realTime>
+    <quoteDesc/>
+    <comments>Composite</comments>
+    <cachedTime>Sun Feb 13 08:27:50 EST 2022</cachedTime>
+    <curmktstatus>POST_MKT</curmktstatus>
+    <trading_day_type>WEEKEND</trading_day_type>
+    <reg_market_open>09:30:00</reg_market_open>
+    <reg_market_close>16:00:00</reg_market_close>
+    <mainmktstatus>CLOSE</mainmktstatus>
+    <assetType>STOCK</assetType>
+    <assetSubType>Common Stock</assetSubType>
+    <streamable>1</streamable>
+    <issue_id>72887506</issue_id>
+    <issuer_id>19004</issuer_id>
+    <FundamentalData>
+      <pe>23.898293</pe>
+      <eps>112.2507</eps>
+      <sharesout>660971321</sharesout>
+      <sharesoutView>660.97M</sharesoutView>
+      <mktcap>1773121730262.58056640625</mktcap>
+      <mktcapView>1773118.11M</mktcapView>
+      <beta>1.07080</beta>
+      <tendayavgvol>2260961.00</tendayavgvol>
+      <pcttendayvol>0.8582</pcttendayvol>
+      <yragoprice>2086.48000</yragoprice>
+      <yragopricechange>596.1201</yragopricechange>
+      <yragopricechangepct>28.570614</yragopricechangepct>
+      <yrhiprice>3042.0</yrhiprice>
+      <yrhidate>2022-02-02</yrhidate>
+      <yrloprice>2002.02</yrloprice>
+      <yrlodate>2021-02-23</yrlodate>
+      <revenuettm>257637000000</revenuettm>
+      <revenuettmView>257637.0M</revenuettmView>
+      <MPreviousClose>2772.40000</MPreviousClose>
+      <PDYTDPCHG>-4.30232</PDYTDPCHG>
+      <ROETTM>32.06932</ROETTM>
+      <NETPROFTTM>29.51168</NETPROFTTM>
+      <GROSMGNTTM>56.93980</GROSMGNTTM>
+      <TTMEBITD>91144.00000</TTMEBITD>
+      <DEBTEQTYQ>5.933196892324199</DEBTEQTYQ>
+      <feps>110.975</feps>
+      <fpe>24.173014</fpe>
+    </FundamentalData>
+  </QuickQuote>
+</QuickQuoteResult>

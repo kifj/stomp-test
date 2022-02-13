@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import x1.stomp.model.Quote;
@@ -21,7 +22,11 @@ public class QuoteRetriever {
   @Inject
   @RestClient
   private QuickQuoteService quickQuoteService;
-  
+
+  @Inject
+  @ConfigProperty(name = "x1.stomp.control.QuickQuoteService/mp-rest/format", defaultValue = "json")
+  private String format;
+
   public Optional<Quote> retrieveQuote(Share share) {
     return createQuote(retrieveQuotes(share.getKey()), share);
   }
@@ -43,16 +48,22 @@ public class QuoteRetriever {
   }
 
   private QuickQuoteResult retrieveQuotes(String keys) {
-    var response = quickQuoteService.retrieve(keys.toUpperCase(), "json");
-    var quickQuoteResponse = response.readEntity(QuickQuoteResponse.class);
-    return quickQuoteResponse.getQuickQuoteResult();
+    var response = quickQuoteService.retrieve(keys.toUpperCase(), format);
+    switch (format) {
+    case "xml":
+      return response.readEntity(QuickQuoteResult.class);
+    case "json":
+      return response.readEntity(QuickQuoteResponse.class).getQuickQuoteResult();
+    default:
+      throw new IllegalArgumentException(format);
+    }
   }
 
   private Optional<Quote> createQuote(QuickQuote quickQuote, List<Share> shares) {
     if (quickQuote.getLast() == null || quickQuote.getName() == null || quickQuote.getSymbol() == null) {
       return Optional.empty();
     }
-    
+
     for (var share : shares) {
       var key = quickQuote.getSymbol().toUpperCase();
       if (share.getKey().equalsIgnoreCase(key)) {
@@ -65,7 +76,7 @@ public class QuoteRetriever {
   private Quote convertTo(QuickQuote quickQuote, Share share) {
     share.setKey(quickQuote.getSymbol().toUpperCase());
     share.setName(quickQuote.getName());
-    
+
     var quote = new Quote(share);
     quote.setPrice(quickQuote.getLast());
     quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));

@@ -3,6 +3,9 @@ package x1.stomp.control;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,8 +14,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName(value = "QuickQuote")
+@XmlRootElement(name = "QuickQuote", namespace = QuickQuote.NS)
 public class QuickQuote implements Serializable {
   private static final long serialVersionUID = -7248251946071933412L;
+  static final String NS = "http://quote.cnbc.com/services/MultiQuote/2006";
 
   private Float last;
   private String name;
@@ -21,8 +26,9 @@ public class QuickQuote implements Serializable {
   private String countryCode;
   private String currencyCode;
   private String exchange;
-  private Date lastTime;
+  private Date timestamp;
 
+  @XmlElement(name = "last", namespace = NS)
   public Float getLast() {
     return last;
   }
@@ -31,6 +37,7 @@ public class QuickQuote implements Serializable {
     this.last = last;
   }
 
+  @XmlElement(name = "name", namespace = NS)
   public String getName() {
     return name;
   }
@@ -39,6 +46,7 @@ public class QuickQuote implements Serializable {
     this.name = name;
   }
 
+  @XmlElement(name = "symbol", namespace = NS)
   public String getSymbol() {
     return symbol;
   }
@@ -47,6 +55,7 @@ public class QuickQuote implements Serializable {
     this.symbol = symbol;
   }
 
+  @XmlElement(name = "volume", namespace = NS)
   public Integer getVolume() {
     return volume;
   }
@@ -55,6 +64,7 @@ public class QuickQuote implements Serializable {
     this.volume = volume;
   }
 
+  @XmlElement(name = "countryCode", namespace = NS)
   public String getCountryCode() {
     return countryCode;
   }
@@ -63,6 +73,7 @@ public class QuickQuote implements Serializable {
     this.countryCode = countryCode;
   }
 
+  @XmlElement(name = "currencyCode", namespace = NS)
   public String getCurrencyCode() {
     return currencyCode;
   }
@@ -71,6 +82,7 @@ public class QuickQuote implements Serializable {
     this.currencyCode = currencyCode;
   }
 
+  @XmlElement(name = "exchange", namespace = NS)
   public String getExchange() {
     return exchange;
   }
@@ -78,21 +90,23 @@ public class QuickQuote implements Serializable {
   public void setExchange(String exchange) {
     this.exchange = exchange;
   }
-  
+
   @JsonProperty("reg_last_time")
   @JsonFormat(shape = Shape.STRING)
+  @XmlElement(name = "reg_last_time", namespace = NS)
   public Date getLastTime() {
-    return lastTime;
+    return timestamp;
   }
-  
+
   public void setLastTime(Date lastTime) {
-    this.lastTime = lastTime;
+    this.timestamp = lastTime;
   }
 
   @Override
   public String toString() {
-    return "QuickQuote[last=" + last + ", name=" + name + ", symbol=" + symbol + ", volume=" + volume
-        + ", countryCode=" + countryCode + ", currencyCode=" + currencyCode + ", exchange=" + exchange + "]";
+    return "QuickQuote [last=" + last + ", name=" + name + ", symbol=" + symbol + ", volume=" + volume
+        + ", countryCode=" + countryCode + ", currencyCode=" + currencyCode + ", exchange=" + exchange + ", timestamp="
+        + timestamp + "]";
   }
-
+  
 }
