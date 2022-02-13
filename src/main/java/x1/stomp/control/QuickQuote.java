@@ -79,7 +79,7 @@ public class QuickQuote implements Serializable {
     this.exchange = exchange;
   }
   
-  @JsonProperty("last_time")
+  @JsonProperty("reg_last_time")
   @JsonFormat(shape = Shape.STRING)
   public Date getLastTime() {
     return lastTime;
