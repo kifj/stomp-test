@@ -167,7 +167,7 @@ public class ShareResource {
       MDC.put(CORRELATION_ID, jmsCorrelationId);
       MDC.put(MDC_KEY, share.getKey());
       log.debug("message sent: {}", share);
-      var location = UriBuilder.fromPath("shares/{0}").build(share.getKey());
+      var location = UriBuilder.fromResource(ShareResource.class).path("{0}").build(share.getKey());
       return Response.created(location).build();
     } finally {
       MDC.remove(CORRELATION_ID);
@@ -187,10 +187,10 @@ public class ShareResource {
   @SimplyTimed(name = "remove-share", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
   public Response removeShare(
       @Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") @MDCKey(MDC_KEY) String key) {
-    var share = shareSubscription.find(key);
-    if (share.isPresent()) {
-      shareSubscription.unsubscribe(share.get());
-      return Response.ok(share.get()).build();
+    var candidate = shareSubscription.find(key);
+    if (candidate.isPresent()) {
+      var share = shareSubscription.unsubscribe(candidate.get());
+      return Response.ok(share).build();
     } else {
       return Response.status(NOT_FOUND).build();
     }

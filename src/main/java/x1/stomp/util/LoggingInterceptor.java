@@ -48,13 +48,11 @@ public class LoggingInterceptor {
   }
 
   private void logCall(InvocationContext ctx, Object result) {
-    var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") -> " + result;
-    getLogger(ctx).debug(argLine);
+    getLogger(ctx).debug(argLine(ctx, "-> " + result));
   }
 
   private void logFailure(InvocationContext ctx, Exception e) {
-    var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") failed";
-    getLogger(ctx).error(argLine, e);
+    getLogger(ctx).error(argLine(ctx, "failed"), e);
   }
 
   private void logFailure(InvocationContext ctx, WebApplicationException e) {
@@ -68,14 +66,17 @@ public class LoggingInterceptor {
 
   private void logResponse(InvocationContext ctx, WebApplicationException e) {
     var response = e.getResponse();
-    var argLine = ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") -> status="
-        + response.getStatus();
+    var argLine = argLine(ctx, "-> status=" + response.getStatus());
     var log = getLogger(ctx);
     switch (response.getStatusInfo().getFamily()) {
     case INFORMATIONAL, SUCCESSFUL, REDIRECTION -> log.debug(argLine);
     case CLIENT_ERROR, OTHER -> log.warn(argLine);
     case SERVER_ERROR -> log.error(argLine, e);
     }
+  }
+
+  private String argLine(InvocationContext ctx, Object result) {
+    return ctx.getMethod().getName() + "(" + StringUtils.join(ctx.getParameters(), ',') + ") " + result;
   }
 
   private Logger getLogger(InvocationContext ctx) {
@@ -93,7 +94,7 @@ public class LoggingInterceptor {
         if (annotation instanceof MDCKey mdcKey) {
           var key = StringUtils.defaultIfEmpty(mdcKey.value(), parameters[i].getName());
           var value = Objects.toString(ctx.getParameters()[i], null);
-          if (value != null) {
+          if (value != null && MDC.get(key) == null) {
             keys.add(key);
             MDC.put(key, value);
           }
