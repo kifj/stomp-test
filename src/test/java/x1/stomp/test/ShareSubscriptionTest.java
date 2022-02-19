@@ -1,37 +1,17 @@
 package x1.stomp.test;
 
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit5.ArquillianExtension;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import x1.stomp.control.QuoteUpdater;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Share;
-import x1.stomp.version.VersionData;
 
 import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(ArquillianExtension.class)
 @DisplayName("ShareSubscription Test")
-public class ShareSubscriptionTest {
-  @Deployment
-  public static Archive<?> createTestArchive() {
-    var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-library").withTransitivity().asFile();
-    return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
-        .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-        .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
-        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
-        .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
-  }
+public class ShareSubscriptionTest extends AbstractIT {
 
   @Inject
   private ShareSubscription shareSubscription;
@@ -46,7 +26,7 @@ public class ShareSubscriptionTest {
   public void testSubscribe() {
     var share = new Share();
     share.setKey("MSFT");
-    share.setName("Microsoft Corpora");
+    share.setName("Microsoft Corporation");
 
     while (true) {
       var existing = shareSubscription.find(share.getKey());

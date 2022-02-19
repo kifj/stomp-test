@@ -6,17 +6,9 @@ import static x1.stomp.model.Action.UNSUBSCRIBE;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit5.ArquillianExtension;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 
 import x1.stomp.control.QuoteUpdater;
@@ -29,9 +21,8 @@ import x1.stomp.version.VersionData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(ArquillianExtension.class)
 @DisplayName("ShareSubscription WebSocket Test")
-public class ShareSubscriptionWebSocketTest {
+public class ShareSubscriptionWebSocketTest extends AbstractIT {
   private static final String TEST_SHARE = "MSFT";
 
   private String baseUrl;
@@ -48,20 +39,9 @@ public class ShareSubscriptionWebSocketTest {
   @Inject
   private WebSocketClient client;
 
-  @Deployment
-  public static Archive<?> createTestArchive() {
-    var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-library").withTransitivity().asFile();
-
-    return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
-        .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-        .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
-        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").addAsWebInfResource("test-ds.xml")
-        .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
-  }
-
   @BeforeEach
   public void setup() {
+    super.setup();
     var host = System.getProperty("jboss.bind.address", "127.0.0.1");
     var port = 8080 + Integer.parseInt(System.getProperty("jboss.socket.binding.port-offset", "0"));
     baseUrl = "ws://" + host + ":" + port + "/" + VersionData.APP_NAME_MAJOR_MINOR + "/ws/stocks";
