@@ -37,25 +37,25 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT {
   private QuoteUpdater quoteUpdater;
 
   @Inject
-  private WebSocketClient client;
+  private WebSocketClient webSocketClient;
 
   @BeforeEach
   public void setup() {
     super.setup();
-    var host = System.getProperty("jboss.bind.address", "127.0.0.1");
-    var port = 8080 + Integer.parseInt(System.getProperty("jboss.socket.binding.port-offset", "0"));
+    var host = getHost();
+    var port = 8080 + getPortOffset();
     baseUrl = "ws://" + host + ":" + port + "/" + VersionData.APP_NAME_MAJOR_MINOR + "/ws/stocks";
     log.debug("baseUrl={}", baseUrl);
   }
 
   @Test
   public void testWebSocket() throws Exception {
-    client.openConnection(baseUrl);
+    webSocketClient.openConnection(baseUrl);
     Thread.sleep(500);
     var command = new Command(SUBSCRIBE, TEST_SHARE);
     var message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
-    client.sendMessage(message);
+    webSocketClient.sendMessage(message);
     Thread.sleep(2500);
 
     var quote = new Quote();
@@ -65,7 +65,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT {
     quote.setShare(share);
     quoteUpdater.updateQuote(quote);
     Thread.sleep(1500);
-    var response = client.getLastMessage();
+    var response = webSocketClient.getLastMessage();
     assertThat(response).isNotNull();
     log.debug("Received: {}", response);
     var received = jsonHelper.fromJSON(response, Quote.class);
@@ -76,15 +76,15 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT {
     command.setAction(UNSUBSCRIBE);
     message = jsonHelper.toJSON(command);
     log.debug("Sending {} to {}", command, baseUrl);
-    client.sendMessage(message);
+    webSocketClient.sendMessage(message);
 
     Thread.sleep(2500);
-    response = client.getLastMessage();
+    response = webSocketClient.getLastMessage();
     assertThat(response).isNotNull();
     SubscriptionEvent event = jsonHelper.fromJSON(response, SubscriptionEvent.class);
     assertThat(event.getKey()).isEqualTo(TEST_SHARE);
     assertThat(event.getAction()).isEqualTo(UNSUBSCRIBE);
-    client.closeConnection();
+    webSocketClient.closeConnection();
   }
 
 }

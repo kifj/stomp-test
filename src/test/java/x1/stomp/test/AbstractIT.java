@@ -48,5 +48,13 @@ public abstract class AbstractIT {
     public void tearDown() {
         client.close();
     }
+    
+    protected Integer getPortOffset() {
+      return Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
+    }
+
+    protected String getHost() {
+      return System.getProperty("jboss.bind.address", "127.0.0.1");
+    }
   
 }

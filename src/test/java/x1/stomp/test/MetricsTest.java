@@ -37,14 +37,7 @@ public class MetricsTest extends AbstractIT {
     var port = 9990 + getPortOffset();
     return "http://" + host + ":" + port;
   }
-  
-  private Integer getPortOffset() {
-    return Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
-  }
 
-  private String getHost() {
-    return System.getProperty("jboss.bind.address", "127.0.0.1");
-  }
 
   @ParameterizedTest
   @ValueSource(strings = { "memory.committedHeap", "memory.committedNonHeap", "memory.maxHeap", "memory.maxNonHeap",
