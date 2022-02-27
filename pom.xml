@@ -47,7 +47,7 @@
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <jacoco.version>0.8.7</jacoco.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <jkube.version>1.6.0</jkube.version>
+        <jkube.version>1.7.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -508,7 +508,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.2</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
