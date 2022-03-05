@@ -25,7 +25,7 @@
   </scm>
   <ciManagement>
     <system>Jenkins</system>
-    <url>http://www.x1/jenkins/job/stomp-test-wildfly-10/</url>
+    <url>https://www.x1/jenkins/job/stomp-test-wildfly-10/</url>
     <notifiers>
       <notifier>
         <type>mail</type>
@@ -74,7 +74,7 @@
       <id>joe</id>
       <name>Johannes Beck</name>
       <email>mail@johannes-beck.name</email>
-      <url>http://johannes-beck.name</url>
+      <url>https://johannes-beck.name</url>
       <organization>X1</organization>
       <organizationUrl>https://www.x1</organizationUrl>
       <roles>
