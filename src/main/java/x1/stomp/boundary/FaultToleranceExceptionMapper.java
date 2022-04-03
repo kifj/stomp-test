@@ -13,9 +13,8 @@ public class FaultToleranceExceptionMapper extends ExceptionMapperBase implement
   
   @Override
   public Response toResponse(FaultToleranceException e) {
-    var response = new ErrorResponse();
+    var response = new ErrorResponse(e.getClass().getSimpleName());
     var status = SERVICE_UNAVAILABLE;
-    response.setType(e.getClass().getSimpleName());
     response.setRequestUri(uriInfo.getRequestUri().toString());
     response.add(ErrorMessage.from(e));
     warn(status, "Service not available due to:\n{}", response.toString());

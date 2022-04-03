@@ -13,6 +13,7 @@ import static x1.stomp.boundary.LinkConstants.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.enterprise.context.RequestScoped;
@@ -161,7 +162,7 @@ public class ShareResource {
           description = "provide a Correlation-Id header to receive a response for your operation when it finished.",
           allowEmptyValue = true, example = "12345") @HeaderParam(value = "Correlation-Id") String correlationId) {
     try {
-      var jmsCorrelationId = correlationId != null ? correlationId : UUID.randomUUID().toString();
+      var jmsCorrelationId = Objects.requireNonNullElse(correlationId, UUID.randomUUID().toString());
       context.createProducer().setJMSCorrelationID(jmsCorrelationId).setProperty("type", "share")
           .setProperty("action", Action.SUBSCRIBE.name()).send(stockMarketQueue, share);
       MDC.put(CORRELATION_ID, jmsCorrelationId);

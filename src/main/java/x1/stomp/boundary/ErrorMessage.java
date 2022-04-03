@@ -8,7 +8,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @XmlRootElement(name = "error")
 @Schema(name = "error", description = "Structured error message")
-public class ErrorMessage {
+public final class ErrorMessage {
   public static ErrorMessage of(String message) {
     return new ErrorMessage(message);
   }

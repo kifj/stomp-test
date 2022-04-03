@@ -13,13 +13,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement(name = "errors")
 @Schema(name = "errors", description = "Error response")
-public class ErrorResponse {
-  public ErrorResponse() {
+public final class ErrorResponse {
+  private ErrorResponse() {
     errors = new ArrayList<>();
   }
   
   public ErrorResponse(String type) {
-    errors = new ArrayList<>();
+    this();
     this.type = type;
   }
 

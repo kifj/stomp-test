@@ -46,7 +46,7 @@ public class OpenAPIModelBuilder implements OASModelReader, ServletContextListen
     try {
       LOCK.await();
     } catch (InterruptedException e1) {
-     return openAPI;
+      return openAPI;
     }
 
     // add server by a relative url: works only if using swagger UI deployed with
