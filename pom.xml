@@ -782,8 +782,7 @@
                                     </sources>
                                 </mapping>
                                 <mapping>
-                                    <directory>/usr/share/stomp-test-v${app.majorVersion}.${app.minorVersion}
-                                    </directory>
+                                    <directory>/usr/share/stomp-test-v${app.majorVersion}.${app.minorVersion}</directory>
                                     <directoryIncluded>true</directoryIncluded>
                                     <sources>
                                         <source>
@@ -964,9 +963,6 @@
                             <namespace>stomp-test</namespace>
                             <verbose>true</verbose>
                             <registry>registry.x1</registry>
-                            <!--
-                            <imagePullPolicy>Always</imagePullPolicy>
-                            -->
                             <generator>
                                 <config>
                                    <wildfly-jar>
@@ -1029,9 +1025,6 @@
                                 <goals>
                                     <goal>resource</goal>
                                     <goal>build</goal>
-                                    <!-- 
-                                    <goal>apply</goal>
-                                    -->
                                 </goals>
                                 <phase>install</phase>
                             </execution>

@@ -1,4 +1,4 @@
-var client = new Client();
+var application = new Client();
 
 function Client() {
 	let protocol = 'ws://';

@@ -1,5 +1,6 @@
 package x1.stomp.util;
 
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -72,6 +73,7 @@ public class LoggingInterceptor {
     case INFORMATIONAL, SUCCESSFUL, REDIRECTION -> log.debug(argLine);
     case CLIENT_ERROR, OTHER -> log.warn(argLine);
     case SERVER_ERROR -> log.error(argLine, e);
+    default -> log.trace(argLine, e);
     }
   }
 
@@ -92,17 +94,20 @@ public class LoggingInterceptor {
     for (var annotations : method.getParameterAnnotations()) {
       for (var annotation : annotations) {
         if (annotation instanceof MDCKey mdcKey) {
-          var key = StringUtils.defaultIfEmpty(mdcKey.value(), parameters[i].getName());
-          var value = Objects.toString(ctx.getParameters()[i], null);
-          if (value != null && MDC.get(key) == null) {
-            keys.add(key);
-            MDC.put(key, value);
-          }
+          addToMdc(mdcKey, keys, parameters[i], Objects.toString(ctx.getParameters()[i], null));
         }
       }
       i++;
     }
     return keys;
+  }
+
+  private void addToMdc(MDCKey mdcKey, List<String> keys, Parameter parameter, String value) {
+    var key = StringUtils.defaultIfEmpty(mdcKey.value(), parameter.getName());
+    if (value != null && MDC.get(key) == null) {
+      keys.add(key);
+      MDC.put(key, value);
+    }
   }
 
   private void clearMdc(List<String> keys) {
