@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgresql
+  namespace: stomp-test
+spec:
+  secretName: pki-postgresql-secret
+  issuerRef:
+    kind: ClusterIssuer
+    name: x1-cluster-issuer
+  commonName: postgresql.stomp-test.pod.cluster.local
+  dnsNames:
+    - postgresql
+    - postgresql.stomp-test.svc.cluster.local
+    - postgresql.stomp-test.pod.cluster.local

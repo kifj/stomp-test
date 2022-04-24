@@ -8,6 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: 40m
     #nginx.ingress.kubernetes.io/enable-cors: 'true'
     nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
+    cert-manager.io/cluster-issuer: x1-cluster-issuer
 spec:
   tls:
   - hosts:
