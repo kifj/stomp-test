@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta name="Description" content="X1 Stock Market" />
   <meta name="Keywords" content="Stock Market,Stomp,Wildfly,JMS,Websockets,OpenAPI" />
@@ -7,109 +8,121 @@
   <meta name="Distribution" content="Global" />
   <meta name="Author" content="Johannes Beck - mail@johannes-beck.name" />
   <meta name="Robots" content="index,follow" />
-  <link type="text/css" rel="stylesheet" href="css/screen.css" media="all"/>
-  <link type="text/css" rel="stylesheet" href="css/stockmarket.css" media="all"/>
+  <link type="text/css" rel="stylesheet" href="css/screen.css" media="all" />
+  <link type="text/css" rel="stylesheet" href="css/stockmarket.css" media="all" />
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/stockmarket-ws.js"></script>
   <script type="text/javascript">
-  $(document).ready(function() {
-    var supported = ("WebSocket" in window);
-    if (!supported) {
-      var msg = "Your browser does not support Web Sockets. This example will not work properly.<br>";
-      msg += "Please use a Web Browser with Web Sockets support (WebKit or Google Chrome).";
-      $("#connect").html(msg);
-    } else {
-       application.init();
-    }
-  });
+    $(document).ready(function () {
+      var supported = ("WebSocket" in window);
+      if (!supported) {
+        var msg = "Your browser does not support Web Sockets. This example will not work properly.<br>";
+        msg += "Please use a Web Browser with Web Sockets support (WebKit or Google Chrome).";
+        $("#connect").html(msg);
+      } else {
+        application.init();
+      }
+    });
   </script>
   <title>Stock Market</title>
 </head>
 
 <body>
-	<div id="wrap">
-		<header id="header">
-			<div id="header-content">
-				<h1 id="logo"><a href="index.html" title="">Stock<span class="gray">Market</span></a></h1>
-				<h2 id="slogan">powered by Websockets and Stomp...</h2>
-		    <ul><li class="messageOff" id="message"></li></ul>
-			</div>
-		</header>
-		<div id="content-wrap">
-			<div id="content">
-				<aside id="sidebar" >
-					<div class="sidebox">
-						<h1>Debug console</h1>
-						<pre id="debug"></pre>
-					</div>
-				</aside>
-				<div id="main">
-					<div class="post">
-						<h1><a id="quotes">Quotes</a></h1>
-						<table style="width: 95%">
-							<thead><tr><th>Share</th><th>Name</th><th>Price</th><th>Currency</th></tr></thead>
-							<tbody id="tbl_quotes"></tbody>
-						</table>
-					</div>
-					<div class="post">
-						<h1><a id="subscribe">Subscribe</a></h1>
-						<form autocomplete="off">
-							<p>
-							<label for="l_share">Share</label>
-							<input list="shares" id="l_share" placeholder="Stock market share (key)" name="l_share" type="text" size="40" maxlength="40" autocomplete="on"/>
-							<datalist id="shares" class="hidden">
-								<option value="ADS.DE">ADIDAS N</option>
-								<option value="ALV.DE">ALLIANZ N</option>
-								<option value="BAS.DE">BASF N</option>
-								<option value="BAYN.DE">BAYER N</option>
-								<option value="BEI.DE">BEIERSDORF</option>
-								<option value="BMW.DE">BMW</option>
-								<option value="CBK.DE">COMMERZBANK</option>
-								<option value="CON.DE">CONTINENTAL</option>
-								<option value="DB1.DE">DEUTSCHE BOERSE N</option>
-								<option value="DBK.DE">DEUTSCHE BANK N</option>
-								<option value="DPW.DE">DEUTSCHE POST N</option>
-								<option value="DTE.DE">DEUTSCHE TELEKOM </option>
-								<option value="EOAN.DE">E.ON N</option>
-								<option value="FME.DE">FRESENIUS MED CAR</option>
-								<option value="FRE.DE">FRESENIUS</option>
-								<option value="HEI.DE">HEIDELBERGCEMENT</option>
-								<option value="HEN3.DE">HENKEL VZ</option>
-								<option value="IFX.DE">INFINEON TECHNOLO</option>
-								<option value="LHA.DE">DT.LUFTHANSA N</option>
-								<option value="LIN.DE">LINDE</option>
-								<option value="LXS.DE">LANXESS</option>
-								<option value="MRK.DE">MERCK</option>
-								<option value="MUV2.DE">MUNICHRE</option>
-								<option value="RWE.DE">RWE</option>
-								<option value="SAP.DE">SAP</option>
-								<option value="SDF.DE">K+S N</option>
-								<option value="SIE.DE">SIEMENS N</option>
-								<option value="TKA.DE">THYSSENKRUPP</option>
-								<option value="VOW3.DE">VOLKSWAGEN VZ</option>		          
-							</datalist>
-							<br/>
-							<span id="status"></span>
-							<br/>
-							<input class="button" id="button_subscribe" type="button" value="Subscribe"/>
-							<input class="button" id="button_unsubscribe" type="button" value="Unsubscribe"/>
-							<input class="button" id="button_connect" type="button" value="Connect"/>
-							<input class="button" id="button_disconnect" type="button" value="Disconnect"/>
-							</p>
-						</form>					
-					</div>
-				</div>
-			</div>
-		</div>
-	  <footer id="footer"><div id="footer-content">
-	  	<div class="col float-left">
-	  		<a href="https://blog.johannes-beck.name/?p=285">Read more...</a>
-	  	</div>
-			<div class="col2 float-right">
-	    	<p>&copy; copyright 2013 <a href="mailto:mail@johannes-beck.name">X1</a><br/></p>
-			</div>
-	    </div>
-	  </footer>
-	</div>
+  <div id="wrap">
+    <header id="header">
+      <div id="header-content">
+        <h1 id="logo"><a href="index.html" title="">Stock<span class="gray">Market</span></a></h1>
+        <h2 id="slogan">powered by Websockets and Stomp...</h2>
+        <ul>
+          <li class="messageOff" id="message"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="content-wrap">
+      <div id="content">
+        <aside id="sidebar">
+          <div class="sidebox">
+            <h1>Debug console</h1>
+            <pre id="debug"></pre>
+          </div>
+        </aside>
+        <div id="main">
+          <div class="post">
+            <h1><a id="quotes">Quotes</a></h1>
+            <table style="width: 95%">
+              <thead>
+                <tr>
+                  <th>Share</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Currency</th>
+                </tr>
+              </thead>
+              <tbody id="tbl_quotes"></tbody>
+            </table>
+          </div>
+          <div class="post">
+            <h1><a id="subscribe">Subscribe</a></h1>
+            <form autocomplete="off">
+              <p>
+                <label for="l_share">Share</label>
+                <input list="shares" id="l_share" placeholder="Stock market share (key)" name="l_share" type="text"
+                  size="40" maxlength="40" autocomplete="on" />
+                <datalist id="shares" class="hidden">
+                  <option value="ADS.DE">ADIDAS N</option>
+                  <option value="ALV.DE">ALLIANZ N</option>
+                  <option value="BAS.DE">BASF N</option>
+                  <option value="BAYN.DE">BAYER N</option>
+                  <option value="BEI.DE">BEIERSDORF</option>
+                  <option value="BMW.DE">BMW</option>
+                  <option value="CBK.DE">COMMERZBANK</option>
+                  <option value="CON.DE">CONTINENTAL</option>
+                  <option value="DB1.DE">DEUTSCHE BOERSE N</option>
+                  <option value="DBK.DE">DEUTSCHE BANK N</option>
+                  <option value="DPW.DE">DEUTSCHE POST N</option>
+                  <option value="DTE.DE">DEUTSCHE TELEKOM </option>
+                  <option value="EOAN.DE">E.ON N</option>
+                  <option value="FME.DE">FRESENIUS MED CAR</option>
+                  <option value="FRE.DE">FRESENIUS</option>
+                  <option value="HEI.DE">HEIDELBERGCEMENT</option>
+                  <option value="HEN3.DE">HENKEL VZ</option>
+                  <option value="IFX.DE">INFINEON TECHNOLO</option>
+                  <option value="LHA.DE">DT.LUFTHANSA N</option>
+                  <option value="LIN.DE">LINDE</option>
+                  <option value="LXS.DE">LANXESS</option>
+                  <option value="MRK.DE">MERCK</option>
+                  <option value="MUV2.DE">MUNICHRE</option>
+                  <option value="RWE.DE">RWE</option>
+                  <option value="SAP.DE">SAP</option>
+                  <option value="SDF.DE">K+S N</option>
+                  <option value="SIE.DE">SIEMENS N</option>
+                  <option value="TKA.DE">THYSSENKRUPP</option>
+                  <option value="VOW3.DE">VOLKSWAGEN VZ</option>
+                </datalist>
+                <br />
+                <span id="status"></span>
+                <br />
+                <input class="button" id="button_subscribe" type="button" value="Subscribe" />
+                <input class="button" id="button_unsubscribe" type="button" value="Unsubscribe" />
+                <input class="button" id="button_connect" type="button" value="Connect" />
+                <input class="button" id="button_disconnect" type="button" value="Disconnect" />
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer id="footer">
+      <div id="footer-content">
+        <div class="col float-left">
+          <a href="https://blog.johannes-beck.name/?p=285">Read more...</a>
+        </div>
+        <div class="col2 float-right">
+          <p>&copy; copyright 2013 <a href="mailto:mail@johannes-beck.name">X1</a><br /></p>
+        </div>
+      </div>
+    </footer>
+  </div>
 </body>
+
 </html>
