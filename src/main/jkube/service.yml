@@ -1,0 +1,12 @@
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: management-http
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  sessionAffinity: None

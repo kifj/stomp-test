@@ -97,7 +97,7 @@ spec:
             path: /health/ready
             port: 9990
             scheme: HTTP
-          initialDelaySeconds: 60
+          initialDelaySeconds: 45
           periodSeconds: 60
           successThreshold: 1
           timeoutSeconds: 10
@@ -107,7 +107,7 @@ spec:
             path: /health/live
             port: 9990
             scheme: HTTP
-          initialDelaySeconds: 120
+          initialDelaySeconds: 90
           periodSeconds: 60
           successThreshold: 1
           timeoutSeconds: 10

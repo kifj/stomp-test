@@ -45,9 +45,9 @@
         <maven.compiler.source>17</maven.compiler.source>
         <wildfly.version>26.1.1.Final</wildfly.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
-        <jacoco.version>0.8.7</jacoco.version>
+        <jacoco.version>0.8.8</jacoco.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <jkube.version>1.7.0</jkube.version>
+        <jkube.version>1.8.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -353,7 +353,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.4</version>
+            <version>42.3.6</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -481,12 +481,12 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.6.0.0</version>
+                <version>4.7.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>2.6.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -913,10 +913,6 @@
             <properties>
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%v</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
-                <jkube.enricher.jkube-service.name>wildfly</jkube.enricher.jkube-service.name>
-                <jkube.enricher.jkube-service.type>ClusterIP</jkube.enricher.jkube-service.type>
-                <jkube.enricher.jkube-service.port>8080,8443,9990</jkube.enricher.jkube-service.port>
-                <jkube.enricher.jkube-service.multiPort>true</jkube.enricher.jkube-service.multiPort>
             </properties>
             <build>
                 <finalName>${project.artifactId}</finalName>
@@ -987,42 +983,16 @@
                                     <GC_METASPACE_SIZE>256</GC_METASPACE_SIZE>
                                     <JAEGER_SERVICE_NAME>stomp-test</JAEGER_SERVICE_NAME>
                                     <MP_METRICS_TAGS>_app=stomp-test,version=1.6</MP_METRICS_TAGS>
-                                    <DB_SERVER>postgresql</DB_SERVER>
-                                    <DB_USER>stomp-test</DB_USER>
-                                    <DB_PASSWORD>stomp-test</DB_PASSWORD>
-                                    <ACTIVEMQ_SERVER>activemq-artemis</ACTIVEMQ_SERVER>
-                                    <ACTIVEMQ_USER>artemis</ACTIVEMQ_USER>
-                                    <ACTIVEMQ_PASSWORD>artemis</ACTIVEMQ_PASSWORD>
                                     <SERVICE_NAME>stomp-test</SERVICE_NAME>
                                 </env>
-                                <configMap>
-                                    <name>stomp-test-config</name>
-                                    <entries>
-                                        <entry>
-                                            <name>X1_STOMP_CONTROL_QUICKQUOTESERVICE_MP_REST_URL</name>
-                                            <value>https://quote.cnbc.com/quote-html-webservice</value>
-                                        </entry>
-                                        <entry>
-                                            <name>X1_STOMP_CONTROL_QUOTEUPDATER_ENABLE</name>
-                                            <value>true</value>
-                                        </entry>
-                                    </entries>
-                                </configMap>
-                                <volumes>
-                                    <volume>
-                                        <name>application-config</name>
-                                        <type>configMap</type>
-                                        <configMapName>stomp-test-config</configMapName>
-                                        <mounts>/deployments/configuration</mounts>
-                                        <readOnly>true</readOnly>
-                                    </volume>
-                                </volumes>
                                 <serviceAccount>jgroups-kubeping-service-account</serviceAccount>
                             </resources>
                             <enricher>
                                 <config>
                                     <jkube-healthcheck-wildfly-jar>
                                         <enforceProbes>true</enforceProbes>
+                                        <livenessInitialDelay>90</livenessInitialDelay>
+                                        <readinessInitialDelay>45</readinessInitialDelay>
                                     </jkube-healthcheck-wildfly-jar>
                                     <jkube-prometheus>
                                         <prometheusPort>9990</prometheusPort>

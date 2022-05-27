@@ -1,0 +1,4 @@
+data:
+  X1_STOMP_CONTROL_QUICKQUOTESERVICE_MP_REST_URL: https://quote.cnbc.com/quote-html-webservice
+  X1_STOMP_CONTROL_QUOTEUPDATER_ENABLE: "true"
+  X1_SERVICE_REGISTRY_ETCD: "http://etcd.x1:4001"

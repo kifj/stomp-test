@@ -1,0 +1,55 @@
+metadata:
+  annotations:
+    #reloader.stakater.com/auto: "true"
+    configmap.reloader.stakater.com/reload: stomp-test-config
+spec:
+  minReadySeconds: 90
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                app: stomp-test
+      containers:
+      - env:
+        - name: DB_SERVER
+          value: postgresql
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: postgresql
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: postgresql
+        - name: ACTIVEMQ_SERVER
+          value: activemq-artemis
+        - name: ARTEMIS_USER
+          valueFrom:
+            secretKeyRef:
+              key: artemis-user
+              name: activemq-artemis
+        - name: ARTEMIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: artemis-password
+              name: activemq-artemis
+        ports:
+        - containerPort: 9990
+          name: management-http
+          protocol: TCP
+        resources:
+          limits:
+            memory: "1024Mi"
+          requests:
+            memory: "768Mi"
+      terminationGracePeriodSeconds: 30
