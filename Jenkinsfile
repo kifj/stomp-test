@@ -24,6 +24,7 @@ node {
     docker
       .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.6')
       .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
+    c -> 
         waitFor("http://${hostIp(c)}:9990/health/ready", 10, 6)
         withMaven(maven: 'Maven-3.8', mavenSettingsConfig: mavenSetting) {
           sh "mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
