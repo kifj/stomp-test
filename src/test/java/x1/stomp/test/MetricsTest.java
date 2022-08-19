@@ -6,10 +6,14 @@ import static x1.stomp.test.ResponseAssert.assertThat;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import static javax.ws.rs.core.Response.Status.*;
 
 import org.junit.jupiter.api.Test;
+import org.eclipse.microprofile.metrics.MetricID;
+import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.eclipse.microprofile.metrics.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,6 +41,9 @@ public class MetricsTest extends AbstractIT {
     var port = 9990 + getPortOffset();
     return "http://" + host + ":" + port;
   }
+  
+  @Inject
+  private MetricRegistry registry; 
 
 
   @ParameterizedTest
@@ -90,5 +97,10 @@ public class MetricsTest extends AbstractIT {
     assertThat(o.getAsJsonObject("get-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("remove-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("get-shares").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(1);
+    
+    assertThat(registry.getSimpleTimer(new MetricID("add-share", new Tag("interface","ShareResource"))).getCount()).isEqualTo(0l);
+    assertThat(registry.getSimpleTimer(new MetricID("get-share", new Tag("interface","ShareResource"))).getCount()).isEqualTo(0l);
+    assertThat(registry.getSimpleTimer(new MetricID("remove-share", new Tag("interface","ShareResource"))).getCount()).isEqualTo(0l);
+    assertThat(registry.getSimpleTimer(new MetricID("get-shares", new Tag("interface","ShareResource"))).getCount()).isEqualTo(1l);
   }
 }
