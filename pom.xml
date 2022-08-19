@@ -44,9 +44,9 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
         <wildfly.version>26.1.1.Final</wildfly.version>
-        <junit.jupiter.version>5.8.2</junit.jupiter.version>
+        <junit.jupiter.version>5.9.0</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
+        <arquillian.version>1.7.0.Alpha12</arquillian.version>
         <jkube.version>1.8.0</jkube.version>
     </properties>
 
