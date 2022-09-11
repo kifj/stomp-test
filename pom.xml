@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
-        <wildfly.version>26.1.1.Final</wildfly.version>
+        <wildfly.version>26.1.2.Final</wildfly.version>
         <junit.jupiter.version>5.9.0</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
         <arquillian.version>1.7.0.Alpha12</arquillian.version>
@@ -273,7 +273,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>service-registry</artifactId>
-            <version>1.2.10</version>
+            <version>1.2.11</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
