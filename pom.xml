@@ -47,7 +47,7 @@
         <junit.jupiter.version>5.9.0</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
         <arquillian.version>1.7.0.Alpha12</arquillian.version>
-        <jkube.version>1.8.0</jkube.version>
+        <jkube.version>1.9.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -353,7 +353,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.4.1</version>
+            <version>42.5.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -481,7 +481,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.1.1</version>
+                <version>4.7.2.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -495,14 +495,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>8.45.1</version>
-                    </dependency>
-                </dependencies>
+                <version>3.2.0</version>
             </plugin>
         </plugins>
 
@@ -520,7 +513,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.4.1</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -576,7 +569,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>
                 <configuration>
                     <configLocation>etc/checkstyle.xml</configLocation>
                 </configuration>

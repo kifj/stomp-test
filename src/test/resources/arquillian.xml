@@ -18,8 +18,6 @@
   <container qualifier="jbossas-managed" default="false">
     <configuration>
       <property name="allowConnectingToRunningServer">true</property>
-      <property name="username">${jboss.user:admin}</property>
-      <property name="password">${jboss.password:12345}</property>
       <property name="serverConfig">standalone-full.xml</property>
       <property name="jbossHome">${jboss.home}</property>
       <property name="managementPort">${jboss.managementPort:9990}</property>
