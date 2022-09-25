@@ -1,4 +1,4 @@
-var application = new Client();
+const application = new Client();
 
 function Client() {
 	let protocol = 'ws://';
@@ -19,7 +19,7 @@ function Client() {
 //---------------------------------------------------------------------
 
 Client.prototype.init = function() {
-	var caller = this;
+	let caller = this;
 	$("#button_subscribe").click(function(e) {
 		caller.subscribe($('#l_share').val());
 	});
@@ -37,7 +37,7 @@ Client.prototype.init = function() {
 
 Client.prototype.connect = function() {
 	this.statusOff();
-	var caller = this;
+	let caller = this;
 	let connection = new WebSocket(this.url);
 	$("#sidebar").fadeOut();
 	
@@ -62,7 +62,7 @@ Client.prototype.connect = function() {
 }
 
 Client.prototype.disconnect = function(isClosed) {
-	var caller = this;
+	let caller = this;
 	let connection = this.connection;
 	if (connection) {
 		if (!isClosed) {

@@ -1,4 +1,4 @@
-var application = new Client();
+const application = new Client();
 
 function Client() {
 	let protocol = 'ws://';
@@ -16,7 +16,7 @@ function Client() {
 //---------------------------------------------------------------------
 
 Client.prototype.init = function() {
-	var caller = this;
+	let caller = this;
 	$("#button_subscribe").click(function(e) {
 		caller.subscribe($('#l_share').val());
 	});
@@ -33,8 +33,8 @@ Client.prototype.init = function() {
 }
 
 Client.prototype.connect = function() {
-	var caller = this;
-	var client = Stomp.client(this.url);
+	let caller = this;
+	let client = Stomp.client(this.url);
 	
 	if (this.debug) {
 		// this allows to display debug logs directly on the web page
@@ -67,8 +67,8 @@ Client.prototype.connect = function() {
 }
 
 Client.prototype.disconnect = function() {
-	var caller = this;
-	var client = this.stompClient;
+	let caller = this;
+	let client = this.stompClient;
 	if (client) {
 		this.stompClient = null;
 		client.disconnect(function() {
@@ -83,7 +83,7 @@ Client.prototype.disconnect = function() {
 }
 
 Client.prototype.subscribe = function(key) {
-	var client = this.stompClient;
+	let client = this.stompClient;
 	if (client && key) {
 		this.messageOn('Subscribe ' + key);
 		let data = {'command' : {'action': 'SUBSCRIBE', 'key': key}};
@@ -93,7 +93,7 @@ Client.prototype.subscribe = function(key) {
 }
 
 Client.prototype.unsubscribe = function(key) {
-	var client = this.stompClient;
+	let client = this.stompClient;
 	if (client && key) {
 		this.messageOn('Unsubscribe ' + key);
 		let data = {'command' : {'action': 'UNSUBSCRIBE', 'key': key}};
