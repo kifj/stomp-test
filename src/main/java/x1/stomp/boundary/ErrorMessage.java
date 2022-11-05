@@ -1,8 +1,8 @@
 package x1.stomp.boundary;
 
-import javax.validation.ConstraintViolation;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.validation.ConstraintViolation;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 

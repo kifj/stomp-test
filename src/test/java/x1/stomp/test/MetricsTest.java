@@ -1,14 +1,14 @@
 package x1.stomp.test;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static x1.stomp.test.ResponseAssert.assertThat;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.GenericType;
-import static javax.ws.rs.core.Response.Status.*;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.GenericType;
+import static jakarta.ws.rs.core.Response.Status.*;
 
 import org.junit.jupiter.api.Test;
 import org.eclipse.microprofile.metrics.MetricID;

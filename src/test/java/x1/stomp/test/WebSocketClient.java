@@ -1,16 +1,16 @@
 package x1.stomp.test;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.websocket.*;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.websocket.*;
 
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
 
-import static javax.websocket.CloseReason.CloseCodes.CLOSED_ABNORMALLY;
-import static javax.websocket.CloseReason.CloseCodes.NORMAL_CLOSURE;
+import static jakarta.websocket.CloseReason.CloseCodes.CLOSED_ABNORMALLY;
+import static jakarta.websocket.CloseReason.CloseCodes.NORMAL_CLOSURE;
 
 @ClientEndpoint
 @ApplicationScoped

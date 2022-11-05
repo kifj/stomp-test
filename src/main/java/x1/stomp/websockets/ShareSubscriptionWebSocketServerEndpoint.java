@@ -13,15 +13,15 @@ import x1.stomp.model.Share;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.version.VersionData;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
-import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
+import jakarta.ejb.ActivationConfigProperty;
+import jakarta.ejb.MessageDriven;
+import jakarta.inject.Inject;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageListener;
+import jakarta.jms.TextMessage;
+import jakarta.websocket.*;
+import jakarta.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +31,7 @@ import static x1.service.registry.Protocol.*;
 import static x1.service.registry.Technology.*;
 
 @MessageDriven(name = "ShareSubscriptionWebSocketServerEndpoint", activationConfig = {
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "jakarta.jms.Topic"),
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/topic/quotes"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")})
 @ServerEndpoint("/ws/stocks")

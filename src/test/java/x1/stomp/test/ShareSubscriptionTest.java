@@ -7,7 +7,7 @@ import x1.stomp.control.QuoteUpdater;
 import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Share;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ShareSubscription Test")

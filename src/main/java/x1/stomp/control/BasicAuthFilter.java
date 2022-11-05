@@ -2,9 +2,9 @@ package x1.stomp.control;
 
 import java.io.IOException;
 
-import javax.enterprise.inject.spi.CDI;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.client.ClientRequestFilter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.Config;

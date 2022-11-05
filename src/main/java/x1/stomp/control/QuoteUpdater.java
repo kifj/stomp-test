@@ -3,9 +3,9 @@ package x1.stomp.control;
 import java.io.IOException;
 import java.util.UUID;
 
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import jakarta.ejb.Schedule;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 import org.slf4j.Logger;
 
@@ -13,12 +13,12 @@ import x1.stomp.model.Quote;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.util.StockMarket;
 
-import javax.inject.Inject;
-import javax.jms.JMSConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.JMSProducer;
-import javax.jms.Topic;
-import javax.validation.constraints.NotNull;
+import jakarta.inject.Inject;
+import jakarta.jms.JMSConnectionFactory;
+import jakarta.jms.JMSContext;
+import jakarta.jms.JMSProducer;
+import jakarta.jms.Topic;
+import jakarta.validation.constraints.NotNull;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 

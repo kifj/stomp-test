@@ -15,8 +15,8 @@ import x1.stomp.model.Share;
 import x1.stomp.model.SimpleLink;
 import x1.stomp.util.JsonHelper;
 
-import javax.ws.rs.HttpMethod;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.HttpMethod;
+import jakarta.ws.rs.core.MediaType;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;

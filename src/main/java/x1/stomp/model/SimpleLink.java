@@ -1,6 +1,6 @@
 package x1.stomp.model;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 

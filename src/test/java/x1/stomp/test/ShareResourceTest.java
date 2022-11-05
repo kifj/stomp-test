@@ -7,17 +7,17 @@ import x1.stomp.boundary.ErrorResponse;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.UriBuilder;
 
 import java.util.List;
 import java.util.UUID;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.Response.Status.*;
 import static x1.stomp.test.ResponseAssert.assertThat;
 import static x1.stomp.test.ErrorResponseAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;

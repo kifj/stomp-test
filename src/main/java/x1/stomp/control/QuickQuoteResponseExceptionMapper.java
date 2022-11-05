@@ -1,9 +1,9 @@
 package x1.stomp.control;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 import org.slf4j.Logger;

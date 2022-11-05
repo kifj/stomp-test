@@ -24,7 +24,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static x1.service.Constants.*;

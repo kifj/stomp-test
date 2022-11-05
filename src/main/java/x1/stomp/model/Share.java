@@ -3,14 +3,14 @@ package x1.stomp.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import javax.ws.rs.core.Link;
-import javax.xml.bind.annotation.*;
-import javax.validation.constraints.NotEmpty;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import jakarta.ws.rs.core.Link;
+import jakarta.xml.bind.annotation.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

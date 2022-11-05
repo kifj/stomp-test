@@ -4,12 +4,12 @@ import org.slf4j.Logger;
 import x1.stomp.model.Share;
 import x1.stomp.model.SubscriptionEvent;
 
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.validation.constraints.NotNull;
+import jakarta.ejb.Stateless;
+import jakarta.enterprise.event.Event;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Optional;

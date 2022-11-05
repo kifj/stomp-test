@@ -1,11 +1,11 @@
 package x1.stomp.control;
 
-import javax.enterprise.context.Dependent;
-import javax.ws.rs.*;
+import jakarta.enterprise.context.Dependent;
+import jakarta.ws.rs.*;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.MediaType.APPLICATION_XML;
-import javax.ws.rs.core.Response;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_XML;
+import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;

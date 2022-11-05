@@ -3,8 +3,8 @@ package x1.stomp.test;
 import static x1.stomp.model.Action.SUBSCRIBE;
 import static x1.stomp.model.Action.UNSUBSCRIBE;
 
-import javax.ejb.EJB;
-import javax.inject.Inject;
+import jakarta.ejb.EJB;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

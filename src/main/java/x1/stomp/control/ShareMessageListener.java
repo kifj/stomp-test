@@ -3,6 +3,15 @@ package x1.stomp.control;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 
+import jakarta.ejb.ActivationConfigProperty;
+import jakarta.ejb.EJBException;
+import jakarta.inject.Inject;
+import jakarta.jms.BytesMessage;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageListener;
+import jakarta.jms.ObjectMessage;
+import jakarta.ejb.MessageDriven;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.model.Action;
@@ -11,15 +20,6 @@ import x1.stomp.model.Share;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.version.VersionData;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJBException;
-import javax.ejb.MessageDriven;
-import javax.inject.Inject;
-import javax.jms.BytesMessage;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import java.io.IOException;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -28,7 +28,7 @@ import static x1.service.registry.Technology.JMS;
 import static x1.service.registry.Technology.STOMP;
 
 @MessageDriven(name = "ShareMessageListener",
-    activationConfig = { @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+    activationConfig = { @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "jakarta.jms.Queue"),
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/jms/queue/stocks"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 @Services(services = {

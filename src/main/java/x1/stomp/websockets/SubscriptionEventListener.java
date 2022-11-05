@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import x1.stomp.model.SubscriptionEvent;
 import x1.stomp.util.JsonHelper;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.TransactionPhase;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.event.TransactionPhase;
+import jakarta.inject.Inject;
 import java.nio.channels.ClosedChannelException;
 
 @ApplicationScoped
