@@ -21,7 +21,7 @@ public class QuickQuoteResult implements Serializable {
 
   @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
   @JsonProperty(value = "QuickQuote")
-  @XmlElement(name = "QuickQuote", namespace = NS)
+  @XmlElement(name = "QuickQuote")
   public List<QuickQuote> getQuotes() {
     return quotes;
   }
