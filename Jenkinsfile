@@ -27,7 +27,7 @@ node {
     c -> 
         waitFor("http://${hostIp(c)}:9990/health/ready", 20, 3)
         withMaven(maven: 'Maven-3.8', mavenSettingsConfig: mavenSetting) {
-          sh "mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
+          sh "mvn -Parq-remote verify -Djboss.managementAddress=${hostIp(c)}"
 	}      
     }
   }

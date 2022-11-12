@@ -3,7 +3,7 @@
   xsi:schemaLocation="
         http://jboss.org/schema/arquillian
         http://www.jboss.org/schema/arquillian/arquillian_1_0.xsd">
-  <container qualifier="jbossas-remote" default="false">
+  <container qualifier="remote" default="false">
     <protocol type="Servlet 3.0" />
     <configuration>
       <property name="managementAddress">${jboss.managementAddress:localhost}</property>
@@ -16,7 +16,7 @@
     </configuration>
   </container>
 
-  <container qualifier="jbossas-managed" default="false">
+  <container qualifier="managed" default="false">
     <configuration>
       <property name="allowConnectingToRunningServer">true</property>
       <property name="serverConfig">standalone-full.xml</property>
@@ -27,7 +27,7 @@
     </configuration>
   </container>
 
-  <container qualifier="docker-stomp-test-it" default="false">
+  <container qualifier="docker-it" default="false">
     <protocol type="Servlet 3.0" />
     <configuration>
       <property name="managementAddress">${jboss.managementAddress:localhost}</property>

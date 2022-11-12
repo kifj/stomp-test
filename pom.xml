@@ -43,7 +43,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
-        <wildfly.version>27.0.0.Beta1</wildfly.version>
+        <wildfly.version>27.0.0.Final</wildfly.version>
+        <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <junit.jupiter.version>5.9.1</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
         <arquillian.version>1.7.0.Alpha13</arquillian.version>
@@ -634,7 +635,7 @@
             </build>
         </profile>
         <profile>
-            <id>arq-jbossas-managed</id>
+            <id>arq-managed</id>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.shrinkwrap.resolver</groupId>
@@ -660,7 +661,8 @@
                         <configuration>
                             <skip>false</skip>
                             <systemPropertyVariables>
-                                <arquillian.launch>jbossas-managed</arquillian.launch>
+                                <arquillian.launch>managed</arquillian.launch>
+				                <jboss.home>${jboss.home}</jboss.home>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
@@ -669,7 +671,7 @@
             </build>
         </profile>
         <profile>
-            <id>arq-jbossas-remote</id>
+            <id>arq-remote</id>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.shrinkwrap.resolver</groupId>
@@ -696,7 +698,7 @@
                         <configuration>
                             <skip>false</skip>
                             <systemPropertyVariables>
-                                <arquillian.launch>jbossas-remote</arquillian.launch>
+                                <arquillian.launch>remote</arquillian.launch>
                                 <jboss.managementAddress>127.0.0.1</jboss.managementAddress>
                                 <jboss.managementPort>9990</jboss.managementPort>
                                 <jboss.user>admin</jboss.user>
@@ -709,7 +711,7 @@
             </build>
         </profile>
         <profile>
-            <id>arq-jbossas-docker</id>
+            <id>arq-docker</id>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.shrinkwrap.resolver</groupId>
@@ -749,7 +751,7 @@
                             <skip>false</skip>
                             <systemPropertyVariables>
                                 <org.jboss.logging.provider>slf4j</org.jboss.logging.provider>
-                                <arquillian.launch>docker-stomp-test-it</arquillian.launch>
+                                <arquillian.launch>docker-it</arquillian.launch>
                                 <jboss.managementPort>10090</jboss.managementPort>
                                 <jboss.user>admin</jboss.user>
                                 <jboss.password>12345</jboss.password>
