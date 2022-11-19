@@ -8,8 +8,8 @@
     <configuration>
       <property name="managementAddress">${jboss.managementAddress:localhost}</property>
       <property name="managementPort">${jboss.managementPort:9990}</property>
-      <!-- 
-      <property name="managementProtocol">${jboss.managementProtocol}</property>
+      <!--
+      <property name="managementProtocol">${jboss.managementProtocol:remote+http}</property>
       -->
       <property name="username">${jboss.user:admin}</property>
       <property name="password">${jboss.password:12345}</property>
@@ -32,6 +32,9 @@
     <configuration>
       <property name="managementAddress">${jboss.managementAddress:localhost}</property>
       <property name="managementPort">${jboss.managementPort:9990}</property>
+      <!--
+      <property name="managementProtocol">${jboss.managementProtocol:remote+http}</property>
+      -->
       <property name="username">${jboss.user:admin}</property>
       <property name="password">${jboss.password:12345}</property>
     </configuration>

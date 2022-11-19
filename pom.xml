@@ -359,6 +359,11 @@
             <version>42.5.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.logmanager</groupId>
+            <artifactId>jboss-logmanager</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>${project.artifactId}-v${app.majorVersion}.${app.minorVersion}</finalName>
@@ -673,7 +678,7 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>3.0.1.Final</version>
+                    <version>5.0.0.Alpha5</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -707,7 +712,7 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>3.0.1.Final</version>
+                    <version>5.0.0.Alpha5</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
