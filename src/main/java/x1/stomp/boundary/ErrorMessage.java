@@ -25,7 +25,7 @@ public final class ErrorMessage {
   }
 
   public static ErrorMessage of(ConstraintViolation<?> violation) {
-    ErrorMessage errorMessage = new ErrorMessage();
+    var errorMessage = new ErrorMessage();
     errorMessage.message = violation.getMessage();
     errorMessage.path = violation.getPropertyPath().toString();
     errorMessage.invalidValue = (violation.getInvalidValue() == null) ? null : violation.getInvalidValue().toString();
