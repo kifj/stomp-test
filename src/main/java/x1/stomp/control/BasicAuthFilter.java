@@ -13,7 +13,7 @@ import org.jboss.resteasy.client.jaxrs.internal.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.internal.ClientRequestContextImpl;
 
 public class BasicAuthFilter implements ClientRequestFilter {
-  private static final String MP_REST = "/mp-rest/"; 
+  private static final String MP_REST = "/mp-rest/";
   private BasicAuthentication delegate;
   private Boolean hasDelegate = null;
 
@@ -47,7 +47,7 @@ public class BasicAuthFilter implements ClientRequestFilter {
 
   private Class<?> getDeclaringClass(ClientRequestContext requestContext) {
     if (requestContext instanceof ClientRequestContextImpl == false) {
-      throw new RuntimeException(
+      throw new IllegalStateException(
           "Failed to get ClientInvocation from request context. Is RestEasy client used underneath?");
     }
     var invocation = ((ClientRequestContextImpl) requestContext).getInvocation();
