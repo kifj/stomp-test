@@ -1024,6 +1024,13 @@
                         <enabled>true</enabled>
                     </snapshots>
                 </repository>
+                <repository>
+                    <id>jboss</id>
+                    <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>                
             </repositories>
         </profile>
     </profiles>
