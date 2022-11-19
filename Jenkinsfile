@@ -1,7 +1,7 @@
 node {
   def mvnHome = tool 'Maven-3.8'
   env.JAVA_HOME = tool 'JDK-17'
-  def branch = 'wildfly-26'
+  def branch = 'wildfly-27'
   def mavenSetting = 'dfe73d5e-dd12-4ed1-965f-7c8dcebd9101'
 
   stage('Checkout') {
@@ -22,7 +22,7 @@ node {
 
   stage('Run IT test') {
     docker
-      .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.6')
+      .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.7')
       .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
     c -> 
         waitFor("http://${hostIp(c)}:9990/health/ready", 20, 3)
