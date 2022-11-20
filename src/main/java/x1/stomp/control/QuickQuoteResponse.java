@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement(name = "QuickQuoteResponse")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,6 +15,7 @@ public class QuickQuoteResponse implements Serializable {
   private QuickQuoteResult quickQuoteResult;
 
   @XmlElement(name = "QuickQuoteResult")
+  @JsonProperty(value = "QuickQuoteResult")
   public QuickQuoteResult getQuickQuoteResult() {
     return quickQuoteResult;
   }

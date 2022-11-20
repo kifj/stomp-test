@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -49,6 +51,11 @@ public class QuoteRetriever {
 
   private QuickQuoteResult retrieveQuotes(String keys) {
     var response = quickQuoteService.retrieve(keys.toUpperCase(), format);
+    var status = Status.fromStatusCode(response.getStatus());
+    if (status != Status.OK) {
+      var body = response.readEntity(String.class);
+      throw new WebApplicationException(body, status);
+    }
     switch (format) {
     case "xml":
       return response.readEntity(QuickQuoteResult.class);

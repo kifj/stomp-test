@@ -52,8 +52,8 @@ public class ShareResourceTest extends AbstractIT {
   @Test
   public void testAddAndFindShare() throws Exception {
     var share = new Share();
-    var key = "BMW";
-    var name = "Bayerische Motoren Werke AG";
+    var key = "MSFT";
+    var name = "Microsoft Corporation";
     share.setKey(key);
     share.setName(name);
 
