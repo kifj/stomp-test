@@ -97,7 +97,7 @@ public class QuoteResource {
 
   @Context
   private UriInfo uriInfo;
-
+  
   @GET
   @Path("/{key}")
   @Formatted
@@ -145,13 +145,7 @@ public class QuoteResource {
 
   private Response retrieveQuotes(List<String> keys, UriBuilder baseUriBuilder) {
     try {
-      List<Share> shares;
-      if (keys.isEmpty()) {
-        shares = shareSubscription.list();
-      } else {
-        shares = keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent).map(Optional::get)
-            .collect(Collectors.toList());
-      }
+      List<Share> shares = retrieveShares(keys);
       if (shares.isEmpty()) {
         return Response.status(NOT_FOUND).entity(new Quotes()).build();
       }
@@ -161,6 +155,15 @@ public class QuoteResource {
     } catch (RuntimeException e) {
       log.error(null, e);
       throw e;
+    }
+  }
+
+  private List<Share> retrieveShares(List<String> keys) {
+    if (keys.isEmpty()) {
+      return shareSubscription.list();
+    } else {
+      return keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent).map(Optional::get)
+          .collect(Collectors.toList());
     }
   }
 

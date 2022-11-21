@@ -34,10 +34,7 @@ public class QuoteRetriever {
   }
 
   public List<Quote> retrieveQuotes(List<Share> shares) {
-    if (shares.isEmpty()) {
-      return Collections.emptyList();
-    }
-    return extractQuotes(shares, retrieveQuotes(joinKeys(shares)));
+    return (shares.isEmpty()) ? Collections.emptyList() : extractQuotes(shares, retrieveQuotes(joinKeys(shares)));
   }
 
   private String joinKeys(List<Share> shares) {
@@ -56,14 +53,11 @@ public class QuoteRetriever {
       var body = response.readEntity(String.class);
       throw new WebApplicationException(body, status);
     }
-    switch (format) {
-    case "xml":
-      return response.readEntity(QuickQuoteResult.class);
-    case "json":
-      return response.readEntity(QuickQuoteResponse.class).getQuickQuoteResult();
-    default:
-      throw new IllegalArgumentException(format);
-    }
+    return switch (format) {
+      case "xml" -> response.readEntity(QuickQuoteResult.class);
+      case "json" -> response.readEntity(QuickQuoteResponse.class).getQuickQuoteResult();
+      default -> throw new IllegalArgumentException(format);
+    };
   }
 
   private Optional<Quote> createQuote(QuickQuote quickQuote, List<Share> shares) {

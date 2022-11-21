@@ -66,6 +66,7 @@ public class ShareMessageListener implements MessageListener {
         log.warn("Message {} of wrong type: {}", correlationId, message.getClass().getName());
       }
     } catch (JMSException | IOException e) {
+      log.error(e.getMessage(), e);
       throw new EJBException(e);
     } finally {
       MDC.remove(CORRELATION_ID);
@@ -76,9 +77,9 @@ public class ShareMessageListener implements MessageListener {
     if (message.getStringProperty("type").equalsIgnoreCase("share")) {
       var action = Action.valueOf(message.getStringProperty("action"));
       switch (action) {
-      case SUBSCRIBE -> subscribe((Share) message.getObject());
-      case UNSUBSCRIBE -> shareSubscription.unsubscribe((Share) message.getObject());
-      default -> log.warn("Unsupported action: {}", action);
+        case SUBSCRIBE -> subscribe((Share) message.getObject());
+        case UNSUBSCRIBE -> shareSubscription.unsubscribe((Share) message.getObject());
+        default -> log.warn("Unsupported action: {}", action);
       }
     } else {
       log.warn("Message of wrong type: {}", message);
@@ -94,9 +95,9 @@ public class ShareMessageListener implements MessageListener {
       return;
     }
     switch (command.getAction()) {
-    case SUBSCRIBE -> subscribe(command.getKey());
-    case UNSUBSCRIBE -> unsubscribe(command.getKey());
-    default -> log.warn("Unknown command: {}", body);
+      case SUBSCRIBE -> subscribe(command.getKey());
+      case UNSUBSCRIBE -> unsubscribe(command.getKey());
+      default -> log.warn("Unknown command: {}", body);
     }
   }
 
