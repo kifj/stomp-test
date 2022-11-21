@@ -2,7 +2,7 @@ package x1.stomp.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.Readiness;
 
 import x1.stomp.model.Share;
 
@@ -11,7 +11,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 @ApplicationScoped
-@Liveness
+@Readiness
 public class DatabaseCheck implements HealthCheck {
 
   @Inject

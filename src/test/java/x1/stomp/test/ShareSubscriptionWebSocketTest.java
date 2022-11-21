@@ -81,7 +81,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT {
     Thread.sleep(2500);
     response = webSocketClient.getLastMessage();
     assertThat(response).isNotNull();
-    SubscriptionEvent event = jsonHelper.fromJSON(response, SubscriptionEvent.class);
+    var event = jsonHelper.fromJSON(response, SubscriptionEvent.class);
     assertThat(event.getKey()).isEqualTo(TEST_SHARE);
     assertThat(event.getAction()).isEqualTo(UNSUBSCRIBE);
     webSocketClient.closeConnection();
