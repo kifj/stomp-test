@@ -1,12 +1,12 @@
 version: '3'
 services:
   etcd:
-    image: quay.io/coreos/etcd:v3.4.15
+    image: quay.io/coreos/etcd:v3.5.6
     network_mode: bridge
     domainname: docker.x1
     command: ["-listen-client-urls", "http://0.0.0.0:2379,http://0.0.0.0:4001", "-advertise-client-urls", "http://etcd:2379,http://etcd:4001"]
   db:
-    image: registry.x1/j7beck/x1-postgres-stomp-test:1.6
+    image: registry.x1/j7beck/x1-postgres-stomp-test:1.7
     hostname: stomp-test-db
     domainname: docker.x1
     container_name: stomp-test-db
@@ -26,7 +26,7 @@ services:
      - /opt/docker/x1/certs/activemq-artemis.key:/etc/pki/tls/private/node.key:ro
      - /opt/docker/x1/certs/activemq-artemis.crt:/etc/pki/tls/certs/node.crt:ro
   wildfly:
-    image: registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.6.0-SNAPSHOT
+    image: registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.7.0-SNAPSHOT
     domainname: docker.x1
     network_mode: bridge
     environment:
