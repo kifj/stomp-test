@@ -4,7 +4,7 @@ services:
     image: quay.io/coreos/etcd:v3.5.6
     network_mode: bridge
     domainname: docker.x1
-    command: ["-listen-client-urls", "http://0.0.0.0:2379,http://0.0.0.0:4001", "-advertise-client-urls", "http://etcd:2379,http://etcd:4001"]
+    command: ["etcd", "--listen-client-urls", "http://0.0.0.0:2379,http://0.0.0.0:4001", "--advertise-client-urls", "http://etcd:2379,http://etcd:4001"]
   db:
     image: registry.x1/j7beck/x1-postgres-stomp-test:1.7
     hostname: stomp-test-db
@@ -34,6 +34,7 @@ services:
      - X1_SERVICE_REGISTRY_STAGE=docker
      - DB_SERVER=db
      - DB_PORT=5432
+     - DB_NAME=stocks
      - ACTIVEMQ_SERVER=activemq-artemis
      - GC_MAX_METASPACE_SIZE=256
      - GC_METASPACE_SIZE=96
