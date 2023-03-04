@@ -13,3 +13,4 @@ MANIFEST.MF
 /.tern-project
 .vscode/settings.json
 *.crt
+.vscode/launch.json
