@@ -653,7 +653,7 @@
                             <skip>false</skip>
                             <systemPropertyVariables>
                                 <arquillian.launch>managed</arquillian.launch>
-				                <jboss.home>${jboss.home}</jboss.home>
+                                <jboss.home>${jboss.home}</jboss.home>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
@@ -930,7 +930,7 @@
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-datasources-galleon-pack</artifactId>
-                                    <version>2.2.5.Final</version>
+                                    <version>3.0.1.Final</version>
                                 </feature-pack>
                             </feature-packs>
                             <layers>
