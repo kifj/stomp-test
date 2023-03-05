@@ -46,8 +46,8 @@
         <wildfly.version>26.1.3.Final</wildfly.version>
         <junit.jupiter.version>5.9.1</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
-        <arquillian.version>1.7.0.Alpha13</arquillian.version>
-        <jkube.version>1.10.1</jkube.version>
+        <arquillian.version>1.7.0.Alpha14</arquillian.version>
+        <jkube.version>1.11.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -366,7 +366,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.11.0</version>
                 <configuration>
                     <parameters>true</parameters>
                 </configuration>
@@ -472,7 +472,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>3.0.2.Final</version>
+                <version>4.0.0.Final</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -481,12 +481,12 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.3.0</version>
+                <version>4.7.3.2</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
-                <version>2.7.3</version>
+                <version>2.7.5</version>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -1013,6 +1013,13 @@
                     <url>https://maven.pkg.github.com/kifj/service-registry</url>
                     <snapshots>
                         <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>jboss</id>
+                    <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+                    <snapshots>
+                        <enabled>false</enabled>
                     </snapshots>
                 </repository>
             </repositories>
