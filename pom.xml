@@ -25,7 +25,7 @@
     </scm>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://www.x1/jenkins/job/stomp-test-wildfly-27/</url>
+        <url>https://www.x1/jenkins/job/stomp-test-wildfly-26/</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -44,7 +44,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
         <wildfly.version>26.1.3.Final</wildfly.version>
-        <junit.jupiter.version>5.9.1</junit.jupiter.version>
+        <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
         <arquillian.version>1.7.0.Alpha14</arquillian.version>
         <jkube.version>1.11.0</jkube.version>
@@ -62,7 +62,7 @@
             <url>https://www.x1/nexus/repository/x1-repo</url>
         </repository>
         <snapshotRepository>
-            <id>x1-snapshot-repo</id>
+            <id>x1-snapshots</id>
             <name>X1 Maven Snapshot Repository</name>
             <url>https://www.x1/nexus/repository/x1-snapshots</url>
         </snapshotRepository>
