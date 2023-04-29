@@ -42,8 +42,6 @@ import jakarta.ws.rs.core.UriInfo;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.Timeout;
-import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -53,12 +51,12 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 
+import io.micrometer.core.annotation.Timed;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.ShareSubscription;
@@ -78,7 +76,6 @@ import x1.stomp.version.VersionData;
     version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional
 @Logged
-@Traced
 @Timeout(value = 5, unit = ChronoUnit.SECONDS)
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
 @RestRequestStatusCounted
@@ -115,7 +112,7 @@ public class ShareResource {
           @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class),
               mediaType = APPLICATION_JSON),
           @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML) })
-  @SimplyTimed(name = "get-shares", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
+  @Timed(value = "get-shares", extraTags = { "interface", "ShareResource" })
   @Bulkhead(value = 5)
   public List<Share> listAllShares() {
     var shares = shareSubscription.list();
@@ -132,7 +129,7 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @SimplyTimed(name = "get-share", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
+  @Timed(value = "get-share", extraTags = { "interface", "ShareResource" })
   @Bulkhead(value = 5)
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
@@ -154,7 +151,7 @@ public class ShareResource {
   @APIResponse(responseCode = "500", description = "Queuing failed")
   @APIResponse(responseCode = "400", description = "Invalid data",
       content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-  @SimplyTimed(name = "add-share", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
+  @Timed(value = "add-share", extraTags = { "interface", "ShareResource" })
   public Response addShare(
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
@@ -185,7 +182,7 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")
-  @SimplyTimed(name = "remove-share", absolute = true, unit = MetricUnits.SECONDS, tags = { "interface=ShareResource" })
+  @Timed(value = "remove-share", extraTags = { "interface", "ShareResource" })
   public Response removeShare(
       @Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var candidate = shareSubscription.find(key);

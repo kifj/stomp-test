@@ -25,7 +25,7 @@
     </scm>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://www.x1/jenkins/job/stomp-test-wildfly-27/</url>
+        <url>https://www.x1/jenkins/job/stomp-test-wildfly-28/</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -43,9 +43,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
-        <wildfly.version>27.0.1.Final</wildfly.version>
+        <wildfly.version>28.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
-        <junit.jupiter.version>5.9.2</junit.jupiter.version>
+        <junit.jupiter.version>5.9.3</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
         <arquillian.version>1.7.0.Alpha14</arquillian.version>
         <jkube.version>1.12.0</jkube.version>
@@ -189,16 +189,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.microprofile.metrics</groupId>
-            <artifactId>microprofile-metrics-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.microprofile.opentracing</groupId>
-            <artifactId>microprofile-opentracing-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.microprofile.openapi</groupId>
             <artifactId>microprofile-openapi-api</artifactId>
             <scope>provided</scope>
@@ -206,6 +196,12 @@
         <dependency>
             <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
             <artifactId>microprofile-fault-tolerance-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+            <version>1.9.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -236,7 +232,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version><!--$NO-MVN-MAN-VER$-->
+            <version>3.12.0</version><!--$NO-MVN-MAN-VER$ -->
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -259,11 +255,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
@@ -281,7 +272,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>service-registry</artifactId>
-            <version>1.3.0</version>
+            <version>1.3.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -546,7 +537,7 @@
                     <schema>stocks</schema>
                     <username>stocks</username>
                     <password>stocks</password>
-                    <type>pgsql</type>                    
+                    <type>pgsql</type>
                 </configuration>
             </plugin>
             <plugin>
@@ -697,65 +688,6 @@
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>arq-docker</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>5.0.0.Alpha6</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.arquillian.cube</groupId>
-                    <artifactId>arquillian-cube-docker</artifactId>
-                    <version>1.18.2</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                    <version>1.19</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>org.jacoco.core</artifactId>
-                    <version>${jacoco.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <skip>false</skip>
-                            <systemPropertyVariables>
-                                <org.jboss.logging.provider>slf4j</org.jboss.logging.provider>
-                                <arquillian.launch>docker-it</arquillian.launch>
-                                <jboss.managementPort>10090</jboss.managementPort>
-                                <jboss.user>admin</jboss.user>
-                                <jboss.password>12345</jboss.password>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                            </systemPropertyVariables>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.junit.jupiter</groupId>
-                                <artifactId>junit-jupiter-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
@@ -972,11 +904,11 @@
                             <registry>registry.x1</registry>
                             <generator>
                                 <config>
-                                   <wildfly-jar>
-                                       <jolokiaPort>0</jolokiaPort>
-                                       <prometheusPort>9990</prometheusPort>
-                                   </wildfly-jar>
-                               </config>
+                                    <wildfly-jar>
+                                        <jolokiaPort>0</jolokiaPort>
+                                        <prometheusPort>9990</prometheusPort>
+                                    </wildfly-jar>
+                                </config>
                             </generator>
                             <resources>
                                 <env>

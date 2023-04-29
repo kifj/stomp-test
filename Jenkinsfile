@@ -1,7 +1,7 @@
 node {
   def mvnHome = tool 'Maven-3.9'
   env.JAVA_HOME = tool 'JDK-17'
-  def branch = 'wildfly-27'
+  def branch = 'wildfly-28'
   def mavenSetting = 'dfe73d5e-dd12-4ed1-965f-7c8dcebd9101'
 
   stage('Checkout') {

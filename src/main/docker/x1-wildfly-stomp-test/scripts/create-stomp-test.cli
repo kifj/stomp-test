@@ -49,12 +49,3 @@ if (outcome == success) of /system-property=x1.service.registry.stage:read-resou
 end-if
 /system-property=x1.service.registry.stage:add(value="kubernetes")
 
-if (outcome != success) of /subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger-operator:read-resource
-  /subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger-operator:add(\
-    sampler-type=probabilistic,\
-    sampler-param=0.1,\
-    tags={{service=stomp-test,deployment=wildfly}},\
-    sender-endpoint="http://jaeger-all-in-one-collector.observability:14268/api/traces")
-end-if
-
-/subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-operator)

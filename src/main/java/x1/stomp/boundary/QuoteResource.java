@@ -37,8 +37,6 @@ import jakarta.ws.rs.core.UriInfo;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
-import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -48,10 +46,10 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.eclipse.microprofile.opentracing.Traced;
 import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import org.slf4j.Logger;
 
+import io.micrometer.core.annotation.Timed;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
@@ -70,7 +68,6 @@ import x1.stomp.version.VersionData;
     version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
-@Traced
 @Tag(name = "Quotes", description = "receive quotes for shares")
 @Produces({ APPLICATION_JSON, APPLICATION_XML })
 @Consumes({ APPLICATION_JSON, APPLICATION_XML })
@@ -107,7 +104,7 @@ public class QuoteResource {
   @APIResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @SimplyTimed(name = "get-quote", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=QuoteResource"})
+  @Timed(value = "get-quote", extraTags = { "interface", "QuoteResource" })
   @Bulkhead(value = 5)
   public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
@@ -134,7 +131,7 @@ public class QuoteResource {
           @Content(schema = @Schema(type=SchemaType.ARRAY, implementation = Quote.class),
               mediaType = APPLICATION_JSON) })
   @APIResponse(responseCode = "404", description = "No subscription found")
-  @SimplyTimed(name = "get-quotes", absolute = true, unit = MetricUnits.SECONDS, tags = {"interface=QuoteResource"})
+  @Timed(value = "get-quotes", extraTags = { "interface", "QuoteResource" })
   @Bulkhead(value = 5)
   public void getQuotes(
       @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,

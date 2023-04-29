@@ -4,6 +4,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static x1.stomp.test.ResponseAssert.assertThat;
 
+import java.util.Arrays;
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -11,9 +12,6 @@ import jakarta.ws.rs.core.GenericType;
 import static jakarta.ws.rs.core.Response.Status.*;
 
 import org.junit.jupiter.api.Test;
-import org.eclipse.microprofile.metrics.MetricID;
-import org.eclipse.microprofile.metrics.MetricRegistry;
-import org.eclipse.microprofile.metrics.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,6 +19,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.google.gson.JsonParser;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
 import x1.stomp.model.Share;
 
 @DisplayName("Metrics Test")
@@ -43,8 +43,7 @@ public class MetricsTest extends AbstractIT {
   }
   
   @Inject
-  private MetricRegistry registry; 
-
+  private MeterRegistry registry; 
 
   @ParameterizedTest
   @ValueSource(strings = { "memory.committedHeap", "memory.committedNonHeap", "memory.maxHeap", "memory.maxNonHeap",
@@ -98,9 +97,9 @@ public class MetricsTest extends AbstractIT {
     assertThat(o.getAsJsonObject("remove-share").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(0);
     assertThat(o.getAsJsonObject("get-shares").getAsJsonPrimitive("count;interface=ShareResource").getAsInt()).isEqualTo(1);
     
-    assertThat(registry.getSimpleTimer(new MetricID("add-share", new Tag("interface","ShareResource"))).getCount()).isEqualTo(0l);
-    assertThat(registry.getSimpleTimer(new MetricID("get-share", new Tag("interface","ShareResource"))).getCount()).isEqualTo(0l);
-    assertThat(registry.getSimpleTimer(new MetricID("remove-share", new Tag("interface","ShareResource"))).getCount()).isEqualTo(0l);
-    assertThat(registry.getSimpleTimer(new MetricID("get-shares", new Tag("interface","ShareResource"))).getCount()).isEqualTo(1l);
+    assertThat(registry.timer("add-share", Arrays.asList(Tag.of("interface","ShareResource"))).count()).isEqualTo(0l);
+    assertThat(registry.timer("get-share", Arrays.asList(Tag.of("interface","ShareResource"))).count()).isEqualTo(0l);
+    assertThat(registry.timer("remove-share", Arrays.asList(Tag.of("interface","ShareResource"))).count()).isEqualTo(0l);
+    assertThat(registry.timer("get-shares", Arrays.asList(Tag.of("interface","ShareResource"))).count()).isEqualTo(1l);
   }
 }
