@@ -702,65 +702,6 @@
             </build>
         </profile>
         <profile>
-            <id>arq-docker</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>5.0.0.Alpha6</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.arquillian.cube</groupId>
-                    <artifactId>arquillian-cube-docker</artifactId>
-                    <version>1.18.2</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                    <version>1.19</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>org.jacoco.core</artifactId>
-                    <version>${jacoco.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <skip>false</skip>
-                            <systemPropertyVariables>
-                                <org.jboss.logging.provider>slf4j</org.jboss.logging.provider>
-                                <arquillian.launch>docker-it</arquillian.launch>
-                                <jboss.managementPort>10090</jboss.managementPort>
-                                <jboss.user>admin</jboss.user>
-                                <jboss.password>12345</jboss.password>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                            </systemPropertyVariables>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.junit.jupiter</groupId>
-                                <artifactId>junit-jupiter-engine</artifactId>
-                                <version>${junit.jupiter.version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>rpm</id>
             <build>
                 <plugins>

@@ -48,23 +48,4 @@
     <property name="connectionMode">STARTANDSTOP</property>
   </extension>
 
-  <extension qualifier="docker">
-    <property name="serverVersion">1.41</property>
-    <property name="autoStartContainers">stomp-test-it</property>
-    <property name="definitionFormat">CUBE</property>
-    <property name="clean">true</property>
-    <property name="dockerContainers">
-      stomp-test-it:
-        image: registry.x1/j7beck/x1-wildfly-stomp-test-it:1.6
-        alwaysPull: false
-        portBindings: [10090->9990/tcp,8180->8080/tcp]
-        await:
-          strategy: http
-          responseCode: 200
-          url: http://dockerHost:10090/health/ready
-          sleepPollingTime: 5s
-          iterations: 10
-        env: [ MANAGEMENT=public, HTTP=public, ETCD_SERVER=${env.ETCD_SERVER:etcd.x1}]
-      </property>
-  </extension>
 </arquillian>
