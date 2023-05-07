@@ -7,7 +7,7 @@ export RUN_CONF=$JBOSS_BASE_DIR/standalone.conf
 
 $JBOSS_HOME/bin/add-user.sh -s -a -u guest -g guest -r ApplicationRealm -sc $JBOSS_BASE_DIR/configuration -p guest_12345!
 
-/usr/local/bin/create-keystore.sh $JBOSS_BASE_DIR/configuration jboss12345 jboss.jboss
+/usr/local/bin/create-keystore.sh $JBOSS_BASE_DIR/configuration jboss12345 jboss:jboss
 
 $JBOSS_HOME/bin/standalone.sh -c profile.xml --admin-only &
 timeout 30 bash -c 'until echo > /dev/tcp/localhost/9990; do sleep 1; done' >& /dev/null || exit -1

@@ -1,7 +1,0 @@
-[x1-testing]
-name=X1 Testing Repository
-baseurl=http://www.x1/nexus/content/repositories/x1-snapshot-repo/
-enabled=1
-protect=0
-gpgcheck=0
-type=rpm-md 
