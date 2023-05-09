@@ -45,7 +45,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <wildfly.version>27.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
-        <junit.jupiter.version>5.9.2</junit.jupiter.version>
+        <junit.jupiter.version>5.9.3</junit.jupiter.version>
         <jacoco.version>0.8.8</jacoco.version>
         <arquillian.version>1.7.0.Alpha14</arquillian.version>
         <jkube.version>1.12.0</jkube.version>
@@ -546,7 +546,7 @@
                     <schema>stocks</schema>
                     <username>stocks</username>
                     <password>stocks</password>
-                    <type>pgsql</type>                    
+                    <type>pgsql</type>
                 </configuration>
             </plugin>
             <plugin>
@@ -913,11 +913,11 @@
                             <registry>registry.x1</registry>
                             <generator>
                                 <config>
-                                   <wildfly-jar>
-                                       <jolokiaPort>0</jolokiaPort>
-                                       <prometheusPort>9990</prometheusPort>
-                                   </wildfly-jar>
-                               </config>
+                                    <wildfly-jar>
+                                        <jolokiaPort>0</jolokiaPort>
+                                        <prometheusPort>9990</prometheusPort>
+                                    </wildfly-jar>
+                                </config>
                             </generator>
                             <resources>
                                 <env>

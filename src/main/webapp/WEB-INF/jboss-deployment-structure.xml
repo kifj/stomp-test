@@ -2,7 +2,6 @@
 <jboss-deployment-structure>
   <deployment>
     <dependencies>
-      <module name="org.infinispan" />
       <module name="org.apache.httpcomponents" />
       <module name="org.apache.commons.codec" />
       <module name="com.google.guava" />

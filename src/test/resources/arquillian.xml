@@ -27,25 +27,8 @@
     </configuration>
   </container>
 
-  <container qualifier="docker-it" default="false">
-    <protocol type="Servlet 3.0" />
-    <configuration>
-      <property name="managementAddress">${jboss.managementAddress:localhost}</property>
-      <property name="managementPort">${jboss.managementPort:9990}</property>
-      <!--
-      <property name="managementProtocol">${jboss.managementProtocol:remote+http}</property>
-      -->
-      <property name="username">${jboss.user:admin}</property>
-      <property name="password">${jboss.password:12345}</property>
-    </configuration>
-  </container>
-
   <extension qualifier="jacoco">
     <property name="includes">x1.*</property>
-  </extension>
-
-  <extension qualifier="cube">
-    <property name="connectionMode">STARTANDSTOP</property>
   </extension>
 
 </arquillian>
