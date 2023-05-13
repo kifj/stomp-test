@@ -64,4 +64,4 @@ are located in folder `etc/k8s`. The scripts for the certificates require the `c
 ## OpenAPI and manual testing
 
 In Wildfly the OpenAPI spec can be loaded under the `/openapi` URL.
-Swagger-UI is located under the application root URL `/stomp-test-v1.7/swagger-ui`.
+Swagger-UI is located under the application root URL `/stomp-test-v1.8/swagger-ui`.

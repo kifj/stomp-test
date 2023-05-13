@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>x1.wildfly</groupId>
     <artifactId>stomp-test</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.8.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Stomp Test</name>
     <description>A sample application for websockets and stomp on Wildfly</description>

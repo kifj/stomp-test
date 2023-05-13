@@ -22,7 +22,7 @@ node {
 
   stage('Run IT test') {
     docker
-      .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.7')
+      .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8')
       .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
     c -> 
         waitFor("http://${hostIp(c)}:9990/health/ready", 20, 3)
