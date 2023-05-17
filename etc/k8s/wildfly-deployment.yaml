@@ -35,7 +35,7 @@ spec:
                 app: wildfly
       containers:
       - name: wildfly
-        image: registry.x1/j7beck/x1-wildfly-stomp-test:1.6
+        image: registry.x1/j7beck/x1-wildfly-stomp-test:1.8
         imagePullPolicy: Always
         env:
         - name: DB_SERVER
@@ -130,4 +130,4 @@ spec:
         emptyDir: {}
       - name: application-config
         configMap:
-          name: stomp-test-config  
+          name: stomp-test-config
