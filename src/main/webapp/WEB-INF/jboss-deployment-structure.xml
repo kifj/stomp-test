@@ -6,7 +6,6 @@
       <module name="org.apache.commons.codec" />
       <module name="com.google.guava" />
       <module name="com.google.code.gson" />
-      <module name="org.jboss.vfs" />
     </dependencies>
     <exclusions>
       <module name="org.jboss.resteasy.resteasy-json-binding-provider" />
