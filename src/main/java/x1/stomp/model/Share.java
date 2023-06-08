@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+@SuppressWarnings("deprecation")
 @Entity
 @XmlRootElement(name = "share")
 @XmlAccessorType(XmlAccessType.FIELD)
