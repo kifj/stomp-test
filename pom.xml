@@ -46,7 +46,7 @@
         <wildfly.version>28.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <junit.jupiter.version>5.9.3</junit.jupiter.version>
-        <jacoco.version>0.8.8</jacoco.version>
+        <jacoco.version>0.8.10</jacoco.version>
         <arquillian.version>1.7.0.Final</arquillian.version>
         <jkube.version>1.12.0</jkube.version>
     </properties>
@@ -202,6 +202,12 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
             <version>1.9.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-instrumentation-annotations</artifactId>
+            <version>1.20.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

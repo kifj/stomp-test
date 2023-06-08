@@ -24,6 +24,8 @@ spec:
       labels:
         deployment: wildfly
         app: wildfly
+      annotations:
+        sidecar.opentelemetry.io/inject: 'true'
     spec:
       serviceAccountName: jgroups-kubeping-service-account
       affinity:

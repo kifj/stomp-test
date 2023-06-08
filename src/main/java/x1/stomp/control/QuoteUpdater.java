@@ -1,11 +1,13 @@
 package x1.stomp.control;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
+import jakarta.ejb.Timer;
 
 import org.slf4j.Logger;
 
@@ -58,8 +60,8 @@ public class QuoteUpdater {
   }
 
   @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
-  public void onSchedule() {
-    if (schedulerEnabled) {
+  public void onSchedule(Timer timer) {
+    if (schedulerEnabled && timer.getNextTimeout().before(new Date())) {
       updateQuotes();
     }
   }

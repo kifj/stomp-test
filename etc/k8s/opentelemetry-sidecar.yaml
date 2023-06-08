@@ -1,0 +1,39 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: opentelemtry-sidecar
+  namespace: hikingtracks
+spec:
+  mode: sidecar
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+    exporters:
+      otlp:
+        endpoint: http://jaeger-all-in-one-collector.observability:4317
+        tls:
+          insecure: true
+      logging:
+    processors:
+      batch:
+    extensions:
+      health_check:
+      zpages:
+        endpoint: :55679
+    service:
+      telemetry:
+        logs:
+          level: "debug"
+      extensions: [zpages, health_check]
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp]
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [otlp]
