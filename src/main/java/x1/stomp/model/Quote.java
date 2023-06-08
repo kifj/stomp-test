@@ -16,6 +16,7 @@ import org.eclipse.microprofile.openapi.annotations.ExternalDocumentation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+@SuppressWarnings("deprecation")
 @XmlRootElement(name = "quote")
 @JsonRootName(value = "quote")
 @Schema(name = "quote", description = "A quote is the current price for a share", readOnly = true)

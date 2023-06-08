@@ -12,6 +12,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@SuppressWarnings("deprecation")
 @XmlRootElement(name = "index")
 @Schema(name = "index", description = "Index page with HATEOS links")
 public class IndexResponse {

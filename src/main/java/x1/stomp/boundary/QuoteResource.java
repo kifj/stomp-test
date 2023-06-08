@@ -78,7 +78,7 @@ import x1.stomp.version.VersionData;
 public class QuoteResource {
   protected static final String PATH = "/quotes";
   private static final String MDC_KEY = "quote";
-
+  
   @Inject
   private Logger log;
 
