@@ -61,7 +61,7 @@ public class QuoteUpdater {
 
   @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
   public void onSchedule(Timer timer) {
-    if (schedulerEnabled && timer.getNextTimeout().before(new Date())) {
+    if (schedulerEnabled && timer.getNextTimeout().after(new Date())) {
       updateQuotes();
     }
   }
