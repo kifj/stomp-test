@@ -11,6 +11,8 @@ import jakarta.ejb.Timer;
 
 import org.slf4j.Logger;
 
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import x1.stomp.model.Quote;
 import x1.stomp.util.JsonHelper;
 import x1.stomp.util.StockMarket;
@@ -60,6 +62,7 @@ public class QuoteUpdater {
   }
 
   @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
+  @WithSpan(kind = SpanKind.SERVER)
   public void onSchedule(Timer timer) {
     if (schedulerEnabled && timer.getNextTimeout().after(new Date())) {
       updateQuotes();
