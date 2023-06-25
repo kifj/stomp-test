@@ -391,7 +391,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
+                <version>3.4.0</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <archive>
@@ -419,7 +419,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -482,6 +482,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
             </plugin>
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
@@ -495,12 +496,12 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.3.0</version>
             </plugin>
         </plugins>
 
@@ -518,7 +519,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.3</version>
+                <version>3.4.5</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -554,7 +555,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.2</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -602,7 +603,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.1.2</version>
                         <configuration>
                             <skip>true</skip>
                         </configuration>
