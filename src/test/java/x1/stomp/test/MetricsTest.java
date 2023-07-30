@@ -41,7 +41,7 @@ public class MetricsTest extends AbstractIT {
   }
   
   @Inject
-  private MeterRegistry registry; 
+  private MeterRegistry registry;
 
   @Test
   @DisplayName("test health")
@@ -56,7 +56,7 @@ public class MetricsTest extends AbstractIT {
     assertThat(o).isNotNull();
     assertThat(o.get("status").getAsString()).isEqualTo("UP");
     var checks = o.getAsJsonArray("checks");
-    assertThat(checks).hasSize(7);
+    assertThat(checks).hasSize(8);
   }
   
   @Test
