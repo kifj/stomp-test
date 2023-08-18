@@ -8,7 +8,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -80,7 +79,7 @@ public class QuoteRetriever {
 
     var quote = new Quote(share);
     quote.setPrice(quickQuote.getLast());
-    quote.setCurrency(StringUtils.defaultString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));
+    quote.setCurrency(Objects.toString(quickQuote.getCurrencyCode(), DEFAULT_CURRENCY));
     quote.setFrom(quickQuote.getLastTime());
     return quote;
   }
