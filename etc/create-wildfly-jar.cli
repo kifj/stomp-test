@@ -14,14 +14,6 @@
     check-valid-connection-sql="select current_timestamp",\
     statistics-enabled=true\
     )
-    
-/subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger-operator:add(\
-    sampler-type=probabilistic,\
-    sampler-param=0.1,\
-    tags={{service=stomp-test,deployment=wildfly}},\
-    sender-endpoint="http://jaeger-all-in-one-collector.observability:14268/api/traces")
-
-/subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-operator)
 
 /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-artemis:add(host="${env.ACTIVEMQ_SERVER:activemq-artemis}", port="${env.ACTIVEMQ_PORT:61616}")
 /subsystem=messaging-activemq/remote-connector=remote-artemis:add(socket-binding=remote-artemis)
@@ -40,6 +32,3 @@
     
 /subsystem=messaging-activemq/external-jms-queue=stocksQueue:add(entries=[java:/jms/queue/stocks])
 /subsystem=messaging-activemq/external-jms-topic=quotesTopic:add(entries=[java:/jms/topic/quotes])
-
-/system-property=x1.service.registry.etcd:add(value="http://${env.ETCD_SERVER:etcd.x1}:${env.ETCD_PORT:4001}")
-/system-property=x1.service.registry.stage:add(value="kubernetes")

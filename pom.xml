@@ -48,7 +48,7 @@
         <junit.jupiter.version>5.10.0</junit.jupiter.version>
         <jacoco.version>0.8.10</jacoco.version>
         <arquillian.version>1.7.1.Final</arquillian.version>
-        <jkube.version>1.13.1</jkube.version>
+        <jkube.version>1.14.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -288,7 +288,6 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
@@ -366,8 +365,55 @@
         <finalName>${project.artifactId}-v${app.majorVersion}.${app.minorVersion}</finalName>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${basedir}/target/generated-sources/java-templates</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <propertyPrefix>app</propertyPrefix>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/generated-sources/java-templates</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/java-templates</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -375,19 +421,6 @@
                 <configuration>
                     <parameters>true</parameters>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>templating-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <executions>
-                    <execution>
-                        <id>filter-src</id>
-                        <goals>
-                            <goal>filter-sources</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
@@ -429,23 +462,6 @@
                 </executions>
                 <configuration>
                     <shortRevisionLength>8</shortRevisionLength>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.4.0</version>
-                <executions>
-                    <execution>
-                        <id>parse-version</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>parse-version</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <propertyPrefix>app</propertyPrefix>
                 </configuration>
             </plugin>
             <plugin>
@@ -881,6 +897,9 @@
                                 <layer>microprofile-openapi</layer>
                                 <layer>microprofile-rest-client</layer>
                                 <layer>microprofile-fault-tolerance</layer>
+                                <layer>microprofile-telemetry</layer>
+                                <layer>microprofile-fault-tolerance</layer>
+                                <layer>micrometer</layer>
                             </layers>
                             <cloud>
                                 <type>kubernetes</type>
@@ -922,7 +941,6 @@
                                 <env>
                                     <GC_MAX_METASPACE_SIZE>512</GC_MAX_METASPACE_SIZE>
                                     <GC_METASPACE_SIZE>256</GC_METASPACE_SIZE>
-                                    <JAEGER_SERVICE_NAME>stomp-test</JAEGER_SERVICE_NAME>
                                     <MP_METRICS_TAGS>_app=stomp-test,version=1.6</MP_METRICS_TAGS>
                                     <SERVICE_NAME>stomp-test</SERVICE_NAME>
                                 </env>
@@ -934,6 +952,7 @@
                                         <enforceProbes>true</enforceProbes>
                                         <livenessInitialDelay>90</livenessInitialDelay>
                                         <readinessInitialDelay>45</readinessInitialDelay>
+                                        <periodSeconds>60</periodSeconds>
                                     </jkube-healthcheck-wildfly-jar>
                                     <jkube-prometheus>
                                         <prometheusPort>9990</prometheusPort>

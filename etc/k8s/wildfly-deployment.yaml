@@ -52,6 +52,8 @@ spec:
             secretKeyRef:
               key: database-password
               name: postgresql
+        - name: ETCD_SERVER
+          value: etcd.x1
         - name: ACTIVEMQ_SERVER
           value: activemq-artemis
         - name: ARTEMIS_USER

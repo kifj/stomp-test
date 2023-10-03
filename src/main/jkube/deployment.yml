@@ -9,6 +9,9 @@ spec:
       maxSurge: 1
       maxUnavailable: 0
   template:
+    metadata:
+      annotations:
+        sidecar.opentelemetry.io/inject: 'true'
     spec:
       affinity:
         podAntiAffinity:
@@ -43,6 +46,9 @@ spec:
             secretKeyRef:
               key: artemis-password
               name: activemq-artemis
+        envFrom:
+         - configMapRef:
+            name: stomp-test
         ports:
         - containerPort: 9990
           name: management-http
