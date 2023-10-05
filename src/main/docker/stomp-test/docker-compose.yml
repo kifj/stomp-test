@@ -1,9 +1,11 @@
 version: '3'
 services:
   etcd:
-    image: quay.io/coreos/etcd:v3.5.8
+    image: quay.io/coreos/etcd:v3.5.9
     container_name: etcd
     command: ["etcd", "--listen-client-urls", "http://0.0.0.0:2379,http://0.0.0.0:4001", "--advertise-client-urls", "http://etcd:2379,http://etcd:4001"]
+    environment:
+     - ETCD_ENABLE_V2=true
   db:
     image: registry.x1/j7beck/x1-postgres-stomp-test:1.8
     container_name: stomp-test-db
@@ -13,7 +15,6 @@ services:
   activemq-artemis:
     image: registry.x1/j7beck/x1-activemq-artemis
     container_name: activemq-artemis
-    container_name: activemq-artemis
     environment:
      - SERVICE_NAME=activemq-artemis
      - ARTEMIS_USER=artemis
@@ -22,7 +23,7 @@ services:
      - /opt/docker/x1/certs/activemq-artemis.key:/etc/pki/tls/private/node.key:ro
      - /opt/docker/x1/certs/activemq-artemis.crt:/etc/pki/tls/certs/node.crt:ro
     ports:
-     - 8161:8161     
+     - 8161:8161
   wildfly:
     image: registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8.0-SNAPSHOT
     environment:
@@ -41,4 +42,12 @@ services:
     ports:
      - 8080:8080
      - 8443:8443
-
+  otel-collector:
+    image: otel/opentelemetry-collector:0.86.0
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics

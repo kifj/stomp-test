@@ -41,8 +41,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
         <wildfly.version>29.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <junit.jupiter.version>5.10.0</junit.jupiter.version>
@@ -278,7 +278,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>service-registry</artifactId>
-            <version>1.3.2</version>
+            <version>1.3.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -868,6 +868,8 @@
         <profile>
             <id>wildfly-jar</id>
             <properties>
+                <maven.compiler.target>17</maven.compiler.target>
+                <maven.compiler.source>17</maven.compiler.source>
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%v</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
             </properties>

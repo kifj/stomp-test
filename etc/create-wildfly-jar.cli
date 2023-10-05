@@ -1,3 +1,10 @@
+/subsystem=metrics:remove()
+/extension=org.wildfly.extension.metrics:remove()
+/subsystem=micrometer:write-attribute(name=endpoint, value="http://otel-collector:4318/v1/metrics")
+/subsystem=micrometer:write-attribute(name=exposed-subsystems, value=["ejb","undertow","datasources","transactions","jaxrs","messaging-activemq"])
+/subsystem=opentelemetry:write-attribute(name=exporter-type, value="otlp")
+/subsystem=opentelemetry:write-attribute(name=endpoint, value="http://otel-collector:4317")
+
 /subsystem=microprofile-config-smallrye/config-source=stomp-test:add(dir={path="/deployments/configuration"}, ordinal=200)
 
 /subsystem=datasources/data-source=stocksDS:add( \
@@ -32,3 +39,6 @@
     
 /subsystem=messaging-activemq/external-jms-queue=stocksQueue:add(entries=[java:/jms/queue/stocks])
 /subsystem=messaging-activemq/external-jms-topic=quotesTopic:add(entries=[java:/jms/topic/quotes])
+
+/subsystem=logging/logger=x1:add(level=DEBUG)
+/subsystem=logging/logger=x1.service.registry:add(level=INFO)

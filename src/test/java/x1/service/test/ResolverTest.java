@@ -19,11 +19,11 @@ import x1.stomp.control.ShareMessageListener;
 import x1.stomp.version.VersionData;
 
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.UriBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static x1.service.Constants.*;
@@ -73,7 +73,8 @@ public class ResolverTest {
     var props = resolver.getProperties(node);
     var port = 8443;
     var context = "/" + VersionData.APP_NAME_MAJOR_MINOR;
-    var url = new URL(HTTPS.getPrefix(), hostname, port, context + "/rest/shares");
+    var url = UriBuilder.fromUri("{protocol}://{host}:{port}/{context}").path("/rest/shares").build(HTTPS.getPrefix(),
+        hostname, port, context);
     assertThat(props).containsEntry(BASE_URI, url.toString()).containsEntry(PORT, Integer.toString(port))
         .containsEntry(CONTEXT, context).containsEntry(PROTOCOL, HTTPS.getPrefix()).containsEntry(HOST_NAME, hostname)
         .doesNotContainKeys(Constants.DESTINATION, JNDI_NAME).size().isEqualTo(5);
