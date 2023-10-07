@@ -73,8 +73,8 @@ public class ResolverTest {
     var props = resolver.getProperties(node);
     var port = 8443;
     var context = "/" + VersionData.APP_NAME_MAJOR_MINOR;
-    var url = UriBuilder.fromUri("{protocol}://{host}:{port}/{context}").path("/rest/shares").build(HTTPS.getPrefix(),
-        hostname, port, context);
+    var url = UriBuilder.fromUri(HTTPS.getPrefix() + "://" + hostname + ":" + port).path("{context}").path("/rest/shares")
+        .build(context);
     assertThat(props).containsEntry(BASE_URI, url.toString()).containsEntry(PORT, Integer.toString(port))
         .containsEntry(CONTEXT, context).containsEntry(PROTOCOL, HTTPS.getPrefix()).containsEntry(HOST_NAME, hostname)
         .doesNotContainKeys(Constants.DESTINATION, JNDI_NAME).size().isEqualTo(5);
