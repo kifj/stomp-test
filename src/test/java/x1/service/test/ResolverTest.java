@@ -76,7 +76,7 @@ public class ResolverTest {
     var url = UriBuilder.fromUri(HTTPS.getPrefix() + "://" + hostname + ":" + port).path("{context}").path("/rest/shares")
         .build(context);
     assertThat(props).containsEntry(BASE_URI, url.toString()).containsEntry(PORT, Integer.toString(port))
-        .containsEntry(CONTEXT, context).containsEntry(PROTOCOL, HTTPS.getPrefix()).containsEntry(HOST_NAME, hostname)
+        .containsEntry(CONTEXT, "/" + context).containsEntry(PROTOCOL, HTTPS.getPrefix()).containsEntry(HOST_NAME, hostname)
         .doesNotContainKeys(Constants.DESTINATION, JNDI_NAME).size().isEqualTo(5);
   }
 
