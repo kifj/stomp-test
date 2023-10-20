@@ -1,7 +1,7 @@
 node {
   def mvnHome = tool 'Maven-3.9'
   env.JAVA_HOME = tool 'JDK-21'
-  def branch = 'wildfly-29'
+  def branch = 'wildfly-30'
   def mavenSetting = 'dfe73d5e-dd12-4ed1-965f-7c8dcebd9101'
 
   stage('Checkout') {
@@ -37,7 +37,7 @@ node {
       withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
         sh '''
           mvn -Prpm deploy site-deploy -DskipTests
-          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:wildfly-29 -Dsonar.projectName=stomp-test:wildfly-29
+          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:wildfly-30 -Dsonar.projectName=stomp-test:wildfly-29
           curl -u "$USERPASS" --upload-file target/rpm/stomp-test-v*/RPMS/noarch/stomp-test-*.noarch.rpm https://www.x1/nexus/repository/x1-extra-rpms/testing/
         '''        
       }
