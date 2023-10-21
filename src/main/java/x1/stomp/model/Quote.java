@@ -40,7 +40,7 @@ public class Quote implements Serializable {
   @JsonProperty(value = "links")
   @XmlElement(name = "link")
   @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-  @Schema(type=SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
+  @Schema(type = SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
   private List<Link> links;
 
   public Quote() {

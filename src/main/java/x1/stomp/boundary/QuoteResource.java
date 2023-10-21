@@ -131,7 +131,7 @@ public class QuoteResource {
   @APIResponse(responseCode = "200", description = "Quotes received",
       content = {
           @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = APPLICATION_XML),
-          @Content(schema = @Schema(type=SchemaType.ARRAY, implementation = Quote.class),
+          @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Quote.class),
               mediaType = APPLICATION_JSON) })
   @APIResponse(responseCode = "404", description = "No subscription found")
   @Timed(value = "get-quotes", extraTags = { "interface", "QuoteResource" })

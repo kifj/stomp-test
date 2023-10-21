@@ -76,7 +76,7 @@ public class Share implements Serializable {
   @XmlElement(name = "link")
   @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
   @Transient
-  @Schema(type=SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
+  @Schema(type = SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
   private List<Link> links;
 
   public Long getId() {

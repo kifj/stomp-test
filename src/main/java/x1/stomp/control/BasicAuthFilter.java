@@ -22,7 +22,7 @@ public class BasicAuthFilter implements ClientRequestFilter {
     synchronized (this) {
       checkDelegate(requestContext);
     }
-    if (hasDelegate == Boolean.TRUE) {
+    if (Boolean.TRUE.equals(hasDelegate)) {
       delegate.filter(requestContext);
     }
   }
