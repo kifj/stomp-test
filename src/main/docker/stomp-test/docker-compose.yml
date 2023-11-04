@@ -29,6 +29,8 @@ services:
     environment:
      - X1_SERVICE_REGISTRY_ETCD=http://etcd:4001
      - X1_SERVICE_REGISTRY_STAGE=docker
+     - OTEL_COLLECTOR=otel-collector
+     - OTEL_SDK_DISABLED=false
      - DB_SERVER=db
      - DB_PORT=5432
      - DB_NAME=stocks
