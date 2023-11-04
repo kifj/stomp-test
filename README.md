@@ -29,7 +29,7 @@ Docker images can be built by executing
 
 The application can be packaged as a bootable JAR for Wildfly in Docker with
 
-	mvn -Pwildfly-jar clean package
+	mvn -Pwildfly-jar clean install
 
 The CLI scripts for this version are located at
 
@@ -45,6 +45,10 @@ ACTIVEMQ_USER (default artemis)
 ACTIVEMQ_PASSWORD (default artemis)
 ```
 
+## Docker compose
+
+is located in `src/main/docker/stomp-test`
+
 ## DDL scripts
 
 The DDL scripts are available for PostgreSQL.
@@ -59,7 +63,7 @@ RPM package can be built by executing
 
 ## Kubernetes resources
 
-are located in folder `etc/k8s`. The scripts for the certificates require the `cfssl` binary. 
+are located in folder `etc/k8s`. The scripts for the certificates require `cfssl`. 
 
 ## OpenAPI and manual testing
 
