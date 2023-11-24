@@ -8,12 +8,12 @@
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
-    <version>1.6</version>
+    <version>1.12.0</version>
   </skin>
 
   <body>
     <breadcrumbs>
-      <item name="www.x1" href="http://www.x1"/>
+      <item name="www.x1" href="https://www.x1"/>
       <item name="Stomp Test" href="/index.html" />
     </breadcrumbs>
 
