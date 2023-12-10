@@ -48,6 +48,7 @@
         <junit.jupiter.version>5.10.0</junit.jupiter.version>
         <jacoco.version>0.8.10</jacoco.version>
         <arquillian.version>1.7.1.Final</arquillian.version>
+        <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
         <jkube.version>1.14.0</jkube.version>
     </properties>
 
@@ -502,7 +503,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.3.6</version>
+                <version>4.8.2.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -649,7 +650,7 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <version>5.0.1.Final</version>
+                    <version>${arquillian.wildfly.version}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
@@ -692,7 +693,7 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>5.0.1.Final</version>
+                    <version>${arquillian.wildfly.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
