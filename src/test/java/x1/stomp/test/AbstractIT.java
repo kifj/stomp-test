@@ -30,7 +30,7 @@ public abstract class AbstractIT {
     @Deployment
     public static Archive<?> createTestArchive() {
       var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-          .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-library").withTransitivity().asFile();
+          .resolve("org.assertj:assertj-core").withTransitivity().asFile();
   
       return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
           .addAsResource("test-persistence.xml", "META-INF/persistence.xml")

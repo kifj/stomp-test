@@ -44,8 +44,7 @@ public class ResolverTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core", "org.hamcrest:hamcrest-library")
-        .withTransitivity().asFile();
+        .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core").withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
