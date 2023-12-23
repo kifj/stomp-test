@@ -57,8 +57,6 @@ import org.slf4j.Logger;
 import org.slf4j.MDC;
 
 import io.micrometer.core.annotation.Timed;
-import io.opentelemetry.api.trace.SpanKind;
-import io.opentelemetry.instrumentation.annotations.WithSpan;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.ShareSubscription;
@@ -67,6 +65,7 @@ import x1.stomp.model.Share;
 import x1.stomp.model.ShareWrapper;
 import x1.stomp.util.Logged;
 import x1.stomp.util.MDCKey;
+import x1.stomp.util.Metered;
 import x1.stomp.util.StockMarket;
 import x1.stomp.version.VersionData;
 
@@ -78,6 +77,7 @@ import x1.stomp.version.VersionData;
     version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
 @Transactional
 @Logged
+@Metered
 @Timeout(value = 5, unit = ChronoUnit.SECONDS)
 @Tag(name = "Shares", description = "subscribe to shares on the stock market")
 @RestRequestStatusCounted
@@ -116,7 +116,6 @@ public class ShareResource {
           @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML) })
   @Timed(value = "get-shares", extraTags = { "interface", "ShareResource" })
   @Bulkhead(value = 5)
-  @WithSpan(kind = SpanKind.SERVER)  
   public List<Share> listAllShares() {
     var shares = shareSubscription.list();
     shares.forEach(share -> addLinks(uriInfo.getBaseUriBuilder(), share));
@@ -134,7 +133,6 @@ public class ShareResource {
   @APIResponse(responseCode = "404", description = "Subscription not found")
   @Timed(value = "get-share", extraTags = { "interface", "ShareResource" })
   @Bulkhead(value = 5)
-  @WithSpan(kind = SpanKind.SERVER)  
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
@@ -156,7 +154,6 @@ public class ShareResource {
   @APIResponse(responseCode = "400", description = "Invalid data",
       content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
   @Timed(value = "add-share", extraTags = { "interface", "ShareResource" })
-  @WithSpan(kind = SpanKind.SERVER)  
   public Response addShare(
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
@@ -188,7 +185,6 @@ public class ShareResource {
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")
   @Timed(value = "remove-share", extraTags = { "interface", "ShareResource" })
-  @WithSpan(kind = SpanKind.SERVER)  
   public Response removeShare(
       @Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var candidate = shareSubscription.find(key);

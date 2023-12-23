@@ -50,8 +50,6 @@ import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import org.slf4j.Logger;
 
 import io.micrometer.core.annotation.Timed;
-import io.opentelemetry.api.trace.SpanKind;
-import io.opentelemetry.instrumentation.annotations.WithSpan;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
@@ -62,6 +60,7 @@ import x1.stomp.model.Quotes;
 import x1.stomp.model.Share;
 import x1.stomp.util.Logged;
 import x1.stomp.util.MDCKey;
+import x1.stomp.util.Metered;
 import x1.stomp.version.VersionData;
 
 @Path(QuoteResource.PATH)
@@ -74,6 +73,7 @@ import x1.stomp.version.VersionData;
 @Produces({ APPLICATION_JSON, APPLICATION_XML })
 @Consumes({ APPLICATION_JSON, APPLICATION_XML })
 @RestRequestStatusCounted
+@Metered
 public class QuoteResource {
   protected static final String PATH = "/quotes";
   private static final String MDC_KEY = "quote";
@@ -108,7 +108,6 @@ public class QuoteResource {
   @APIResponse(responseCode = "404", description = "Subscription not found")
   @Timed(value = "get-quote", extraTags = { "interface", "QuoteResource" })
   @Bulkhead(value = 5)
-  @WithSpan(kind = SpanKind.SERVER)  
   public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var share = shareSubscription.find(key);
@@ -136,7 +135,6 @@ public class QuoteResource {
   @APIResponse(responseCode = "404", description = "No subscription found")
   @Timed(value = "get-quotes", extraTags = { "interface", "QuoteResource" })
   @Bulkhead(value = 5)
-  @WithSpan(kind = SpanKind.SERVER)  
   public void getQuotes(
       @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,
       @Suspended AsyncResponse response) {

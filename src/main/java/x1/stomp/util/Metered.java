@@ -6,13 +6,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import jakarta.enterprise.util.Nonbinding;
 import jakarta.interceptor.InterceptorBinding;
 
+/**
+ * Additional annotation required for classes with micrometer annotations @Counted or @Timed
+ */
 @Inherited
 @InterceptorBinding
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Logged {
-  @Nonbinding boolean onlyFailures() default true;
+public @interface Metered {
 }

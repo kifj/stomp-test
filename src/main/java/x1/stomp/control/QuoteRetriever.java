@@ -11,12 +11,15 @@ import jakarta.ws.rs.core.Response.Status;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import io.micrometer.core.annotation.Timed;
 import x1.stomp.model.Quote;
 import x1.stomp.model.Share;
 import x1.stomp.util.Logged;
+import x1.stomp.util.Metered;
 
 @ApplicationScoped
 @Logged(onlyFailures = false)
+@Metered
 public class QuoteRetriever {
   private static final String DEFAULT_CURRENCY = "EUR";
 
@@ -28,10 +31,12 @@ public class QuoteRetriever {
   @ConfigProperty(name = "x1.stomp.control.QuickQuoteService/mp-rest/format", defaultValue = "json")
   private String format;
 
+  @Timed(value = "rest_calls", extraTags = { "class", "QuoteRetriever", "method", "retrieveQuote" })
   public Optional<Quote> retrieveQuote(Share share) {
     return createQuote(retrieveQuotes(share.getKey()), share);
   }
 
+  @Timed(value = "rest_calls", extraTags = { "class", "QuoteRetriever", "method", "retrieveQuotes" })
   public List<Quote> retrieveQuotes(List<Share> shares) {
     return (shares.isEmpty()) ? Collections.emptyList() : extractQuotes(shares, retrieveQuotes(joinKeys(shares)));
   }

@@ -62,7 +62,7 @@ public class QuoteUpdater {
   }
 
   @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
-  @WithSpan(kind = SpanKind.SERVER)
+  @WithSpan(kind = SpanKind.CLIENT)
   public void onSchedule(Timer timer) {
     if (schedulerEnabled && timer.getNextTimeout().after(new Date())) {
       updateQuotes();
