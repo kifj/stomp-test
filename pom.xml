@@ -49,7 +49,7 @@
         <jacoco.version>0.8.10</jacoco.version>
         <arquillian.version>1.8.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
-        <jkube.version>1.14.0</jkube.version>
+        <jkube.version>1.15.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -412,7 +412,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.12.0</version>
                 <configuration>
                     <parameters>true</parameters>
                 </configuration>
@@ -488,7 +488,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>4.2.0.Final</version>
+                <version>4.2.2.Final</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -507,7 +507,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -530,7 +530,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.5</version>
+                <version>3.5.0</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -566,7 +566,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.3</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -614,7 +614,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>3.2.3</version>
                         <configuration>
                             <skip>true</skip>
                         </configuration>
@@ -883,7 +883,7 @@
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-datasources-galleon-pack</artifactId>
-                                    <version>5.0.0.Final</version>
+                                    <version>6.0.0.Final</version>
                                 </feature-pack>
                             </feature-packs>
                             <layers>
