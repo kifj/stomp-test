@@ -31,12 +31,12 @@ public class QuoteRetriever {
   @ConfigProperty(name = "x1.stomp.control.QuickQuoteService/mp-rest/format", defaultValue = "json")
   private String format;
 
-  @Timed(value = "rest_calls", extraTags = { "class", "QuoteRetriever", "method", "retrieveQuote" })
+  @Timed
   public Optional<Quote> retrieveQuote(Share share) {
     return createQuote(retrieveQuotes(share.getKey()), share);
   }
 
-  @Timed(value = "rest_calls", extraTags = { "class", "QuoteRetriever", "method", "retrieveQuotes" })
+  @Timed
   public List<Quote> retrieveQuotes(List<Share> shares) {
     return (shares.isEmpty()) ? Collections.emptyList() : extractQuotes(shares, retrieveQuotes(joinKeys(shares)));
   }

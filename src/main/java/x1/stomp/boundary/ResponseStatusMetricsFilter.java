@@ -40,6 +40,7 @@ public class ResponseStatusMetricsFilter implements ContainerRequestFilter, Cont
       var methodTag = Tag.of("method", resourceInfo.getResourceMethod().getName());
       var statusTag = Tag.of("status", String.valueOf(responseContext.getStatus()));
       createMetrics(metricID, classTag, methodTag, statusTag);
+      requestContext.removeProperty(METRIC_ID_PARAM);
     }
   }
 

@@ -114,7 +114,7 @@ public class ShareResource {
           @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class),
               mediaType = APPLICATION_JSON),
           @Content(schema = @Schema(implementation = ShareWrapper.class), mediaType = APPLICATION_XML) })
-  @Timed(value = "get-shares", extraTags = { "interface", "ShareResource" })
+  @Timed
   @Bulkhead(value = 5)
   public List<Share> listAllShares() {
     var shares = shareSubscription.list();
@@ -131,7 +131,7 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @Timed(value = "get-share", extraTags = { "interface", "ShareResource" })
+  @Timed
   @Bulkhead(value = 5)
   public Response findShare(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
@@ -153,7 +153,7 @@ public class ShareResource {
   @APIResponse(responseCode = "500", description = "Queuing failed")
   @APIResponse(responseCode = "400", description = "Invalid data",
       content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-  @Timed(value = "add-share", extraTags = { "interface", "ShareResource" })
+  @Timed
   public Response addShare(
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
@@ -184,7 +184,7 @@ public class ShareResource {
   @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")
-  @Timed(value = "remove-share", extraTags = { "interface", "ShareResource" })
+  @Timed
   public Response removeShare(
       @Parameter(description = "Stock symbol", example = "GOOG") @PathParam("key") @MDCKey(MDC_KEY) String key) {
     var candidate = shareSubscription.find(key);

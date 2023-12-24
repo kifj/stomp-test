@@ -106,7 +106,7 @@ public class QuoteResource {
   @APIResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
-  @Timed(value = "get-quote", extraTags = { "interface", "QuoteResource" })
+  @Timed
   @Bulkhead(value = 5)
   public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
       example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
@@ -133,7 +133,7 @@ public class QuoteResource {
           @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Quote.class),
               mediaType = APPLICATION_JSON) })
   @APIResponse(responseCode = "404", description = "No subscription found")
-  @Timed(value = "get-quotes", extraTags = { "interface", "QuoteResource" })
+  @Timed
   @Bulkhead(value = 5)
   public void getQuotes(
       @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,
