@@ -71,6 +71,8 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.namespace
+        - name: OTEL_COLLECTOR_HOST
+          value: 'localhost'
         resources:
           limits:
             memory: 1024Mi
@@ -107,7 +109,7 @@ spec:
             path: /health/live
             port: 9990
             scheme: HTTP
-          initialDelaySeconds: 90
+          initialDelaySeconds: 60
           periodSeconds: 60
           successThreshold: 1
           timeoutSeconds: 10
