@@ -10,7 +10,7 @@ metadata:
     configmap.reloader.stakater.com/reload: stomp-test-config
 spec:
   replicas: 0
-  minReadySeconds: 90
+  minReadySeconds: 30
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -73,9 +73,9 @@ spec:
               fieldPath: metadata.namespace
         resources:
           limits:
-            memory: "1024Mi"
+            memory: 1024Mi
           requests:
-            memory: "768Mi"
+            memory: 768Mi
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -123,6 +123,9 @@ spec:
         env:
         - name: SERVICE_ELASTICSEARCH
           value: elasticsearch.x1
+        resources:
+          limits:
+            memory: 64Mi
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 30

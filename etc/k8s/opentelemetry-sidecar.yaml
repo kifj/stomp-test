@@ -1,8 +1,8 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: opentelemtry-sidecar
-  namespace: hikingtracks
+  name: opentelemetry-sidecar
+  namespace: stomp-test
 spec:
   mode: sidecar
   config: |
@@ -13,9 +13,11 @@ spec:
           http:
     exporters:
       otlp:
-        endpoint: http://jaeger-all-in-one-collector.observability:4317
+        endpoint: jaeger-all-in-one-collector.observability:4317
         tls:
           insecure: true
+      prometheus:
+        endpoint: "0.0.0.0:8889"
       logging:
     processors:
       batch:
@@ -26,7 +28,7 @@ spec:
     service:
       telemetry:
         logs:
-          level: "debug"
+          level: "warn"
       extensions: [zpages, health_check]
       pipelines:
         traces:
@@ -36,4 +38,4 @@ spec:
         metrics:
           receivers: [otlp]
           processors: [batch]
-          exporters: [otlp]
+          exporters: [prometheus]
