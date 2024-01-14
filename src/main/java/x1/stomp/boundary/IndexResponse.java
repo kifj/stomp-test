@@ -3,16 +3,15 @@ package x1.stomp.boundary;
 import java.util.List;
 
 import jakarta.ws.rs.core.Link;
-import jakarta.ws.rs.core.Link.JaxbAdapter;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import x1.stomp.model.JaxbSupport;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@SuppressWarnings("deprecation")
 @XmlRootElement(name = "index")
 @Schema(name = "index", description = "Index page with HATEOS links")
 public class IndexResponse {
@@ -27,7 +26,7 @@ public class IndexResponse {
 
   @JsonProperty(value = "links")
   @XmlElement(name = "link")
-  @XmlJavaTypeAdapter(JaxbAdapter.class)
+  @XmlJavaTypeAdapter(JaxbSupport.JaxbAdapter.class)
   public List<Link> getLinks() {
     return links;
   }

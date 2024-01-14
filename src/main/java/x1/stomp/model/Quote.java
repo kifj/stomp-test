@@ -16,7 +16,6 @@ import org.eclipse.microprofile.openapi.annotations.ExternalDocumentation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@SuppressWarnings("deprecation")
 @XmlRootElement(name = "quote")
 @JsonRootName(value = "quote")
 @Schema(name = "quote", description = "A quote is the current price for a share", readOnly = true)
@@ -39,7 +38,7 @@ public class Quote implements Serializable {
   private Date from;
   @JsonProperty(value = "links")
   @XmlElement(name = "link")
-  @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+  @XmlJavaTypeAdapter(JaxbSupport.JaxbAdapter.class)
   @Schema(type = SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
   private List<Link> links;
 

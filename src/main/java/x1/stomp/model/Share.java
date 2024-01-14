@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-@SuppressWarnings("deprecation")
 @Entity
 @XmlRootElement(name = "share")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -74,7 +73,7 @@ public class Share implements Serializable {
 
   @JsonProperty(value = "links")
   @XmlElement(name = "link")
-  @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+  @XmlJavaTypeAdapter(JaxbSupport.JaxbAdapter.class)
   @Transient
   @Schema(type = SchemaType.ARRAY, implementation = SimpleLink.class, readOnly = true)
   private List<Link> links;
