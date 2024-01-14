@@ -2,6 +2,8 @@ package x1.stomp.websockets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+
+import io.opentelemetry.api.trace.Tracer;
 import x1.service.registry.Service;
 import x1.service.registry.Services;
 import x1.stomp.control.QuoteRetriever;
@@ -63,6 +65,9 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
   @Inject
   private SessionHolder sessionHolder;
 
+  @Inject
+  private Tracer tracer;
+  
   @OnOpen
   public void onConnectionOpen(Session session) {
     log.debug("Connection opened for session {}", session.getId());
@@ -88,15 +93,25 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   private void unsubscribe(String key) {
     log.info("Unsubscribe: {}", key);
-    shareSubscription.find(key).ifPresent(shareSubscription::unsubscribe);
+    var span = tracer.spanBuilder("/ws/stocks").setAttribute("command", "unsubscribe").setAttribute("key", key).startSpan();
+    try {
+      shareSubscription.find(key).ifPresent(shareSubscription::unsubscribe);
+    } finally {
+      span.end();
+    }
   }
 
-  private Optional<Quote> subscribe(String key) {
+  private Optional<Quote> subscribe(String key) {    
     log.info("Subscribe: {}", key);
-    var share = new Share(key);
-    var quote = quoteRetriever.retrieveQuote(share);
-    quote.ifPresent(q -> shareSubscription.subscribe(q.getShare()));
-    return quote;
+    var span = tracer.spanBuilder("/ws/stocks").setAttribute("command", "subscribe").setAttribute("key", key).startSpan();
+    try {
+      var share = new Share(key);
+      var quote = quoteRetriever.retrieveQuote(share);
+      quote.ifPresent(q -> shareSubscription.subscribe(q.getShare()));
+      return quote;
+    } finally {
+      span.end();
+    }
   }
 
   @OnClose

@@ -12,6 +12,8 @@ import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
 import java.time.temporal.ChronoUnit;
 
 @Produces({ APPLICATION_JSON, APPLICATION_XML })
@@ -24,5 +26,6 @@ import java.time.temporal.ChronoUnit;
 public interface QuickQuoteService {
   @GET
   @Path("/quote.htm")
+  @WithSpan
   Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
 }
