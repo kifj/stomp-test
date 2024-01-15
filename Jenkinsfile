@@ -38,7 +38,7 @@ node {
       withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
         sh """
           mvn -Prpm deploy site-deploy -DskipTests
-          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=${pom.groupId}:{pom.artifactId}:$env.BRANCH_NAME -Dsonar.projectName={pom.artifactId}:$env.BRANCH_NAME
+          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=${pom.groupId}:${pom.artifactId}:$env.BRANCH_NAME -Dsonar.projectName=${pom.artifactId}:$env.BRANCH_NAME
           curl -u "$USERPASS" --upload-file target/rpm/stomp-test-v*/RPMS/noarch/stomp-test-*.noarch.rpm https://www.x1/nexus/repository/x1-extra-rpms/testing/
         """
       }
