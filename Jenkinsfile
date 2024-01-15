@@ -1,11 +1,11 @@
 node {
   def mvnHome = tool 'Maven-3.9'
   env.JAVA_HOME = tool 'JDK-21'
-  def branch = 'wildfly-30'
   def mavenSetting = 'dfe73d5e-dd12-4ed1-965f-7c8dcebd9101'
 
   stage('Checkout') {
     checkout scm
+    echo "Branch $env.BRANCH_NAME"
   }
   
   stage('Build') {
@@ -28,19 +28,26 @@ node {
         waitFor("http://${hostIp(c)}:9990/health/ready", 20, 3)
         withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting) {
           sh "mvn -Parq-remote verify -Djboss.managementAddress=${hostIp(c)}"
-	}      
+      }
     }
   }
   
   stage('Publish') {
+    pom = readMavenPom file: 'pom.xml'
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
       withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
-        sh '''
+        sh """
           mvn -Prpm deploy site-deploy -DskipTests
-          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=x1.wildfly:stomp-test:wildfly-30 -Dsonar.projectName=stomp-test:wildfly-30
+          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=${pom.groupId}:{pom.artifactId}:$env.BRANCH_NAME -Dsonar.projectName={pom.artifactId}:$env.BRANCH_NAME
           curl -u "$USERPASS" --upload-file target/rpm/stomp-test-v*/RPMS/noarch/stomp-test-*.noarch.rpm https://www.x1/nexus/repository/x1-extra-rpms/testing/
-        '''        
+        """
       }
+    }
+  }
+  
+  stage('dependencyTrack') {
+    withCredentials([string(credentialsId: 'dtrack', variable: 'API_KEY')]) {
+      dependencyTrackPublisher artifact: 'target/bom.xml', projectName: "${pom.artifactId}", projectVersion: "${pom.version}", synchronous: true, dependencyTrackApiKey: API_KEY, projectProperties: [group: "${pom.groupId}"]
     }
   }
   
