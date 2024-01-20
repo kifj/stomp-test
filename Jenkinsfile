@@ -1,3 +1,9 @@
+properties([
+  parameters([
+     booleanParam(name: 'DEPENDENCY_TRACK', defaultValue: false, description: 'Upload BOM to Dependency Track'),
+  ])
+])
+
 node {
   def mvnHome = tool 'Maven-3.9'
   env.JAVA_HOME = tool 'JDK-21'
@@ -46,8 +52,10 @@ node {
   }
   
   stage('dependencyTrack') {
-    withCredentials([string(credentialsId: 'dtrack', variable: 'API_KEY')]) {
-      dependencyTrackPublisher artifact: 'target/bom.xml', projectName: "${pom.artifactId}", projectVersion: "${pom.version}", synchronous: true, dependencyTrackApiKey: API_KEY, projectProperties: [group: "${pom.groupId}"]
+    if (params.DEPENDENCY_TRACK) {
+      withCredentials([string(credentialsId: 'dtrack', variable: 'API_KEY')]) {
+        dependencyTrackPublisher artifact: 'target/bom.xml', projectName: "${pom.artifactId}", projectVersion: "${pom.version}", synchronous: true, dependencyTrackApiKey: API_KEY, projectProperties: [group: "${pom.groupId}"]
+      }
     }
   }
   
