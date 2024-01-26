@@ -1,4 +1,4 @@
-FROM registry.x1/j7beck/x1-wildfly-profile:30.0.0.Final
+FROM registry.x1/j7beck/x1-wildfly-profile:31.0.0.Final
 LABEL maintainer="joe@mail.x1"
 
 COPY --chown=jboss:jboss scripts /srv/wildfly/scripts

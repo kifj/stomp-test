@@ -30,7 +30,7 @@ node {
     docker
       .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8')
       .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
-    c -> 
+    c ->
         waitFor("http://${hostIp(c)}:9990/health/ready", 20, 3)
         withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting) {
           sh "mvn -Parq-remote verify -Djboss.managementAddress=${hostIp(c)}"
@@ -50,7 +50,7 @@ node {
       }
     }
   }
-  
+
   stage('dependencyTrack') {
     if (params.DEPENDENCY_TRACK) {
       withCredentials([string(credentialsId: 'dtrack', variable: 'API_KEY')]) {
@@ -61,7 +61,7 @@ node {
   
   stage('Create image') {
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
-      sh "mvn -Pdocker clean install k8s:push"
+      sh "mvn -Pdocker install k8s:push"
     }
   }
 }
