@@ -107,8 +107,9 @@ public class ShareResource {
   @Wrapped(element = "shares")
   @Formatted
   @Operation(description = "List all subscriptions")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
-      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
+  @Parameters({
+      @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, schema = @Schema(implementation = String.class)),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, schema = @Schema(implementation = String.class)) })
   @APIResponse(responseCode = "200", description = "All subscriptions",
       content = {
           @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Share.class),
@@ -126,8 +127,9 @@ public class ShareResource {
   @Path("/{key}")
   @Formatted
   @Operation(description = "Find a share subscription")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
-      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
+  @Parameters({
+      @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, schema = @Schema(implementation = String.class)),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, schema = @Schema(implementation = String.class)) })
   @APIResponse(responseCode = "200", description = "Subscription found",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
@@ -146,8 +148,9 @@ public class ShareResource {
   @POST
   @Formatted
   @Operation(description = "Add a share to your list of subscriptions", operationId = "addShare")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, example = "test", allowEmptyValue = true),
-      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, example = "12345", allowEmptyValue = true) })
+  @Parameters({
+      @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, schema = @Schema(implementation = String.class)),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, schema = @Schema(implementation = String.class)) })
   @APIResponse(responseCode = "201", description = "Share queued for subscription",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "500", description = "Queuing failed")
@@ -158,8 +161,8 @@ public class ShareResource {
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share,
       @Parameter(
-          description = "provide a Correlation-Id header to receive a response for your operation when it finished.",
-          allowEmptyValue = true, example = "12345") @HeaderParam(value = "Correlation-Id") String correlationId) {
+          description = "provide a Correlation-Id header to receive a response for your operation when it finished.") 
+      @HeaderParam(value = "Correlation-Id") String correlationId) {
     try {
       var jmsCorrelationId = Objects.requireNonNullElse(correlationId, UUID.randomUUID().toString());
       context.createProducer().setJMSCorrelationID(jmsCorrelationId).setProperty("type", "share")
@@ -179,8 +182,9 @@ public class ShareResource {
   @Path("/{key}")
   @Formatted
   @Operation(description = "Remove a subscription of a share")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID),
-      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID) })
+  @Parameters({
+      @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, schema = @Schema(implementation = String.class)),
+      @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, schema = @Schema(implementation = String.class)) })
   @APIResponse(responseCode = "200", description = "Subscription removed",
       content = @Content(schema = @Schema(implementation = Share.class)))
   @APIResponse(responseCode = "404", description = "Subscription was not found")

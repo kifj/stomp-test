@@ -1,0 +1,484 @@
+---
+openapi: 3.0.3
+info:
+  title: Stomp Test
+  description: A sample application for websockets and stomp on Wildfly
+  contact:
+    email: mail@johannes-beck.name
+  license:
+    name: "The Apache Software License, Version 2.0"
+    url: http://www.apache.org/licenses/LICENSE-2.0.txt
+  version: "1.8"
+tags:
+- name: Quotes
+  description: receive quotes for shares
+- name: Shares
+  description: subscribe to shares on the stock market
+paths:
+  /rest:
+    get:
+      description: Link to available resources
+      responses:
+        "200":
+          description: The root resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/index'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/index'
+  /rest/quotes:
+    get:
+      tags:
+      - Quotes
+      description: get quotes
+      parameters:
+      - name: X-Caller-ID
+        in: header
+        schema:
+          type: string
+      - name: X-Request-ID
+        in: header
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: Stock symbols
+        schema:
+          type: array
+          items:
+            type: string
+        example:
+        - GOOG
+      responses:
+        "200":
+          description: Quotes received
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/quotes'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/quote'
+        "404":
+          description: No subscription found
+  /rest/quotes/{key}:
+    get:
+      tags:
+      - Quotes
+      description: get a quote
+      parameters:
+      - name: X-Caller-ID
+        in: header
+        schema:
+          type: string
+      - name: X-Request-ID
+        in: header
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)"
+        required: true
+        schema:
+          type: string
+        example: BMW.DE
+      responses:
+        "200":
+          description: Quote received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/quote'
+        "404":
+          description: Subscription not found
+  /rest/shares:
+    get:
+      tags:
+      - Shares
+      description: List all subscriptions
+      parameters:
+      - name: X-Caller-ID
+        in: header
+        schema:
+          type: string
+      - name: X-Request-ID
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: All subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/share'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/shares'
+    post:
+      tags:
+      - Shares
+      description: Add a share to your list of subscriptions
+      operationId: addShare
+      parameters:
+      - name: X-Caller-ID
+        in: header
+        schema:
+          type: string
+      - name: X-Request-ID
+        in: header
+        schema:
+          type: string
+      - name: Correlation-Id
+        in: header
+        description: provide a Correlation-Id header to receive a response for your
+          operation when it finished.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/share'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/share'
+      responses:
+        "201":
+          description: Share queued for subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/share'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/share'
+        "500":
+          description: Queuing failed
+        "400":
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errors'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/errors'
+  /rest/shares/{key}:
+    get:
+      tags:
+      - Shares
+      description: Find a share subscription
+      parameters:
+      - name: X-Caller-ID
+        in: header
+        schema:
+          type: string
+      - name: X-Request-ID
+        in: header
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)"
+        required: true
+        schema:
+          type: string
+        example: BMW.DE
+      responses:
+        "200":
+          description: Subscription found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/share'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/share'
+        "404":
+          description: Subscription not found
+    delete:
+      tags:
+      - Shares
+      description: Remove a subscription of a share
+      parameters:
+      - name: X-Caller-ID
+        in: header
+        schema:
+          type: string
+      - name: X-Request-ID
+        in: header
+        schema:
+          type: string
+      - name: key
+        in: path
+        description: Stock symbol
+        required: true
+        schema:
+          type: string
+        example: GOOG
+      responses:
+        "200":
+          description: Subscription removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/share'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/share'
+        "404":
+          description: Subscription was not found
+  /rest/{path}:
+    options:
+      parameters:
+      - name: path
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    error:
+      description: Structured error message
+      type: object
+      properties:
+        message:
+          description: The error message
+          type: string
+          xml:
+            attribute: true
+        path:
+          description: "On validation errors: the property which was invalid"
+          type: string
+          xml:
+            attribute: true
+        invalidValue:
+          description: "On validation errors: the value which was invalid"
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: error
+    errors:
+      description: Error response
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+        requestUri:
+          description: Request URI
+          type: string
+          xml:
+            attribute: true
+        type:
+          description: Error type
+          type: string
+          xml:
+            attribute: true
+      xml:
+        name: errors
+    index:
+      description: Index page with HATEOS links
+      type: object
+      properties:
+        links:
+          type: array
+          items: {}
+          xml:
+            name: link
+      xml:
+        name: index
+    link:
+      description: HTTP Link
+      type: object
+      properties:
+        href:
+          description: the link target as a URI-Reference
+          type: string
+          example: https://microsoft.com
+          nullable: false
+        rel:
+          description: The relation type of a link
+          type: string
+          example: self
+        title:
+          description: used to label the destination of a link such that it can be
+            used as a human-readable identifier
+          type: string
+        type:
+          description: a hint indicating what the media type of the result of dereferencing
+            the link should be
+          type: string
+          example: text/html
+        method:
+          description: HTTP method
+          type: string
+          example: get
+    quote:
+      description: A quote is the current price for a share
+      required:
+      - share
+      type: object
+      properties:
+        share:
+          description: the share
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/share'
+        price:
+          format: float
+          description: the price
+          type: number
+          xml:
+            attribute: true
+          example: 12.34
+        currency:
+          description: currency code
+          default: EUR
+          type: string
+          xml:
+            attribute: true
+        from:
+          format: date
+          description: "date of origin, as defined in `ISO8601`"
+          type: string
+          xml:
+            attribute: true
+          externalDocs:
+            url: https://en.wikipedia.org/wiki/ISO_8601
+          example: 2022-03-10
+        links:
+          type: array
+          items:
+            description: HTTP Link
+            type: object
+            properties:
+              href:
+                description: the link target as a URI-Reference
+                type: string
+                example: https://microsoft.com
+                nullable: false
+              rel:
+                description: The relation type of a link
+                type: string
+                example: self
+              title:
+                description: used to label the destination of a link such that it
+                  can be used as a human-readable identifier
+                type: string
+              type:
+                description: a hint indicating what the media type of the result of
+                  dereferencing the link should be
+                type: string
+                example: text/html
+              method:
+                description: HTTP method
+                type: string
+                example: get
+          readOnly: true
+          xml:
+            name: link
+      readOnly: true
+      xml:
+        name: quote
+    quotes:
+      type: object
+      properties:
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/quote'
+          xml:
+            name: quote
+      readOnly: true
+      xml:
+        name: quotes
+    share:
+      description: "Shares are identified by stock symbols, and may have an name for\
+        \ readability."
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          description: Stock symbol
+          maxLength: 25
+          minLength: 1
+          pattern: "[A-Z0-9.]*"
+          type: string
+          xml:
+            attribute: true
+          example: MSFT
+        name:
+          description: Human readable name
+          maxLength: 80
+          minLength: 1
+          type: string
+          xml:
+            attribute: true
+          example: Microsoft Corp.
+        links:
+          type: array
+          items:
+            description: HTTP Link
+            type: object
+            properties:
+              href:
+                description: the link target as a URI-Reference
+                type: string
+                example: https://microsoft.com
+                nullable: false
+              rel:
+                description: The relation type of a link
+                type: string
+                example: self
+              title:
+                description: used to label the destination of a link such that it
+                  can be used as a human-readable identifier
+                type: string
+              type:
+                description: a hint indicating what the media type of the result of
+                  dereferencing the link should be
+                type: string
+                example: text/html
+              method:
+                description: HTTP method
+                type: string
+                example: get
+          readOnly: true
+          xml:
+            name: link
+      xml:
+        name: share
+    shares:
+      type: object
+      properties:
+        shares:
+          type: array
+          items:
+            $ref: '#/components/schemas/share'
+          xml:
+            name: share
+      readOnly: true
+      xml:
+        name: shares

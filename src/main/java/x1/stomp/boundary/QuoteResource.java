@@ -101,8 +101,11 @@ public class QuoteResource {
   @Path("/{key}")
   @Formatted
   @Operation(description = "get a quote")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
-    @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
+  @Parameters({
+      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
+          schema = @Schema(implementation = String.class)),
+      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID,
+          schema = @Schema(implementation = String.class)) })
   @APIResponse(responseCode = "200", description = "Quote received",
       content = @Content(schema = @Schema(implementation = Quote.class)))
   @APIResponse(responseCode = "404", description = "Subscription not found")
@@ -125,8 +128,11 @@ public class QuoteResource {
   @Path("/")
   @Formatted
   @Operation(description = "get quotes")
-  @Parameters({ @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID),
-          @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID) })
+  @Parameters({
+      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
+          schema = @Schema(implementation = String.class)),
+      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID,
+          schema = @Schema(implementation = String.class)) })
   @APIResponse(responseCode = "200", description = "Quotes received",
       content = {
           @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = APPLICATION_XML),
