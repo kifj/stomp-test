@@ -1,7 +1,5 @@
 CREATE SCHEMA stocks;
 
-CREATE SEQUENCE stocks.hibernate_sequence;
-
 CREATE TABLE stocks.share (
   id bigint NOT NULL,
   key character varying(25) NOT NULL,
@@ -9,6 +7,8 @@ CREATE TABLE stocks.share (
   version bigint,
   CONSTRAINT share_pkey PRIMARY KEY (id)
 );
+
+CREATE SEQUENCE stocks.share_seq INCREMENT BY 50;
 
 CREATE UNIQUE INDEX idx_key ON stocks.share (key);
 CREATE INDEX idx_name ON stocks.share (name);

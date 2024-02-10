@@ -45,7 +45,7 @@ public class Share implements Serializable {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @JsonIgnore
   @XmlTransient
   private Long id;

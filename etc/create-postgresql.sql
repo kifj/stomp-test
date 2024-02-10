@@ -8,6 +8,7 @@ CREATE TABLE stocks.share (
   CONSTRAINT share_pkey PRIMARY KEY (id)
 );
 
+CREATE SEQUENCE stocks.share_seq INCREMENT BY 50;
+
 CREATE UNIQUE INDEX idx_key ON stocks.share (key);
 CREATE INDEX idx_name ON stocks.share (name);
-CREATE SEQUENCE stocks.hibernate_sequence;
