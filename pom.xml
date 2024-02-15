@@ -45,7 +45,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <wildfly.version>31.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
-        <junit.jupiter.version>5.10.1</junit.jupiter.version>
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <jacoco.version>0.8.10</jacoco.version>
         <arquillian.version>1.8.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
