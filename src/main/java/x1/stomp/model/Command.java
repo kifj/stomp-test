@@ -11,6 +11,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "command")
 @JsonRootName(value = "command")
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
+@Schema(description = "Action to execute for a share")
 public class Command {
   @NotNull
   private Action action;

@@ -49,7 +49,7 @@
         <jacoco.version>0.8.10</jacoco.version>
         <arquillian.version>1.8.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
-        <jkube.version>1.15.0</jkube.version>
+        <jkube.version>1.16.0</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -202,6 +202,7 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
@@ -346,6 +347,22 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-ant</artifactId>
+            <version>6.4.2.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml</groupId>
+            <artifactId>classmate</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
