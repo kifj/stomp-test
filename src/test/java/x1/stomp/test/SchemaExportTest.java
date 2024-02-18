@@ -18,7 +18,7 @@ public class SchemaExportTest {
     MetadataSources metadata = new MetadataSources(
         new StandardServiceRegistryBuilder().applySetting(AvailableSettings.DIALECT, PostgreSQLDialect.class.getName())
             .applySetting(AvailableSettings.DEFAULT_SCHEMA, "stocks").build());
-    new SchemaExport().setOutputFile("target/ddl.sql").setFormat(true).create(EnumSet.of(TargetType.SCRIPT),
+    new SchemaExport().setOutputFile("target/generated/ddl.sql").setFormat(true).create(EnumSet.of(TargetType.SCRIPT),
         metadata.addAnnotatedClass(Share.class).buildMetadata());
   }
 }

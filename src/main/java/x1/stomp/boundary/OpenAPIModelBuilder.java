@@ -45,14 +45,12 @@ public class OpenAPIModelBuilder implements OASModelReader, ServletContextListen
 
     try {
       LOCK.await();
+      // add server by a relative url: works only if using swagger UI deployed with the application
+      var server = OASFactory.createServer().description("stage").url(servletContext.getContextPath());
+      openAPI.addServer(server);
     } catch (InterruptedException e1) {
-      return openAPI;
+      // ignore
     }
-
-    // add server by a relative url: works only if using swagger UI deployed with
-    // the application
-    var server = OASFactory.createServer().description("stage").url(servletContext.getContextPath());
-    openAPI.addServer(server);
     return openAPI;
   }
 

@@ -256,6 +256,26 @@ paths:
           description: OK
 components:
   schemas:
+    Action:
+      description: Executable action
+      enum:
+      - SUBSCRIBE
+      - UNSUBSCRIBE
+      type: string
+    Command:
+      description: Action to execute for a share
+      required:
+      - action
+      - key
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/Action'
+        key:
+          description: the share
+          type: string
+      xml:
+        name: command
     error:
       description: Structured error message
       type: object
