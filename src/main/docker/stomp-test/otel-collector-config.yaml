@@ -10,7 +10,7 @@ exporters:
     const_labels:
       application: stomp-test
   otlp:
-    endpoint: jaeger.docker.x1:4317
+    endpoint: hemispheres.x1:4317
     tls:
       insecure: true
 
