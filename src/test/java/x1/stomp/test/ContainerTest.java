@@ -39,15 +39,17 @@ public class ContainerTest {
     private static final String PATH_PARAM_KEY = "{key}";
     private static final String PARAM_KEY = "key";
     private static final String TEST_SHARE = "AAPL";
-    private static final String TEST_SHARE_INVALID = "XXXX";
  
     private static Network network =  Network.builder().build();
     
     @Container
     private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
-        .withNetwork(network).withNetworkAliases("postgres").withDatabaseName("stocks")
-         .withInitScript("init.sql");
+        .withNetwork(network)
+        .withNetworkAliases("postgres")
+        .withDatabaseName("stocks")
+        .withInitScript("init.sql");
 
+    @SuppressWarnings("rawtypes")
     @Container
     private static GenericContainer<?> wildfly = new GenericContainer(DockerImageName.parse("registry.x1/j7beck/x1-wildfly-stomp-test:1.8"))
         .dependsOn(postgres).withNetwork(network)
@@ -80,7 +82,7 @@ public class ContainerTest {
     @Test
     public void testFindShareNotFound() {
         try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
-            .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get()) {
+                .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get()) {
             assertThat(response).hasStatus(NOT_FOUND);
         }
     }
@@ -91,14 +93,14 @@ public class ContainerTest {
         var share = new Share(key);
 
         try (var response = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON)
-            .post(Entity.entity(share, MediaType.APPLICATION_XML))) {
+                .post(Entity.entity(share, MediaType.APPLICATION_XML))) {
             assertThat(response).hasStatus(BAD_REQUEST);
             var errorResponse = response.readEntity(ErrorResponse.class);
             assertThat(errorResponse).isNotNull().containsErrors(2).hasRequestUri().hasType("Invalid data");
         }
 
         try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, key)
-            .request(APPLICATION_JSON).get()) {
+                .request(APPLICATION_JSON).get()) {
             assertThat(response).hasStatus(NOT_FOUND);
         }
     }
