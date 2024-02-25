@@ -14,12 +14,14 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.version.VersionData;
 
 @ExtendWith(ArquillianExtension.class)
+@Tag("Arquillian")
 public abstract class AbstractIT {
     
     protected Client client;
@@ -30,7 +32,7 @@ public abstract class AbstractIT {
     @Deployment
     public static Archive<?> createTestArchive() {
       var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-          .resolve("org.assertj:assertj-core").withTransitivity().asFile();
+          .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-core").withTransitivity().asFile();
   
       return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
           .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
@@ -49,11 +51,11 @@ public abstract class AbstractIT {
         client.close();
     }
     
-    protected Integer getPortOffset() {
+    public Integer getPortOffset() {
       return Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
     }
 
-    protected String getHost() {
+    public String getHost() {
       return System.getProperty("jboss.bind.address", "127.0.0.1");
     }
   

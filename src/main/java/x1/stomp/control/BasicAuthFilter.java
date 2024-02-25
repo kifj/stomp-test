@@ -46,11 +46,10 @@ public class BasicAuthFilter implements ClientRequestFilter {
   }
 
   private Class<?> getDeclaringClass(ClientRequestContext requestContext) {
-    if (requestContext instanceof ClientRequestContextImpl == false) {
-      throw new IllegalStateException(
-          "Failed to get ClientInvocation from request context. Is RestEasy client used underneath?");
+    if (requestContext instanceof ClientRequestContextImpl clientRequestContext) {
+      return clientRequestContext.getInvocation().getClientInvoker().getDeclaring();
     }
-    var invocation = ((ClientRequestContextImpl) requestContext).getInvocation();
-    return invocation.getClientInvoker().getDeclaring();
+    throw new IllegalStateException(
+        "Failed to get ClientInvocation from request context. Is RestEasy client used underneath?");
   }
 }

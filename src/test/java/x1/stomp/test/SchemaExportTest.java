@@ -8,10 +8,12 @@ import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import x1.stomp.model.Share;
 
+@Tag("Unittests")
 public class SchemaExportTest {
   @Test
   public void testSchemaExport() {

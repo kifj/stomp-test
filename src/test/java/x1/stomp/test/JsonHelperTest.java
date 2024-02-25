@@ -3,6 +3,7 @@ package x1.stomp.test;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
@@ -29,6 +30,7 @@ import static x1.stomp.model.Action.SUBSCRIBE;
 import static x1.stomp.model.Action.UNSUBSCRIBE;
 
 @DisplayName("test JSON mapping")
+@Tag("Unittests")
 public class JsonHelperTest {
   private final JsonHelper jsonHelper = new JsonHelper();
 

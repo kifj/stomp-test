@@ -8,6 +8,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -34,6 +35,7 @@ import static x1.service.registry.Technology.REST;
 
 @ExtendWith(ArquillianExtension.class)
 @DisplayName("Resolver Test")
+@Tag("Arquillian")
 public class ResolverTest {
   private static final String STAGE = "local";
   private String hostname;
@@ -44,7 +46,8 @@ public class ResolverTest {
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core").withTransitivity().asFile();
+        .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core", "org.hamcrest:hamcrest-core")
+        .withTransitivity().asFile();
 
     return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
         .addAsResource("test-persistence.xml", "META-INF/persistence.xml")

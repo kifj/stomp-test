@@ -653,7 +653,11 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <skip>true</skip>
+                            <systemPropertyVariables>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                            </systemPropertyVariables>
+                            <groups>Unittests</groups>
+                            <excludedGroups>Arquillian,Testcontainers</excludedGroups>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -742,8 +746,8 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <skip>false</skip>
                             <groups>Testcontainers</groups>
+                            <excludedGroups>Arquillian,Unittests</excludedGroups>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -782,7 +786,8 @@
                                 <jboss.home>${jboss.home}</jboss.home>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
-                            <excludedgroups>Testcontainers</excludedgroups>
+                            <groups>Arquillian</groups>
+                            <excludedGroups>Testcontainers,Unittests</excludedGroups>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -824,7 +829,8 @@
                                 <jboss.password>12345</jboss.password>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
-                            <excludedgroups>Testcontainers</excludedgroups>
+                            <groups>Arquillian</groups>
+                            <excludedgroups>Testcontainers,Unittests</excludedgroups>
                         </configuration>
                     </plugin>
                 </plugins>

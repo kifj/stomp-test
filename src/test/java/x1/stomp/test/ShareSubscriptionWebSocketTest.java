@@ -6,9 +6,9 @@ import static x1.stomp.model.Action.UNSUBSCRIBE;
 import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 
 import x1.stomp.control.QuoteUpdater;
@@ -22,10 +22,9 @@ import x1.stomp.version.VersionData;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ShareSubscription WebSocket Test")
-public class ShareSubscriptionWebSocketTest extends AbstractIT {
+@ExtendWith(WebsocketExtension.class)
+public class ShareSubscriptionWebSocketTest extends AbstractIT implements WebSocketTest {
   private static final String TEST_SHARE = "MSFT";
-
-  private String baseUrl;
 
   @Inject
   private Logger log;
@@ -38,23 +37,22 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT {
 
   @Inject
   private WebSocketClient webSocketClient;
-
-  @BeforeEach
-  public void setup() {
-    super.setup();
-    var host = getHost();
-    var port = 8080 + getPortOffset();
-    baseUrl = "ws://" + host + ":" + port + "/" + VersionData.APP_NAME_MAJOR_MINOR + "/ws/stocks";
-    log.debug("baseUrl={}", baseUrl);
+  
+  @Override
+  public WebSocketClient getWebSocketClient() {   
+    return webSocketClient;
+  }
+  
+  @Override
+  public String getPath() {
+    return "/" + VersionData.APP_NAME_MAJOR_MINOR + "/ws/stocks";
   }
 
   @Test
   public void testWebSocket() throws Exception {
-    webSocketClient.openConnection(baseUrl);
-    Thread.sleep(500);
     var command = new Command(SUBSCRIBE, TEST_SHARE);
     var message = jsonHelper.toJSON(command);
-    log.debug("Sending {} to {}", command, baseUrl);
+    log.debug("Sending {} to {}", command);
     webSocketClient.sendMessage(message);
     Thread.sleep(2500);
 
@@ -75,7 +73,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT {
 
     command.setAction(UNSUBSCRIBE);
     message = jsonHelper.toJSON(command);
-    log.debug("Sending {} to {}", command, baseUrl);
+    log.debug("Sending {} to {}", command);
     webSocketClient.sendMessage(message);
 
     Thread.sleep(2500);
@@ -84,7 +82,6 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT {
     var event = jsonHelper.fromJSON(response, SubscriptionEvent.class);
     assertThat(event.getKey()).isEqualTo(TEST_SHARE);
     assertThat(event.getAction()).isEqualTo(UNSUBSCRIBE);
-    webSocketClient.closeConnection();
   }
 
 }

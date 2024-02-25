@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -23,6 +24,7 @@ import x1.stomp.model.Share;
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("Testcontainers")
+@DisplayName("Entities")
 public class EntitiesTest {
     @Container
     private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
@@ -58,13 +60,16 @@ public class EntitiesTest {
     @Test
     void insertShare() {
         var tx = em.getTransaction();
-
+        
         tx.begin();
         var s1 = new Share("TEST1");
         em.persist(s1);
         tx.commit();
 
         tx.begin();
+        var count = em.createNamedQuery(Share.COUNT_ALL, Long.class).getSingleResult();
+        assertEquals(1, count);
+        
         var s2 = em.find(Share.class, s1.getId());
         assertNotNull(s2);
         assertEquals(s1.getKey(), s2.getKey());
