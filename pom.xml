@@ -702,9 +702,8 @@
             <id>testcontainers</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.jboss</groupId>
+                    <groupId>io.smallrye</groupId>
                     <artifactId>jandex</artifactId>
-                    <version>3.1.6</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
