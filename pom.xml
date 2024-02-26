@@ -710,13 +710,26 @@
                 <dependency>
                     <groupId>org.antlr</groupId>
                     <artifactId>antlr4-runtime</artifactId>
-                    <version>4.13.0</version>
                     <scope>test</scope>
                 </dependency>
+			    <dependency>
+    				<groupId>org.jboss.spec.jakarta.el</groupId>
+    				<artifactId>jboss-el-api_5.0_spec</artifactId>
+                    <scope>test</scope>
+				</dependency>
+				<dependency>
+                    <groupId>org.hibernate.validator</groupId>
+                    <artifactId>hibernate-validator</artifactId>
+                    <scope>test</scope>            
+			    </dependency>
+			    <dependency>
+				    <groupId>org.glassfish.expressly</groupId>
+    				<artifactId>expressly</artifactId>
+                    <scope>test</scope>
+				</dependency>
                 <dependency>
                     <groupId>org.glassfish.jaxb</groupId>
                     <artifactId>jaxb-runtime</artifactId>
-                    <version>4.0.4</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
