@@ -145,7 +145,11 @@ public class QuoteResource {
       @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,
       @Suspended AsyncResponse response) {
     var baseUriBuilder = uriInfo.getBaseUriBuilder();
-    withTimeoutHandler(response).execute(() -> response.resume(retrieveQuotes(keys, baseUriBuilder)));
+    withTimeoutHandler(response).execute(() -> {
+      try (var r = retrieveQuotes(keys, baseUriBuilder)) {
+        response.resume(r);
+      }
+    });
   }
 
   private Response retrieveQuotes(List<String> keys, UriBuilder baseUriBuilder) {

@@ -47,6 +47,7 @@
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <jacoco.version>0.8.10</jacoco.version>
+        <jacoco.append>true</jacoco.append>
         <arquillian.version>1.8.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
         <jkube.version>1.16.0</jkube.version>
