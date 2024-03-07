@@ -22,7 +22,7 @@ node {
   
   stage('Pre IT-Test') {
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
-      sh "mvn -Pdocker-integration-test pre-integration-test"
+      sh "mvn -Pdocker-integration-test pre-integration-test -DskipTests"
     }
   }
 
@@ -61,7 +61,7 @@ node {
   
   stage('Create image') {
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
-      sh "mvn -Pdocker install k8s:push"
+      sh "mvn -DskipTests -Pdocker install k8s:push"
     }
   }
 }
