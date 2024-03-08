@@ -838,7 +838,7 @@
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                             <groups>Arquillian</groups>
-                            <excludedgroups>Testcontainers,Unittests</excludedgroups>
+                            <excludedGroups>Testcontainers,Unittests</excludedGroups>
                         </configuration>
                     </plugin>
                 </plugins>
