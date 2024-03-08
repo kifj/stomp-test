@@ -31,9 +31,14 @@ node {
       .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8')
       .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
     c ->
+      try {
         waitFor("http://${hostIp(c)}:9990/health/ready", 20, 3)
         withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting) {
           sh "mvn -Parq-remote verify -Djboss.managementAddress=${hostIp(c)}"
+        }
+      } finally {
+        junit '**/target/surefire-reports/TEST-*.xml'
+        jacoco(execPattern: '**/**.exec')
       }
     }
   }
