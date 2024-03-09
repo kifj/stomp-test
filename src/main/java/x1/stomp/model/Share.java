@@ -20,6 +20,7 @@ import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Entity
+@Cacheable
 @XmlRootElement(name = "share")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {

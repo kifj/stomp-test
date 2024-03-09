@@ -49,3 +49,4 @@ if (outcome == success) of /system-property=x1.service.registry.stage:read-resou
 end-if
 /system-property=x1.service.registry.stage:add(value="kubernetes")
 
+/subsystem=logging/logger=org.reflections:add(level=WARN)
