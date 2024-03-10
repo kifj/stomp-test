@@ -4,7 +4,7 @@ metadata:
   name: activemq-artemis
   labels:
     app: activemq-artemis
-  namespace: stomp-test
+  namespace: activemq-artemis
 spec:
   selector:
     matchLabels:

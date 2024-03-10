@@ -55,17 +55,17 @@ spec:
         - name: ETCD_SERVER
           value: etcd.x1
         - name: ACTIVEMQ_SERVER
-          value: activemq-artemis
+          value: activemq-artemis.activemq-artemis
         - name: ARTEMIS_USER
           valueFrom:
             secretKeyRef:
               key: artemis-user
-              name: activemq-artemis
+              name: wildfly
         - name: ARTEMIS_PASSWORD
           valueFrom:
             secretKeyRef:
               key: artemis-password
-              name: activemq-artemis
+              name: wildfly
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
