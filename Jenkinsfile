@@ -27,14 +27,8 @@ node {
   }
 
   stage('Run IT test') {
-    docker
-      .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8')
-      .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') {
-    c ->
-      waitFor("http://${hostIp(c)}:9990/health/ready", 20, 3)
-      withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting) {
-        sh "mvn -Parq-remote verify -Djboss.managementAddress=${hostIp(c)}"
-      }
+    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting) {
+      sh "mvn -Parq-remote verify"
     }
   }
   
@@ -63,17 +57,5 @@ node {
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
       sh "mvn -DskipTests -Pdocker install k8s:push"
     }
-  }
-}
-
-def hostIp(container) {
-  sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
-  readFile('hostIp').trim()
-}
-
-def waitFor(target, sleepInSec, retries) {
-  retry (retries) {
-    sleep sleepInSec
-    httpRequest url: target, validResponseCodes: '200'
   }
 }

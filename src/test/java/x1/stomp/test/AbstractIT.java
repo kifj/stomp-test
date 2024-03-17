@@ -17,46 +17,56 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import x1.arquillian.TestContainersExtension;
 import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.version.VersionData;
 
 @ExtendWith(ArquillianExtension.class)
 @Tag("Arquillian")
 public abstract class AbstractIT {
-    
-    protected Client client;
 
-    @ArquillianResource
-    protected URL url;
+  protected Client client;
 
-    @Deployment
-    public static Archive<?> createTestArchive() {
-      var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-          .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-core").withTransitivity().asFile();
-  
-      return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war").addPackages(true, "x1.stomp")
-          .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+  @ArquillianResource
+  protected URL url;
+
+  @Deployment
+  public static Archive<?> createTestArchive() {
+    var libraries = Maven.resolver().loadPomFromFile("pom.xml")
+        .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-core").withTransitivity().asFile();
+
+    if (TestContainersExtension.isRemoteArquillian()) {
+      return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")
+          .addPackages(true, "x1.stomp").addAsResource("remote-persistence.xml", "META-INF/persistence.xml")
           .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
-          .addAsResource("quickquoteresult.xml").addAsWebInfResource("beans.xml").addAsWebInfResource("test-ds.xml")
+          .addAsResource("quickquoteresult.xml").addAsWebInfResource("beans.xml")
+          .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
+    } else {
+      return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")
+          .addPackages(true, "x1.stomp").addAsResource("managed-persistence.xml", "META-INF/persistence.xml")
+          .addAsWebInfResource("test-ds.xml")
+          .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
+          .addAsResource("quickquoteresult.xml").addAsWebInfResource("beans.xml")
           .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
     }
-  
-    @BeforeEach
-    public void setup() {
-      client = ClientBuilder.newClient().register(JacksonConfig.class);
-    }
+  }
 
-    @AfterEach
-    public void tearDown() {
-        client.close();
-    }
-    
-    public Integer getPortOffset() {
-      return Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
-    }
+  @BeforeEach
+  public void setup() {
+    client = ClientBuilder.newClient().register(JacksonConfig.class);
+  }
 
-    public String getHost() {
-      return System.getProperty("jboss.bind.address", "127.0.0.1");
-    }
-  
+  @AfterEach
+  public void tearDown() {
+    client.close();
+  }
+
+  public Integer getPortOffset() {
+    return Integer.valueOf(System.getProperty("jboss.socket.binding.port-offset", "0"));
+  }
+
+  public String getHost() {
+    return System.getProperty("jboss.bind.address", "127.0.0.1");
+  }
+
 }

@@ -1,5 +1,22 @@
 embed-server --admin-only --server-config=profile.xml --std-out=echo
 
+if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-resource
+  /subsystem=datasources/data-source=stocksDS:add( \
+    jndi-name=java:jboss/datasources/stocksDS, \
+    connection-url=jdbc:postgresql://${env.DB_SERVER:postgresql}:${env.DB_PORT:5432}/stocks,\
+    user-name=${env.DB_USER:stocks}, \
+    password=${env.DB_PASSWORD:stocks}, \
+    statistics-enabled=true,\
+    min-pool-size=2,\
+    max-pool-size=5,\
+    driver-name=postgresql,\
+    driver-class=org.postgresql.Driver,\
+    validate-on-match=true,\
+    check-valid-connection-sql="select current_timestamp",\
+    statistics-enabled=true\
+    )
+end-if
+
 /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:add(durable=true, entries=[java:/jms/queue/stocks])
 /subsystem=messaging-activemq/server=default/jms-topic=quotesTopic:add(entries=[java:/jms/topic/quotes])
 /subsystem=logging/logger=x1.service.registry:write-attribute(name=level,value=DEBUG)
