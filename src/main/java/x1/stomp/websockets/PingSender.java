@@ -28,7 +28,7 @@ public class PingSender {
   private SessionHolder sessionHolder;
 
   @Schedule(hour = "*", minute = "*", second = "*/30", persistent = false)
-  public void sendPing() {
+  public void ping() {
     sessionHolder.values().forEach(session -> {
       try {
         session.getBasicRemote().sendPing(ping);
