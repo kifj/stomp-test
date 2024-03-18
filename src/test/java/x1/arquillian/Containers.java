@@ -3,9 +3,8 @@ package x1.arquillian;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jboss.arquillian.config.descriptor.api.ContainerDef;
-import org.jboss.arquillian.container.spi.Container;
 import org.jboss.arquillian.container.spi.ContainerRegistry;
+import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -30,7 +29,7 @@ public final class Containers implements ArquillianTestContainers {
           .withNetwork(network).withEnv("DB_SERVER", "db").withEnv("DB_PORT", "5432").withEnv("DB_USER", "stocks")
           .withEnv("DB_PASSWORD", "stocks").withEnv("ETCD_SERVER", "etcd").withEnv("ETCD_PORT", "2379")
           .withEnv("X1_SERVICE_REGISTRY_STAGE", "docker").withExposedPorts(8080, 9990)
-          .waitingFor(Wait.forHttp("/health/ready").forStatusCode(Status.OK.getStatusCode()));
+          .waitingFor(Wait.forHttp("/health/ready").forPort(9990).forStatusCode(Status.OK.getStatusCode()));
 
   private final List<GenericContainer<?>> instances = Arrays.asList(etcd, database, wildfly);
 
@@ -41,13 +40,15 @@ public final class Containers implements ArquillianTestContainers {
   
   @Override
   public void configureAfterStart(ContainerRegistry registry) {
-    Container arquillianContainer = registry.getContainers().iterator().next();
-    ContainerDef containerConfiguration = arquillianContainer.getContainerConfiguration();
+    var arquillianContainer = registry.getContainers().iterator().next();
+    var containerConfiguration = arquillianContainer.getContainerConfiguration();
     containerConfiguration.property("managementPort", Integer.toString(wildfly.getMappedPort(9990)));
 
     // if we would run the test as client, we would need to access the servlet from the host
-    // ProtocolDef protocolConfiguration = arquillianContainer.getProtocolConfiguration(new ProtocolDescription(ServletProtocolDefinition.NAME));
-    // protocolConfiguration.property("port", Integer.toString(wildfly.getMappedPort(8080)));
+    // same in Windows we can not access the container network directly 
+    var protocolConfiguration = arquillianContainer.getProtocolConfiguration(new ProtocolDescription("Servlet 5.0"));
+    protocolConfiguration.property("port", Integer.toString(wildfly.getMappedPort(8080)));
+    protocolConfiguration.property("host", System.getProperty("DOCKER_HOST", wildfly.getHost()));
   }
 
   @Override

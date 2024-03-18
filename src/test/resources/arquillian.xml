@@ -4,7 +4,7 @@
         http://jboss.org/schema/arquillian
         http://www.jboss.org/schema/arquillian/arquillian_1_0.xsd">
   <container qualifier="remote" default="false">
-    <protocol type="Servlet 3.0" />
+    <protocol type="Servlet 5.0" />
     <configuration>
       <property name="managementAddress">${jboss.managementAddress:localhost}</property>
       <property name="managementPort">${jboss.managementPort:9990}</property>
