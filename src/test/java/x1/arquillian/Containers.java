@@ -51,8 +51,8 @@ public final class Containers implements ArquillianTestContainers {
       protocolConfiguration.property("port", Integer.toString(wildfly.getMappedPort(8080)));
       protocolConfiguration.property("host", System.getProperty("DOCKER_HOST", wildfly.getHost()));
     } else {
-      containerConfiguration.property("managementAddress",
-          wildfly.getContainerInfo().getNetworkSettings().getNetworks().values().iterator().next().getIpAddress());
+      containerConfiguration.property("managementAddress", wildfly.getHost());
+      containerConfiguration.property("managementPort", Integer.toString(wildfly.getMappedPort(9990)));
     }
   }
 
