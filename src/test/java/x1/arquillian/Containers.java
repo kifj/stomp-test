@@ -42,18 +42,16 @@ public final class Containers implements ArquillianTestContainers {
   public void configureAfterStart(ContainerRegistry registry) {
     var arquillianContainer = registry.getContainers().iterator().next();
     var containerConfiguration = arquillianContainer.getContainerConfiguration();
-    if (Boolean.valueOf(System.getProperty("arquillian.useMappedPorts", "true"))) {
-      containerConfiguration.property("managementPort", Integer.toString(wildfly.getMappedPort(9990)));
-  
-      // if we would run the test as client, we would need to access the servlet from the host
-      // same in Windows we can not access the container network directly 
-      var protocolConfiguration = arquillianContainer.getProtocolConfiguration(new ProtocolDescription("Servlet 5.0"));
-      protocolConfiguration.property("port", Integer.toString(wildfly.getMappedPort(8080)));
-      protocolConfiguration.property("host", System.getProperty("DOCKER_HOST", wildfly.getHost()));
-    } else {
+    if (Boolean.valueOf(System.getProperty("arquillian.useContainerHost", "false"))) {
       containerConfiguration.property("managementAddress", wildfly.getHost());
-      containerConfiguration.property("managementPort", Integer.toString(wildfly.getMappedPort(9990)));
     }
+    containerConfiguration.property("managementPort", Integer.toString(wildfly.getMappedPort(9990)));
+
+    // if we would run the test as client, we would need to access the servlet from the host
+    // same in Windows we can not access the container network directly 
+    var protocolConfiguration = arquillianContainer.getProtocolConfiguration(new ProtocolDescription("Servlet 5.0"));
+    protocolConfiguration.property("port", Integer.toString(wildfly.getMappedPort(8080)));
+    protocolConfiguration.property("host", System.getProperty("DOCKER_HOST", wildfly.getHost()));
   }
 
   @Override
