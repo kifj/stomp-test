@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import x1.arquillian.TestContainersExtension;
+import x1.arquillian.Containers;
 import x1.stomp.boundary.JacksonConfig;
 import x1.stomp.version.VersionData;
 
@@ -35,7 +35,7 @@ public abstract class AbstractIT {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
         .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-core").withTransitivity().asFile();
 
-    if (TestContainersExtension.isRemoteArquillian()) {
+    if (Containers.isRemoteArquillian()) {
       return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")
           .addPackages(true, "x1.stomp").addAsResource("remote-persistence.xml", "META-INF/persistence.xml")
           .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")

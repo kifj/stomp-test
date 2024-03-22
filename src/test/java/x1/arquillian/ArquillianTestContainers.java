@@ -1,5 +1,6 @@
 package x1.arquillian;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.jboss.arquillian.container.spi.ContainerRegistry;
@@ -10,7 +11,9 @@ import org.testcontainers.containers.GenericContainer;
  * with @ContainerDefinition
  */
 public interface ArquillianTestContainers {
-  List<GenericContainer<?>> instances();
+  default List<GenericContainer<?>> instances() {
+    return Collections.emptyList();
+  }
 
   default void configureAfterStart(ContainerRegistry registry) {
   };

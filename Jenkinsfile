@@ -28,7 +28,7 @@ node {
 
   stage('Run IT test') {
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting) {
-      sh "mvn -Parq-remote verify"
+      sh "mvn -Parq-remote verify -Djboss.managementAddress=${hostIp(c)} -Darquillian.useMappedPorts=false"
     }
   }
   
@@ -58,4 +58,9 @@ node {
       sh "mvn -DskipTests -Pdocker install k8s:push"
     }
   }
+}
+
+def hostIp(container) {
+  def ipAddress = sh(returnStdout: true, script: "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id}").trim()
+  return ipAddress
 }
