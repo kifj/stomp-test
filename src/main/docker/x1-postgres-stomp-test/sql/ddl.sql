@@ -5,10 +5,10 @@ CREATE TABLE stocks.share (
   key character varying(25) NOT NULL,
   name character varying(80) NOT NULL,
   version bigint,
-  CONSTRAINT share_pkey PRIMARY KEY (id)
+  CONSTRAINT share_pkey PRIMARY KEY (id),
+  CONSTRAINT idx_key UNIQUE (key);
 );
 
 CREATE SEQUENCE stocks.share_seq INCREMENT BY 50;
 
-CREATE UNIQUE INDEX idx_key ON stocks.share (key);
 CREATE INDEX idx_name ON stocks.share (name);

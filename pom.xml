@@ -581,14 +581,14 @@
             <plugin>
                 <groupId>x1.maven</groupId>
                 <artifactId>schemaspy-maven-plugin</artifactId>
-                <version>1.10</version>
+                <version>2.0</version>
                 <configuration>
                     <host>db.x1</host>
                     <dbname>stocks</dbname>
                     <schema>stocks</schema>
                     <username>stocks</username>
                     <password>stocks</password>
-                    <type>pgsql</type>
+                    <type>pgsql11</type>
                 </configuration>
             </plugin>
             <plugin>

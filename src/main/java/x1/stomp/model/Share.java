@@ -23,9 +23,9 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Cacheable
 @XmlRootElement(name = "share")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(name = "share", uniqueConstraints = @UniqueConstraint(columnNames = "key"), indexes = {
-    @Index(columnList = "key", name = "idx_key", unique = false),
-    @Index(columnList = "name", name = "idx_name", unique = false) })
+@Table(name = "share", 
+  uniqueConstraints = @UniqueConstraint(columnNames = "key", name = "idx_key"), 
+  indexes = { @Index(columnList = "name", name = "idx_name", unique = false) })
 @NamedQuery(name = Share.FIND_BY_KEY, query = "select s from Share s where s.key = :key")
 @NamedQuery(name = Share.LIST_ALL, query = "select s from Share s order by s.name")
 @NamedQuery(name = Share.COUNT_ALL, query = "select count(s.id) from Share s")
