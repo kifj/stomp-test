@@ -1,5 +1,6 @@
 package x1.stomp.control;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 @JsonRootName(value = "QuickQuote")
 @XmlRootElement(name = "QuickQuote")
 public class QuickQuote implements Serializable {
+  @Serial
   private static final long serialVersionUID = -7248251946071933412L;
 
   private Float last;

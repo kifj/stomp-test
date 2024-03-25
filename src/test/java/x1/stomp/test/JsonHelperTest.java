@@ -38,28 +38,13 @@ public class JsonHelperTest {
     return new TestData<>(object, json);
   }
 
-  private static class TestData<T> {
-    private TestData(T object, String json) {
-      this.object = object;
-      this.json = json;
-    }
-
-    private final T object;
-    private final String json;
-
-    protected String getJson() {
-      return json;
-    }
-
-    protected T getObject() {
-      return object;
-    }
+  private record TestData<T>(T object, String json) {
 
     @Override
-    public String toString() {
-      return "TestData [object=" + object + ", json=" + json + "]";
+      public String toString() {
+        return "TestData [object=" + object + ", json=" + json + "]";
+      }
     }
-  }
 
   @TestFactory
   @DisplayName("from Command to JSON")
@@ -67,8 +52,8 @@ public class JsonHelperTest {
     return Stream.of(test(new Command(UNSUBSCRIBE, null), "{\"command\":{\"action\":\"UNSUBSCRIBE\"}}"),
         test(new Command(SUBSCRIBE, "MSFT"), "{\"command\":{\"action\":\"SUBSCRIBE\",\"key\":\"MSFT\"}}"),
         test(null, null)).map(testData -> DynamicTest.dynamicTest(testData.toString(), () -> {
-          String json = jsonHelper.toJSON(testData.getObject());
-          assertThat(json).isEqualTo(testData.getJson());
+          String json = jsonHelper.toJSON(testData.object());
+          assertThat(json).isEqualTo(testData.json());
         }));
   }
 
@@ -99,8 +84,8 @@ public class JsonHelperTest {
         .of(test(new Command(UNSUBSCRIBE, "MSFT"), "{\"command\":{\"action\":\"UNSUBSCRIBE\",\"key\":\"MSFT\"}}"),
             test(new Command(SUBSCRIBE, null), "{\"command\":{\"action\":\"SUBSCRIBE\"}}"))
         .map(testData -> DynamicTest.dynamicTest(testData.toString(), () -> {
-          var c = jsonHelper.fromJSON(testData.getJson(), Command.class);
-          Command expected = testData.getObject();
+          var c = jsonHelper.fromJSON(testData.json(), Command.class);
+          Command expected = testData.object();
           assertAll(() -> assertThat(c).isNotNull(), () -> assertThat(c.getAction()).isEqualTo(expected.getAction()),
               () -> assertThat(c.getKey()).isEqualTo(expected.getKey()));
         }));
@@ -122,7 +107,7 @@ public class JsonHelperTest {
 
     assertAll(() -> assertThat(q).isNotNull(), () -> assertThat(q.getQuotes()).size().isEqualTo(2));
 
-    var q1 = q.getQuotes().get(0);
+    var q1 = q.getQuotes().getFirst();
     assertAll(() -> assertThat(q1.getSymbol()).isEqualTo("BMW.DE"),
         () -> assertThat(q1.getLast().toString()).isEqualTo("89.57"),
         () -> assertThat(q1.getCurrencyCode()).isEqualTo("EUR"), () -> assertThat(q1.getCountryCode()).isEqualTo("DE"),

@@ -14,17 +14,17 @@ import jakarta.ws.rs.core.Response.Status;
 
 @ContainerDefinition
 public final class Containers implements ArquillianTestContainers {
-  private Network network = Network.newNetwork();
+  private final Network network = Network.newNetwork();
   
-  private GenericContainer<?> database = new GenericContainer<>(
+  private final GenericContainer<?> database = new GenericContainer<>(
       DockerImageName.parse("registry.x1/j7beck/x1-postgres-stomp-test:1.8")).withNetwork(network)
           .withNetworkAliases("db");
   
-  private GenericContainer<?> etcd = new GenericContainer<>(DockerImageName.parse("quay.io/coreos/etcd:v3.5.12"))
+  private final GenericContainer<?> etcd = new GenericContainer<>(DockerImageName.parse("quay.io/coreos/etcd:v3.5.12"))
       .withEnv("ETCD_ENABLE_V2", "true").withNetwork(network).withNetworkAliases("etcd").withCommand("etcd",
           "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://etcd:2379");
 
-  private GenericContainer<?> wildfly = new GenericContainer<>(
+  private final GenericContainer<?> wildfly = new GenericContainer<>(
       DockerImageName.parse("registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8")).dependsOn(database).dependsOn(etcd)
           .withNetwork(network).withEnv("DB_SERVER", "db").withEnv("DB_PORT", "5432").withEnv("DB_USER", "stocks")
           .withEnv("DB_PASSWORD", "stocks").withEnv("ETCD_SERVER", "etcd").withEnv("ETCD_PORT", "2379")
@@ -40,9 +40,9 @@ public final class Containers implements ArquillianTestContainers {
   
   @Override
   public void configureAfterStart(ContainerRegistry registry) {
-    var arquillianContainer = registry.getContainers().iterator().next();
+    var arquillianContainer = registry.getContainers().getFirst();
     var containerConfiguration = arquillianContainer.getContainerConfiguration();
-    if (Boolean.valueOf(System.getProperty("arquillian.useContainerHost", "false"))) {
+    if (Boolean.parseBoolean(System.getProperty("arquillian.useContainerHost", "false"))) {
       containerConfiguration.property("managementAddress", wildfly.getHost());
     }
     containerConfiguration.property("managementPort", Integer.toString(wildfly.getMappedPort(9990)));
@@ -56,18 +56,12 @@ public final class Containers implements ArquillianTestContainers {
 
   @Override
   public boolean followLog(GenericContainer<?> container) {
-    if (container == etcd) {
-      return false;
-    }
-    return true;
+    return container != etcd;
   }
 
   @Override
   public boolean simpleLog(GenericContainer<?> container) {
-    if (container == wildfly) {
-      return true;
-    }
-    return false;
+    return container == wildfly;
   }
 
   public static boolean isRemoteArquillian() {

@@ -1,5 +1,6 @@
 package x1.stomp.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Schema(name = "quote", description = "A quote is the current price for a share", readOnly = true)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Quote implements Serializable {
+  @Serial
   private static final long serialVersionUID = -6139640371442481033L;
 
   @Schema(description = "the share", required = true)

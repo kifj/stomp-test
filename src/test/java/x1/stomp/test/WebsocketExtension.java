@@ -12,7 +12,7 @@ public class WebsocketExtension implements TestInstancePostProcessor, BeforeEach
   private String baseUrl;
 
   @Override
-  public void postProcessTestInstance(Object testInstance, ExtensionContext context) throws Exception {
+  public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
     if (testInstance instanceof WebSocketTest webSocketTest) {
       var host = webSocketTest.getHost();
       var port = 8080 + webSocketTest.getPortOffset();
@@ -37,7 +37,7 @@ public class WebsocketExtension implements TestInstancePostProcessor, BeforeEach
   }
 
   @Override
-  public void afterEach(ExtensionContext context) throws Exception {
+  public void afterEach(ExtensionContext context) {
     var testInstance = context.getRequiredTestInstance();
     if (testInstance instanceof WebSocketTest webSocketTest) {
       if (webSocketTest.getWebSocketClient() != null) {

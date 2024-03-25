@@ -31,7 +31,7 @@ import x1.stomp.model.Share;
 @DisplayName("Entities")
 public class EntitiesTest {
   @Container
-  private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
+  private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
 
   private static EntityManagerFactory emf;
   private EntityManager em;
@@ -145,7 +145,7 @@ public class EntitiesTest {
     var s1 = new Share("TEST4");
     s1.setName("");
     em.persist(s1);
-    var ex = assertThrows(PersistenceException.class, () -> tx.commit());
+    var ex = assertThrows(PersistenceException.class, tx::commit);
     if (ex.getCause() instanceof ConstraintViolationException cvex) {
       var constraintViolations = cvex.getConstraintViolations();
       assertEquals(2, constraintViolations.size());

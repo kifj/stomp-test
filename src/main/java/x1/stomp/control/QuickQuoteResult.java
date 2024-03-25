@@ -1,5 +1,6 @@
 package x1.stomp.control;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "QuickQuoteResult")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuickQuoteResult implements Serializable {
+  @Serial
   private static final long serialVersionUID = -7297678762119016793L;
 
   private List<QuickQuote> quotes = new ArrayList<>();

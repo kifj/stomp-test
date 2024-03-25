@@ -1,5 +1,6 @@
 package x1.stomp.control;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import jakarta.xml.bind.annotation.XmlElement;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "QuickQuoteResponse")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QuickQuoteResponse implements Serializable {
+  @Serial
   private static final long serialVersionUID = -7214747561822054360L;
   private QuickQuoteResult quickQuoteResult;
 

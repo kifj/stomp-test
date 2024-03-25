@@ -47,14 +47,14 @@ public class ContainerTest {
     private static final String PARAM_KEY = "key";
     private static final String TEST_SHARE = "AAPL";
  
-    private static Network network =  Network.newNetwork();
+    private static final Network network =  Network.newNetwork();
     
     @Container
-    private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
         .withNetwork(network).withNetworkAliases("postgres").withDatabaseName("stocks").withInitScript("init.sql");
 
     @Container
-    private static GenericContainer<?> wildfly = new GenericContainer<>(
+    private static final GenericContainer<?> wildfly = new GenericContainer<>(
         DockerImageName.parse("registry.x1/j7beck/x1-wildfly-stomp-test:1.8")).dependsOn(postgres).withNetwork(network)
             .withEnv("DB_SERVER", "postgres").withEnv("DB_PORT", "5432").withEnv("DB_USER", postgres.getUsername())
             .withEnv("DB_PASSWORD", postgres.getPassword()).withExposedPorts(8080)

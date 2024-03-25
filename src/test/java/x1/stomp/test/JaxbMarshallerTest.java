@@ -22,7 +22,7 @@ public class JaxbMarshallerTest extends AbstractIT {
     var result = (QuickQuoteResult) unmarshaller.unmarshal(is);
     assertThat(result).isNotNull();
     assertThat(result.getQuotes()).hasSize(1);
-    var quote = result.getQuotes().get(0);
+    var quote = result.getQuotes().getFirst();
     assertThat(quote).isNotNull();
     assertThat(quote.getCountryCode()).isNotNull();
     assertThat(quote.getCurrencyCode()).isNotNull();

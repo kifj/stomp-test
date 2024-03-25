@@ -1,5 +1,6 @@
 package x1.stomp.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class Share implements Serializable {
   public static final String FIND_BY_KEY = "Share.findByKey";
   public static final String LIST_ALL = "Share.listAll";
   public static final String COUNT_ALL = "Share.count";
+  @Serial
   private static final long serialVersionUID = -6219237799499789827L;
 
   public Share() {

@@ -51,17 +51,18 @@ public class QuoteRetriever {
   }
 
   private QuickQuoteResult retrieveQuotes(String keys) {
-    var response = quickQuoteService.retrieve(keys.toUpperCase(), format);
-    var status = Status.fromStatusCode(response.getStatus());
-    if (status != Status.OK) {
-      var body = response.readEntity(String.class);
-      throw new WebApplicationException(body, status);
+    try (var response = quickQuoteService.retrieve(keys.toUpperCase(), format)) {
+      var status = Status.fromStatusCode(response.getStatus());
+      if (status != Status.OK) {
+        var body = response.readEntity(String.class);
+        throw new WebApplicationException(body, status);
+      }
+      return switch (format) {
+        case "xml" -> response.readEntity(QuickQuoteResult.class);
+        case "json" -> response.readEntity(QuickQuoteResponse.class).getQuickQuoteResult();
+        default -> throw new IllegalArgumentException(format);
+      };
     }
-    return switch (format) {
-      case "xml" -> response.readEntity(QuickQuoteResult.class);
-      case "json" -> response.readEntity(QuickQuoteResponse.class).getQuickQuoteResult();
-      default -> throw new IllegalArgumentException(format);
-    };
   }
 
   private Optional<Quote> createQuote(QuickQuote quickQuote, List<Share> shares) {
@@ -91,6 +92,6 @@ public class QuoteRetriever {
 
   private Optional<Quote> createQuote(QuickQuoteResult quickQuoteResult, Share share) {
     var quotes = quickQuoteResult.getQuotes();
-    return quotes.isEmpty() ? Optional.empty() : createQuote(quotes.get(0), Collections.singletonList(share));
+    return quotes.isEmpty() ? Optional.empty() : createQuote(quotes.getFirst(), Collections.singletonList(share));
   }
 }

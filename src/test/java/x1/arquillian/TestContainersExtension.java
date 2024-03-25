@@ -63,7 +63,7 @@ public class TestContainersExtension implements LoadableExtension {
     }
 
     private List<String> getImageNames() {
-      return containerDefinition.instances().stream().map(instance -> instance.getDockerImageName())
+      return containerDefinition.instances().stream().map(GenericContainer::getDockerImageName)
           .collect(Collectors.toList());
     }
   }

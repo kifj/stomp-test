@@ -23,7 +23,7 @@ services:
      - /opt/docker/x1/certs/activemq-artemis.key:/etc/pki/tls/private/node.key:ro
      - /opt/docker/x1/certs/activemq-artemis.crt:/etc/pki/tls/certs/node.crt:ro
     ports:
-     - 8161:8161
+     - "8161:8161"
   wildfly:
     image: registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8.0-SNAPSHOT
     environment:
@@ -42,8 +42,8 @@ services:
      - /opt/docker/x1/certs/docker.key:/etc/pki/tls/private/node.key:ro
      - /opt/docker/x1/certs/docker.crt:/etc/pki/tls/certs/node.crt:ro
     ports:
-     - 8080:8080
-     - 8443:8443
+     - "8080:8080"
+     - "8443:8443"
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.96.0
     restart: always

@@ -67,7 +67,7 @@ public class ResolverTest {
   }
 
   @Test
-  public void testResolveHttps() throws Exception {
+  public void testResolveHttps() {
     var nodes = resolver.resolve(REST, ShareResource.class, VersionData.APP_VERSION_MAJOR_MINOR, STAGE, HTTPS);
     assertThat(nodes).size().isPositive();
     var node = getNode(nodes, resolver);

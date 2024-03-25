@@ -52,7 +52,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT implements WebSoc
   public void testWebSocket() throws Exception {
     var command = new Command(SUBSCRIBE, TEST_SHARE);
     var message = jsonHelper.toJSON(command);
-    log.debug("Sending {} to {}", command);
+    log.debug("Sending {}", command);
     webSocketClient.sendMessage(message);
     Thread.sleep(2500);
 
@@ -73,7 +73,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT implements WebSoc
 
     command.setAction(UNSUBSCRIBE);
     message = jsonHelper.toJSON(command);
-    log.debug("Sending {} to {}", command);
+    log.debug("Sending {}", command);
     webSocketClient.sendMessage(message);
 
     Thread.sleep(2500);

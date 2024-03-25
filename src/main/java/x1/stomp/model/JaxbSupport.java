@@ -42,7 +42,7 @@ public final class JaxbSupport {
     @XmlAnyAttribute
     public Map<QName, Object> getParams() {
       if (params == null) {
-        params = new HashMap<QName, Object>();
+        params = new HashMap<>();
       }
       return params;
     }
@@ -64,7 +64,7 @@ public final class JaxbSupport {
         return false;
       }
 
-      if (uri != null ? !uri.equals(jaxbLink.uri) : jaxbLink.uri != null) {
+      if (!Objects.equals(uri, jaxbLink.uri)) {
         return false;
       }
 
