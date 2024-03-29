@@ -3,6 +3,8 @@ kind: Certificate
 metadata:
   name: postgresql
   namespace: stomp-test
+  labels:
+    app: postgresql
 spec:
   secretName: pki-postgresql-secret
   issuerRef:
