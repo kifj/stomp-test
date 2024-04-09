@@ -17,12 +17,4 @@ public interface ArquillianTestContainers {
 
   default void configureAfterStart(ContainerRegistry registry) {
   }
-
-  default boolean followLog(GenericContainer<?> container) {
-    return true;
-  }
-
-  default boolean simpleLog(GenericContainer<?> container) {
-    return false;
-  }
 }

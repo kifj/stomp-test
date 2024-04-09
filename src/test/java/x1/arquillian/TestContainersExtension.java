@@ -15,7 +15,6 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 public class TestContainersExtension implements LoadableExtension {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestContainersExtension.class);
@@ -40,11 +39,6 @@ public class TestContainersExtension implements LoadableExtension {
 
     private void startContainer(GenericContainer<?> container) {
       container.start();
-      if (containerDefinition.followLog(container)) {
-        var logConsumer = containerDefinition.simpleLog(container) ? new SimpleLogConsumer()
-            : new Slf4jLogConsumer(LOGGER).withSeparateOutputStreams();
-        container.followOutput(logConsumer);
-      }
     }
 
     public void stopInstance(@Observes AfterStop event) {
