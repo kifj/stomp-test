@@ -39,18 +39,15 @@ public class JsonHelperTest {
   }
 
   private record TestData<T>(T object, String json) {
-
-    @Override
-      public String toString() {
-        return "TestData [object=" + object + ", json=" + json + "]";
-      }
-    }
+  }
 
   @TestFactory
   @DisplayName("from Command to JSON")
   Stream<DynamicTest> testCommandToJson() {
-    return Stream.of(test(new Command(UNSUBSCRIBE, null), "{\"command\":{\"action\":\"UNSUBSCRIBE\"}}"),
-        test(new Command(SUBSCRIBE, "MSFT"), "{\"command\":{\"action\":\"SUBSCRIBE\",\"key\":\"MSFT\"}}"),
+    return Stream.of(test(new Command(UNSUBSCRIBE, null), """
+           {"command":{"action":"UNSUBSCRIBE"}}"""),
+        test(new Command(SUBSCRIBE, "MSFT"), """
+           {"command":{"action":"SUBSCRIBE","key":"MSFT"}}"""),
         test(null, null)).map(testData -> DynamicTest.dynamicTest(testData.toString(), () -> {
           String json = jsonHelper.toJSON(testData.object());
           assertThat(json).isEqualTo(testData.json());
@@ -72,20 +69,21 @@ public class JsonHelperTest {
     q.setFrom(new Date(123000123000L));
 
     var json = jsonHelper.toJSON(q);
-    assertThat(json)
-        .isEqualTo("{\"quote\":{\"share\":{\"key\":\"BMW.DE\",\"name\":\"Bayerische Motorenwerke AG\"},\"price\":1.23,"
-            + "\"currency\":\"EUR\",\"from\":\"1973-11-24T14:42:03.000+00:00\"}}");
+    assertThat(json).isEqualTo("""
+      {"quote":{"share":{"key":"BMW.DE","name":"Bayerische Motorenwerke AG"},"price":1.23,"currency":"EUR","from":"1973-11-24T14:42:03.000+00:00"}}""");
   }
-
+  
   @TestFactory
   @DisplayName("from JSON to Command")
   Stream<DynamicTest> testJsonToCommand() {
     return Stream
-        .of(test(new Command(UNSUBSCRIBE, "MSFT"), "{\"command\":{\"action\":\"UNSUBSCRIBE\",\"key\":\"MSFT\"}}"),
-            test(new Command(SUBSCRIBE, null), "{\"command\":{\"action\":\"SUBSCRIBE\"}}"))
+        .of(test(new Command(UNSUBSCRIBE, "MSFT"), """
+                {"command":{"action":"UNSUBSCRIBE","key":"MSFT"}}"""),
+            test(new Command(SUBSCRIBE, null), """
+                {"command":{"action":"SUBSCRIBE"}}"""))
         .map(testData -> DynamicTest.dynamicTest(testData.toString(), () -> {
           var c = jsonHelper.fromJSON(testData.json(), Command.class);
-          Command expected = testData.object();
+          var expected = testData.object();
           assertAll(() -> assertThat(c).isNotNull(), () -> assertThat(c.getAction()).isEqualTo(expected.getAction()),
               () -> assertThat(c.getKey()).isEqualTo(expected.getKey()));
         }));
@@ -101,7 +99,8 @@ public class JsonHelperTest {
   @Test
   @DisplayName("from JSON to QuickQuoteResult")
   void testFromJson4() throws Exception {
-    var f = new File(Objects.requireNonNull(getClass().getClassLoader().getResource("quickquoteresult.json")).getFile());
+    var f = new File(
+        Objects.requireNonNull(getClass().getClassLoader().getResource("quickquoteresult.json")).getFile());
     var c = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
     var q = jsonHelper.fromJSON(c, QuickQuoteResult.class);
 
@@ -127,7 +126,7 @@ public class JsonHelperTest {
 
     var json = jsonHelper.toJSON(link);
     var o = JsonParser.parseString(json).getAsJsonObject().get("SimpleLink").getAsJsonObject();
-    assertThat(o).isNotNull();    
+    assertThat(o).isNotNull();
     assertThat(o.get("href").getAsString()).isEqualTo("https://google.com");
     assertThat(o.get("rel").getAsString()).isEqualTo("self");
     assertThat(o.get("title").getAsString()).isEqualTo("Google");

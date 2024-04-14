@@ -17,6 +17,7 @@
   </container>
 
   <container qualifier="managed" default="false">
+    <protocol type="Servlet 5.0" />
     <configuration>
       <property name="allowConnectingToRunningServer">true</property>
       <property name="serverConfig">standalone-full.xml</property>

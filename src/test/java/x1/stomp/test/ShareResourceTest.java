@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 @DisplayName("ShareResource Test")
 public class ShareResourceTest extends AbstractIT {
+
   private static final String HEADER_CORRELATION_ID = "Correlation-Id";
   private static final String PATH_QUOTES = "quotes";
   private static final String PATH_SHARES = "shares";
@@ -87,8 +88,7 @@ public class ShareResourceTest extends AbstractIT {
       }
     }
 
-    var shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON).get(new GenericType<List<Share>>() {
-    });
+    var shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON).get(new Shares());
     assertThat(shares).size().isEqualTo(1);
 
     var quote = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, share.getKey())
@@ -99,8 +99,7 @@ public class ShareResourceTest extends AbstractIT {
     assertThat(quote.getShare().getKey()).isEqualTo(share.getKey());
 
     var quotes = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, share.getKey(), TEST_SHARE_INVALID)
-        .request(APPLICATION_JSON).get(new GenericType<List<Quote>>() {
-        });
+        .request(APPLICATION_JSON).get(new Quotes());
     assertThat(quotes).size().isEqualTo(1);
 
     try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
@@ -146,6 +145,12 @@ public class ShareResourceTest extends AbstractIT {
         .request(APPLICATION_JSON).get()) {
       assertThat(response).hasStatus(NOT_FOUND);
     }
+  }
+
+  private final class Shares extends GenericType<List<Share>> {
+  }
+
+  private final class Quotes extends GenericType<List<Quote>> {
   }
 
 }

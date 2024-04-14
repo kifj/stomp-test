@@ -57,4 +57,9 @@ public final class Containers implements ArquillianTestContainers {
   public static boolean isRemoteArquillian() {
     return System.getProperty("arquillian.launch").equals("remote");
   }
+  
+  @Override
+  public boolean isActive() {
+    return isRemoteArquillian();
+  }
 }

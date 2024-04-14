@@ -62,8 +62,7 @@ public class MetricsTest extends AbstractIT {
   @Test
   @DisplayName("test metrics")
   public void testMetrics() {
-    var shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON).get(new GenericType<List<Share>>() {
-    });
+    var shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON).get(new Shares());
     assertThat(shares).isEmpty();
 
     // if no endpoint is configured, Micrometer uses NoOp metrics 
@@ -71,4 +70,8 @@ public class MetricsTest extends AbstractIT {
     assertThat(counters).isNotEmpty();
     assertThat(counters).anyMatch(counter -> counter.getId().getTag("method").equals("listAllShares"));
   }
+  
+  private final class Shares extends GenericType<List<Share>> {
+  }
+
 }

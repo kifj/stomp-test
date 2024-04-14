@@ -23,8 +23,10 @@ public class TestContainersExtension implements LoadableExtension {
   @Override
   public void register(ExtensionBuilder builder) {
     findArquillianTestContainers().ifPresent(containerDefinition -> {
-      LoadContainerConfiguration.containerDefinition = containerDefinition;
-      builder.observer(LoadContainerConfiguration.class);
+      if (containerDefinition.isActive()) {
+        LoadContainerConfiguration.containerDefinition = containerDefinition;
+        builder.observer(LoadContainerConfiguration.class);
+      }
     });
   }
 

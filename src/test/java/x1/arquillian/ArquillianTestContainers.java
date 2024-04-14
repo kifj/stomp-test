@@ -17,4 +17,8 @@ public interface ArquillianTestContainers {
 
   default void configureAfterStart(ContainerRegistry registry) {
   }
+
+  default boolean isActive() {
+    return true;
+  }
 }
