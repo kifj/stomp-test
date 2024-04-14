@@ -50,7 +50,7 @@
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.8.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
-        <jkube.version>1.16.1</jkube.version>
+        <jkube.version>1.16.2</jkube.version>
     </properties>
 
     <distributionManagement>
@@ -530,7 +530,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.8.3.1</version>
+                <version>4.8.4.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
