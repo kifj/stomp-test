@@ -37,6 +37,7 @@ services:
      - GC_MAX_METASPACE_SIZE=256
      - GC_METASPACE_SIZE=96
      - SERVICE_NAME=stomp-test
+     - MP_METRICS_TAGS=_app=stomp-test,version=1.8
     volumes:
      - /opt/docker/x1/certs/docker.key:/etc/pki/tls/private/node.key:ro
      - /opt/docker/x1/certs/docker.crt:/etc/pki/tls/certs/node.crt:ro

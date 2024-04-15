@@ -520,7 +520,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>4.2.2.Final</version>
+                <version>5.0.0.Final</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1087,7 +1087,7 @@
                                 <env>
                                     <GC_MAX_METASPACE_SIZE>512</GC_MAX_METASPACE_SIZE>
                                     <GC_METASPACE_SIZE>256</GC_METASPACE_SIZE>
-                                    <MP_METRICS_TAGS>_app=stomp-test,version=1.6</MP_METRICS_TAGS>
+                                    <MP_METRICS_TAGS>_app=stomp-test,version=1.8</MP_METRICS_TAGS>
                                     <SERVICE_NAME>stomp-test</SERVICE_NAME>
                                 </env>
                                 <serviceAccount>jgroups-kubeping-service-account</serviceAccount>

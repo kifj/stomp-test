@@ -73,6 +73,8 @@ spec:
               fieldPath: metadata.namespace
         - name: OTEL_COLLECTOR_HOST
           value: 'localhost'
+        - name: MP_METRICS_TAGS
+          value: _app=stomp-test,version=1.8
         resources:
           limits:
             memory: 1024Mi
