@@ -1,5 +1,10 @@
 package x1.arquillian;
 
+import java.io.IOException;
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
@@ -7,6 +12,8 @@ import org.testcontainers.utility.DockerImageName;
 import jakarta.ws.rs.core.Response.Status;
 
 public class WildflyContainer extends GenericContainer<WildflyContainer> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(WildflyContainer.class);
+      
   private static final int HTTP_PORT = 8080;
   private static final int MGMT_PORT = 9990;
 
@@ -31,5 +38,16 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
 
   public Integer getHttpPort() {
     return getMappedPort(HTTP_PORT);
+  }
+  
+  public WildflyContainer withEnv(String file) {
+    var p = new Properties();
+    try (var is = this.getClass().getClassLoader().getResourceAsStream(file)) {
+      p.load(is);
+      p.forEach(((key,value) -> this.withEnv(key.toString(), value.toString())));
+    } catch (IOException e) {
+      LOGGER.warn(e.getMessage());
+    }
+    return this;
   }
 }

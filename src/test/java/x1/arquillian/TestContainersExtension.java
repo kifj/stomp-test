@@ -54,7 +54,7 @@ public class TestContainersExtension implements LoadableExtension {
 
     private List<GenericContainer<?>> reverse(List<GenericContainer<?>> containers) {
       var reverse = new ArrayList<>(containers);
-      Collections.reverse(containers);
+      Collections.reverse(reverse);
       return reverse;
     }
 

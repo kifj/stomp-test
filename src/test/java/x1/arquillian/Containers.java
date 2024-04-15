@@ -27,9 +27,7 @@ public final class Containers implements ArquillianTestContainers {
           "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://etcd:2379");
 
   private final WildflyContainer wildfly = new WildflyContainer("registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8")
-      .dependsOn(database).dependsOn(etcd).withNetwork(network).withEnv("DB_SERVER", "db").withEnv("DB_PORT", "5432")
-      .withEnv("DB_USER", "stocks").withEnv("DB_PASSWORD", "stocks").withEnv("ETCD_SERVER", "etcd")
-      .withEnv("ETCD_PORT", "2379").withEnv("X1_SERVICE_REGISTRY_STAGE", "docker");
+      .dependsOn(database).dependsOn(etcd).withNetwork(network).withEnv("wildfly-testcontainers.properties");
 
   private final List<GenericContainer<?>> instances = Arrays.asList(etcd, database, wildfly);
 
@@ -57,7 +55,7 @@ public final class Containers implements ArquillianTestContainers {
   public static boolean isRemoteArquillian() {
     return System.getProperty("arquillian.launch").equals("remote");
   }
-  
+
   @Override
   public boolean isActive() {
     return isRemoteArquillian();
