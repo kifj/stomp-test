@@ -15,6 +15,9 @@ public interface ArquillianTestContainers {
     return Collections.emptyList();
   }
 
+  default void configureBeforeStart(ContainerRegistry registry) {
+  }
+  
   default void configureAfterStart(ContainerRegistry registry) {
   }
 
