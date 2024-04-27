@@ -60,7 +60,7 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
 
   public WildflyContainer withConfigurationDirectory(String directory) {
     var target = System.getProperty("x1.arquillian.wildfly.configuration", "/srv/wildfly/standalone/configuration");
-    LOGGER.info("Source configuration folder: {}", new File(directory).getAbsolutePath(), target);
+    LOGGER.info("Source configuration folder {} -> {}", new File(directory).getAbsolutePath(), target);
     for (var source : Objects.requireNonNullElse(new File(directory).listFiles(), new File[0])) {
       LOGGER.debug("Copy {} to {}", source.getAbsolutePath(), target);
       try (var fis = new FileInputStream(source)) {
