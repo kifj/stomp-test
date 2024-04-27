@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <wildfly.version>31.0.1.Final</wildfly.version>
+        <wildfly.version>32.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <jacoco.version>0.8.10</jacoco.version>
@@ -289,7 +289,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>service-registry</artifactId>
-            <version>1.3.4</version>
+            <version>1.3.5</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
