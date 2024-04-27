@@ -16,7 +16,7 @@ import x1.stomp.model.Share;
 @Tag("Unittests")
 public class SchemaExportTest {
   @Test
-  public void testSchemaExport() {
+  void testSchemaExport() {
     var metadata = new MetadataSources(
         new StandardServiceRegistryBuilder().applySetting(AvailableSettings.DIALECT, PostgreSQLDialect.class.getName())
             .applySetting(AvailableSettings.DEFAULT_SCHEMA, "stocks").build());

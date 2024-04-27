@@ -52,12 +52,12 @@ public abstract class AbstractIT {
   }
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     client = ClientBuilder.newClient().register(JacksonConfig.class);
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     client.close();
   }
 

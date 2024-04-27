@@ -39,7 +39,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT implements WebSoc
   private WebSocketClient webSocketClient;
   
   @Override
-  public WebSocketClient getWebSocketClient() {   
+  public WebSocketClient getWebSocketClient() {
     return webSocketClient;
   }
   
@@ -49,7 +49,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT implements WebSoc
   }
 
   @Test
-  public void testWebSocket() throws Exception {
+  void testWebSocket() throws Exception {
     var command = new Command(SUBSCRIBE, TEST_SHARE);
     var message = jsonHelper.toJSON(command);
     log.debug("Sending {}", command);

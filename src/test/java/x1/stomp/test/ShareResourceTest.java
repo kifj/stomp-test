@@ -37,13 +37,13 @@ public class ShareResourceTest extends AbstractIT {
   private String baseUrl;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     super.setup();
     baseUrl = url.toString() + "rest";
   }
 
   @Test
-  public void testFindShareNotFound() {
+  void testFindShareNotFound() {
     try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
         .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get()) {
       assertThat(response).hasStatus(NOT_FOUND);
@@ -51,7 +51,7 @@ public class ShareResourceTest extends AbstractIT {
   }
 
   @Test
-  public void testAddAndFindShare() throws Exception {
+  void testAddAndFindShare() throws Exception {
     var share = new Share();
     var key = "MSFT";
     var name = "Microsoft Corporation";
@@ -114,7 +114,7 @@ public class ShareResourceTest extends AbstractIT {
   }
 
   @Test
-  public void testAddShareInvalid() {
+  void testAddShareInvalid() {
     var key = "GOOG";
     var share = new Share(key);
 
@@ -132,7 +132,7 @@ public class ShareResourceTest extends AbstractIT {
   }
 
   @Test
-  public void testGetQuoteNotFound() {
+  void testGetQuoteNotFound() {
     try (var response = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY)
         .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get()) {
       assertThat(response).hasStatus(NOT_FOUND);
@@ -140,7 +140,7 @@ public class ShareResourceTest extends AbstractIT {
   }
 
   @Test
-  public void testGetQuotesNotFound() {
+  void testGetQuotesNotFound() {
     try (var response = client.target(baseUrl).path(PATH_QUOTES).queryParam(PARAM_KEY, TEST_SHARE, TEST_SHARE_INVALID)
         .request(APPLICATION_JSON).get()) {
       assertThat(response).hasStatus(NOT_FOUND);
