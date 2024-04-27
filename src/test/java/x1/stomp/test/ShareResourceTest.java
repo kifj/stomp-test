@@ -147,10 +147,10 @@ public class ShareResourceTest extends AbstractIT {
     }
   }
 
-  private final class Shares extends GenericType<List<Share>> {
+  private static final class Shares extends GenericType<List<Share>> {
   }
 
-  private final class Quotes extends GenericType<List<Quote>> {
+  private static final class Quotes extends GenericType<List<Quote>> {
   }
 
 }

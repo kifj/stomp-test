@@ -71,7 +71,7 @@ public class MetricsTest extends AbstractIT {
     assertThat(counters).anyMatch(counter -> counter.getId().getTag("method").equals("listAllShares"));
   }
   
-  private final class Shares extends GenericType<List<Share>> {
+  private static final class Shares extends GenericType<List<Share>> {
   }
 
 }
