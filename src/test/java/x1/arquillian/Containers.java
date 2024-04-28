@@ -19,7 +19,7 @@ public final class Containers implements ArquillianTestContainers {
 
   private final GenericContainer<?> database = new GenericContainer<>(
       DockerImageName.parse("registry.x1/j7beck/x1-postgres-stomp-test:1.8")).withNetwork(network)
-          .withNetworkAliases("db").withLogConsumer(new Slf4jLogConsumer(LOGGER).withSeparateOutputStreams());
+          .withNetworkAliases("postgres").withLogConsumer(new Slf4jLogConsumer(LOGGER).withSeparateOutputStreams());
 
   private final GenericContainer<?> etcd = new GenericContainer<>(DockerImageName.parse("quay.io/coreos/etcd:v3.5.13"))
       .withEnv("ETCD_ENABLE_V2", "true").withNetwork(network).withNetworkAliases("etcd").withCommand("etcd",

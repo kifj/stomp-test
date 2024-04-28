@@ -10,7 +10,6 @@ import static x1.stomp.test.ErrorResponseAssert.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -58,30 +57,26 @@ public class ContainerTest {
         DockerImageName.parse("registry.x1/j7beck/x1-wildfly-stomp-test:1.8")).dependsOn(postgres).withNetwork(network)
             .withEnv("DB_SERVER", "postgres").withEnv("DB_PORT", "5432").withEnv("DB_USER", postgres.getUsername())
             .withEnv("DB_PASSWORD", postgres.getPassword()).withExposedPorts(8080)
+            .withLogConsumer(new Slf4jLogConsumer(LOGGER).withSeparateOutputStreams())
             .waitingFor(Wait.forHttp("/").forStatusCode(Status.OK.getStatusCode()));
 
     private URI baseUrl;
     private Client client;
 
-    @BeforeAll
-    static void enableLogging() {
-        wildfly.followOutput(new Slf4jLogConsumer(LOGGER).withSeparateOutputStreams());
-    }
-
     @BeforeEach
-    public void setup() {
+    void setup() {
       client = ClientBuilder.newClient().register(JacksonConfig.class);
       baseUrl = UriBuilder.fromUri("http://" + wildfly.getHost() + ":" + wildfly.getFirstMappedPort()).path("rest")
           .build();
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         client.close();
     }
 
     @Test
-    public void testFindShareNotFound() {
+    void testFindShareNotFound() {
         try (var response = client.target(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY)
                 .resolveTemplate(PARAM_KEY, TEST_SHARE).request(APPLICATION_JSON).get()) {
             assertThat(response).hasStatus(NOT_FOUND);
@@ -89,7 +84,7 @@ public class ContainerTest {
     }
 
     @Test
-    public void testAddShareInvalid() {
+    void testAddShareInvalid() {
         var key = "GOOG";
         var share = new Share(key);
 

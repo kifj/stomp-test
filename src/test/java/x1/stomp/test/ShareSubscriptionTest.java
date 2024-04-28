@@ -23,7 +23,7 @@ public class ShareSubscriptionTest extends AbstractIT {
   private Logger log;
 
   @Test
-  public void testSubscribe() {
+  void testSubscribe() {
     var share = new Share();
     share.setKey("MSFT");
     share.setName("Microsoft Corporation");
@@ -53,7 +53,7 @@ public class ShareSubscriptionTest extends AbstractIT {
   }
 
   @Test
-  public void testQuoteUpdater() throws Exception {
+  void testQuoteUpdater() throws Exception {
     var share = new Share();
     share.setKey("GOOG");
     share.setName("Google");

@@ -1,11 +1,14 @@
 package x1.stomp.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static x1.stomp.test.JaxbMarshallerTest.QuickQuoteAssert.assertThat;
 
 import java.util.Objects;
 
 import jakarta.xml.bind.JAXBContext;
 
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import x1.stomp.control.QuickQuote;
@@ -14,7 +17,7 @@ import x1.stomp.control.QuickQuoteResult;
 public class JaxbMarshallerTest extends AbstractIT {
 
   @Test
-  public void readQuickQuote() throws Exception {
+  void readQuickQuote() throws Exception {
     var ctx = JAXBContext.newInstance(QuickQuoteResult.class, QuickQuote.class);
     var unmarshaller = ctx.createUnmarshaller();
     var is = Objects.requireNonNull(getClass().getClassLoader().getResource("quickquoteresult.xml"));
@@ -23,15 +26,32 @@ public class JaxbMarshallerTest extends AbstractIT {
     assertThat(result).isNotNull();
     assertThat(result.getQuotes()).hasSize(1);
     var quote = result.getQuotes().getFirst();
-    assertThat(quote).isNotNull();
-    assertThat(quote.getCountryCode()).isNotNull();
-    assertThat(quote.getCurrencyCode()).isNotNull();
-    assertThat(quote.getExchange()).isNotNull();
-    assertThat(quote.getLast()).isNotNull();
-    assertThat(quote.getLastTime()).isNotNull();
-    assertThat(quote.getName()).isNotNull();
-    assertThat(quote.getSymbol()).isNotNull();
-    assertThat(quote.getVolume()).isNotNull();
+    assertThat(quote).hasValues();
+  }
+
+  static class QuickQuoteAssert extends AbstractAssert<QuickQuoteAssert, QuickQuote> {
+
+    private QuickQuoteAssert(QuickQuote actual) {
+      super(actual, QuickQuoteAssert.class);
+    }
+
+    public static QuickQuoteAssert assertThat(QuickQuote actual) {
+      return new QuickQuoteAssert(actual);
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public QuickQuoteAssert hasValues() {
+      isNotNull();
+      Assertions.assertThat(actual.getCountryCode()).isNotNull();
+      Assertions.assertThat(actual.getCurrencyCode()).isNotNull();
+      Assertions.assertThat(actual.getExchange()).isNotNull();
+      Assertions.assertThat(actual.getLast()).isNotNull();
+      Assertions.assertThat(actual.getLastTime()).isNotNull();
+      Assertions.assertThat(actual.getName()).isNotNull();
+      Assertions.assertThat(actual.getSymbol()).isNotNull();
+      Assertions.assertThat(actual.getVolume()).isNotNull();
+      return this;
+    }
   }
 
 }

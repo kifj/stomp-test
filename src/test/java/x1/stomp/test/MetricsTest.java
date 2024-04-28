@@ -28,7 +28,7 @@ public class MetricsTest extends AbstractIT {
   private String metricsBaseUrl;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     super.setup();
     baseUrl = url.toString() + "rest";
     metricsBaseUrl = getBaseUrlForMetrics();
@@ -45,7 +45,7 @@ public class MetricsTest extends AbstractIT {
 
   @Test
   @DisplayName("test health")
-  public void testHealth() {
+  void testHealth() {
     var response = client.target(metricsBaseUrl).path("health").request(APPLICATION_JSON).get();
     assertThat(response).hasStatus(OK);
 
@@ -61,7 +61,7 @@ public class MetricsTest extends AbstractIT {
   
   @Test
   @DisplayName("test metrics")
-  public void testMetrics() {
+  void testMetrics() {
     var shares = client.target(baseUrl).path(PATH_SHARES).request(APPLICATION_JSON).get(new Shares());
     assertThat(shares).isEmpty();
 
@@ -71,7 +71,7 @@ public class MetricsTest extends AbstractIT {
     assertThat(counters).anyMatch(counter -> counter.getId().getTag("method").equals("listAllShares"));
   }
   
-  private final class Shares extends GenericType<List<Share>> {
+  private static final class Shares extends GenericType<List<Share>> {
   }
 
 }
