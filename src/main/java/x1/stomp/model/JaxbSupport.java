@@ -17,6 +17,8 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
  * copied from jakarta.ws.rs.core where this is deprecated 
  */
 public final class JaxbSupport {
+  private JaxbSupport() {}
+  
   public static class JaxbLink {
 
     private URI uri;
