@@ -6,7 +6,7 @@ metadata:
   name: activemq-artemis
   namespace: activemq-artemis
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       deployment: activemq-artemis

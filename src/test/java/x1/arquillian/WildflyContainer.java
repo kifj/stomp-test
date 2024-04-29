@@ -23,9 +23,10 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
 
   private static final int HTTP_PORT = 8080;
   private static final int MGMT_PORT = 9990;
+  private static final int DEBUG_PORT = 8787;
 
   public WildflyContainer() {
-    this("registry.x1/j7beck/x1-wildfly-profile:31.0.1.Final");
+    this("registry.x1/j7beck/x1-wildfly-profile:32.0.0.Final");
   }
 
   public WildflyContainer(String image) {
@@ -72,7 +73,17 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
     }
     return self();
   }
-  
+
+  public WildflyContainer withRemoteDebug() {
+    if (Boolean.getBoolean("arquillian.remote.debug")) {
+      LOGGER.info("Enable remote debugging on port {}", DEBUG_PORT);
+      addFixedExposedPort(DEBUG_PORT, DEBUG_PORT);
+      withEnv("JAVA_OPTS",
+          "-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -agentlib:jdwp=transport=dt_socket,address=*:8787,server=y,suspend=n");
+    }
+    return this;
+  }
+
   public void configureAfterStart(ContainerRegistry registry) {
     var arquillianContainer = registry.getContainers().getFirst();
     var containerConfiguration = arquillianContainer.getContainerConfiguration();

@@ -15,9 +15,6 @@ spec:
   - hosts:
     - stomp-test.k8s.x1
     secretName: pki-wildfly-secret
-  - hosts:
-    - activemq-artemis.k8s.x1
-    secretName: pki-activemq-artemis-secret
   rules:
   - host: stomp-test.k8s.x1
     http:
@@ -29,13 +26,4 @@ spec:
             name: wildfly
             port:
               name: https
-  - host: activemq-artemis.k8s.x1
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: activemq-artemis
-            port:
               name: http

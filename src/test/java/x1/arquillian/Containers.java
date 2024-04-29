@@ -26,7 +26,8 @@ public final class Containers implements ArquillianTestContainers {
           "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://etcd:2379");
 
   private final WildflyContainer wildfly = new WildflyContainer("registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8")
-      .dependsOn(database).dependsOn(etcd).withNetwork(network).withEnv("wildfly-testcontainers.properties");
+      .dependsOn(database).dependsOn(etcd).withNetwork(network).withEnv("wildfly-testcontainers.properties")
+      .withRemoteDebug();
 
   @Override
   public List<GenericContainer<?>> instances() {
