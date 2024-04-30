@@ -1012,8 +1012,6 @@
         <profile>
             <id>wildfly-jar</id>
             <properties>
-                <maven.compiler.target>17</maven.compiler.target>
-                <maven.compiler.source>17</maven.compiler.source>
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%v</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
             </properties>
@@ -1023,7 +1021,7 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
-                        <version>10.0.0.Final</version>
+                        <version>11.0.1.Final</version>
                         <configuration>
                             <feature-packs>
                                 <feature-pack>
@@ -1032,7 +1030,7 @@
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-datasources-galleon-pack</artifactId>
-                                    <version>7.0.0.Final</version>
+                                    <version>8.0.0.Final</version>
                                 </feature-pack>
                             </feature-packs>
                             <layers>

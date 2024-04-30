@@ -76,10 +76,12 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
 
   public WildflyContainer withRemoteDebug() {
     if (Boolean.getBoolean("arquillian.remote.debug")) {
-      LOGGER.info("Enable remote debugging on port {}", DEBUG_PORT);
+      var suspend = Boolean.getBoolean("arquillian.remote.debug.suspend") ? "y" : "n";
+      LOGGER.info("Enable remote debugging on port {} with suspend={}", DEBUG_PORT, suspend);
       addFixedExposedPort(DEBUG_PORT, DEBUG_PORT);
       withEnv("JAVA_OPTS",
-          "-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -agentlib:jdwp=transport=dt_socket,address=*:8787,server=y,suspend=n");
+          "-server -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -agentlib:jdwp=transport=dt_socket,address=*:"
+              + DEBUG_PORT + ",server=y,suspend=" + suspend);
     }
     return this;
   }
