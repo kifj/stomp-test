@@ -1087,6 +1087,7 @@
                                     <GC_METASPACE_SIZE>256</GC_METASPACE_SIZE>
                                     <MP_METRICS_TAGS>_app=stomp-test,version=1.8</MP_METRICS_TAGS>
                                     <SERVICE_NAME>stomp-test</SERVICE_NAME>
+                                    <MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>DOWN</MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>
                                 </env>
                                 <serviceAccount>jgroups-kubeping-service-account</serviceAccount>
                             </resources>

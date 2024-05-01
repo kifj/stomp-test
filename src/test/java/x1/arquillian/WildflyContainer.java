@@ -25,6 +25,8 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
   private static final int MGMT_PORT = 9990;
   private static final int DEBUG_PORT = 8787;
 
+  private static final String JAVA_OPTS = "-server -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true";
+
   public WildflyContainer() {
     this("registry.x1/j7beck/x1-wildfly-profile:32.0.0.Final");
   }
@@ -75,13 +77,16 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
   }
 
   public WildflyContainer withRemoteDebug() {
+    return withRemoteDebug(JAVA_OPTS);
+  }
+
+  public WildflyContainer withRemoteDebug(String javaOpts) {
     if (Boolean.getBoolean("arquillian.remote.debug")) {
       var suspend = Boolean.getBoolean("arquillian.remote.debug.suspend") ? "y" : "n";
       LOGGER.info("Enable remote debugging on port {} with suspend={}", DEBUG_PORT, suspend);
       addFixedExposedPort(DEBUG_PORT, DEBUG_PORT);
       withEnv("JAVA_OPTS",
-          "-server -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -agentlib:jdwp=transport=dt_socket,address=*:"
-              + DEBUG_PORT + ",server=y,suspend=" + suspend);
+          javaOpts + " -agentlib:jdwp=transport=dt_socket,address=*:" + DEBUG_PORT + ",server=y,suspend=" + suspend);
     }
     return this;
   }
