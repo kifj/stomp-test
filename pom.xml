@@ -314,11 +314,11 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
+        <version>3.13.0</version>
       </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
-        <version>3.3.2</version>
+        <version>3.4.0</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
           <archive>
@@ -398,7 +398,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.7.3.4</version>
+        <version>4.8.4.0</version>
       </plugin>
     </plugins>
     <extensions>
@@ -414,7 +414,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.4.3</version>
+        <version>3.5.0</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -432,7 +432,7 @@
       <plugin>
         <groupId>x1.maven</groupId>
         <artifactId>schemaspy-maven-plugin</artifactId>
-        <version>1.9</version>
+        <version>1.10</version>
         <configuration>
           <host>db.x1</host>
           <dbname>stocks</dbname>
@@ -473,7 +473,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.1</version>
         <configuration>
           <configLocation>etc/checkstyle.xml</configLocation>
         </configuration>
@@ -638,7 +638,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>rpm-maven-plugin</artifactId>
-            <version>2.2.0</version>
+            <version>2.3.0</version>
             <executions>
               <execution>
                 <id>build-rpm</id>
@@ -690,7 +690,7 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>fabric8-maven-plugin</artifactId>
-            <version>4.4.1</version>
+            <version>4.4.2</version>
             <executions>
               <execution>
                 <phase>install</phase>
@@ -732,7 +732,7 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>fabric8-maven-plugin</artifactId>
-            <version>4.4.1</version>
+            <version>4.4.2</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
