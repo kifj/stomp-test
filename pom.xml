@@ -1021,7 +1021,7 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
-                        <version>11.0.1.Final</version>
+                        <version>11.0.2.Final</version>
                         <configuration>
                             <feature-packs>
                                 <feature-pack>

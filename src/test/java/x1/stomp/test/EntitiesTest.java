@@ -31,7 +31,7 @@ import x1.stomp.model.Share;
 @DisplayName("Entities")
 public class EntitiesTest {
   @Container
-  private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
+  private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
   private static EntityManagerFactory emf;
   private EntityManager em;

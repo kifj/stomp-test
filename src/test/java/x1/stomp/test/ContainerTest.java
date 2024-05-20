@@ -49,7 +49,7 @@ public class ContainerTest {
     private static final Network network =  Network.newNetwork();
     
     @Container
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
         .withNetwork(network).withNetworkAliases("postgres").withDatabaseName("stocks").withInitScript("init.sql");
 
     @Container
