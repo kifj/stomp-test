@@ -14,15 +14,15 @@ jobs:
           java-version: 21
           distribution: adopt
       - name: Build with Maven
-        run: mvn -Pgithub,default -B clean package
+        run: mvn -Pgithub,default -B --no-transfer-progress clean package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Prepare IT
-        run: mvn -Pgithub,wildfly-jar -DskipTests install
+        run: mvn -Pgithub,wildfly-jar -B --no-transfer-progress -DskipTests install
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run TestContainers
-        run: mvn -Pgithub,testcontainers verify
+        run: mvn -Pgithub,testcontainers -B --no-transfer-progress verify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish Unit Test Results
