@@ -21,7 +21,11 @@ jobs:
         run: mvn -Pgithub,docker-integration-test pre-integration-test -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run IT 
+      - name: Run TestContainers
+        run: mvn -Pgithub,testcontainers verify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run IT
         run: mvn -Pgithub,arq-remote verify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

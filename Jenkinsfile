@@ -60,7 +60,3 @@ node {
   }
 }
 
-def hostIp(container) {
-  def ipAddress = sh(returnStdout: true, script: "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id}").trim()
-  return ipAddress
-}
