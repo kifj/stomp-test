@@ -45,16 +45,16 @@ public class ContainerTest {
     private static final String PATH_PARAM_KEY = "{key}";
     private static final String PARAM_KEY = "key";
     private static final String TEST_SHARE = "AAPL";
- 
+
     private static final Network network =  Network.newNetwork();
-    
+
     @Container
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
         .withNetwork(network).withNetworkAliases("postgres").withDatabaseName("stocks").withInitScript("init.sql");
 
     @Container
     private static final GenericContainer<?> wildfly = new GenericContainer<>(
-        DockerImageName.parse("registry.x1/j7beck/x1-wildfly-stomp-test:1.8")).dependsOn(postgres).withNetwork(network)
+        DockerImageName.parse("registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8.0-SNAPSHOT")).dependsOn(postgres).withNetwork(network)
             .withEnv("DB_SERVER", "postgres").withEnv("DB_PORT", "5432").withEnv("DB_USER", postgres.getUsername())
             .withEnv("DB_PASSWORD", postgres.getPassword()).withExposedPorts(8080)
             .withLogConsumer(new Slf4jLogConsumer(LOGGER).withSeparateOutputStreams())
