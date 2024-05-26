@@ -66,7 +66,7 @@ pipeline {
         jdk 'JDK-17'
       }
       steps {
-        sh 'mvn -B deploy site-deploy -DskipTests'
+        sh 'mvn -B -Prpm deploy site-deploy -DskipTests'
       }
       post {
         always {
