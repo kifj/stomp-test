@@ -92,14 +92,14 @@
       <dependency>
         <groupId>org.jboss.shrinkwrap.resolver</groupId>
         <artifactId>shrinkwrap-resolver-bom</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.1</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>1.6.0.Final</version>
+        <version>1.8.0.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -398,7 +398,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.8.4.0</version>
+        <version>4.8.5.0</version>
       </plugin>
     </plugins>
     <extensions>
