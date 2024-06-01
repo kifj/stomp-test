@@ -25,7 +25,7 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
   private static final int MGMT_PORT = 9990;
   private static final int DEBUG_PORT = 8787;
 
-  private static final String JAVA_OPTS = "-server -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true";
+  public static final String JAVA_OPTS = "-server -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true";
 
   public WildflyContainer() {
     this("registry.x1/j7beck/x1-wildfly-profile:32.0.0.Final");
@@ -39,7 +39,7 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
   protected void configure() {
     withExposedPorts(HTTP_PORT, MGMT_PORT)
         .waitingFor(Wait.forHttp("/health/ready").forPort(MGMT_PORT).forStatusCode(Status.OK.getStatusCode()))
-        .withLogConsumer(new SimpleLogConsumer());
+        .withLogConsumer(new SimpleLogConsumer()).withJavaOpts(JAVA_OPTS);
   }
 
   public Integer getManagementPort() {
@@ -76,11 +76,7 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
     return self();
   }
 
-  public WildflyContainer withRemoteDebug() {
-    return withRemoteDebug(JAVA_OPTS);
-  }
-
-  public WildflyContainer withRemoteDebug(String javaOpts) {
+  public WildflyContainer withJavaOpts(String javaOpts) {
     if (Boolean.getBoolean("arquillian.remote.debug")) {
       var suspend = Boolean.getBoolean("arquillian.remote.debug.suspend") ? "y" : "n";
       LOGGER.info("Enable remote debugging on port {} with suspend={}", DEBUG_PORT, suspend);
