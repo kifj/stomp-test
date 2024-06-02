@@ -14,7 +14,7 @@ jobs:
           java-version: 21
           distribution: adopt
       - name: Build with Maven
-        run: mvn -Pgithub,default -B --no-transfer-progress clean package spotbugs:spotbugs
+        run: mvn -Pgithub,default -B --no-transfer-progress clean package spotbugs:spotbugs -Dspotbugs.excludeFilterFile=etc/spotbugs-exclude.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish Unit Test Results
