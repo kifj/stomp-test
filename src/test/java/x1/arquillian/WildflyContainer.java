@@ -96,7 +96,7 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
     containerConfiguration.property("managementPort", Integer.toString(getManagementPort()));
 
     // if we would run the test as client, we would need to access the servlet from
-    // the host same in Windows we can not access the container network directly
+    // the host. Same in Windows, we can not access the container network directly.
     var protocolConfiguration = arquillianContainer.getProtocolConfiguration(new ProtocolDescription("Servlet 5.0"));
     protocolConfiguration.property("port", Integer.toString(getHttpPort()));
     protocolConfiguration.property("host", System.getProperty("DOCKER_HOST", getHost()));

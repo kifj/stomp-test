@@ -14,7 +14,7 @@ jobs:
           java-version: 21
           distribution: adopt
       - name: Build with Maven
-        run: mvn -Pgithub,default -B --no-transfer-progress clean package
+        run: mvn -Pgithub,default -B --no-transfer-progress clean package spotbugs:spotbugs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish Unit Test Results
@@ -23,3 +23,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           junit_files: target/**/TEST-*.xml
+      - uses: lcollins/spotbugs-github-action@v3.0.0
+        with:
+          path: 'target/spotbugsXml.xml'
