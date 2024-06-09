@@ -83,6 +83,8 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
       addFixedExposedPort(DEBUG_PORT, DEBUG_PORT);
       withEnv("JAVA_OPTS",
           javaOpts + " -agentlib:jdwp=transport=dt_socket,address=*:" + DEBUG_PORT + ",server=y,suspend=" + suspend);
+    } else {
+      withEnv("JAVA_OPTS", javaOpts);
     }
     return this;
   }
