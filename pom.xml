@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <wildfly.version>32.0.0.Final</wildfly.version>
+        <wildfly.version>32.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <jacoco.version>0.8.12</jacoco.version>
@@ -552,7 +552,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.0</version>
             </plugin>
         </plugins>
 
@@ -678,7 +678,7 @@
                     <plugin>
                         <groupId>io.smallrye</groupId>
                         <artifactId>smallrye-open-api-maven-plugin</artifactId>
-                        <version>3.10.0</version>
+                        <version>3.11.0</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
