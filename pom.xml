@@ -1019,8 +1019,9 @@
         <profile>
             <id>wildfly-jar</id>
             <properties>
-                <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%v</jkube.generator.name>
+                <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%l</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
+                <jkube.generator.tags>1.8</jkube.generator.tags>
             </properties>
             <build>
                 <finalName>${project.artifactId}</finalName>
@@ -1079,7 +1080,6 @@
                         <configuration>
                             <namespace>stomp-test</namespace>
                             <verbose>true</verbose>
-                            <registry>registry.x1</registry>
                             <generator>
                                 <config>
                                     <wildfly-jar>
