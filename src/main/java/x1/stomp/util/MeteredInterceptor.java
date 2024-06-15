@@ -28,8 +28,8 @@ public class MeteredInterceptor {
 
   @AroundInvoke
   public Object meter(InvocationContext ctx) throws Exception {
-    Class<?> type = ctx.getMethod().getDeclaringClass();
-    String method = ctx.getMethod().getName();
+    var type = ctx.getMethod().getDeclaringClass();
+    var method = ctx.getMethod().getName();
 
     var timed = timed(ctx);
     var counted = counted(ctx);

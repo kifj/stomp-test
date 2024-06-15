@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
 
@@ -96,8 +95,8 @@ public final class JaxbSupport {
 
     @Override
     public Link unmarshal(final JaxbLink v) {
-        Link.Builder lb = Link.fromUri(v.getUri());
-        for (Entry<QName, Object> e : v.getParams().entrySet()) {
+        var lb = Link.fromUri(v.getUri());
+        for (var e : v.getParams().entrySet()) {
             lb.param(e.getKey().getLocalPart(), e.getValue().toString());
         }
         return lb.build();
@@ -105,10 +104,9 @@ public final class JaxbSupport {
 
     @Override
     public JaxbLink marshal(final Link v) {
-        JaxbLink jl = new JaxbLink(v.getUri());
-        for (Entry<String, String> e : v.getParams().entrySet()) {
-            final String name = e.getKey();
-            jl.getParams().put(new QName("", name), e.getValue());
+        var jl = new JaxbLink(v.getUri());
+        for (var e : v.getParams().entrySet()) {
+            jl.getParams().put(new QName("", e.getKey()), e.getValue());
         }
         return jl;
     }
