@@ -32,8 +32,10 @@ public abstract class AbstractIT {
 
   @Deployment
   public static Archive<?> createTestArchive() {
-    var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-core").withTransitivity().asFile();
+    var libraries = Maven
+        .resolver().loadPomFromFile("pom.xml").resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-core",
+            "org.testcontainers:activemq", "org.testcontainers:postgresql")
+        .withTransitivity().asFile();
 
     if (Containers.isRemoteArquillian()) {
       return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")

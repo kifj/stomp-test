@@ -28,7 +28,7 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
   public static final String JAVA_OPTS = "-server -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true";
 
   public WildflyContainer() {
-    this("registry.x1/j7beck/x1-wildfly-profile:32.0.0.Final");
+    this("registry.x1/j7beck/x1-wildfly-profile:32.0.1.Final");
   }
 
   public WildflyContainer(String image) {
