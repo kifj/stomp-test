@@ -32,14 +32,14 @@ public abstract class AbstractIT {
 
   @Deployment
   public static Archive<?> createTestArchive() {
-    var libraries = Maven
-        .resolver().loadPomFromFile("pom.xml").resolve("org.assertj:assertj-core", "org.hamcrest:hamcrest-core",
-            "org.testcontainers:activemq", "org.testcontainers:postgresql")
-        .withTransitivity().asFile();
+    var libraries = Maven.resolver().loadPomFromFile("pom.xml")
+        .resolve("org.assertj:assertj-core", "org.testcontainers:activemq", "org.testcontainers:postgresql").withTransitivity()
+        .asFile();
 
     if (Containers.isRemoteArquillian()) {
       return ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")
-          .addPackages(true, "x1.stomp").addAsResource("remote-persistence.xml", "META-INF/persistence.xml")
+          .addPackages(true, "x1.stomp")
+          .addAsResource("remote-persistence.xml", "META-INF/persistence.xml")
           .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
           .addAsResource("quickquoteresult.xml").addAsWebInfResource("beans.xml")
           .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
