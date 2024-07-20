@@ -10,14 +10,11 @@ import jakarta.xml.bind.Unmarshaller;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
-import org.jboss.arquillian.junit5.ArquillianParameterResolver;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import x1.stomp.control.QuickQuote;
 import x1.stomp.control.QuickQuoteResult;
 
-@ExtendWith(ArquillianParameterResolver.class)
 public class JaxbMarshallerTest extends AbstractIT {
   @Inject
   private Unmarshaller unmarshaller;
