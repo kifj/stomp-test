@@ -43,7 +43,8 @@ pipeline {
                 .image('registry.x1/j7beck/x1-wildfly-stomp-test-it:1.4')
                 .withRun('-e MANAGEMENT=public -e HTTP=public --name stomp-test-it') { c ->
                   waitFor("http://${hostIp(c)}:8080", 10, 6)
-                  sh "$MAVEN_HOME/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)}"
+                  sh "$MAVEN_HOME/bin/mvn -Parq-jbossas-remote verify -Djboss.managementAddress=${hostIp(c)} jacoco:report"
+                  stash name: 'coverage', includes: '**/jacoco.xml'
               }
             }
           }
@@ -66,6 +67,7 @@ pipeline {
         jdk 'JDK-17'
       }
       steps {
+        unstash name: 'coverage' 
         sh 'mvn -B -Prpm deploy site-deploy -DskipTests'
       }
       post {
@@ -79,6 +81,7 @@ pipeline {
         jdk 'JDK-17'
       }
       steps {
+        unstash name: 'coverage' 
         sh "mvn sonar:sonar -DskipTests -Dsonar.java.coveragePlugin=jacoco -Dsonar.jacoco.reportPath=target/jacoco.exec -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=${groupId}:${artifactId}:wildfly-10 -Dsonar.projectName=${artifactId}:wildfly-10"
       }
     }
