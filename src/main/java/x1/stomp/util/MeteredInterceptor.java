@@ -1,5 +1,10 @@
 package x1.stomp.util;
 
+import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.commons.lang3.StringUtils;
 
 import io.micrometer.core.annotation.Counted;
@@ -22,6 +27,7 @@ public class MeteredInterceptor {
   public static final String DEFAULT_METRIC_NAME = "method.timed";
   public static final String DEFAULT_EXCEPTION_TAG_VALUE = "none";
   public static final String EXCEPTION_TAG = "exception";
+  private static final Map<String, Optional<? extends Annotation>> CACHE = new ConcurrentHashMap<>();
 
   @Inject
   private MeterRegistry registry;
@@ -33,7 +39,7 @@ public class MeteredInterceptor {
 
     var timed = timed(ctx);
     var counted = counted(ctx);
-    
+
     Sample sample = null;
     Exception exception = null;
     try {
@@ -70,19 +76,31 @@ public class MeteredInterceptor {
   }
 
   private Timed timed(InvocationContext ctx) {
-    var annotation = ctx.getMethod().getAnnotation(Timed.class);
-    if (annotation == null) {
-      annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Timed.class);
+    var cached = CACHE.get(signature("timed", ctx));
+    if (cached == null) {
+      var annotation = ctx.getMethod().getAnnotation(Timed.class);
+      if (annotation == null) {
+        annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Timed.class);
+      }
+      CACHE.put(signature("timed", ctx), Optional.ofNullable(annotation));
+      return annotation;
+    } else {
+      return (Timed) cached.orElse(null);
     }
-    return annotation;
   }
 
   private Counted counted(InvocationContext ctx) {
-    var annotation = ctx.getMethod().getAnnotation(Counted.class);
-    if (annotation == null) {
-      annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Counted.class);
+    var cached = CACHE.get(signature("counted", ctx));
+    if (cached == null) {
+      var annotation = ctx.getMethod().getAnnotation(Counted.class);
+      if (annotation == null) {
+        annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Counted.class);
+      }
+      CACHE.put(signature("counted", ctx), Optional.ofNullable(annotation));
+      return annotation;
+    } else {
+      return (Counted) cached.orElse(null);
     }
-    return annotation;
   }
 
   private String metricId(Timed annotation) {
@@ -102,4 +120,9 @@ public class MeteredInterceptor {
     }
     return throwable.getCause().getClass().getSimpleName();
   }
+
+  private String signature(String prefix, InvocationContext ctx) {
+    return prefix + "/" + ctx.getMethod().getDeclaringClass().getName() + "." + ctx.getMethod().getName();
+  }
+
 }
