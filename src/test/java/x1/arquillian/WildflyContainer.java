@@ -18,6 +18,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import jakarta.ws.rs.core.Response.Status;
 
+@Wildfly
 public class WildflyContainer extends GenericContainer<WildflyContainer> {
   private static final Logger LOGGER = LoggerFactory.getLogger(WildflyContainer.class);
 
