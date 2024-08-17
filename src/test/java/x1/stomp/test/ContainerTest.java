@@ -86,7 +86,7 @@ public class ContainerTest {
 
   @SuppressWarnings("resource")
   static GenericContainer<?> createWildflyContainer() {
-    return new GenericContainer<>(DockerImageName.parse("registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8.0-SNAPSHOT"))
+    return new GenericContainer<>(DockerImageName.parse("registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8"))
         .dependsOn(POSTGRES).dependsOn(ARTEMIS).withNetwork(NETWORK).withEnv("ACTIVEMQ_SERVER", "activemq-artemis")
         .withEnv("DB_SERVER", "postgres").withEnv("DB_PORT", "5432").withEnv("DB_USER", POSTGRES.getUsername())
         .withEnv("DB_PASSWORD", POSTGRES.getPassword()).withExposedPorts(8080)
