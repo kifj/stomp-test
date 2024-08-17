@@ -46,13 +46,13 @@
         <wildfly.version>33.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <junit.jupiter.version>5.10.3</junit.jupiter.version>
-        <shrinkwrap-resolver.version>3.3.0</shrinkwrap-resolver.version>
+        <shrinkwrap-resolver.version>3.3.1</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.9.1.Final</arquillian.version>
         <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
-        <jkube.version>1.16.2</jkube.version>
-        <testcontainers.version>1.20.0</testcontainers.version>
+        <jkube.version>1.17.0</jkube.version>
+        <testcontainers.version>1.20.1</testcontainers.version>
     </properties>
 
     <distributionManagement>
@@ -312,13 +312,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <version>${junit.jupiter.version}</version><!--$NO-MVN-MAN-VER$-->
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <version>${junit.jupiter.version}</version><!--$NO-MVN-MAN-VER$-->
             <scope>test</scope>
         </dependency>
         <dependency>
