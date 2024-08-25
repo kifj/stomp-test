@@ -45,12 +45,11 @@
         <maven.compiler.source>21</maven.compiler.source>
         <wildfly.version>33.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
-        <junit.jupiter.version>5.10.3</junit.jupiter.version>
         <shrinkwrap-resolver.version>3.3.1</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.9.1.Final</arquillian.version>
-        <arquillian.wildfly.version>5.0.1.Final</arquillian.wildfly.version>
+        <arquillian.wildfly.version>5.1.0.Beta4</arquillian.wildfly.version>
         <jkube.version>1.17.0</jkube.version>
         <testcontainers.version>1.20.1</testcontainers.version>
     </properties>
@@ -311,14 +310,7 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.jupiter.version}</version><!--$NO-MVN-MAN-VER$-->
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit.jupiter.version}</version><!--$NO-MVN-MAN-VER$-->
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -1096,7 +1088,6 @@
                                 <env>
                                     <GC_MAX_METASPACE_SIZE>512</GC_MAX_METASPACE_SIZE>
                                     <GC_METASPACE_SIZE>256</GC_METASPACE_SIZE>
-                                    <MP_METRICS_TAGS>_app=stomp-test,version=1.8</MP_METRICS_TAGS>
                                     <SERVICE_NAME>stomp-test</SERVICE_NAME>
                                     <MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>DOWN</MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>
                                 </env>
