@@ -39,10 +39,8 @@ public class WebsocketExtension implements TestInstancePostProcessor, BeforeEach
   @Override
   public void afterEach(ExtensionContext context) {
     var testInstance = context.getRequiredTestInstance();
-    if (testInstance instanceof WebSocketTest webSocketTest) {
-      if (webSocketTest.getWebSocketClient() != null) {
-        webSocketTest.getWebSocketClient().closeConnection();
-      }
+    if (testInstance instanceof WebSocketTest webSocketTest && webSocketTest.getWebSocketClient() != null) {
+      webSocketTest.getWebSocketClient().closeConnection();
     }
   }
 
