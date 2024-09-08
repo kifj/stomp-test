@@ -22,7 +22,7 @@ public final class Containers implements ArquillianTestContainers {
           .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(Containers.class)).withSeparateOutputStreams());
 
   @SuppressWarnings("resource")
-  private final GenericContainer<?> etcd = new GenericContainer<>(DockerImageName.parse("quay.io/coreos/etcd:v3.5.14"))
+  private final GenericContainer<?> etcd = new GenericContainer<>(DockerImageName.parse("quay.io/coreos/etcd:v3.5.15"))
       .withEnv("ETCD_ENABLE_V2", "true").withNetwork(network).withNetworkAliases("etcd").withCommand("etcd",
           "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://etcd:2379");
 
