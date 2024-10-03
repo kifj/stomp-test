@@ -51,7 +51,7 @@
         <arquillian.version>1.9.1.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta4</arquillian.wildfly.version>
         <jkube.version>1.17.0</jkube.version>
-        <testcontainers.version>1.20.1</testcontainers.version>
+        <testcontainers.version>1.20.2</testcontainers.version>
     </properties>
 
     <distributionManagement>
@@ -257,7 +257,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.15.0</version><!--$NO-MVN-MAN-VER$ -->
+            <version>3.17.0</version><!--$NO-MVN-MAN-VER$ -->
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -533,12 +533,12 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.8.6.3</version>
+                <version>4.8.6.4</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.8.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -674,7 +674,7 @@
                     <plugin>
                         <groupId>io.smallrye</groupId>
                         <artifactId>smallrye-open-api-maven-plugin</artifactId>
-                        <version>3.11.0</version>
+                        <version>3.13.0</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
