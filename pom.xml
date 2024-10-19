@@ -25,7 +25,7 @@
     </scm>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://www.x1/jenkins/job/stomp-test-wildfly-33/</url>
+        <url>https://www.x1/jenkins/job/stomp-test-wildfly-34/</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <wildfly.version>33.0.1.Final</wildfly.version>
+        <wildfly.version>34.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <shrinkwrap-resolver.version>3.3.1</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
@@ -118,7 +118,7 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.wildfly.bom</groupId>
+                <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-microprofile</artifactId>
                 <version>${wildfly.version}</version>
                 <type>pom</type>
@@ -226,9 +226,13 @@
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-instrumentation-annotations</artifactId>
-            <version>1.29.0</version>
             <scope>provided</scope>
         </dependency>
+		<dependency>
+    		<groupId>io.opentelemetry</groupId>
+    		<artifactId>opentelemetry-context</artifactId>
+            <scope>provided</scope>
+		</dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
@@ -297,7 +301,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>service-registry</artifactId>
-            <version>1.3.7</version>
+            <version>1.3.8</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -349,7 +353,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.4.4.Final</version>
+            <version>6.6.1.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -1034,7 +1038,7 @@
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-datasources-galleon-pack</artifactId>
-                                    <version>8.0.0.Final</version>
+                                    <version>9.0.0.Final</version>
                                 </feature-pack>
                             </feature-packs>
                             <layers>
