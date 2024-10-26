@@ -45,13 +45,13 @@
         <maven.compiler.source>21</maven.compiler.source>
         <wildfly.version>34.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
-        <shrinkwrap-resolver.version>3.3.1</shrinkwrap-resolver.version>
+        <shrinkwrap-resolver.version>3.3.2</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.9.1.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta6</arquillian.wildfly.version>
         <jkube.version>1.17.0</jkube.version>
-        <testcontainers.version>1.20.2</testcontainers.version>
+        <testcontainers.version>1.20.3</testcontainers.version>
     </properties>
 
     <distributionManagement>
@@ -527,7 +527,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>5.0.0.Final</version>
+                <version>5.0.1.Final</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -537,7 +537,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.8.6.4</version>
+                <version>4.8.6.5</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
