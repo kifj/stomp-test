@@ -37,6 +37,7 @@ public class ShareResourceTest extends AbstractIT {
   private String baseUrl;
 
   @BeforeEach
+  @Override
   void setup() {
     super.setup();
     baseUrl = url.toString() + "rest";

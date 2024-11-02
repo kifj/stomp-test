@@ -28,6 +28,7 @@ public class MetricsTest extends AbstractIT {
   private String metricsBaseUrl;
 
   @BeforeEach
+  @Override
   void setup() {
     super.setup();
     baseUrl = url.toString() + "rest";
