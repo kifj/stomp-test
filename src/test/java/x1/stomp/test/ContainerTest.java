@@ -74,13 +74,13 @@ public class ContainerTest {
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
-    return new PostgreSQLContainer<>("postgres:16-alpine").withNetwork(NETWORK).withNetworkAliases("postgres")
+    return new PostgreSQLContainer<>("postgres:17-alpine").withNetwork(NETWORK).withNetworkAliases("postgres")
         .withDatabaseName("stocks").withInitScript("init.sql");
   }
 
   @SuppressWarnings("resource")
   static ArtemisContainer createArtemisContainer() {
-    return new ArtemisContainer("apache/activemq-artemis:2.33.0").withNetwork(NETWORK).withNetworkAliases("activemq-artemis")
+    return new ArtemisContainer("apache/activemq-artemis:2.36.0").withNetwork(NETWORK).withNetworkAliases("activemq-artemis")
         .withUser("artemis").withPassword("artemis");
   }
 
