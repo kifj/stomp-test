@@ -1,6 +1,5 @@
 package x1.arquillian;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.jboss.arquillian.container.spi.ContainerRegistry;
@@ -32,7 +31,7 @@ public final class Containers implements ArquillianTestContainers {
 
   @Override
   public List<GenericContainer<?>> instances() {
-    return Arrays.asList(etcd, database, wildfly);
+    return List.of(etcd, database, wildfly);
   }
 
   @Override

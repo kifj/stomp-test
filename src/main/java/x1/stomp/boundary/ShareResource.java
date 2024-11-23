@@ -11,7 +11,6 @@ import static x1.stomp.boundary.MDCFilter.X_REQUEST_ID;
 import static x1.stomp.boundary.LinkConstants.*;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -206,7 +205,7 @@ public class ShareResource {
         .param(PARAM_METHOD, HttpMethod.DELETE).build();
     var quote = Link.fromUriBuilder(baseUriBuilder.clone().path(QuoteResource.PATH).path(share.getKey())).rel("quote")
         .build();
-    share.setLinks(Arrays.asList(self, delete, quote));
+    share.setLinks(List.of(self, delete, quote));
     return share;
   }
 }

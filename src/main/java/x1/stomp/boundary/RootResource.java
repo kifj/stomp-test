@@ -11,7 +11,7 @@ import static jakarta.ws.rs.core.MediaType.TEXT_HTML;
 import static org.jboss.resteasy.spi.CorsHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
 import static org.jboss.resteasy.spi.CorsHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
 
-import java.util.Arrays;
+import java.util.List;
 
 import jakarta.servlet.ServletContext;
 import jakarta.websocket.server.PathParam;
@@ -59,7 +59,7 @@ public class RootResource {
     var subscribe = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path(ShareResource.PATH)).rel("subscribe")
         .param(LinkConstants.PARAM_METHOD, HttpMethod.POST).build();
 
-    return Response.ok(new IndexResponse(Arrays.asList(self, swagger, quotes, shares, subscribe))).build();
+    return Response.ok(new IndexResponse(List.of(self, swagger, quotes, shares, subscribe))).build();
   }
 
   @GET

@@ -1,6 +1,5 @@
 package x1.stomp.boundary;
 
-import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_XML;
@@ -187,7 +186,7 @@ public class QuoteResource {
         .build();
     var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
         .rel("parent").build();
-    quote.setLinks(asList(self, share));
+    quote.setLinks(List.of(self, share));
     return quote;
   }
 }

@@ -1,7 +1,7 @@
 package x1.stomp.boundary;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.inject.Inject;
@@ -45,7 +45,7 @@ public class ResponseStatusMetricsFilter implements ContainerRequestFilter, Cont
   }
 
   private void createMetrics(String metricID, Tag... tags) {
-    registry.counter(metricID, Arrays.asList(tags)).increment();
+    registry.counter(metricID, List.of(tags)).increment();
   }
 
   private Optional<String> getMetricID(Class<?> resourceClass, Method resourceMethod) {
