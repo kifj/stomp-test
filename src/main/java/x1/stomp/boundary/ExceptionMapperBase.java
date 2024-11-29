@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import static x1.stomp.boundary.MDCFilter.HTTP_STATUS_CODE;
 
+import java.net.URI;
+
 /**
  * Base class for ExceptionMapper with MDC logging
  */
@@ -16,8 +18,12 @@ public abstract class ExceptionMapperBase {
   private final Logger log = LoggerFactory.getLogger(ExceptionMapperBase.class);
 
   @Context
-  protected UriInfo uriInfo;
-
+  private UriInfo uriInfo;
+  
+  protected URI getRequestUri() {
+    return uriInfo.getRequestUri();
+  }
+  
   protected void debug(Status status, String message, Object... args) {
     try {
       MDC.put(HTTP_STATUS_CODE, Integer.toString(status.getStatusCode()));

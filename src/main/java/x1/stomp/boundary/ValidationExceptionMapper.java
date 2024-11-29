@@ -14,7 +14,7 @@ public class ValidationExceptionMapper extends ExceptionMapperBase implements Ex
   public Response toResponse(ConstraintViolationException e) {
     var response = new ErrorResponse("Invalid data");
     var status = BAD_REQUEST;
-    response.setRequestUri(uriInfo.getRequestUri().toString());
+    response.setRequestUri(getRequestUri().toString());
     e.getConstraintViolations().forEach(violation -> response.add(ErrorMessage.of(violation)));
     info(status, "Request failed because of invalid parameters:\n{}", response.toString());
     return Response.status(status).entity(response).build();

@@ -13,7 +13,7 @@ public class RuntimeExceptionMapper extends ExceptionMapperBase implements Excep
   public Response toResponse(RuntimeException e) {
     // will be logged by LoggingInterceptor
     var response = new ErrorResponse(e.getClass().getSimpleName());
-    response.setRequestUri(uriInfo.getRequestUri().toString());
+    response.setRequestUri(getRequestUri().toString());
     response.add(ErrorMessage.from(e));
     return Response.status(INTERNAL_SERVER_ERROR).entity(response).build();
   }

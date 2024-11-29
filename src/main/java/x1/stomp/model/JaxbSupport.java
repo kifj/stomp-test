@@ -13,11 +13,12 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
- * copied from jakarta.ws.rs.core where this is deprecated 
+ * copied from jakarta.ws.rs.core where this is deprecated
  */
 public final class JaxbSupport {
-  private JaxbSupport() {}
-  
+  private JaxbSupport() {
+  }
+
   public static class JaxbLink {
 
     private URI uri;
@@ -90,25 +91,25 @@ public final class JaxbSupport {
     }
 
   }
-  
+
   public static class JaxbAdapter extends XmlAdapter<JaxbLink, Link> {
 
     @Override
     public Link unmarshal(final JaxbLink v) {
-        var lb = Link.fromUri(v.getUri());
-        for (var e : v.getParams().entrySet()) {
-            lb.param(e.getKey().getLocalPart(), e.getValue().toString());
-        }
-        return lb.build();
+      var lb = Link.fromUri(v.getUri());
+      for (var e : v.getParams().entrySet()) {
+        lb.param(e.getKey().getLocalPart(), e.getValue().toString());
+      }
+      return lb.build();
     }
 
     @Override
     public JaxbLink marshal(final Link v) {
-        var jl = new JaxbLink(v.getUri());
-        for (var e : v.getParams().entrySet()) {
-            jl.getParams().put(new QName("", e.getKey()), e.getValue());
-        }
-        return jl;
+      var jl = new JaxbLink(v.getUri());
+      for (var e : v.getParams().entrySet()) {
+        jl.getParams().put(new QName("", e.getKey()), e.getValue());
+      }
+      return jl;
     }
-}
+  }
 }
