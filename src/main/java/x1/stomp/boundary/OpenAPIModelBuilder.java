@@ -17,9 +17,13 @@ public class OpenAPIModelBuilder implements OASModelReader, ServletContextListen
   private static final CountDownLatch LOCK = new CountDownLatch(1);
   private static ServletContext servletContext;
   
+  private static void setServletContext(ServletContextEvent sce) {
+    servletContext = sce.getServletContext();
+  }
+
   @Override
   public void contextInitialized(ServletContextEvent sce) {
-    servletContext = sce.getServletContext();
+    setServletContext(sce);
     LOCK.countDown();
   }
   
