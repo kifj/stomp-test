@@ -320,7 +320,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.26.3</version>
+            <version>3.27.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -353,7 +353,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.3.Final</version>
+            <version>6.6.4.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -486,7 +486,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -527,7 +527,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>5.0.1.Final</version>
+                <version>5.1.1.Final</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -575,7 +575,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.1</version>
                 <configuration>
                     <aggregate>true</aggregate>
                     <tags>
