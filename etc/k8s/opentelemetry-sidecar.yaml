@@ -1,41 +1,40 @@
-apiVersion: opentelemetry.io/v1alpha1
+apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: opentelemetry-sidecar
   namespace: stomp-test
 spec:
   mode: sidecar
-  config: |
+  config:
     receivers:
       otlp:
         protocols:
-          grpc:
-          http:
+          grpc: {}
+          http: {}
     exporters:
+      logging: {}
       otlp:
         endpoint: jaeger-all-in-one-collector.observability:4317
         tls:
           insecure: true
-      prometheus:
-        endpoint: "0.0.0.0:8889"
-      logging:
     processors:
-      batch:
+      batch: {}
     extensions:
-      health_check:
+      health_check: {}
       zpages:
         endpoint: :55679
     service:
+      extensions:
+        - zpages
+        - health_check
       telemetry:
         logs:
-          level: "warn"
-      extensions: [zpages, health_check]
+          level: warn
       pipelines:
         traces:
-          receivers: [otlp]
-          processors: [batch]
-          exporters: [otlp]
-        metrics:
-          receivers: [otlp]
-          processors: [batch]
-          exporters: [prometheus]
+          exporters:
+            - otlp
+          processors:
+            - batch
+          receivers:
+            - otlp
