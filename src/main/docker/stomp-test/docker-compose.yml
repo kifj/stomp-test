@@ -24,7 +24,7 @@ services:
     ports:
      - "8161:8161"
   wildfly:
-    image: registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8.0-SNAPSHOT
+    image: registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8
     environment:
      - X1_SERVICE_REGISTRY_ETCD=http://etcd:2379
      - X1_SERVICE_REGISTRY_STAGE=docker
@@ -44,7 +44,7 @@ services:
      - "8080:8080"
      - "8443:8443"
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.110.0
+    image: otel/opentelemetry-collector-contrib:0.116.0
     restart: always
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
