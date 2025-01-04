@@ -149,7 +149,7 @@ public class ContainerTest {
           .isEqualTo(UriBuilder.fromUri(baseUrl).path(PATH_SHARES).path(PATH_PARAM_KEY).build(share.getKey()));
     }
 
-    Thread.sleep(3000l);
+    Thread.sleep(3000L);
 
     var quote = client.target(baseUrl).path(PATH_QUOTES).path(PATH_PARAM_KEY).resolveTemplate(PARAM_KEY, share.getKey())
         .request(APPLICATION_JSON).get(Quote.class);
