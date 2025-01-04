@@ -45,11 +45,11 @@
         <maven.compiler.source>21</maven.compiler.source>
         <wildfly.version>34.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
-        <shrinkwrap-resolver.version>3.3.2</shrinkwrap-resolver.version>
+        <shrinkwrap-resolver.version>3.3.3</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
         <jacoco.append>true</jacoco.append>
-        <arquillian.version>1.9.1.Final</arquillian.version>
-        <arquillian.wildfly.version>5.1.0.Beta7</arquillian.wildfly.version>
+        <arquillian.version>1.9.2.Final</arquillian.version>
+        <arquillian.wildfly.version>5.1.0.Beta9</arquillian.wildfly.version>
         <jkube.version>1.17.0</jkube.version>
         <testcontainers.version>1.20.4</testcontainers.version>
     </properties>
@@ -320,7 +320,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.0</version>
+            <version>3.27.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
