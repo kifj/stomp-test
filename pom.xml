@@ -25,7 +25,7 @@
     </scm>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://www.x1/jenkins/job/stomp-test-wildfly-34/</url>
+        <url>https://www.x1/jenkins/job/stomp-test-wildfly-35/</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <wildfly.version>34.0.1.Final</wildfly.version>
+        <wildfly.version>35.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <shrinkwrap-resolver.version>3.3.3</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
@@ -261,7 +261,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.17.0</version><!--$NO-MVN-MAN-VER$ -->
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
