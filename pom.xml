@@ -48,7 +48,7 @@
         <shrinkwrap-resolver.version>3.3.3</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
         <jacoco.append>true</jacoco.append>
-        <arquillian.version>1.9.2.Final</arquillian.version>
+        <arquillian.version>1.9.3.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta9</arquillian.wildfly.version>
         <jkube.version>1.17.0</jkube.version>
         <testcontainers.version>1.20.4</testcontainers.version>
