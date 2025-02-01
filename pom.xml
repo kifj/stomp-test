@@ -50,7 +50,7 @@
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.9.3.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta9</arquillian.wildfly.version>
-        <jkube.version>1.17.0</jkube.version>
+        <jkube.version>1.18.0</jkube.version>
         <testcontainers.version>1.20.4</testcontainers.version>
     </properties>
 
@@ -319,7 +319,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.1</version>
+            <version>3.27.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -346,13 +346,13 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.4</version>
+            <version>42.7.5</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.4.Final</version>
+            <version>6.6.5.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -1028,7 +1028,7 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
-                        <version>11.0.2.Final</version>
+                        <version>12.0.0.Final</version>
                         <configuration>
                             <feature-packs>
                                 <feature-pack>
