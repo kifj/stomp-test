@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>x1.wildfly</groupId>
     <artifactId>stomp-test</artifactId>
@@ -51,7 +51,7 @@
         <arquillian.version>1.9.3.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta9</arquillian.wildfly.version>
         <jkube.version>1.18.0</jkube.version>
-        <testcontainers.version>1.20.4</testcontainers.version>
+        <testcontainers.version>1.20.5</testcontainers.version>
     </properties>
 
     <distributionManagement>
@@ -352,7 +352,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.5.Final</version>
+            <version>6.6.8.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -536,7 +536,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.8.6.6</version>
+                <version>4.9.1.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
