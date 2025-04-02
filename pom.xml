@@ -48,9 +48,9 @@
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.12</jacoco.version>
         <jacoco.append>true</jacoco.append>
-        <arquillian.version>1.9.3.Final</arquillian.version>
-        <arquillian.wildfly.version>5.1.0.Beta9</arquillian.wildfly.version>
-        <jkube.version>1.18.0</jkube.version>
+        <arquillian.version>1.9.4.Final</arquillian.version>
+        <arquillian.wildfly.version>5.1.0.Beta10</arquillian.wildfly.version>
+        <jkube.version>1.18.1</jkube.version>
         <testcontainers.version>1.20.6</testcontainers.version>
     </properties>
 
@@ -536,7 +536,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.9.2.0</version>
+                <version>4.9.3.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -546,7 +546,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -605,7 +605,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.3</version>
                 <reportSets>
                     <reportSet>
                         <reports>
