@@ -15,6 +15,7 @@ exporters:
     endpoint: hemispheres.x1:4317
     tls:
       insecure: true
+  nop:
 
 connectors:
   servicegraph:
@@ -43,3 +44,7 @@ service:
     metrics/servicegraph:
       receivers: [servicegraph]
       exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [nop]
