@@ -17,7 +17,7 @@ pipeline {
       agent {
         docker {
           image 'registry.x1/j7beck/x1-maven3:jdk-1.8.0'
-          args '-u 994:967 -v $HOME/.m2/repository:/var/lib/jenkins/.m2/repository -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker'
+          args '-v $HOME/.m2/repository:/var/lib/jenkins/.m2/repository -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker'
         }
       }
       stages {
