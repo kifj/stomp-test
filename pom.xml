@@ -92,7 +92,7 @@
       <dependency>
         <groupId>org.jboss.shrinkwrap.resolver</groupId>
         <artifactId>shrinkwrap-resolver-bom</artifactId>
-        <version>3.3.2</version>
+        <version>3.3.4</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -398,7 +398,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.8.6.6</version>
+        <version>4.9.3.0</version>
       </plugin>
     </plugins>
     <extensions>
@@ -414,7 +414,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>3.9.0</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
