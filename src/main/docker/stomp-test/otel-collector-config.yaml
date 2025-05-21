@@ -16,6 +16,11 @@ exporters:
     tls:
       insecure: true
   nop:
+  elasticsearch:
+    endpoint: https://elasticsearch.x1
+    tls:
+      insecure: false
+      ca_file: /etc/cacert.crt
 
 connectors:
   servicegraph:
