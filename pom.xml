@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <wildfly.version>36.0.0.Final</wildfly.version>
+        <wildfly.version>36.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.13</jacoco.version>
@@ -89,7 +89,7 @@
             </roles>
             <timezone>+1</timezone>
             <properties>
-                <skype>johannesbeck</skype>
+                <github>kifj</github>
             </properties>
         </developer>
     </developers>
@@ -346,13 +346,13 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.5</version>
+            <version>42.7.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.13.Final</version>
+            <version>6.6.17.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
