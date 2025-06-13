@@ -20,7 +20,6 @@ import x1.stomp.util.StockMarket;
 import jakarta.inject.Inject;
 import jakarta.jms.JMSConnectionFactory;
 import jakarta.jms.JMSContext;
-import jakarta.jms.JMSProducer;
 import jakarta.jms.Topic;
 import jakarta.validation.constraints.NotNull;
 
@@ -73,30 +72,22 @@ public class QuoteUpdater {
     lastUpdatedCount = 0;
     var shares = shareSubscription.list();
     log.info("Update quotes for {} shares", shares.size());
-    var quotes = quoteRetriever.retrieveQuotes(shares);
-    quotes.forEach(quote -> {
-      try {
-        log.debug("Sending message for {}", quote);
-        send(quote, context.createProducer(), quoteTopic);
-        lastUpdatedCount++;
-      } catch (IOException e) {
-        log.error(e.getMessage(), e);
-      }
-    });
+    quoteRetriever.retrieveQuotes(shares).forEach(this::send);
   }
 
   public void updateQuote(@NotNull Quote quote) {
+    send(quote);
+  }
+
+
+  private void send(Quote quote) {
     try {
       log.debug("Sending message for {}", quote);
-      send(quote, context.createProducer(), quoteTopic);
+      context.createProducer().setJMSCorrelationID(UUID.randomUUID().toString()).setProperty("type", "quote")
+        .setProperty("key", quote.getShare().getKey()).send(quoteTopic, jsonHelper.toJSON(quote));
       lastUpdatedCount++;
     } catch (IOException e) {
       log.error(e.getMessage(), e);
     }
-  }
-
-  private void send(Quote quote, JMSProducer producer, Topic topic) throws IOException {
-    producer.setJMSCorrelationID(UUID.randomUUID().toString()).setProperty("type", "quote")
-        .setProperty("key", quote.getShare().getKey()).send(topic, jsonHelper.toJSON(quote));
   }
 }
