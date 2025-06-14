@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>x1.wildfly</groupId>
     <artifactId>stomp-test</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.9.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Stomp Test</name>
     <description>A sample application for websockets and stomp on Wildfly</description>
@@ -25,7 +25,7 @@
     </scm>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://www.x1/jenkins/job/stomp-test-wildfly-36/</url>
+        <url>https://www.x1/jenkins/job/message-queue/</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
@@ -45,6 +45,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <wildfly.version>36.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
+        <db.server>localhost</db.server>
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.13</jacoco.version>
         <jacoco.append>true</jacoco.append>
@@ -129,6 +130,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>x1.wildfly</groupId>
+            <artifactId>message-queue</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <scope>provided</scope>
@@ -161,11 +167,6 @@
         <dependency>
             <groupId>jakarta.ejb</groupId>
             <artifactId>jakarta.ejb-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.jms</groupId>
-            <artifactId>jakarta.jms-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -380,12 +381,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>activemq</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
@@ -799,6 +794,7 @@
                             <systemPropertyVariables>
                                 <arquillian.launch>managed</arquillian.launch>
                                 <jboss.home>${jboss.home}</jboss.home>
+                                <db.server>${db.server}</db.server>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                             <groups>Arquillian</groups>
@@ -1020,7 +1016,7 @@
             <properties>
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%l</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
-                <jkube.generator.tags>1.8</jkube.generator.tags>
+                <jkube.generator.tags>1.9</jkube.generator.tags>
             </properties>
             <build>
                 <finalName>${project.artifactId}</finalName>

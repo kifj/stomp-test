@@ -37,7 +37,7 @@ spec:
                 app: wildfly
       containers:
       - name: wildfly
-        image: registry.x1/j7beck/x1-wildfly-stomp-test:1.8
+        image: registry.x1/j7beck/x1-wildfly-stomp-test:1.9
         imagePullPolicy: Always
         env:
         - name: DB_SERVER

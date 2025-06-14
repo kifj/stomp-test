@@ -18,19 +18,6 @@ if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-reso
     )
 end-if
 
-if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:read-resource
-  /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:add(\
-    durable=true,\
-    entries=[java:/jms/queue/stocks],\
-    )
-end-if
-
-if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topic=quotesTopic:read-resource
-  /subsystem=messaging-activemq/server=default/jms-topic=quotesTopic:add(\
-    entries=[java:/jms/topic/quotes],\
-    )
-end-if
-
 if (outcome != success) of /system-property=x1.service.registry.etcd:read-resource
    /system-property=x1.service.registry.etcd:add(value="http://etcd.x1:4001")
 end-if

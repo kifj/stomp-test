@@ -3,6 +3,8 @@
     xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
     version="3.1">
   <persistence-unit name="testcontainers">
+    <class>x1.message.entity.MessageEntity</class>
+    <class>x1.message.configuration.ConfigurationEntity</class>
     <class>x1.stomp.model.Share</class>
     <properties>
       <property name="jakarta.persistence.jdbc.url" value="${jdbc.url}" />

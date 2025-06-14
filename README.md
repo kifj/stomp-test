@@ -2,20 +2,13 @@
 
 # stomp-test
 
-Sample application how to use Wildfly with Websockets and Stomp
+Sample application how to use Wildfly with Websockets
 
 [for details](https://blog.johannes-beck.name/?p=285)
 
 ## CLI-Scripts for Wildfly
 
-This creates the STOMP acceptor on port 61614
-
-	/socket-binding-group=standard-sockets/socket-binding=messaging-stomp:add(port=61614)
-	/subsystem=messaging-activemq/server=default/remote-acceptor=stomp:add(\
-		socket-binding=messaging-stomp,\
-		params={[name=protocols, key=STOMP]})
-
-The application needs a queue, a topic and a datasource.
+The application needs a datasource.
 
 	etc/create-stomp-test.cli
 
@@ -35,16 +28,6 @@ The CLI scripts for this version are located at
 
 	etc/create-wildfly-jar.cli
 
-This versions requires an external ActiveMQ Artemis broker 
-which is configured by environment variables:
-
-```
-ACTIVEMQ_SERVER (default activemq-artemis)
-ACTIVEMQ_PORT (default 61616)
-ACTIVEMQ_USER (default artemis)
-ACTIVEMQ_PASSWORD (default artemis)
-```
-
 ## Docker compose
 
 is located in `src/main/docker/stomp-test`
@@ -53,7 +36,7 @@ is located in `src/main/docker/stomp-test`
 
 The DDL scripts are available for PostgreSQL.
 
-	create-postgresql.sql
+	etc/create-postgresql.sql
 
 ## RPM package
 
@@ -68,4 +51,4 @@ are located in folder `etc/k8s`. The scripts for the certificates require `cfssl
 ## OpenAPI and manual testing
 
 In Wildfly the OpenAPI spec can be loaded under the `/openapi` URL.
-Swagger-UI is located under the application root URL `/stomp-test-v1.8/swagger-ui`.
+Swagger-UI is located under the application root URL `/stomp-test-v1.9/swagger-ui`.

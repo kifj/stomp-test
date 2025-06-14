@@ -4,8 +4,11 @@
     version="3.0">
   <persistence-unit name="stomp-test">
     <jta-data-source>java:jboss/datasources/stocksDS</jta-data-source>
+    <class>x1.message.entity.MessageEntity</class>
+    <class>x1.message.configuration.ConfigurationEntity</class>
+    <class>x1.stomp.model.Share</class>
     <properties>
-      <property name="hibernate.hbm2ddl.auto" value="update" />
+      <property name="hibernate.hbm2ddl.auto" value="validate" />
       <property name="hibernate.show_sql" value="false" />
       <property name="hibernate.default_schema" value="stocks" />
       <property name="hibernate.cache.use_query_cache" value="true" />

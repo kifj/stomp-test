@@ -8,7 +8,7 @@ info:
   license:
     name: "The Apache Software License, Version 2.0"
     url: http://www.apache.org/licenses/LICENSE-2.0.txt
-  version: "1.8"
+  version: "1.9"
 tags:
 - name: Quotes
   description: receive quotes for shares
@@ -24,10 +24,106 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/index'
+                $ref: "#/components/schemas/index"
             application/xml:
               schema:
-                $ref: '#/components/schemas/index'
+                $ref: "#/components/schemas/index"
+  /rest/queues:
+    get:
+      summary: list queues
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Queue"
+  /rest/queues/{queue}:
+    get:
+      summary: list messages in queue
+      parameters:
+      - name: queue
+        in: path
+        description: Queue name
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: offset
+        schema:
+          format: int32
+          default: 0
+          type: integer
+      - name: outOfRetries
+        in: query
+        description: only messages with no retries
+        schema:
+          type: boolean
+      - name: search
+        in: query
+        description: search keywords
+        schema:
+          type: string
+      - name: size
+        in: query
+        description: page size
+        schema:
+          format: int32
+          default: 50
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MessageDto"
+    post:
+      summary: operate on messages in queue
+      parameters:
+      - name: queue
+        in: path
+        description: Queue name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OperationsRequest"
+      responses:
+        "200":
+          description: if successful
+  /rest/queues/{queue}/{correlationId}:
+    put:
+      summary: update message
+      parameters:
+      - name: correlationId
+        in: path
+        description: Message correlation
+        required: true
+        schema:
+          type: string
+      - name: queue
+        in: path
+        description: Queue name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageDto"
+      responses:
+        "200":
+          description: if successful
   /rest/quotes:
     get:
       tags:
@@ -57,12 +153,12 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/quotes'
+                $ref: "#/components/schemas/quotes"
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/quote'
+                  $ref: "#/components/schemas/quote"
         "404":
           description: No subscription found
   /rest/quotes/{key}:
@@ -92,10 +188,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/quote'
+                $ref: "#/components/schemas/quote"
             application/xml:
               schema:
-                $ref: '#/components/schemas/quote'
+                $ref: "#/components/schemas/quote"
         "404":
           description: Subscription not found
   /rest/shares:
@@ -120,10 +216,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/share'
+                  $ref: "#/components/schemas/share"
             application/xml:
               schema:
-                $ref: '#/components/schemas/shares'
+                $ref: "#/components/schemas/shares"
     post:
       tags:
       - Shares
@@ -138,30 +234,24 @@ paths:
         in: header
         schema:
           type: string
-      - name: Correlation-Id
-        in: header
-        description: provide a Correlation-Id header to receive a response for your
-          operation when it finished.
-        schema:
-          type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/share'
+              $ref: "#/components/schemas/share"
           application/xml:
             schema:
-              $ref: '#/components/schemas/share'
+              $ref: "#/components/schemas/share"
       responses:
         "201":
-          description: Share queued for subscription
+          description: Share subscribed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/share'
+                $ref: "#/components/schemas/share"
             application/xml:
               schema:
-                $ref: '#/components/schemas/share'
+                $ref: "#/components/schemas/share"
         "500":
           description: Queuing failed
         "400":
@@ -169,10 +259,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/errors'
+                $ref: "#/components/schemas/errors"
             application/xml:
               schema:
-                $ref: '#/components/schemas/errors'
+                $ref: "#/components/schemas/errors"
   /rest/shares/{key}:
     get:
       tags:
@@ -200,10 +290,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/share'
+                $ref: "#/components/schemas/share"
             application/xml:
               schema:
-                $ref: '#/components/schemas/share'
+                $ref: "#/components/schemas/share"
         "404":
           description: Subscription not found
     delete:
@@ -232,10 +322,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/share'
+                $ref: "#/components/schemas/share"
             application/xml:
               schema:
-                $ref: '#/components/schemas/share'
+                $ref: "#/components/schemas/share"
         "404":
           description: Subscription was not found
   /rest/{path}:
@@ -257,6 +347,14 @@ paths:
 components:
   schemas:
     Action:
+      description: Kind of operational request
+      enum:
+      - RETRY
+      - DEQUEUE
+      - MOVE
+      - RESCHEDULE
+      type: string
+    Action1:
       description: Executable action
       enum:
       - SUBSCRIBE
@@ -270,12 +368,85 @@ components:
       type: object
       properties:
         action:
-          $ref: '#/components/schemas/Action'
+          $ref: "#/components/schemas/Action1"
         key:
           description: the share
           type: string
       xml:
         name: command
+    MessageDto:
+      description: Message representation
+      required:
+      - queue
+      - messageCorrelation
+      type: object
+      properties:
+        queue:
+          description: current queue
+          type: string
+        messageCorrelation:
+          description: unique message correlation
+          type: string
+        payload:
+          description: message payload
+          type: string
+        header:
+          description: message header
+          type: string
+        retries:
+          format: int32
+          description: number of retries left
+          type: integer
+        priority:
+          format: int32
+          description: priority
+          type: integer
+        entryDate:
+          format: date-time
+          description: message entry date
+          type: string
+          example: 2022-03-10T12:15:50
+        dueDate:
+          format: date-time
+          description: message due date
+          type: string
+          example: 2022-03-10T12:15:50
+    OperationsRequest:
+      description: Operational Request
+      required:
+      - action
+      - messages
+      type: object
+      properties:
+        action:
+          $ref: "#/components/schemas/Action"
+        messages:
+          minItems: 1
+          type: array
+          items:
+            $ref: "#/components/schemas/MessageDto"
+        targetQueue:
+          description: target queue if action is MOVE
+          type: string
+        deliveryOffset:
+          format: int64
+          description: "delivery offset if action is RESCHEDULE, in milliseconds"
+          type: integer
+    Queue:
+      description: Queue representation
+      type: object
+      properties:
+        name:
+          description: queue name
+          type: string
+        count:
+          format: int64
+          description: number of messages in the queue
+          type: integer
+        outOfRetries:
+          format: int64
+          description: number of messages with no retries in the queue
+          type: integer
     error:
       description: Structured error message
       type: object
@@ -304,7 +475,7 @@ components:
         error:
           type: array
           items:
-            $ref: '#/components/schemas/error'
+            $ref: "#/components/schemas/error"
         requestUri:
           description: Request URI
           type: string
@@ -364,7 +535,7 @@ components:
           description: the share
           type: object
           allOf:
-          - $ref: '#/components/schemas/share'
+          - $ref: "#/components/schemas/share"
         price:
           format: float
           description: the price
@@ -427,7 +598,7 @@ components:
         quotes:
           type: array
           items:
-            $ref: '#/components/schemas/quote'
+            $ref: "#/components/schemas/quote"
           xml:
             name: quote
       readOnly: true
@@ -496,7 +667,7 @@ components:
         shares:
           type: array
           items:
-            $ref: '#/components/schemas/share'
+            $ref: "#/components/schemas/share"
           xml:
             name: share
       readOnly: true

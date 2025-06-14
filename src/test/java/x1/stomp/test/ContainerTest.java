@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.activemq.ArtemisContainer;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -61,9 +60,6 @@ public class ContainerTest {
   private static final PostgreSQLContainer<?> POSTGRES = createPostgresSQLContainer();
 
   @Container
-  private static final ArtemisContainer ARTEMIS = createArtemisContainer();
-
-  @Container
   private static final GenericContainer<?> WILDFLY = createWildflyContainer();
 
   @SuppressWarnings("resource")
@@ -79,15 +75,9 @@ public class ContainerTest {
   }
 
   @SuppressWarnings("resource")
-  static ArtemisContainer createArtemisContainer() {
-    return new ArtemisContainer("apache/activemq-artemis:2.40.0").withNetwork(NETWORK).withNetworkAliases("activemq-artemis")
-        .withUser("artemis").withPassword("artemis");
-  }
-
-  @SuppressWarnings("resource")
   static GenericContainer<?> createWildflyContainer() {
-    return new GenericContainer<>(DockerImageName.parse("registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.8"))
-        .dependsOn(POSTGRES).dependsOn(ARTEMIS).withNetwork(NETWORK).withEnv("ACTIVEMQ_SERVER", "activemq-artemis")
+    return new GenericContainer<>(DockerImageName.parse("registry.x1/j7beck/x1-wildfly-jar-stomp-test:1.9"))
+        .dependsOn(POSTGRES).withNetwork(NETWORK)
         .withEnv("DB_SERVER", "postgres").withEnv("DB_PORT", "5432").withEnv("DB_USER", POSTGRES.getUsername())
         .withEnv("DB_PASSWORD", POSTGRES.getPassword()).withExposedPorts(8080)
         .withLogConsumer(new Slf4jLogConsumer(LOGGER).withSeparateOutputStreams())

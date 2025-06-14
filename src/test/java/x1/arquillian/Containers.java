@@ -15,7 +15,7 @@ public final class Containers implements ArquillianTestContainers {
 
   @SuppressWarnings("resource")
   private final GenericContainer<?> database = new GenericContainer<>(
-      DockerImageName.parse("registry.x1/j7beck/x1-postgres-stomp-test:1.8"))
+      DockerImageName.parse("registry.x1/j7beck/x1-postgres-stomp-test:1.9"))
           .withNetwork(network)
           .withNetworkAliases("postgres")
           .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(Containers.class)).withSeparateOutputStreams());
@@ -26,7 +26,7 @@ public final class Containers implements ArquillianTestContainers {
           "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://etcd:2379");
 
   @SuppressWarnings("resource")
-  private final WildflyContainer wildfly = new WildflyContainer("registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8")
+  private final WildflyContainer wildfly = new WildflyContainer("registry.x1/j7beck/x1-wildfly-stomp-test-it:1.9")
       .dependsOn(database).dependsOn(etcd).withNetwork(network).withEnv("wildfly-testcontainers.properties");
 
   @Override

@@ -1,8 +1,6 @@
 package x1.stomp.control;
 
-import java.io.IOException;
 import java.util.Date;
-import java.util.UUID;
 
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Singleton;
@@ -13,14 +11,11 @@ import org.slf4j.Logger;
 
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
+import x1.message.api.MessageSender;
 import x1.stomp.model.Quote;
 import x1.stomp.util.JsonHelper;
-import x1.stomp.util.StockMarket;
 
 import jakarta.inject.Inject;
-import jakarta.jms.JMSConnectionFactory;
-import jakarta.jms.JMSContext;
-import jakarta.jms.Topic;
 import jakarta.validation.constraints.NotNull;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -40,19 +35,14 @@ public class QuoteUpdater {
   private ShareSubscription shareSubscription;
 
   @Inject
-  @JMSConnectionFactory("java:/JmsXA")
-  private JMSContext context;
-
-  @Inject
-  @StockMarket
-  private Topic quoteTopic;
-
-  @Inject
   private JsonHelper jsonHelper;
 
   @Inject
   @ConfigProperty(name = "x1.stomp.control.QuoteUpdater/enable", defaultValue = "true")
   private boolean schedulerEnabled;
+
+  @Inject
+  private MessageSender messageSender;
 
   private int lastUpdatedCount;
 
@@ -83,10 +73,13 @@ public class QuoteUpdater {
   private void send(Quote quote) {
     try {
       log.debug("Sending message for {}", quote);
-      context.createProducer().setJMSCorrelationID(UUID.randomUUID().toString()).setProperty("type", "quote")
-        .setProperty("key", quote.getShare().getKey()).send(quoteTopic, jsonHelper.toJSON(quote));
+
+      var message = messageSender.from("quotes", jsonHelper.toJSON(quote));
+      message.setHeader(quote.getShare().getKey());
+      messageSender.send(message);
+
       lastUpdatedCount++;
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
   }

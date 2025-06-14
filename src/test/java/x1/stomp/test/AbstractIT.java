@@ -33,7 +33,8 @@ public abstract class AbstractIT {
   @Deployment
   public static Archive<?> createTestArchive() {
     var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-        .resolve("org.assertj:assertj-core", "org.testcontainers:activemq", "org.testcontainers:postgresql").withTransitivity()
+        .resolve("x1.wildfly:message-queue", "org.assertj:assertj-core",
+                "org.testcontainers:activemq", "org.testcontainers:postgresql").withTransitivity()
         .asFile();
 
     if (Containers.isRemoteArquillian()) {

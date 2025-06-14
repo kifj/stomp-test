@@ -37,7 +37,7 @@ spec:
               name: postgresql
         - name: DB_NAME
           value: stocks
-        image: registry.x1/j7beck/x1-postgres-stomp-test:1.8
+        image: registry.x1/j7beck/x1-postgres-stomp-test:1.9
         imagePullPolicy: Always
         livenessProbe:
           exec:
