@@ -14,7 +14,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -49,10 +49,10 @@
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.13</jacoco.version>
         <jacoco.append>true</jacoco.append>
-        <arquillian.version>1.9.4.Final</arquillian.version>
+        <arquillian.version>1.9.5.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta11</arquillian.wildfly.version>
         <jkube.version>1.18.1</jkube.version>
-        <testcontainers.version>1.21.0</testcontainers.version>
+        <testcontainers.version>1.21.2</testcontainers.version>
     </properties>
 
     <distributionManagement>
