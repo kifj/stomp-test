@@ -132,7 +132,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>message-queue</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -353,7 +353,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.17.Final</version>
+            <version>6.6.18.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -531,7 +531,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.9.3.0</version>
+                <version>4.9.3.2</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
