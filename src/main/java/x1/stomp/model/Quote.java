@@ -28,7 +28,7 @@ public class Quote implements Serializable {
   @Schema(description = "the share", required = true)
   @XmlElement
   private Share share;
-  @Schema(description = "the price", example = "12.34")
+  @Schema(description = "the price", examples = "12.34")
   @XmlAttribute
   private Float price;
   @Schema(description = "currency code", defaultValue = "EUR")

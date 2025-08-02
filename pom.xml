@@ -48,10 +48,10 @@
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.13</jacoco.version>
         <jacoco.append>true</jacoco.append>
-        <arquillian.version>1.9.4.Final</arquillian.version>
+        <arquillian.version>1.9.5.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta11</arquillian.wildfly.version>
         <jkube.version>1.18.1</jkube.version>
-        <testcontainers.version>1.21.0</testcontainers.version>
+        <testcontainers.version>1.21.2</testcontainers.version>
     </properties>
 
     <distributionManagement>
@@ -352,7 +352,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.17.Final</version>
+            <version>6.6.18.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -536,7 +536,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.9.3.0</version>
+                <version>4.9.3.2</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>

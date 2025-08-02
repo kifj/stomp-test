@@ -62,7 +62,7 @@ public class Share implements Serializable {
   @Size(min = 1, max = 25)
   @Pattern(regexp = "[A-Z0-9.]*", message = "must contain only letters and dots")
   @Column(length = 25)
-  @Schema(required = true, description = "Stock symbol", example = "MSFT")
+  @Schema(required = true, description = "Stock symbol", examples = "MSFT")
   @XmlAttribute
   private String key;
 
@@ -70,7 +70,7 @@ public class Share implements Serializable {
   @NotEmpty
   @Size(min = 1, max = 80)
   @Column(length = 80)
-  @Schema(required = false, description = "Human readable name", example = "Microsoft Corp.")
+  @Schema(required = false, description = "Human readable name", examples = "Microsoft Corp.")
   @XmlAttribute
   private String name;
 
