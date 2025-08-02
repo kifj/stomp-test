@@ -6,16 +6,16 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(name = "link", description = "HTTP Link")
 public class SimpleLink {
-  @Schema(description = "the link target as a URI-Reference", example = "https://microsoft.com", nullable = false)
+  @Schema(description = "the link target as a URI-Reference", examples = "https://microsoft.com", nullable = false)
   private String href;
-  @Schema(description = "The relation type of a link", example = "self")
+  @Schema(description = "The relation type of a link", examples = "self")
   private String rel;
   @Schema(description = "used to label the destination of a link such that it can be used as a human-readable identifier")
   private String title;
-  @Schema(description = "a hint indicating what the media type of the result of dereferencing the link should be", 
-      example = MediaType.TEXT_HTML)
+  @Schema(description = "a hint indicating what the media type of the result of dereferencing the link should be",
+          examples = MediaType.TEXT_HTML)
   private String type;
-  @Schema(description = "HTTP method", example = "get")
+  @Schema(description = "HTTP method", examples = "get")
   private String method;
 
   public String getHref() {
