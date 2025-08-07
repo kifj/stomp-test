@@ -43,13 +43,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <wildfly.version>36.0.1.Final</wildfly.version>
+        <wildfly.version>37.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.13</jacoco.version>
         <jacoco.append>true</jacoco.append>
-        <arquillian.version>1.9.5.Final</arquillian.version>
+        <arquillian.version>1.10.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Beta11</arquillian.wildfly.version>
         <jkube.version>1.18.1</jkube.version>
         <testcontainers.version>1.21.3</testcontainers.version>
@@ -1079,7 +1079,7 @@
                                 <config>
                                     <wildfly-jar>
                                         <jolokiaPort>0</jolokiaPort>
-                                        <prometheusPort>9990</prometheusPort>
+                                        <prometheusPort>0</prometheusPort>
                                     </wildfly-jar>
                                 </config>
                             </generator>
@@ -1090,7 +1090,7 @@
                                     <SERVICE_NAME>stomp-test</SERVICE_NAME>
                                     <MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>DOWN</MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>
                                     <MP_HEALTH_EMPTY_READINESS_CHECKS_STATUS>DOWN</MP_HEALTH_EMPTY_READINESS_CHECKS_STATUS>
-                                    <OTEL_SERVICE_NAME>stomp-test</OTEL_SERVICE_NAME>
+                                    <OTEL_COLLECTOR_HOST>localhost</OTEL_COLLECTOR_HOST>
                                 </env>
                                 <serviceAccount>jgroups-kubeping-service-account</serviceAccount>
                             </resources>
@@ -1102,11 +1102,16 @@
                                         <readinessInitialDelay>30</readinessInitialDelay>
                                         <periodSeconds>60</periodSeconds>
                                     </jkube-healthcheck-wildfly-jar>
-                                    <jkube-prometheus>
-                                        <prometheusPort>9990</prometheusPort>
-                                    </jkube-prometheus>
                                 </config>
                             </enricher>
+                            <annotations>
+                                <deployment>
+                                    <property>
+                                        <name>sidecar.opentelemetry.io/inject</name>
+                                        <value>true</value>
+                                    </property>
+                                </deployment>
+                            </annotations>
                         </configuration>
                         <executions>
                             <execution>
