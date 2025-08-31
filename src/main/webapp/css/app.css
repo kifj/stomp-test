@@ -1,143 +1,172 @@
-h1 { font-size: 1.4em; color: #65944A; }
-h2 { font-size: 1.2em; text-transform: uppercase; }
-h3 { font-size: 1.2em; }
+/* Define CSS variables for fonts, colors, and borders */
+:root {
+    --font-family-primary: 'Trebuchet MS', Tahoma, sans-serif;
+    --font-family-secondary: 'Trebuchet Ms', Sans-serif;
+
+    --font-size-h1: 1.4em;
+    --font-size-h2: 1.2em;
+    --font-size-h3: 1.2em;
+    --font-size-bold: bold;
+    --font-size-normal: normal;
+    --font-size-small: 12px;
+    --font-size-medium: 16px;
+
+    --font-color-primary: #65944A;
+    --font-color-secondary: #404040;
+    --font-color-error: #ff0000;
+    --font-color-title: #FFF;
+    --font-color-disabled: #a0a0a0;
+    --font-color-muted: #777;
+
+    --background-color-primary: #f0f0f0;
+    --background-color-secondary: #333;
+    --background-color-title: #a0a0a0;
+
+    --border-color-primary: #e0e0e0;
+    --border-color-secondary: #d0d0d0;
+    --border-color-header: #777;
+}
+
+/* General styles */
+h1 {
+    font-size: var(--font-size-h1);
+    color: var(--font-color-primary);
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+    text-transform: uppercase;
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+}
 
 blockquote {
-	font: bold 1.2em/1.5em "Trebuchet MS", Tahoma, sans-serif;
+    font: var(--font-size-bold) 1.2em/1.5em var(--font-family-primary);
 }
 
 textarea {
-	width: 400px;
+    width: 400px;
 }
 
 button {
     margin-left: 10px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-left: 5px;
-    padding-right: 5px;
-    font: bold 12px 'Trebuchet Ms', Sans-serif;	
-	border: 1px solid #a0a0a0;
-	color: #65944A;
-	background-color: #f0f0f0;
+    padding: 3px 5px;
+    font: var(--font-size-bold) var(--font-size-small) var(--font-family-secondary);
+    border: 1px solid var(--border-color-secondary);
+    color: var(--font-color-primary);
+    background-color: var(--background-color-primary);
 }
 
 button[disabled] {
-	color: #a0a0a0;
-	border: 1px solid #d0d0d0;
-	cursor: not-allowed;
-  }
-
-dialog {
-	min-width: 200px;
-	min-height: 100px;
-	margin-top: 25%;	
-	margin-left: 40%;
-	margin-right: 40%;
-	padding: 20px;
+    color: var(--font-color-disabled);
+    border: 1px solid var(--border-color-secondary);
+    cursor: not-allowed;
 }
 
-/* header */
+dialog {
+    min-width: 200px;
+    min-height: 100px;
+    margin-top: 25%;
+    margin-left: 40%;
+    margin-right: 40%;
+    padding: 20px;
+}
+
+/* Header styles */
 #header {
-	height: 100px;
-	text-align: left;
-	background-color: #a0a0a0;
-	border-bottom: 3px solid #272727;	
-	margin-bottom: 10px;
+    height: 100px;
+    text-align: left;
+    background-color: var(--background-color-title);
+    border-bottom: 3px solid var(--border-color-header);
+    margin-bottom: 10px;
 }
 
 #header-content {
-	margin: 0 auto;
-	padding: 0;
-	position: relative;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
 }
 
 #header-content h1#logo {
-	position: absolute;
-	font: bold 45px 'Trebuchet MS', Sans-serif;
-	letter-spacing: -2px;
-	color: #FFF;
-	margin: 0; 
-	padding: 0;
-
-	/* change the values of left and top to adjust the position of the logo */
-	top: 5px; 
-	left: 10px;
+    position: absolute;
+    font: var(--font-size-bold) 45px var(--font-family-secondary);
+    letter-spacing: -2px;
+    color: var(--font-color-title);
+    margin: 0;
+    padding: 0;
+    top: 5px;
+    left: 10px;
 }
 
 #header-content h1#logo a {
-	text-decoration: none;
-	color: #FFF;
+    text-decoration: none;
+    color: var(--font-color-title);
 }
 
 #header-content #slogan {
-	position: absolute;
-	font: bold 12px 'Trebuchet Ms', Sans-serif;
-	text-transform: none;
-	color: #FFF;
-	margin: 0;
-	padding: 0;
-	top: 55px;
-	left: 40px;
+    position: absolute;
+    font: var(--font-size-bold) var(--font-size-small) var(--font-family-secondary);
+    color: var(--font-color-title);
+    margin: 0;
+    padding: 0;
+    top: 55px;
+    left: 40px;
 }
 
-/* header menu */
+/* Header menu */
 #header-content ul {
-	position: absolute;
-	right: 5px; 
-	top: 15px;
-	font: bolder 1.3em 'Trebuchet MS', sans-serif;
-	color: #FFF;
-	list-style: none;
-	margin: 0; 
-	padding: 0;
+    position: absolute;
+    right: 5px;
+    top: 15px;
+    font: var(--font-size-bold) 1.3em var(--font-family-primary);
+    color: var(--font-color-title);
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 #header-content li {
-	display: inline;
+    display: inline;
 }
 
 #header-content li a {
-	float: left;
-	display: block;
-	padding: 3px 12px;
-	color: #FFF;
-	background-color: #333;
-	text-decoration: none;
-	border-right: 1px solid #272727;
+    float: left;
+    display: block;
+    padding: 3px 12px;
+    color: var(--font-color-title);
+    background-color: var(--background-color-secondary);
+    text-decoration: none;
+    border-right: 1px solid var(--border-color-header);
 }
 
 #header-content li a:hover {
-	background: #65944A;
-	color: #FFF;
+    background: var(--font-color-primary);
+    color: var(--font-color-title);
 }
 
-#header-content li a#current  {
-	background: #65944A;
-	color: #FFF;
+#header-content li a#current {
+    background: var(--font-color-primary);
+    color: var(--font-color-title);
 }
 
-#header-content .rss {
-	border: 0px;
-	padding: 0px;
-}
-
-/* content */
+/* Content styles */
 #content-wrap {
-	clear: both;
-	width: 100%;
-	min-width: 1150px;
-	min-height: 800px;
+    clear: both;
+    width: 100%;
+    min-width: 1150px;
+    min-height: 800px;
 }
 
 #content {
-	text-align: left;
-	padding: 0;
-	margin: 0 auto;
+    text-align: left;
+    padding: 0;
+    margin: 0 auto;
 }
 
 .post {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .post table {
@@ -145,15 +174,15 @@ dialog {
 }
 
 .post table td {
-	border: #e0e0e0 1px solid;
+    border: 1px solid var(--border-color-primary);
 }
 
 .post table .selected {
-	background-color: #f0f0f0;	
+    background-color: var(--background-color-primary);
 }
 
 .post table .selectRow {
-	width: 12px;
+    width: 12px;
 }
 
 .post table .contentCell {
@@ -164,25 +193,25 @@ dialog {
 }
 
 .post table tr {
-	max-height: 32px;
+    max-height: 32px;
 }
 
 .post table .date {
-	width: 100px;
+    width: 100px;
 }
 
 .post table tfoot {
-	background-color: #f0f0f0;
+    background-color: var(--background-color-primary);
 }
 
 .post table tfoot a {
-	margin-right: 20px;
-	font-weight: bold;
-	color: #404040;
+    margin-right: 20px;
+    font-weight: var(--font-size-bold);
+    color: var(--font-color-secondary);
 }
 
 .post table tfoot .current {
-	color: #65944A;
+    color: var(--font-color-primary);
 }
 
 .post caption {
@@ -195,38 +224,33 @@ dialog {
     margin-right: 10px;
 }
 
-.post caption button {	
+.post caption button {
     margin-right: 10px;
 }
 
 .post caption select {
-	margin-left: 10px;
-	height: 30px;
-	width: 200px;
-	background-color: #f0f0f0;
-	color: #777;
-	border: #e0e0e0 1px solid;
-	font: normal 16px 'Trebuchet Ms', Sans-serif;
+    margin-left: 10px;
+    height: 30px;
+    width: 200px;
+    background-color: var(--background-color-primary);
+    color: var(--font-color-muted);
+    border: 1px solid var(--border-color-primary);
+    font: var(--font-size-normal) var(--font-size-medium) var(--font-family-secondary);
 }
 
-.post caption input[type=text] {
-    font: normal 16px 'Trebuchet Ms', Sans-serif;
-	padding-left: 5px;	
-    flex-grow: 1;
-}
-
+.post caption input[type=text],
 .post caption input[type=datetime-local] {
-    font: normal 16px 'Trebuchet Ms', Sans-serif;
-	padding-left: 5px;	
+    font: var(--font-size-normal) var(--font-size-medium) var(--font-family-secondary);
+    padding-left: 5px;
     flex-grow: 1;
-	width: 200px;
-	height: 24px;
+    width: 200px;
+    height: 24px;
 }
 
 .post caption input[type=checkbox] {
-    margin-left:  0px;
+    margin-left: 0px;
     margin-right: 5px;
-	height: 36px;
+    height: 36px;
     vertical-align: middle;
 }
 
@@ -236,18 +260,18 @@ dialog {
     display: flex;
     overflow: hidden;
     float: right;
-	margin-top: 5px;
+    margin-top: 5px;
 }
 
 .post caption .date {
-	margin-left: 10px;
-	width: 150px;
+    margin-left: 10px;
+    width: 150px;
 }
 
 #editMessage .values {
     min-width: 400px;
     min-height: 200px;
-    color: #404040;
+    color: var(--font-color-secondary);
 }
 
 #editMessage p {
@@ -257,29 +281,23 @@ dialog {
 }
 
 #editMessage p span {
-    color: #65944A;
-    font-weight: bold;
+    color: var(--font-color-primary);
+    font-weight: var(--font-size-bold);
     min-width: 80px;
     margin-right: 10px;
 }
 
-#editMessage input[type=text] {
-    font: normal 12px 'Trebuchet Ms', Sans-serif;
-	padding-left: 5px;
-	min-width: 200px;
-	max-width: 350px;
-}
-
+#editMessage input[type=text],
 #editMessage textarea {
-    font: normal 12px 'Trebuchet Ms', Sans-serif;
-	padding-left: 5px;
-	min-width: 200px;
-	max-width: 350px;
+    font: var(--font-size-normal) var(--font-size-small) var(--font-family-secondary);
+    padding-left: 5px;
+    min-width: 200px;
+    max-width: 350px;
 }
 
 p.errorMessage {
-    color: #ff0000 !important;
+    color: var(--font-color-error) !important;
     text-align: center !important;
-    font-weight: bold;
+    font-weight: var(--font-size-bold);
     height: 30px;
 }

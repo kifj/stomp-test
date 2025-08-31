@@ -80,12 +80,13 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageConsumer
       log.warn("Incomplete command: {}", command);
       return null;
     }
+    String result = null;
     switch (command.getAction()) {
-      case SUBSCRIBE ->  jsonHelper.toJSON(subscribe(command.getKey()).orElse(null));
+      case SUBSCRIBE -> result = jsonHelper.toJSON(subscribe(command.getKey()).orElse(null));
       case UNSUBSCRIBE -> unsubscribe(command.getKey());
       default -> log.warn("Unknown command: {}", message);
     }
-    return null;
+    return result;
   }
 
   private void unsubscribe(String key) {
