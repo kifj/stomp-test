@@ -14,7 +14,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -319,7 +319,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.3</version>
+            <version>3.27.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -352,7 +352,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.18.Final</version>
+            <version>6.6.19.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -536,7 +536,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.9.3.2</version>
+                <version>4.9.4.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -677,7 +677,7 @@
                     <plugin>
                         <groupId>io.smallrye</groupId>
                         <artifactId>smallrye-open-api-maven-plugin</artifactId>
-                        <version>3.13.0</version>
+                        <version>4.0.5</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
@@ -1083,7 +1083,7 @@
                                 <config>
                                     <wildfly-jar>
                                         <jolokiaPort>0</jolokiaPort>
-                                        <prometheusPort>9990</prometheusPort>
+                                        <prometheusPort>0</prometheusPort>
                                     </wildfly-jar>
                                 </config>
                             </generator>
@@ -1094,7 +1094,7 @@
                                     <SERVICE_NAME>stomp-test</SERVICE_NAME>
                                     <MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>DOWN</MP_HEALTH_EMPTY_LIVENESS_CHECKS_STATUS>
                                     <MP_HEALTH_EMPTY_READINESS_CHECKS_STATUS>DOWN</MP_HEALTH_EMPTY_READINESS_CHECKS_STATUS>
-                                    <OTEL_SERVICE_NAME>stomp-test</OTEL_SERVICE_NAME>
+                                    <OTEL_COLLECTOR_HOST>localhost</OTEL_COLLECTOR_HOST>
                                 </env>
                                 <serviceAccount>jgroups-kubeping-service-account</serviceAccount>
                             </resources>
@@ -1106,11 +1106,16 @@
                                         <readinessInitialDelay>30</readinessInitialDelay>
                                         <periodSeconds>60</periodSeconds>
                                     </jkube-healthcheck-wildfly-jar>
-                                    <jkube-prometheus>
-                                        <prometheusPort>9990</prometheusPort>
-                                    </jkube-prometheus>
                                 </config>
                             </enricher>
+                            <annotations>
+                                <deployment>
+                                    <property>
+                                        <name>sidecar.opentelemetry.io/inject</name>
+                                        <value>true</value>
+                                    </property>
+                                </deployment>
+                            </annotations>
                         </configuration>
                         <executions>
                             <execution>

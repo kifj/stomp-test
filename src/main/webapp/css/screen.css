@@ -1,30 +1,81 @@
+/* Define CSS variables for fonts, colors and borders */
 :root {
-  --main-fonts: 'Trebuchet MS', Tahoma, sans-serif;
-  --console-fonts: 'Lucida Console', 'courier new', monospace;
-  --button-fonts: Arial, Sans-serif;
-  --theme-color: #72A545;
-  --theme-color-light: #74A846;
-  --border-color: #f2f2f2;
+    /* Font families */
+    --font-family-primary: 'Trebuchet MS', Tahoma, sans-serif;
+    --font-family-secondary: Arial, sans-serif;
+    --font-family-monospace: 'Lucida Console', 'Courier New', monospace;
+
+    /* Font sizes */
+    --font-size-small: 0.95em;
+    --font-size-normal: 1em;
+    --font-size-medium: 1.2em;
+    --font-size-large: 1.6em;
+    --font-size-xlarge: 1.8em;
+
+    /* Font weights */
+    --font-weight-normal: normal;
+    --font-weight-bold: bold;
+    --font-weight-light: lighter;
+
+    /* Background colors */
+    --background-color-body: #fff;
+    --background-color-highlight: #fafafa;
+    --background-color-header: #74a846;
+    --background-color-row-a: #f8f8f8;
+    --background-color-row-b: #efefef;
+    --background-color-input: #e0e0e0;
+    --background-color-dark: #333;
+    --background-color-transparent: transparent;
+
+    /* Border colors */
+    --border-color-light: #f2f2f2;
+    --border-color-medium: #dadada;
+    --border-color-dark: #b6d59a;
+    --border-color-highlight: #72a545;
+    --border-color-white: #fff;
+    --border-color-muted: #eee;
+
+    /* Text colors */
+    --text-color-standard: #555;
+    --text-color-link: #72a545;
+    --text-color-link-highlight: #006699;
+    --text-color-light #666666;
+    --text-color-lighter #777;
+    --text-color-dark #333;
+    --text-color-darker #222;
+    --font-color-inverted: #fff;
+    --font-color-error: #f00;
+    --font-color-highlight: #bfbfbf;
 }
 
-/* top elements */
+/* General styles */
 * { padding: 0; margin: 0; outline: 0; }
 
 body {
-  margin: 0;
-  padding: 0;
-  font: normal 73%/1.6em var(--main-fonts);
-  color: #555;
-  background: #FFF url(images/bg.jpg) repeat-x;
-  text-align: center;
+    margin: 0;
+    padding: 0;
+    font: var(--font-weight-normal) 73%/1.6em var(--font-family-primary);
+    color: var(--text-color-standard);
+    background: var(--background-color-body) url(images/bg.jpg) repeat-x;
+    text-align: center;
 }
 
-/* headers */
-h1, h2, h3 { font: bold 1em var(--main-fonts); }
+/* Headers */
+h1, h2, h3 {
+    font: var(--font-weight-bold) var(--font-size-normal) var(--font-family-primary);
+}
 
-/* links */
-a:link, a:visited { background: inherit; color: var(--theme-color); text-decoration: none; }
-a:hover { background: inherit; color: #006699; text-decoration: underline; }
+/* Links */
+a:link, a:visited {
+    background: inherit;
+    color: var(--text-color-link);
+    text-decoration: none;
+}
+a:hover {
+    background: inherit;
+    color: var(--text-color-link-highlight);
+    text-decoration: underline;
+}
 
 p, h1, h2, h3, small {
   margin: 10px 15px;
@@ -34,71 +85,72 @@ ul, ol {
   padding: 0 15px;
 }
 
-/* images */
+/* Images */
 img {
-  border: 1px solid #DADADA;
-  padding: 8px;
+    border: 1px solid var(--border-color-medium);
+    padding: 8px;
 }
 img.float-right {
-  margin: 5px 0px 5px 15px;
+    margin: 5px 0px 5px 15px;
 }
 img.float-left {
-  margin: 5px 15px 5px 0px;
+    margin: 5px 15px 5px 0px;
 }
 
 code {
-  margin: 5px 0;
-  padding: 10px;
-  text-align: left;
-  display: block;
-  overflow: auto;
-  font: 500 1em/1.5em var(--console-fonts);
-  background: #FAFAFA;
-  border: 1px solid var(--border-color);
-  border-left: 3px solid var(--theme-color);
+    margin: 5px 0;
+    padding: 10px;
+    text-align: left;
+    display: block;
+    overflow: auto;
+    font: 500 var(--font-size-normal)/1.5em var(--font-family-monospace);
+    background: var(--background-color-highlight);
+    border: 1px solid var(--border-color-light);
+    border-left: 3px solid var(--border-color-highlight);
 }
+
 acronym {
   cursor: help;
-  border-bottom: 1px solid #777;
+  border-bottom: 1px solid var(--text-color-lighter);
 }
 blockquote {
-  margin: 15px;   
-  padding: 0 0 0 20px;
-  background-color: #FAFAFA;
-  background-position: 8px 10px;
-  border: 1px solid var(--border-color);
-  border-left: 3px solid var(--theme-color);
-  font: bold 1.2em/1.5em var(--main-fonts);
-  color: #666666;
+    margin: 15px;
+    padding: 0 0 0 20px;
+    background-color: var(--background-color-highlight);
+    border: 1px solid var(--border-color-light);
+    border-left: 3px solid var(--border-color-highlight);
+    font: var(--font-weight-bold) var(--font-size-medium)/1.5em var(--font-family-primary);
+    color: var(--text-color-light);
 }
 
 textarea {
-  width: 400px;
-  padding: 2px;
-  font: normal 1em var(--main-fonts);
-  border: 1px solid #eee;
-  height: 100px;
-  display: block;
-  color: #777;
+    width: 400px;
+    padding: 2px;
+    font: var(--font-weight-normal) var(--font-size-normal) var(--font-family-primary);
+    border: 1px solid var(--border-color-muted);
+    height: 100px;
+    display: block;
+    color: var(--text-color-lighter);
+    background-color: var(--background-color-input);
 }
 
-/* start - table */
+/* Table styles */
 table {
-  border-collapse: collapse;
-  margin: 10px 15px;
+    border-collapse: collapse;
+    margin: 10px 15px;
 }
 th strong {
-  color: #fff;
+  color: var(--background-color-body);
 }
 th {
-  background: var(--theme-color-light);
+  background-color: var(--background-color-header);
   height: 29px;
   padding-left: 11px;
   padding-right: 11px;
-  color: #fff;
+  color: var(--background-color-body);
   text-align: left;
   border-left: 1px solid #B6D59A;
-  border-bottom: solid 2px #FFF;
+  border-bottom: solid 2px var(--border-color-white);
 }
 tr {
   height: 30px;
@@ -106,83 +158,83 @@ tr {
 td {
   padding-left: 11px;
   padding-right: 11px;
-  border-left: 1px solid #FFF;
-  border-bottom: solid 1px #ffffff;
+  border-left: 1px solid var(--border-color-white);
+  border-bottom: solid 1px var(--border-color-white);
 }
 td.first,th.first {
   border-left: 0px;
 }
 tr.row-a {
-  background: #F8F8F8;
+    background: var(--background-color-row-a);
 }
 tr.row-b {
-  background: #EFEFEF;
+    background: var(--background-color-row-b);
 }
-/* end - table */
 
-/* form elements */
+/* Form elements */
 form {
-  margin: 10px 15px; 
-  padding: 0;
-  border: 1px solid var(--border-color);
-  background-color: #FAFAFA;
+    margin: 10px 15px;
+    padding: 0;
+    border: 1px solid var(--border-color-light);
+    background-color: var(--background-color-highlight);
 }
 label {
-  display: block;
-  font-weight: bold;
-  margin: 5px 0;
+    display: block;
+    font-weight: var(--font-weight-bold);
+    margin: 5px 0;
 }
 input {
-  padding: 2px;
-  border: 1px solid #eee;
-  font: normal 1em var(--main-fonts);
-  color: #777;
+    padding: 2px;
+    border: 1px solid var(--border-color-muted);
+    font: var(--font-weight-normal) var(--font-size-normal) var(--font-family-primary);
+    color: var(--text-color-lighter);
+    background-color: var(--background-color-body);
 }
 input[required] {
-  background-color: #E0E0E0;
+    background-color: var(--background-color-input);
 }
 
 fieldset {
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
-  border-left: 0px;
-  border-right: 0px;
+    border-top: 1px solid var(--border-color-light);
+    border-bottom: 1px solid var(--border-color-light);
+    border-left: 0px;
+    border-right: 0px;
 }
 
 input.button {
-  margin: 0;
-  font: bold 1em var(--button-fonts);
-  background: #FFF url(images/gradientbg.jpg) repeat-x;
-  padding: 2px 3px;
-  color: #333;
-  border: 1px solid #DADADA;
+    margin: 0;
+    font: var(--font-weight-bold) var(--font-size-normal) var(--font-family-secondary);
+    background: var(--background-color-body) url(images/gradientbg.jpg) repeat-x;
+    padding: 2px 3px;
+    color: var(--text-color-dark);
+    border: 1px solid var(--border-color-medium);
 }
 
-/* ----------------------------
-  SEARCH FORM
-------------------------------- */
+/* Search form */
 .searchform {
-  background-color: transparent;
-  border: none; 
-  margin: 0; 
-  padding: 0;
+    background-color: var(--background-color-transparent);
+    border: none;
+    margin: 0;
+    padding: 0;
 }
 .searchform p { margin: 10px; padding: 0; }
 .searchform input.textbox {
-  width: 130px;
-  color: #333;
-  height: 20px;
-  padding: 2px;
-  vertical-align: top;
+    width: 130px;
+    color: var(----text-color-dark);
+    height: 20px;
+    padding: 2px;
+    vertical-align: top;
+    background-color: var(--background-color-body);
 }
 .searchform input.button {
-  font: bold 12px var(--button-fonts);
-  color: #333;
-  width: 60px;
-  height: 26px;
-  border: 1px solid #DADADA;
-  padding: 3px 5px;
-  vertical-align: top;
+    font: var(--font-weight-bold) var(--font-size-small) var(--font-family-secondary);
+    color: var(--text-color-dark);
+    width: 60px;
+    height: 26px;
+    border: 1px solid var(--border-color-medium);
+    padding: 3px 5px;
+    vertical-align: top;
+    background-color: var(--background-color-body);
 }
 
 /* alignment classes */
@@ -193,19 +245,19 @@ input.button {
 
 /* additional classes */
 .clear { clear: both; }
-.gray  { color: #BFBFBF; }
+.gray  { color: var(--font-color-highlight); }
 
 .messageOn {
   margin-right: 0px;
   margin-top: 50px;
   float: left;
   font-size: 10px;
-  font-weight: lighter;
+  font-weight: var(--font-weight-light);
   padding: 3px 12px;
-  color: #FFF;
-  background-color: #333;
+  color: var(--font-color-inverted);
+  background-color: var(--background-color-dark);
   text-decoration: none;
-  border-right: 1px solid #272727;
+  border-right: 1px solid var(--border-color-dark);
   overflow: hidden;
   display: block;
 }
@@ -218,10 +270,10 @@ input.button {
 .statusOn {
   display: block;
   padding: 3px 12px;
-  color: #333;
+  color: var(--text-color-dark);
   text-decoration: none;
-  font-size: smaller;
-  font-weight: lighter;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-light);
   overflow: hidden;
 }
 
@@ -238,7 +290,7 @@ input.button {
 }
 
 .required {
-  color: red;
+  color: var(--font-color-error);
 }
 
 .inline {
@@ -248,9 +300,9 @@ input.button {
 .errorStatusOn {
   display: block;
   padding: 3px 12px;
-  color: red;
+  color: var(--font-color-error);
   text-decoration: none;
-  font-size: smaller;
+  font-size: var(--font-size-small);
   overflow: hidden;
 }
 
@@ -261,10 +313,10 @@ input.button {
 }
 
 .upload-form {
-  margin: 10px 15px; 
+  margin: 10px 15px;
   padding: 0;
-  border: 1px solid var(--border-color);
-  background-color: #FAFAFA;
+  border: 1px solid var(--border-color-light);
+  background-color: var(--background-color-highlight);
 }
 
 .hint {
@@ -272,7 +324,7 @@ input.button {
   font-style: italic;
   margin-right: 10px;
   margin-top: 3px;
-} 
+}
 
 #upload_hint {
   font-size: 10px;
@@ -295,7 +347,7 @@ input.button {
   order: 2;
   flex: 1 2 auto;
   align-self: auto;
-  margin: 0 0 10px 0; 
+  margin: 0 0 10px 0;
   padding: 5px;
   min-width: 320px;
 }
@@ -303,8 +355,8 @@ input.button {
 #main h1 {
   padding: 10px 0px 0px 5px;
   margin: 0 0 0 10px;
-  border-bottom: 1px solid var(--border-color);
-  font: normal 1.8em var(--main-fonts);
+  border-bottom: 1px solid var(--border-color-light);
+  font: var(--font-weight-normal) var(--font-size-xlarge) var(--font-family-primary);
 }
 
 #main ul li {
@@ -315,7 +367,7 @@ input.button {
   order: 3;
   flex: 0 1 150px;
   align-self: auto;
-  margin: 0 0 10px 0; 
+  margin: 0 0 10px 0;
   padding: 0;
 }
 
@@ -323,40 +375,40 @@ input.button {
   order: 1;
   flex: 0 1 150px;
   align-self: auto;
-  margin: 0 0 10px 0; 
+  margin: 0 0 10px 0;
   padding: 0;
 }
 
 .post {
-  margin: 0; 
+  margin: 0;
   padding: 0;
-  background: #FFF url(images/gradientbg.jpg) repeat-x;
-  border: 1px solid #EFEDED;
+  background: var(--background-color-body) url(images/gradientbg.jpg) repeat-x;
+  border: 1px solid var(--border-color-muted);
   box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
 }
 
 .post .post-footer {
-  background-color: #FAFAFA;
-  border: 1px solid var(--border-color);
-  padding: 5px; 
+  background-color: var(--background-color-highlight);
+  border: 1px solid var(--border-color-light);
+  padding: 5px;
   margin-top: 20px;
   font-size: 95%;
 }
 .post .post-footer .date {
   background: url(images/clock.png) no-repeat 0 center;
-  padding-left: 20px; 
+  padding-left: 20px;
   margin: 0 10px 0 5px;
   padding-top: 1px;
   padding-bottom: 1px;
 }
 .post .post-footer .comments {
   background: url(images/comment.png) no-repeat 0 center;
-  padding-left: 20px; 
+  padding-left: 20px;
   margin: 0 10px 0 5px;
 }
 .post .post-footer .readmore {
   background: url(images/page.png) no-repeat 0 center;
-  padding-left: 20px; 
+  padding-left: 20px;
   margin: 0 10px 0 5px;
 }
 
@@ -397,9 +449,9 @@ input.button {
 /* footer */
 #footer {
   clear: both;
-  margin: 0; 
+  margin: 0;
   padding: 0;
-  font: normal .95em/1.6em var(--main-fonts);
+  font: var(--font-weight-normal) var(--font-size-small)/1.6em var(--font-family-primary);
   text-align: left;
 }
 
@@ -414,30 +466,30 @@ input.button {
   text-decoration: none;
 }
 #footer-content a:hover {
-  color: #333;
+  color: var(--text-color-dark);
 }
 
 /* footer list */
 #footer-content ul.flist {
   list-style: none;
-  margin: 0; 
+  margin: 0;
   padding: 0;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color-light);
 }
 #footer-content ul.flist li {
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color-light);
 }
 #footer-content ul.flist li a:link,
 #footer-content ul.flist li a:visited {
-  color: #555;
+  color: var(--text-color-standard);
   display: block;
-  font-weight: normal;
+  font-weight: var(--font-weight-normal);
   padding: 5px 0 ;
   width: 98%;
 }
 #footer-content ul.flist li a:hover {
   text-decoration: none;
-  color: #222;
+  color: var(--text-color-darker);
 }
 
 #button_list {
@@ -475,11 +527,11 @@ input.button {
 }
 
 .author-name {
-  float: left; 
+  float: left;
   margin-right: 10px;
 }
 
-.no-border {  
+.no-border {
   border: 0px !important;
 }
 
@@ -487,15 +539,15 @@ input.button {
   display: none;
 }
 
-.ui-autocomplete-loading { 
-  background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; 
+.ui-autocomplete-loading {
+  background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
 }
 
 .ui-autocomplete {
   text-align: left;
   border:1px solid #eee !important;
-  font: normal 1em var(--main-fonts) !important;
-  color:#777 !important;
+  font: var(--font-weight-normal) var(--font-size-normal) var(--font-family-primary) !important;
+  color: var(--text-color-lighter) !important;
 }
 
 .updownbuttons {

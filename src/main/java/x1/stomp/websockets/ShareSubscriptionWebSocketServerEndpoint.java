@@ -77,18 +77,19 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
 
   @OnMessage
   public String onMessage(String message, Session session) throws IOException {
-    log.debug("Received message: {}", message);
+    log.debug("Received message {} for session {}", message, session.getId());
     var command = jsonHelper.fromJSON(message, Command.class);
     if (command.getAction() == null || StringUtils.isEmpty(command.getKey())) {
       log.warn("Incomplete command: {}", command);
       return null;
     }
+    String result = null;
     switch (command.getAction()) {
-      case SUBSCRIBE ->  jsonHelper.toJSON(subscribe(command.getKey()).orElse(null));
+      case SUBSCRIBE -> result = jsonHelper.toJSON(subscribe(command.getKey()).orElse(null));
       case UNSUBSCRIBE -> unsubscribe(command.getKey());
       default -> log.warn("Unknown command: {}", message);
     }
-    return null;
+    return result;
   }
 
   private void unsubscribe(String key) {
@@ -143,7 +144,7 @@ public class ShareSubscriptionWebSocketServerEndpoint implements MessageListener
     if (message.getApplicationData().hasArray()) {
       answer = new String(message.getApplicationData().array(), StandardCharsets.UTF_8);
     }
-    log.debug("Received pong [{}]", answer);
+    log.debug("Received pong [{}] for session {}", answer, session.getId());
   }
 
   private void sendMessage(TextMessage textMessage, Session session) {
