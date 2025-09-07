@@ -5,6 +5,5 @@
     <interceptors>
         <class>x1.stomp.util.MeteredInterceptor</class>
         <class>x1.stomp.util.LoggingInterceptor</class>
-        <class>x1.message.handling.MeteredInterceptor</class>
     </interceptors>
 </beans>

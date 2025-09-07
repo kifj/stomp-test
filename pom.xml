@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>x1.wildfly</groupId>
     <artifactId>stomp-test</artifactId>
-    <version>1.9.0-SNAPSHOT</version>
+    <version>1.10.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Stomp Test</name>
     <description>A sample application for websockets and stomp on Wildfly</description>
@@ -130,9 +130,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>x1.wildfly</groupId>
-            <artifactId>message-queue</artifactId>
-            <version>1.0.1</version>
+            <groupId>io.smallrye.reactive</groupId>
+            <artifactId>smallrye-reactive-messaging-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -381,6 +381,12 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>kafka</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
@@ -1016,7 +1022,7 @@
             <properties>
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%l</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
-                <jkube.generator.tags>1.9</jkube.generator.tags>
+                <jkube.generator.tags>1.10</jkube.generator.tags>
             </properties>
             <build>
                 <finalName>${project.artifactId}</finalName>
@@ -1045,7 +1051,7 @@
                                 <layer>microprofile-rest-client</layer>
                                 <layer>microprofile-fault-tolerance</layer>
                                 <layer>microprofile-telemetry</layer>
-                                <layer>microprofile-fault-tolerance</layer>
+                                <layer>microprofile-reactive-messaging-kafka</layer>
                                 <layer>micrometer</layer>
                             </layers>
                             <cloud>

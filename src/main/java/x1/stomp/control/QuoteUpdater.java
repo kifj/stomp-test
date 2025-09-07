@@ -1,17 +1,19 @@
 package x1.stomp.control;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.ejb.Timer;
 
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.slf4j.Logger;
 
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
-import x1.message.api.MessageSender;
 import x1.stomp.model.Quote;
 import x1.stomp.util.JsonHelper;
 
@@ -41,8 +43,9 @@ public class QuoteUpdater {
   @ConfigProperty(name = "x1.stomp.control.QuoteUpdater/enable", defaultValue = "true")
   private boolean schedulerEnabled;
 
-  @Inject
-  private MessageSender messageSender;
+    @Inject
+    @Channel("to-kafka")
+    private Emitter<String> emitter;
 
   private int lastUpdatedCount;
 
@@ -74,9 +77,8 @@ public class QuoteUpdater {
     try {
       log.debug("Sending message for {}", quote);
 
-      var message = messageSender.from("quotes", jsonHelper.toJSON(quote));
-      message.setHeader(quote.getShare().getKey());
-      messageSender.send(message);
+      var message = jsonHelper.toJSON(quote);
+      emitter.send(message).toCompletableFuture().orTimeout(100, TimeUnit.MILLISECONDS).join();
 
       lastUpdatedCount++;
     } catch (Exception e) {

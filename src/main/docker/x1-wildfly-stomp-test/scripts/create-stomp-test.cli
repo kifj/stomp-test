@@ -1,5 +1,10 @@
 embed-server --admin-only --server-config=profile.xml --std-out=echo
 
+/extension=org.wildfly.extension.microprofile.reactive-messaging-smallrye:add
+/extension=org.wildfly.extension.microprofile.reactive-streams-operators-smallrye:add
+/subsystem=microprofile-reactive-streams-operators-smallrye:add
+/subsystem=microprofile-reactive-messaging-smallrye:add
+
 if (outcome != success) of /subsystem=microprofile-config-smallrye/config-source=stomp-test:read-resource
   /subsystem=microprofile-config-smallrye/config-source=stomp-test:add(dir={path="/srv/wildfly/configuration/application"}, ordinal=200)
 end-if
@@ -18,19 +23,6 @@ if (outcome != success) of /subsystem=datasources/data-source=stocksDS:read-reso
     validate-on-match=true,\
     check-valid-connection-sql="select current_timestamp",\
     statistics-enabled=true\
-    )
-end-if
-
-if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:read-resource
-  /subsystem=messaging-activemq/server=default/jms-queue=stocksQueue:add(\
-    durable=true,\
-    entries=[java:/jms/queue/stocks],\
-    )
-end-if
-
-if (outcome != success) of /subsystem=messaging-activemq/server=default/jms-topic=quotesTopic:read-resource
-  /subsystem=messaging-activemq/server=default/jms-topic=quotesTopic:add(\
-    entries=[java:/jms/topic/quotes],\
     )
 end-if
 

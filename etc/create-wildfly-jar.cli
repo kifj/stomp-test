@@ -24,4 +24,3 @@
 
 /subsystem=logging/logger=x1:add(level=DEBUG)
 /subsystem=logging/logger=x1.service.registry:add(level=INFO)
-/subsystem=logging/logger=x1.message:add(level=INFO)
