@@ -4,8 +4,6 @@
     version="3.1">
   <persistence-unit name="stomp-test">
     <jta-data-source>java:jboss/datasources/stockstestDS</jta-data-source>
-    <class>x1.message.entity.MessageEntity</class>
-    <class>x1.message.configuration.ConfigurationEntity</class>
     <class>x1.stomp.model.Share</class>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="create-drop" />
