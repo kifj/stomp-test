@@ -1,14 +1,265 @@
 ---
-openapi: 3.0.3
-info:
-  title: Stomp Test
-  description: A sample application for websockets and stomp on Wildfly
-  contact:
-    email: mail@johannes-beck.name
-  license:
-    name: "The Apache Software License, Version 2.0"
-    url: http://www.apache.org/licenses/LICENSE-2.0.txt
-  version: "1.10"
+openapi: 3.1.0
+components:
+  schemas:
+    Action:
+      description: Executable action
+      type: string
+      enum:
+      - SUBSCRIBE
+      - UNSUBSCRIBE
+    Command:
+      description: Action to execute for a share
+      type: object
+      xml:
+        name: command
+      required:
+      - action
+      - key
+      properties:
+        action:
+          $ref: "#/components/schemas/Action"
+        key:
+          type: string
+          description: the share
+    error:
+      description: Structured error message
+      type: object
+      xml:
+        name: error
+      properties:
+        message:
+          type: string
+          description: The error message
+          xml:
+            attribute: true
+        path:
+          type: string
+          description: "On validation errors: the property which was invalid"
+          xml:
+            attribute: true
+        invalidValue:
+          type: string
+          description: "On validation errors: the value which was invalid"
+          xml:
+            attribute: true
+    errors:
+      description: Error response
+      type: object
+      xml:
+        name: errors
+      properties:
+        error:
+          type: array
+          items:
+            $ref: "#/components/schemas/error"
+        requestUri:
+          type: string
+          description: Request URI
+          xml:
+            attribute: true
+        type:
+          type: string
+          description: Error type
+          xml:
+            attribute: true
+    index:
+      description: Index page with HATEOS links
+      type: object
+      xml:
+        name: index
+      properties:
+        links:
+          type: array
+          items: {}
+          xml:
+            name: link
+    link:
+      description: HTTP Link
+      type: object
+      properties:
+        href:
+          type: string
+          description: the link target as a URI-Reference
+          examples:
+          - https://microsoft.com
+        rel:
+          type: string
+          description: The relation type of a link
+          examples:
+          - self
+        title:
+          type: string
+          description: used to label the destination of a link such that it can be
+            used as a human-readable identifier
+        type:
+          type: string
+          description: a hint indicating what the media type of the result of dereferencing
+            the link should be
+          examples:
+          - text/html
+        method:
+          type: string
+          description: HTTP method
+          examples:
+          - get
+    quote:
+      description: A quote is the current price for a share
+      readOnly: true
+      type: object
+      xml:
+        name: quote
+      required:
+      - share
+      properties:
+        share:
+          description: the share
+          type: object
+          $ref: "#/components/schemas/share"
+        price:
+          type: number
+          format: float
+          description: the price
+          examples:
+          - 12.34
+          xml:
+            attribute: true
+        currency:
+          type: string
+          description: currency code
+          default: EUR
+          xml:
+            attribute: true
+        from:
+          type: string
+          format: date
+          examples:
+          - 2022-03-10
+          description: "date of origin, as defined in `ISO8601`"
+          externalDocs:
+            url: https://en.wikipedia.org/wiki/ISO_8601
+          xml:
+            attribute: true
+        links:
+          readOnly: true
+          type: array
+          items:
+            description: HTTP Link
+            type: object
+            properties:
+              href:
+                type: string
+                description: the link target as a URI-Reference
+                examples:
+                - https://microsoft.com
+              rel:
+                type: string
+                description: The relation type of a link
+                examples:
+                - self
+              title:
+                type: string
+                description: used to label the destination of a link such that it
+                  can be used as a human-readable identifier
+              type:
+                type: string
+                description: a hint indicating what the media type of the result of
+                  dereferencing the link should be
+                examples:
+                - text/html
+              method:
+                type: string
+                description: HTTP method
+                examples:
+                - get
+          xml:
+            name: link
+    quotes:
+      readOnly: true
+      type: object
+      xml:
+        name: quotes
+      properties:
+        quotes:
+          type: array
+          items:
+            $ref: "#/components/schemas/quote"
+          xml:
+            name: quote
+    share:
+      type: object
+      description: "Shares are identified by stock symbols, and may have an name for\
+        \ readability."
+      xml:
+        name: share
+      required:
+      - key
+      properties:
+        key:
+          type: string
+          description: Stock symbol
+          examples:
+          - MSFT
+          pattern: "[A-Z0-9.]*"
+          minLength: 1
+          maxLength: 25
+          xml:
+            attribute: true
+        name:
+          type: string
+          description: Human readable name
+          examples:
+          - Microsoft Corp.
+          minLength: 1
+          maxLength: 80
+          xml:
+            attribute: true
+        links:
+          readOnly: true
+          type: array
+          items:
+            description: HTTP Link
+            type: object
+            properties:
+              href:
+                type: string
+                description: the link target as a URI-Reference
+                examples:
+                - https://microsoft.com
+              rel:
+                type: string
+                description: The relation type of a link
+                examples:
+                - self
+              title:
+                type: string
+                description: used to label the destination of a link such that it
+                  can be used as a human-readable identifier
+              type:
+                type: string
+                description: a hint indicating what the media type of the result of
+                  dereferencing the link should be
+                examples:
+                - text/html
+              method:
+                type: string
+                description: HTTP method
+                examples:
+                - get
+          xml:
+            name: link
+    shares:
+      readOnly: true
+      type: object
+      xml:
+        name: shares
+      properties:
+        shares:
+          type: array
+          items:
+            $ref: "#/components/schemas/share"
+          xml:
+            name: share
 tags:
 - name: Quotes
   description: receive quotes for shares
@@ -28,125 +279,29 @@ paths:
             application/xml:
               schema:
                 $ref: "#/components/schemas/index"
-  /rest/queues:
-    get:
-      summary: list queues
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Queue"
-  /rest/queues/{queue}:
-    get:
-      summary: list messages in queue
-      parameters:
-      - name: queue
-        in: path
-        description: Queue name
-        required: true
-        schema:
-          type: string
-      - name: from
-        in: query
-        description: offset
-        schema:
-          format: int32
-          default: 0
-          type: integer
-      - name: outOfRetries
-        in: query
-        description: only messages with no retries
-        schema:
-          type: boolean
-      - name: search
-        in: query
-        description: search keywords
-        schema:
-          type: string
-      - name: size
-        in: query
-        description: page size
-        schema:
-          format: int32
-          default: 50
-          type: integer
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MessageDto"
-    post:
-      summary: operate on messages in queue
-      parameters:
-      - name: queue
-        in: path
-        description: Queue name
-        required: true
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OperationsRequest"
-      responses:
-        "200":
-          description: if successful
-  /rest/queues/{queue}/{correlationId}:
-    put:
-      summary: update message
-      parameters:
-      - name: correlationId
-        in: path
-        description: Message correlation
-        required: true
-        schema:
-          type: string
-      - name: queue
-        in: path
-        description: Queue name
-        required: true
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MessageDto"
-      responses:
-        "200":
-          description: if successful
   /rest/quotes:
     get:
+      description: get quotes
       tags:
       - Quotes
-      description: get quotes
       parameters:
-      - name: X-Caller-ID
-        in: header
+      - in: header
+        name: X-Caller-ID
         schema:
           type: string
-      - name: X-Request-ID
-        in: header
+      - in: header
+        name: X-Request-ID
         schema:
           type: string
-      - name: key
+      - description: Stock symbols
+        example:
+        - GOOG
+        name: key
         in: query
-        description: Stock symbols
         schema:
           type: array
           items:
             type: string
-        example:
-        - GOOG
       responses:
         "200":
           description: Quotes received
@@ -163,25 +318,25 @@ paths:
           description: No subscription found
   /rest/quotes/{key}:
     get:
+      description: get a quote
       tags:
       - Quotes
-      description: get a quote
       parameters:
-      - name: X-Caller-ID
-        in: header
+      - in: header
+        name: X-Caller-ID
         schema:
           type: string
-      - name: X-Request-ID
-        in: header
+      - in: header
+        name: X-Request-ID
         schema:
           type: string
-      - name: key
+      - description: "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)"
+        example: BMW.DE
+        name: key
         in: path
-        description: "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)"
         required: true
         schema:
           type: string
-        example: BMW.DE
       responses:
         "200":
           description: Quote received
@@ -196,16 +351,16 @@ paths:
           description: Subscription not found
   /rest/shares:
     get:
+      description: List all subscriptions
       tags:
       - Shares
-      description: List all subscriptions
       parameters:
-      - name: X-Caller-ID
-        in: header
+      - in: header
+        name: X-Caller-ID
         schema:
           type: string
-      - name: X-Request-ID
-        in: header
+      - in: header
+        name: X-Request-ID
         schema:
           type: string
       responses:
@@ -221,17 +376,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/shares"
     post:
-      tags:
-      - Shares
       description: Add a share to your list of subscriptions
       operationId: addShare
+      tags:
+      - Shares
       parameters:
-      - name: X-Caller-ID
-        in: header
+      - in: header
+        name: X-Caller-ID
         schema:
           type: string
-      - name: X-Request-ID
-        in: header
+      - in: header
+        name: X-Request-ID
         schema:
           type: string
       requestBody:
@@ -242,6 +397,7 @@ paths:
           application/xml:
             schema:
               $ref: "#/components/schemas/share"
+        required: true
       responses:
         "201":
           description: Share subscribed
@@ -264,58 +420,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/errors"
   /rest/shares/{key}:
-    get:
-      tags:
-      - Shares
-      description: Find a share subscription
-      parameters:
-      - name: X-Caller-ID
-        in: header
-        schema:
-          type: string
-      - name: X-Request-ID
-        in: header
-        schema:
-          type: string
-      - name: key
-        in: path
-        description: "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)"
-        required: true
-        schema:
-          type: string
-        example: BMW.DE
-      responses:
-        "200":
-          description: Subscription found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/share"
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/share"
-        "404":
-          description: Subscription not found
     delete:
+      description: Remove a subscription of a share
       tags:
       - Shares
-      description: Remove a subscription of a share
       parameters:
-      - name: X-Caller-ID
-        in: header
+      - in: header
+        name: X-Caller-ID
         schema:
           type: string
-      - name: X-Request-ID
-        in: header
+      - in: header
+        name: X-Request-ID
         schema:
           type: string
-      - name: key
+      - description: Stock symbol
+        example: GOOG
+        name: key
         in: path
-        description: Stock symbol
         required: true
         schema:
           type: string
-        example: GOOG
       responses:
         "200":
           description: Subscription removed
@@ -328,6 +452,38 @@ paths:
                 $ref: "#/components/schemas/share"
         "404":
           description: Subscription was not found
+    get:
+      description: Find a share subscription
+      tags:
+      - Shares
+      parameters:
+      - in: header
+        name: X-Caller-ID
+        schema:
+          type: string
+      - in: header
+        name: X-Request-ID
+        schema:
+          type: string
+      - description: "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)"
+        example: BMW.DE
+        name: key
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Subscription found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/share"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/share"
+        "404":
+          description: Subscription not found
   /rest/{path}:
     options:
       parameters:
@@ -341,335 +497,16 @@ paths:
           '*/*':
             schema:
               type: string
+        required: true
       responses:
         "200":
           description: OK
-components:
-  schemas:
-    Action:
-      description: Kind of operational request
-      enum:
-      - RETRY
-      - DEQUEUE
-      - MOVE
-      - RESCHEDULE
-      type: string
-    Action1:
-      description: Executable action
-      enum:
-      - SUBSCRIBE
-      - UNSUBSCRIBE
-      type: string
-    Command:
-      description: Action to execute for a share
-      required:
-      - action
-      - key
-      type: object
-      properties:
-        action:
-          $ref: "#/components/schemas/Action1"
-        key:
-          description: the share
-          type: string
-      xml:
-        name: command
-    MessageDto:
-      description: Message representation
-      required:
-      - queue
-      - messageCorrelation
-      type: object
-      properties:
-        queue:
-          description: current queue
-          type: string
-        messageCorrelation:
-          description: unique message correlation
-          type: string
-        payload:
-          description: message payload
-          type: string
-        header:
-          description: message header
-          type: string
-        retries:
-          format: int32
-          description: number of retries left
-          type: integer
-        priority:
-          format: int32
-          description: priority
-          type: integer
-        entryDate:
-          format: date-time
-          description: message entry date
-          type: string
-          example: 2022-03-10T12:15:50
-        dueDate:
-          format: date-time
-          description: message due date
-          type: string
-          example: 2022-03-10T12:15:50
-    OperationsRequest:
-      description: Operational Request
-      required:
-      - action
-      - messages
-      type: object
-      properties:
-        action:
-          $ref: "#/components/schemas/Action"
-        messages:
-          minItems: 1
-          type: array
-          items:
-            $ref: "#/components/schemas/MessageDto"
-        targetQueue:
-          description: target queue if action is MOVE
-          type: string
-        deliveryOffset:
-          format: int64
-          description: "delivery offset if action is RESCHEDULE, in milliseconds"
-          type: integer
-    Queue:
-      description: Queue representation
-      type: object
-      properties:
-        name:
-          description: queue name
-          type: string
-        count:
-          format: int64
-          description: number of messages in the queue
-          type: integer
-        outOfRetries:
-          format: int64
-          description: number of messages with no retries in the queue
-          type: integer
-    error:
-      description: Structured error message
-      type: object
-      properties:
-        message:
-          description: The error message
-          type: string
-          xml:
-            attribute: true
-        path:
-          description: "On validation errors: the property which was invalid"
-          type: string
-          xml:
-            attribute: true
-        invalidValue:
-          description: "On validation errors: the value which was invalid"
-          type: string
-          xml:
-            attribute: true
-      xml:
-        name: error
-    errors:
-      description: Error response
-      type: object
-      properties:
-        error:
-          type: array
-          items:
-            $ref: "#/components/schemas/error"
-        requestUri:
-          description: Request URI
-          type: string
-          xml:
-            attribute: true
-        type:
-          description: Error type
-          type: string
-          xml:
-            attribute: true
-      xml:
-        name: errors
-    index:
-      description: Index page with HATEOS links
-      type: object
-      properties:
-        links:
-          type: array
-          items: {}
-          xml:
-            name: link
-      xml:
-        name: index
-    link:
-      description: HTTP Link
-      type: object
-      properties:
-        href:
-          description: the link target as a URI-Reference
-          type: string
-          example: https://microsoft.com
-          nullable: false
-        rel:
-          description: The relation type of a link
-          type: string
-          example: self
-        title:
-          description: used to label the destination of a link such that it can be
-            used as a human-readable identifier
-          type: string
-        type:
-          description: a hint indicating what the media type of the result of dereferencing
-            the link should be
-          type: string
-          example: text/html
-        method:
-          description: HTTP method
-          type: string
-          example: get
-    quote:
-      description: A quote is the current price for a share
-      required:
-      - share
-      type: object
-      properties:
-        share:
-          description: the share
-          type: object
-          allOf:
-          - $ref: "#/components/schemas/share"
-        price:
-          format: float
-          description: the price
-          type: number
-          xml:
-            attribute: true
-          example: 12.34
-        currency:
-          description: currency code
-          default: EUR
-          type: string
-          xml:
-            attribute: true
-        from:
-          format: date
-          description: "date of origin, as defined in `ISO8601`"
-          type: string
-          xml:
-            attribute: true
-          externalDocs:
-            url: https://en.wikipedia.org/wiki/ISO_8601
-          example: 2022-03-10
-        links:
-          type: array
-          items:
-            description: HTTP Link
-            type: object
-            properties:
-              href:
-                description: the link target as a URI-Reference
-                type: string
-                example: https://microsoft.com
-                nullable: false
-              rel:
-                description: The relation type of a link
-                type: string
-                example: self
-              title:
-                description: used to label the destination of a link such that it
-                  can be used as a human-readable identifier
-                type: string
-              type:
-                description: a hint indicating what the media type of the result of
-                  dereferencing the link should be
-                type: string
-                example: text/html
-              method:
-                description: HTTP method
-                type: string
-                example: get
-          readOnly: true
-          xml:
-            name: link
-      readOnly: true
-      xml:
-        name: quote
-    quotes:
-      type: object
-      properties:
-        quotes:
-          type: array
-          items:
-            $ref: "#/components/schemas/quote"
-          xml:
-            name: quote
-      readOnly: true
-      xml:
-        name: quotes
-    share:
-      description: "Shares are identified by stock symbols, and may have an name for\
-        \ readability."
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          description: Stock symbol
-          maxLength: 25
-          minLength: 1
-          pattern: "[A-Z0-9.]*"
-          type: string
-          xml:
-            attribute: true
-          example: MSFT
-        name:
-          description: Human readable name
-          maxLength: 80
-          minLength: 1
-          type: string
-          xml:
-            attribute: true
-          example: Microsoft Corp.
-        links:
-          type: array
-          items:
-            description: HTTP Link
-            type: object
-            properties:
-              href:
-                description: the link target as a URI-Reference
-                type: string
-                example: https://microsoft.com
-                nullable: false
-              rel:
-                description: The relation type of a link
-                type: string
-                example: self
-              title:
-                description: used to label the destination of a link such that it
-                  can be used as a human-readable identifier
-                type: string
-              type:
-                description: a hint indicating what the media type of the result of
-                  dereferencing the link should be
-                type: string
-                example: text/html
-              method:
-                description: HTTP method
-                type: string
-                example: get
-          readOnly: true
-          xml:
-            name: link
-      xml:
-        name: share
-    shares:
-      type: object
-      properties:
-        shares:
-          type: array
-          items:
-            $ref: "#/components/schemas/share"
-          xml:
-            name: share
-      readOnly: true
-      xml:
-        name: shares
+info:
+  title: Stomp Test
+  version: "1.10"
+  description: A sample application for websockets and stomp on Wildfly
+  contact:
+    email: mail@johannes-beck.name
+  license:
+    name: "The Apache Software License, Version 2.0"
+    url: https://www.apache.org/licenses/LICENSE-2.0.txt
