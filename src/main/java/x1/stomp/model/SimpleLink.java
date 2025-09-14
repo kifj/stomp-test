@@ -12,8 +12,8 @@ public class SimpleLink {
   private String rel;
   @Schema(description = "used to label the destination of a link such that it can be used as a human-readable identifier")
   private String title;
-  @Schema(description = "a hint indicating what the media type of the result of dereferencing the link should be", 
-      examples = MediaType.TEXT_HTML)
+  @Schema(description = "a hint indicating what the media type of the result of dereferencing the link should be",
+          examples = MediaType.TEXT_HTML)
   private String type;
   @Schema(description = "HTTP method", examples = "get")
   private String method;

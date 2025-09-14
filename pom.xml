@@ -43,8 +43,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
-        <wildfly.version>37.0.0.Final</wildfly.version>
+        <wildfly.version>37.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
+        <db.server>localhost</db.server>
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.13</jacoco.version>
         <jacoco.append>true</jacoco.append>
@@ -799,6 +800,7 @@
                             <systemPropertyVariables>
                                 <arquillian.launch>managed</arquillian.launch>
                                 <jboss.home>${jboss.home}</jboss.home>
+                                <db.server>${db.server}</db.server>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                             <groups>Arquillian</groups>
@@ -1049,7 +1051,6 @@
                                 <layer>microprofile-rest-client</layer>
                                 <layer>microprofile-fault-tolerance</layer>
                                 <layer>microprofile-telemetry</layer>
-                                <layer>microprofile-fault-tolerance</layer>
                                 <layer>micrometer</layer>
                             </layers>
                             <cloud>

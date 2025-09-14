@@ -2,8 +2,8 @@ CREATE SCHEMA stocks;
 
 CREATE TABLE stocks.share (
   id bigint NOT NULL,
-  key character varying(25) NOT NULL,
-  name character varying(80) NOT NULL,
+  key varchar(25) NOT NULL,
+  name varchar(80) NOT NULL,
   version bigint,
   CONSTRAINT share_pkey PRIMARY KEY (id),
   CONSTRAINT idx_key UNIQUE (key)
