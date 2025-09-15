@@ -5,10 +5,13 @@ import jakarta.ws.rs.*;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_XML;
+
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -23,6 +26,7 @@ import java.time.temporal.ChronoUnit;
 @CircuitBreaker(failOn = { Exception.class }, skipOn = { ClientErrorException.class })
 public interface QuickQuoteService {
   @GET
+  @ClientHeaderParam(name = HttpHeaders.USER_AGENT, value = "Mozilla/5.0")
   @Path("/quote.htm")
   Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
 }
