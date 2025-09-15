@@ -15,7 +15,7 @@ public final class Containers implements ArquillianTestContainers {
 
     @SuppressWarnings("resource")
     private final GenericContainer<?> database = new GenericContainer<>(
-            DockerImageName.parse("registry.x1/j7beck/x1-postgres-stomp-test:1.10"))
+            DockerImageName.parse("registry.x1/j7beck/x1-postgres-stomp-test:1.8"))
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(Containers.class)).withSeparateOutputStreams());
