@@ -8,7 +8,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response.Status;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import io.micrometer.core.annotation.Timed;
@@ -26,10 +25,6 @@ public class QuoteRetriever {
   @Inject
   @RestClient
   private QuickQuoteService quickQuoteService;
-
-  @Inject
-  @ConfigProperty(name = "x1.stomp.control.QuickQuoteService/mp-rest/format", defaultValue = "json")
-  private String format;
 
   @Timed
   public Optional<Quote> retrieveQuote(Share share) {
@@ -51,17 +46,13 @@ public class QuoteRetriever {
   }
 
   private QuickQuoteResult retrieveQuotes(String keys) {
-    try (var response = quickQuoteService.retrieve(keys.toUpperCase(), format)) {
+    try (var response = quickQuoteService.retrieve(keys.toUpperCase(), "json")) {
       var status = Status.fromStatusCode(response.getStatus());
       if (status != Status.OK) {
         var body = response.readEntity(String.class);
         throw new WebApplicationException(body, status);
       }
-      return switch (format) {
-        case "xml" -> response.readEntity(QuickQuoteResult.class);
-        case "json" -> response.readEntity(QuickQuoteResponse.class).getQuickQuoteResult();
-        default -> throw new IllegalArgumentException(format);
-      };
+      return response.readEntity(QuickQuoteResponse.class).getQuickQuoteResult();
     }
   }
 

@@ -4,9 +4,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName(value = "QuickQuote")
-@XmlRootElement(name = "QuickQuote")
 public class QuickQuote implements Serializable {
   @Serial
   private static final long serialVersionUID = -7248251946071933412L;
@@ -29,7 +25,6 @@ public class QuickQuote implements Serializable {
   private String exchange;
   private Date timestamp;
 
-  @XmlElement(name = "last")
   public Float getLast() {
     return last;
   }
@@ -38,7 +33,6 @@ public class QuickQuote implements Serializable {
     this.last = last;
   }
 
-  @XmlElement(name = "name")
   public String getName() {
     return name;
   }
@@ -47,7 +41,6 @@ public class QuickQuote implements Serializable {
     this.name = name;
   }
 
-  @XmlElement(name = "symbol")
   public String getSymbol() {
     return symbol;
   }
@@ -56,7 +49,6 @@ public class QuickQuote implements Serializable {
     this.symbol = symbol;
   }
 
-  @XmlElement(name = "volume")
   public Integer getVolume() {
     return volume;
   }
@@ -65,7 +57,6 @@ public class QuickQuote implements Serializable {
     this.volume = volume;
   }
 
-  @XmlElement(name = "countryCode")
   public String getCountryCode() {
     return countryCode;
   }
@@ -74,7 +65,6 @@ public class QuickQuote implements Serializable {
     this.countryCode = countryCode;
   }
 
-  @XmlElement(name = "currencyCode")
   public String getCurrencyCode() {
     return currencyCode;
   }
@@ -83,7 +73,6 @@ public class QuickQuote implements Serializable {
     this.currencyCode = currencyCode;
   }
 
-  @XmlElement(name = "exchange")
   public String getExchange() {
     return exchange;
   }
@@ -94,7 +83,6 @@ public class QuickQuote implements Serializable {
 
   @JsonProperty("reg_last_time")
   @JsonFormat(shape = Shape.STRING)
-  @XmlElement(name = "reg_last_time")
   public Date getLastTime() {
     return timestamp;
   }
