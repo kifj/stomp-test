@@ -1098,6 +1098,14 @@
                                     <OTEL_COLLECTOR_HOST>localhost</OTEL_COLLECTOR_HOST>
                                 </env>
                                 <serviceAccount>jgroups-kubeping-service-account</serviceAccount>
+                                <annotations>
+                                    <deployment>
+                                        <property>
+                                            <name>sidecar.opentelemetry.io/inject</name>
+                                            <value>true</value>
+                                        </property>
+                                    </deployment>
+                                </annotations>
                             </resources>
                             <enricher>
                                 <config>
@@ -1109,14 +1117,6 @@
                                     </jkube-healthcheck-wildfly-jar>
                                 </config>
                             </enricher>
-                            <annotations>
-                                <deployment>
-                                    <property>
-                                        <name>sidecar.opentelemetry.io/inject</name>
-                                        <value>true</value>
-                                    </property>
-                                </deployment>
-                            </annotations>
                         </configuration>
                         <executions>
                             <execution>

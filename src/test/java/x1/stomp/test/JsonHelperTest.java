@@ -114,6 +114,26 @@ public class JsonHelperTest {
         () -> assertThat(q1.getExchange()).isEqualTo("XETRA"), () -> assertThat(q1.getLastTime()).isNotNull());
   }
 
+    @Test
+    @DisplayName("from JSON to QuickQuoteResult (2)")
+    void testFromJson5() throws Exception {
+        var f = new File(
+                Objects.requireNonNull(getClass().getClassLoader().getResource("quickquoteresult2.json")).getFile());
+        var c = FileUtils.readFileToString(f, StandardCharsets.UTF_8);
+        var q = jsonHelper.fromJSON(c, QuickQuoteResult.class);
+
+        assertAll(() -> assertThat(q).isNotNull(), () -> assertThat(q.getQuotes()).size().isEqualTo(1));
+
+        var q1 = q.getQuotes().getFirst();
+        assertAll(() -> assertThat(q1.getSymbol()).isEqualTo("MSFT"),
+                () -> assertThat(q1.getLast().toString()).isEqualTo("513.1"),
+                () -> assertThat(q1.getCurrencyCode()).isEqualTo("USD"),
+                () -> assertThat(q1.getCountryCode()).isEqualTo("US"),
+                () -> assertThat(q1.getName()).isEqualTo("Microsoft Corp"),
+                () -> assertThat(q1.getExchange()).isEqualTo("NASDAQ"),
+                () -> assertThat(q1.getLastTime()).isNotNull());
+    }
+
   @DisplayName("from JSON to SimpleLink")
   @Test
   void testSimpleLinkToJson() throws Exception {
