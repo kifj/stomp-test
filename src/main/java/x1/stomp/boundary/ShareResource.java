@@ -143,7 +143,9 @@ public class ShareResource {
       @Parameter(required = true,
           description = "The share which is will be added for subscription") @NotNull @Valid Share share) {
     try {
-      MDC.put(MDC_KEY, share.getKey());
+      if (share.getKey() != null) {
+        MDC.put(MDC_KEY, share.getKey());
+      }
       shareSubscription.subscribe(share);
       log.debug("subscribed share: {}", share);
       var location = UriBuilder.fromResource(ShareResource.class).path("{0}").build(share.getKey());

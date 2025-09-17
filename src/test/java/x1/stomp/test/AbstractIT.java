@@ -38,8 +38,9 @@ public abstract class AbstractIT {
         var archive = ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")
                 .addPackages(true, "x1.stomp")
                 .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
-                .addAsResource("quickquoteresult.xml").addAsWebInfResource("beans.xml")
-                .addAsWebInfResource("jboss-deployment-structure.xml").addAsLibraries(libraries);
+                .addAsWebInfResource("beans.xml")
+                .addAsWebInfResource("jboss-deployment-structure.xml")
+                .addAsLibraries(libraries);
 
         if (Containers.isRemoteArquillian()) {
             return archive

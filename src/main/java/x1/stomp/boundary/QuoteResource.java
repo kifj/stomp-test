@@ -153,7 +153,7 @@ public class QuoteResource {
 
   private Response retrieveQuotes(List<String> keys, UriBuilder baseUriBuilder) {
     try {
-      List<Share> shares = retrieveShares(keys);
+      var shares = retrieveShares(keys);
       if (shares.isEmpty()) {
         return Response.status(NOT_FOUND).entity(new Quotes()).build();
       }
