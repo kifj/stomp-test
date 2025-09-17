@@ -167,7 +167,9 @@ public class ShareResource {
       context.createProducer().setJMSCorrelationID(jmsCorrelationId).setProperty("type", "share")
           .setProperty("action", Action.SUBSCRIBE.name()).send(stockMarketQueue, share);
       MDC.put(CORRELATION_ID, jmsCorrelationId);
-      MDC.put(MDC_KEY, share.getKey());
+      if (share.getKey() != null) {
+          MDC.put(MDC_KEY, share.getKey());
+      }
       log.debug("message sent: {}", share);
       var location = UriBuilder.fromResource(ShareResource.class).path("{0}").build(share.getKey());
       return Response.created(location).build();
