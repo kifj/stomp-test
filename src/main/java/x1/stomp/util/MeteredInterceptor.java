@@ -24,105 +24,105 @@ import jakarta.interceptor.InvocationContext;
 @Interceptor
 @Metered
 public class MeteredInterceptor {
-  public static final String DEFAULT_METRIC_NAME = "method.timed";
-  public static final String DEFAULT_EXCEPTION_TAG_VALUE = "none";
-  public static final String EXCEPTION_TAG = "exception";
-  private static final Map<String, Optional<? extends Annotation>> CACHE = new ConcurrentHashMap<>();
+    public static final String DEFAULT_METRIC_NAME = "method.timed";
+    public static final String DEFAULT_EXCEPTION_TAG_VALUE = "none";
+    public static final String EXCEPTION_TAG = "exception";
+    private static final Map<String, Optional<? extends Annotation>> CACHE = new ConcurrentHashMap<>();
 
-  @Inject
-  private MeterRegistry registry;
+    @Inject
+    private MeterRegistry registry;
 
-  @AroundInvoke
-  public Object meter(InvocationContext ctx) throws Exception {
-    var type = ctx.getMethod().getDeclaringClass();
-    var method = ctx.getMethod().getName();
+    @AroundInvoke
+    public Object meter(InvocationContext ctx) throws Exception {
+        var type = ctx.getMethod().getDeclaringClass();
+        var method = ctx.getMethod().getName();
 
-    var timed = timed(ctx);
-    var counted = counted(ctx);
+        var timed = timed(ctx);
+        var counted = counted(ctx);
 
-    Sample sample = null;
-    Exception exception = null;
-    try {
-      if (timed != null) {
-        sample = Timer.start(registry);
-      }
-      return ctx.proceed();
-    } catch (Exception e) {
-      exception = e;
-      throw e;
-    } finally {
-      if (sample != null) {
-        stopTimer(type, method, timed, sample, exception);
-      }
-      if (counted != null) {
-        increaseCounter(type, method, counted, exception);
-      }
+        Sample sample = null;
+        Exception exception = null;
+        try {
+            if (timed != null) {
+                sample = Timer.start(registry);
+            }
+            return ctx.proceed();
+        } catch (Exception e) {
+            exception = e;
+            throw e;
+        } finally {
+            if (sample != null) {
+                stopTimer(type, method, timed, sample, exception);
+            }
+            if (counted != null) {
+                increaseCounter(type, method, counted, exception);
+            }
+        }
     }
-  }
 
-  private void increaseCounter(Class<?> type, String method, Counted counted, Exception exception) {
-    if (!counted.recordFailuresOnly() || exception != null) {
-      Counter.builder(metricId(counted)).description(StringUtils.defaultIfEmpty(counted.description(), null))
-          .tags(counted.extraTags()).tag("class", type.getSimpleName()).tag("method", method)
-          .tags(EXCEPTION_TAG, getExceptionTag(exception)).register(registry).increment();
+    private void increaseCounter(Class<?> type, String method, Counted counted, Exception exception) {
+        if (!counted.recordFailuresOnly() || exception != null) {
+            Counter.builder(metricId(counted)).description(StringUtils.defaultIfEmpty(counted.description(), null))
+                    .tags(counted.extraTags()).tag("class", type.getSimpleName()).tag("method", method)
+                    .tags(EXCEPTION_TAG, getExceptionTag(exception)).register(registry).increment();
+        }
     }
-  }
 
-  private void stopTimer(Class<?> type, String method, Timed timed, Sample sample, Exception exception) {
-    var timer = Timer.builder(metricId(timed)).description(StringUtils.defaultIfEmpty(timed.description(), null))
-        .tags(timed.extraTags()).tag("class", type.getSimpleName()).tag("method", method)
-        .tags(EXCEPTION_TAG, getExceptionTag(exception)).register(registry);
-    sample.stop(timer);
-  }
-
-  private Timed timed(InvocationContext ctx) {
-    var cached = CACHE.get(signature("timed", ctx));
-    if (cached == null) {
-      var annotation = ctx.getMethod().getAnnotation(Timed.class);
-      if (annotation == null) {
-        annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Timed.class);
-      }
-      CACHE.put(signature("timed", ctx), Optional.ofNullable(annotation));
-      return annotation;
-    } else {
-      return (Timed) cached.orElse(null);
+    private void stopTimer(Class<?> type, String method, Timed timed, Sample sample, Exception exception) {
+        var timer = Timer.builder(metricId(timed)).description(StringUtils.defaultIfEmpty(timed.description(), null))
+                .tags(timed.extraTags()).tag("class", type.getSimpleName()).tag("method", method)
+                .tags(EXCEPTION_TAG, getExceptionTag(exception)).register(registry);
+        sample.stop(timer);
     }
-  }
 
-  private Counted counted(InvocationContext ctx) {
-    var cached = CACHE.get(signature("counted", ctx));
-    if (cached == null) {
-      var annotation = ctx.getMethod().getAnnotation(Counted.class);
-      if (annotation == null) {
-        annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Counted.class);
-      }
-      CACHE.put(signature("counted", ctx), Optional.ofNullable(annotation));
-      return annotation;
-    } else {
-      return (Counted) cached.orElse(null);
+    private Timed timed(InvocationContext ctx) {
+        var cached = CACHE.get(signature("timed", ctx));
+        if (cached == null) {
+            var annotation = ctx.getMethod().getAnnotation(Timed.class);
+            if (annotation == null) {
+                annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Timed.class);
+            }
+            CACHE.put(signature("timed", ctx), Optional.ofNullable(annotation));
+            return annotation;
+        } else {
+            return (Timed) cached.orElse(null);
+        }
     }
-  }
 
-  private String metricId(Timed annotation) {
-    return StringUtils.defaultIfEmpty(annotation.value(), DEFAULT_METRIC_NAME);
-  }
-
-  private String metricId(Counted annotation) {
-    return annotation.value();
-  }
-
-  private String getExceptionTag(Throwable throwable) {
-    if (throwable == null) {
-      return DEFAULT_EXCEPTION_TAG_VALUE;
+    private Counted counted(InvocationContext ctx) {
+        var cached = CACHE.get(signature("counted", ctx));
+        if (cached == null) {
+            var annotation = ctx.getMethod().getAnnotation(Counted.class);
+            if (annotation == null) {
+                annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Counted.class);
+            }
+            CACHE.put(signature("counted", ctx), Optional.ofNullable(annotation));
+            return annotation;
+        } else {
+            return (Counted) cached.orElse(null);
+        }
     }
-    if (throwable.getCause() == null) {
-      return throwable.getClass().getSimpleName();
-    }
-    return throwable.getCause().getClass().getSimpleName();
-  }
 
-  private String signature(String prefix, InvocationContext ctx) {
-    return prefix + "/" + ctx.getMethod().getDeclaringClass().getName() + "." + ctx.getMethod().getName();
-  }
+    private String metricId(Timed annotation) {
+        return StringUtils.defaultIfEmpty(annotation.value(), DEFAULT_METRIC_NAME);
+    }
+
+    private String metricId(Counted annotation) {
+        return annotation.value();
+    }
+
+    private String getExceptionTag(Throwable throwable) {
+        if (throwable == null) {
+            return DEFAULT_EXCEPTION_TAG_VALUE;
+        }
+        if (throwable.getCause() == null) {
+            return throwable.getClass().getSimpleName();
+        }
+        return throwable.getCause().getClass().getSimpleName();
+    }
+
+    private String signature(String prefix, InvocationContext ctx) {
+        return prefix + "/" + ctx.getMethod().getDeclaringClass().getName() + "." + ctx.getMethod().getName();
+    }
 
 }

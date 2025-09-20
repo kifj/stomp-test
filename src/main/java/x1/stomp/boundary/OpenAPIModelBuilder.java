@@ -14,48 +14,48 @@ import org.eclipse.microprofile.openapi.models.OpenAPI;
 
 @WebListener
 public class OpenAPIModelBuilder implements OASModelReader, ServletContextListener {
-  private static final CountDownLatch LOCK = new CountDownLatch(1);
-  private static ServletContext servletContext;
-  
-  private static void setServletContext(ServletContextEvent sce) {
-    servletContext = sce.getServletContext();
-  }
+    private static final CountDownLatch LOCK = new CountDownLatch(1);
+    private static ServletContext servletContext;
 
-  @Override
-  public void contextInitialized(ServletContextEvent sce) {
-    setServletContext(sce);
-    LOCK.countDown();
-  }
-  
-  @Override
-  public OpenAPI buildModel() {
-    var openAPI =  OASFactory.createOpenAPI();
-
-    // read info from manifest
-    try {
-      var manifest = new Manifest(servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));
-      var attributes = manifest.getAttributes("Application");
-      
-      var info = OASFactory.createInfo().title(attributes.getValue("Application-Title"))
-          .description(attributes.getValue("Application-Description"))
-          .version(attributes.getValue("Application-Version"))
-          .contact(OASFactory.createContact().email(attributes.getValue("Application-Contact")))
-          .license(OASFactory.createLicense().name(attributes.getValue("Application-License"))
-              .url(attributes.getValue("Application-LicenseUrl")));
-      openAPI.info(info);
-    } catch (Exception e) {
-      // ignore
+    private static void setServletContext(ServletContextEvent sce) {
+        servletContext = sce.getServletContext();
     }
 
-    try {
-      LOCK.await();
-      // add server by a relative url: works only if using swagger UI deployed with the application
-      var server = OASFactory.createServer().description("stage").url(servletContext.getContextPath());
-      openAPI.addServer(server);
-    } catch (InterruptedException e1) {
-      // ignore
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        setServletContext(sce);
+        LOCK.countDown();
     }
-    return openAPI;
-  }
+
+    @Override
+    public OpenAPI buildModel() {
+        var openAPI = OASFactory.createOpenAPI();
+
+        // read info from manifest
+        try {
+            var manifest = new Manifest(servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));
+            var attributes = manifest.getAttributes("Application");
+
+            var info = OASFactory.createInfo().title(attributes.getValue("Application-Title"))
+                    .description(attributes.getValue("Application-Description"))
+                    .version(attributes.getValue("Application-Version"))
+                    .contact(OASFactory.createContact().email(attributes.getValue("Application-Contact")))
+                    .license(OASFactory.createLicense().name(attributes.getValue("Application-License"))
+                            .url(attributes.getValue("Application-LicenseUrl")));
+            openAPI.info(info);
+        } catch (Exception e) {
+            // ignore
+        }
+
+        try {
+            LOCK.await();
+            // add server by a relative url: works only if using swagger UI deployed with the application
+            var server = OASFactory.createServer().description("stage").url(servletContext.getContextPath());
+            openAPI.addServer(server);
+        } catch (InterruptedException e1) {
+            // ignore
+        }
+        return openAPI;
+    }
 
 }

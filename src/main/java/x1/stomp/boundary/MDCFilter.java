@@ -16,29 +16,29 @@ import org.slf4j.MDC;
 @PreMatching
 public class MDCFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
-  public static final String X_REQUEST_ID = "X-Request-ID";
-  public static final String X_CALLER_ID = "X-Caller-ID";
-  public static final String REQUEST_ID = "requestId";
-  public static final String CALLER_ID = "callerId";
-  public static final String HTTP_STATUS_CODE = "http_response_code";
+    public static final String X_REQUEST_ID = "X-Request-ID";
+    public static final String X_CALLER_ID = "X-Caller-ID";
+    public static final String REQUEST_ID = "requestId";
+    public static final String CALLER_ID = "callerId";
+    public static final String HTTP_STATUS_CODE = "http_response_code";
 
-  @Override
-  public void filter(ContainerRequestContext requestContext) {
-    var requestId = requestContext.getHeaderString(X_REQUEST_ID);
-    if (StringUtils.isEmpty(requestId)) {
-      requestId = UUID.randomUUID().toString();
+    @Override
+    public void filter(ContainerRequestContext requestContext) {
+        var requestId = requestContext.getHeaderString(X_REQUEST_ID);
+        if (StringUtils.isEmpty(requestId)) {
+            requestId = UUID.randomUUID().toString();
+        }
+        MDC.put(REQUEST_ID, requestId);
+        var callerId = requestContext.getHeaderString(X_CALLER_ID);
+        if (StringUtils.isNotEmpty(callerId)) {
+            MDC.put(CALLER_ID, callerId);
+        }
     }
-    MDC.put(REQUEST_ID, requestId);
-    var callerId = requestContext.getHeaderString(X_CALLER_ID);
-    if (StringUtils.isNotEmpty(callerId)) {
-      MDC.put(CALLER_ID, callerId);
-    }
-  }
 
-  @Override
-  public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-    responseContext.getHeaders().putSingle(X_REQUEST_ID, MDC.get(REQUEST_ID));
-    MDC.remove(REQUEST_ID);
-    MDC.remove(CALLER_ID);
-  }
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
+        responseContext.getHeaders().putSingle(X_REQUEST_ID, MDC.get(REQUEST_ID));
+        MDC.remove(REQUEST_ID);
+        MDC.remove(CALLER_ID);
+    }
 }

@@ -8,59 +8,60 @@ import x1.stomp.control.ShareSubscription;
 import x1.stomp.model.Share;
 
 import jakarta.inject.Inject;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ShareSubscription Test")
 public class ShareSubscriptionTest extends AbstractIT {
 
-  @Inject
-  private ShareSubscription shareSubscription;
+    @Inject
+    private ShareSubscription shareSubscription;
 
-  @Inject
-  private QuoteUpdater quoteUpdater;
+    @Inject
+    private QuoteUpdater quoteUpdater;
 
-  @Inject
-  private Logger log;
+    @Inject
+    private Logger log;
 
-  @Test
-  void testSubscribe() {
-    var share = new Share();
-    share.setKey("MSFT");
-    share.setName("Microsoft Corporation");
+    @Test
+    void testSubscribe() {
+        var share = new Share();
+        share.setKey("MSFT");
+        share.setName("Microsoft Corporation");
 
-    while (true) {
-      var existing = shareSubscription.find(share.getKey());
-      if (existing.isPresent()) {
-        shareSubscription.unsubscribe(existing.get());
-      } else {
-        break;
-      }
+        while (true) {
+            var existing = shareSubscription.find(share.getKey());
+            if (existing.isPresent()) {
+                shareSubscription.unsubscribe(existing.get());
+            } else {
+                break;
+            }
+        }
+
+        shareSubscription.subscribe(share);
+        assertThat(share.getId()).isNotNull();
+        assertThat(share.getVersion()).isNotNull();
+        log.info("{} was persisted with id {}", share.getName(), share.getId());
+        // nothing happens
+        shareSubscription.subscribe(share);
+
+        var s = shareSubscription.find(share.getKey());
+        assertThat(s).isPresent();
+        assertThat(shareSubscription.list()).size().isEqualTo(1);
+        share = s.get();
+        shareSubscription.unsubscribe(share);
+        assertThat(shareSubscription.find(share.getKey())).isNotPresent();
     }
 
-    shareSubscription.subscribe(share);
-    assertThat(share.getId()).isNotNull();
-    assertThat(share.getVersion()).isNotNull();
-    log.info("{} was persisted with id {}", share.getName(), share.getId());
-    // nothing happens
-    shareSubscription.subscribe(share);
-
-    var s = shareSubscription.find(share.getKey());
-    assertThat(s).isPresent();
-    assertThat(shareSubscription.list()).size().isEqualTo(1);
-    share = s.get();
-    shareSubscription.unsubscribe(share);
-    assertThat(shareSubscription.find(share.getKey())).isNotPresent();
-  }
-
-  @Test
-  void testQuoteUpdater() throws Exception {
-    var share = new Share();
-    share.setKey("GOOG");
-    share.setName("Google");
-    shareSubscription.subscribe(share);
-    quoteUpdater.updateQuotes();
-    assertThat(quoteUpdater.getLastUpdateCount()).isEqualTo(1);
-    Thread.sleep(3000);
-    shareSubscription.find(share.getKey()).ifPresent(shareSubscription::unsubscribe);
-  }
+    @Test
+    void testQuoteUpdater() throws Exception {
+        var share = new Share();
+        share.setKey("GOOG");
+        share.setName("Google");
+        shareSubscription.subscribe(share);
+        quoteUpdater.updateQuotes();
+        assertThat(quoteUpdater.getLastUpdateCount()).isEqualTo(1);
+        Thread.sleep(3000);
+        shareSubscription.find(share.getKey()).ifPresent(shareSubscription::unsubscribe);
+    }
 }

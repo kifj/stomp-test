@@ -17,66 +17,66 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 
 public class TestContainersExtension implements LoadableExtension {
-  private static final Logger LOGGER = LoggerFactory.getLogger(TestContainersExtension.class);
-  private static final String PACKAGE_NAME = "x1.arquillian";
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestContainersExtension.class);
+    private static final String PACKAGE_NAME = "x1.arquillian";
 
-  @Override
-  public void register(ExtensionBuilder builder) {
-    findArquillianTestContainers().ifPresent(containerDefinition -> {
-      if (containerDefinition.isActive()) {
-        LoadContainerConfiguration.containerDefinition = containerDefinition;
-        builder.observer(LoadContainerConfiguration.class);
-      }
-    });
-  }
-
-  public static final class LoadContainerConfiguration {
-    private static ArquillianTestContainers containerDefinition;
-
-    public void registerInstance(@Observes ContainerRegistry registry, ServiceLoader serviceLoader) {
-      containerDefinition.instances().forEach(this::startContainer);
-      LOGGER.info("Started {}", getImageNames());
-      containerDefinition.configureAfterStart(registry);
+    @Override
+    public void register(ExtensionBuilder builder) {
+        findArquillianTestContainers().ifPresent(containerDefinition -> {
+            if (containerDefinition.isActive()) {
+                LoadContainerConfiguration.containerDefinition = containerDefinition;
+                builder.observer(LoadContainerConfiguration.class);
+            }
+        });
     }
 
-    private void startContainer(GenericContainer<?> container) {
-      container.start();
+    public static final class LoadContainerConfiguration {
+        private static ArquillianTestContainers containerDefinition;
+
+        public void registerInstance(@Observes ContainerRegistry registry, ServiceLoader serviceLoader) {
+            containerDefinition.instances().forEach(this::startContainer);
+            LOGGER.info("Started {}", getImageNames());
+            containerDefinition.configureAfterStart(registry);
+        }
+
+        private void startContainer(GenericContainer<?> container) {
+            container.start();
+        }
+
+        public void stopInstance(@Observes AfterStop event) {
+            reverse(containerDefinition.instances()).forEach(this::stopContainer);
+            LOGGER.info("Stopped {}", getImageNames());
+        }
+
+        private void stopContainer(GenericContainer<?> container) {
+            container.stop();
+        }
+
+        private List<GenericContainer<?>> reverse(List<GenericContainer<?>> containers) {
+            var reverse = new ArrayList<>(containers);
+            Collections.reverse(reverse);
+            return reverse;
+        }
+
+        private List<String> getImageNames() {
+            return containerDefinition.instances().stream().map(GenericContainer::getDockerImageName)
+                    .collect(Collectors.toList());
+        }
     }
 
-    public void stopInstance(@Observes AfterStop event) {
-      reverse(containerDefinition.instances()).forEach(this::stopContainer);
-      LOGGER.info("Stopped {}", getImageNames());
+    private Optional<ArquillianTestContainers> findArquillianTestContainers() {
+        var classes = new Reflections(PACKAGE_NAME).getTypesAnnotatedWith(ContainerDefinition.class);
+        if (classes.isEmpty()) {
+            return Optional.empty();
+        } else if (classes.size() > 1) {
+            throw new IllegalStateException("Found more than one ContainerDefinition under " + PACKAGE_NAME + ": " + classes);
+        }
+        try {
+            LOGGER.debug("Found ContainerDefinition in {}", classes);
+            return Optional.of((ArquillianTestContainers) classes.iterator().next().getDeclaredConstructor().newInstance());
+        } catch (Exception e) {
+            LOGGER.warn("Could not create ContainerDefinition", e);
+            return Optional.empty();
+        }
     }
-
-    private void stopContainer(GenericContainer<?> container) {
-      container.stop();
-    }
-
-    private List<GenericContainer<?>> reverse(List<GenericContainer<?>> containers) {
-      var reverse = new ArrayList<>(containers);
-      Collections.reverse(reverse);
-      return reverse;
-    }
-
-    private List<String> getImageNames() {
-      return containerDefinition.instances().stream().map(GenericContainer::getDockerImageName)
-          .collect(Collectors.toList());
-    }
-  }
-
-  private Optional<ArquillianTestContainers> findArquillianTestContainers() {
-    var classes = new Reflections(PACKAGE_NAME).getTypesAnnotatedWith(ContainerDefinition.class);
-    if (classes.isEmpty()) {
-      return Optional.empty();
-    } else if (classes.size() > 1) {
-      throw new IllegalStateException("Found more than one ContainerDefinition under " + PACKAGE_NAME + ": " + classes);
-    }
-    try {
-      LOGGER.debug("Found ContainerDefinition in {}", classes);
-      return Optional.of((ArquillianTestContainers) classes.iterator().next().getDeclaredConstructor().newInstance());
-    } catch (Exception e) {
-      LOGGER.warn("Could not create ContainerDefinition", e);
-      return Optional.empty();
-    }
-  }
 }

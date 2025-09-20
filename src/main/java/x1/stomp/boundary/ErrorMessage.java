@@ -9,65 +9,65 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @XmlRootElement(name = "error")
 @Schema(name = "error", description = "Structured error message")
 public final class ErrorMessage {
-  public static ErrorMessage of(String message) {
-    return new ErrorMessage(message);
-  }
+    public static ErrorMessage of(String message) {
+        return new ErrorMessage(message);
+    }
 
-  public static ErrorMessage from(Exception e) {
-    return new ErrorMessage(e.getMessage());
-  }
+    public static ErrorMessage from(Exception e) {
+        return new ErrorMessage(e.getMessage());
+    }
 
-  private ErrorMessage() {
-  }
+    private ErrorMessage() {
+    }
 
-  private ErrorMessage(String message) {
-    this.message = message;
-  }
+    private ErrorMessage(String message) {
+        this.message = message;
+    }
 
-  public static ErrorMessage of(ConstraintViolation<?> violation) {
-    var errorMessage = new ErrorMessage();
-    errorMessage.message = violation.getMessage();
-    errorMessage.path = violation.getPropertyPath().toString();
-    errorMessage.invalidValue = (violation.getInvalidValue() == null) ? null : violation.getInvalidValue().toString();
-    return errorMessage;
-  }
-  
-  @XmlAttribute
-  @Schema(description = "The error message")
-  public String getMessage() {
-    return message;
-  }
+    public static ErrorMessage of(ConstraintViolation<?> violation) {
+        var errorMessage = new ErrorMessage();
+        errorMessage.message = violation.getMessage();
+        errorMessage.path = violation.getPropertyPath().toString();
+        errorMessage.invalidValue = (violation.getInvalidValue() == null) ? null : violation.getInvalidValue().toString();
+        return errorMessage;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    @XmlAttribute
+    @Schema(description = "The error message")
+    public String getMessage() {
+        return message;
+    }
 
-  @XmlAttribute
-  @Schema(description = "On validation errors: the property which was invalid")
-  public String getPath() {
-    return path;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  public void setPath(String path) {
-    this.path = path;
-  }
+    @XmlAttribute
+    @Schema(description = "On validation errors: the property which was invalid")
+    public String getPath() {
+        return path;
+    }
 
-  @XmlAttribute
-  @Schema(description = "On validation errors: the value which was invalid")
-  public String getInvalidValue() {
-    return invalidValue;
-  }
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-  public void setInvalidValue(String invalidValue) {
-    this.invalidValue = invalidValue;
-  }
+    @XmlAttribute
+    @Schema(description = "On validation errors: the value which was invalid")
+    public String getInvalidValue() {
+        return invalidValue;
+    }
 
-  @Override
-  public String toString() {
-    return "ErrorMessage[message=" + message + ", path=" + path + ", invalidValue=" + invalidValue + "]";
-  }
+    public void setInvalidValue(String invalidValue) {
+        this.invalidValue = invalidValue;
+    }
 
-  private String message;
-  private String path;
-  private String invalidValue;
+    @Override
+    public String toString() {
+        return "ErrorMessage[message=" + message + ", path=" + path + ", invalidValue=" + invalidValue + "]";
+    }
+
+    private String message;
+    private String path;
+    private String invalidValue;
 }

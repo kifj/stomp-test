@@ -28,66 +28,66 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @Singleton
 @Startup
 public class QuoteUpdater {
-  private static final String INFO_TEXT = "updateQuotes";
+    private static final String INFO_TEXT = "updateQuotes";
 
-  @Inject
-  private Logger log;
+    @Inject
+    private Logger log;
 
-  @Inject
-  private QuoteRetriever quoteRetriever;
+    @Inject
+    private QuoteRetriever quoteRetriever;
 
-  @Inject
-  private ShareSubscription shareSubscription;
+    @Inject
+    private ShareSubscription shareSubscription;
 
-  @Inject
-  @JMSConnectionFactory("java:/JmsXA")
-  private JMSContext context;
+    @Inject
+    @JMSConnectionFactory("java:/JmsXA")
+    private JMSContext context;
 
-  @Inject
-  @StockMarket
-  private Topic quoteTopic;
+    @Inject
+    @StockMarket
+    private Topic quoteTopic;
 
-  @Inject
-  private JsonHelper jsonHelper;
+    @Inject
+    private JsonHelper jsonHelper;
 
-  @Inject
-  @ConfigProperty(name = "x1.stomp.control.QuoteUpdater/enable", defaultValue = "true")
-  private boolean schedulerEnabled;
+    @Inject
+    @ConfigProperty(name = "x1.stomp.control.QuoteUpdater/enable", defaultValue = "true")
+    private boolean schedulerEnabled;
 
-  private int lastUpdatedCount;
+    private int lastUpdatedCount;
 
-  public int getLastUpdateCount() {
-    return lastUpdatedCount;
-  }
-
-  @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
-  @WithSpan(kind = SpanKind.CLIENT)
-  public void onSchedule(Timer timer) {
-    if (schedulerEnabled && timer.getNextTimeout().after(new Date())) {
-      updateQuotes();
+    public int getLastUpdateCount() {
+        return lastUpdatedCount;
     }
-  }
 
-  public void updateQuotes() {
-    lastUpdatedCount = 0;
-    var shares = shareSubscription.list();
-    log.info("Update quotes for {} shares", shares.size());
-    quoteRetriever.retrieveQuotes(shares).forEach(this::send);
-  }
-
-  public void updateQuote(@NotNull Quote quote) {
-    send(quote);
-  }
-
-
-  private void send(Quote quote) {
-    try {
-      log.debug("Sending message for {}", quote);
-      context.createProducer().setJMSCorrelationID(UUID.randomUUID().toString()).setProperty("type", "quote")
-        .setProperty("key", quote.getShare().getKey()).send(quoteTopic, jsonHelper.toJSON(quote));
-      lastUpdatedCount++;
-    } catch (IOException e) {
-      log.error(e.getMessage(), e);
+    @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
+    @WithSpan(kind = SpanKind.CLIENT)
+    public void onSchedule(Timer timer) {
+        if (schedulerEnabled && timer.getNextTimeout().after(new Date())) {
+            updateQuotes();
+        }
     }
-  }
+
+    public void updateQuotes() {
+        lastUpdatedCount = 0;
+        var shares = shareSubscription.list();
+        log.info("Update quotes for {} shares", shares.size());
+        quoteRetriever.retrieveQuotes(shares).forEach(this::send);
+    }
+
+    public void updateQuote(@NotNull Quote quote) {
+        send(quote);
+    }
+
+
+    private void send(Quote quote) {
+        try {
+            log.debug("Sending message for {}", quote);
+            context.createProducer().setJMSCorrelationID(UUID.randomUUID().toString()).setProperty("type", "quote")
+                    .setProperty("key", quote.getShare().getKey()).send(quoteTopic, jsonHelper.toJSON(quote));
+            lastUpdatedCount++;
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 }

@@ -13,32 +13,32 @@ import org.slf4j.LoggerFactory;
 
 public class Resources {
 
-  @Produces
-  @PersistenceContext
-  private EntityManager em;
+    @Produces
+    @PersistenceContext
+    private EntityManager em;
 
-  @Produces
-  public Logger produceLog(InjectionPoint injectionPoint) {
-    return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
-  }
+    @Produces
+    public Logger produceLog(InjectionPoint injectionPoint) {
+        return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
+    }
 
-  @StockMarket
-  @Resource(name = "java:/jms/queue/stocks")
-  private Queue stockMarketQueue;
+    @StockMarket
+    @Resource(name = "java:/jms/queue/stocks")
+    private Queue stockMarketQueue;
 
-  @Produces
-  @StockMarket
-  public Queue getStockMarketQueue() {
-    return stockMarketQueue;
-  }
+    @Produces
+    @StockMarket
+    public Queue getStockMarketQueue() {
+        return stockMarketQueue;
+    }
 
-  @StockMarket
-  @Resource(name = "java:/jms/topic/quotes")
-  private Topic quoteTopic;
+    @StockMarket
+    @Resource(name = "java:/jms/topic/quotes")
+    private Topic quoteTopic;
 
-  @Produces
-  @StockMarket
-  public Topic getQuoteTopic() {
-    return quoteTopic;
-  }
+    @Produces
+    @StockMarket
+    public Topic getQuoteTopic() {
+        return quoteTopic;
+    }
 }

@@ -15,23 +15,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "index")
 @Schema(name = "index", description = "Index page with HATEOS links")
 public class IndexResponse {
-  public IndexResponse() {
-  }
+    public IndexResponse() {
+    }
 
-  public IndexResponse(List<Link> links) {
-    this.links = links;
-  }
+    public IndexResponse(List<Link> links) {
+        this.links = links;
+    }
 
-  private List<Link> links;
+    private List<Link> links;
 
-  @JsonProperty(value = "links")
-  @XmlElement(name = "link")
-  @XmlJavaTypeAdapter(JaxbSupport.JaxbAdapter.class)
-  public List<Link> getLinks() {
-    return links;
-  }
+    @JsonProperty(value = "links")
+    @XmlElement(name = "link")
+    @XmlJavaTypeAdapter(JaxbSupport.JaxbAdapter.class)
+    public List<Link> getLinks() {
+        return links;
+    }
 
-  public void setLinks(List<Link> links) {
-    this.links = links;
-  }
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 }

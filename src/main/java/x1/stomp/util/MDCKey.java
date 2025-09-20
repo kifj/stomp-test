@@ -9,8 +9,8 @@ import jakarta.enterprise.util.Nonbinding;
 import jakarta.interceptor.InterceptorBinding;
 
 @InterceptorBinding
-@Target({ ElementType.PARAMETER })
+@Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MDCKey {
-  @Nonbinding String value() default "";
+    @Nonbinding String value() default "";
 }

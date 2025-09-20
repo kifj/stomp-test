@@ -13,43 +13,43 @@ import org.jboss.resteasy.client.jaxrs.internal.BasicAuthentication;
 import org.jboss.resteasy.client.jaxrs.internal.ClientRequestContextImpl;
 
 public class BasicAuthFilter implements ClientRequestFilter {
-  private static final String MP_REST = "/mp-rest/";
-  private BasicAuthentication delegate;
-  private Boolean hasDelegate = null;
+    private static final String MP_REST = "/mp-rest/";
+    private BasicAuthentication delegate;
+    private Boolean hasDelegate = null;
 
-  @Override
-  public void filter(ClientRequestContext requestContext) throws IOException {
-    synchronized (this) {
-      checkDelegate(requestContext);
+    @Override
+    public void filter(ClientRequestContext requestContext) throws IOException {
+        synchronized (this) {
+            checkDelegate(requestContext);
+        }
+        if (Boolean.TRUE.equals(hasDelegate)) {
+            delegate.filter(requestContext);
+        }
     }
-    if (Boolean.TRUE.equals(hasDelegate)) {
-      delegate.filter(requestContext);
-    }
-  }
 
-  private void checkDelegate(ClientRequestContext requestContext) {
-    if (hasDelegate == null) {
-      var config = CDI.current().select(Config.class).get();
-      var clazz = getDeclaringClass(requestContext);
-      var annotation = clazz.getAnnotation(RegisterRestClient.class);
-      var configKey = annotation != null ? StringUtils.defaultIfEmpty(annotation.configKey(), clazz.getName())
-          : clazz.getName();
-      var username = config.getOptionalValue(configKey + MP_REST + "username", String.class);
-      var password = config.getOptionalValue(configKey + MP_REST + "password", String.class);
-      if (username.isPresent() && password.isPresent()) {
-        delegate = new BasicAuthentication(username.get(), password.get());
-        hasDelegate = Boolean.TRUE;
-      } else {
-        hasDelegate = Boolean.FALSE;
-      }
+    private void checkDelegate(ClientRequestContext requestContext) {
+        if (hasDelegate == null) {
+            var config = CDI.current().select(Config.class).get();
+            var clazz = getDeclaringClass(requestContext);
+            var annotation = clazz.getAnnotation(RegisterRestClient.class);
+            var configKey = annotation != null ? StringUtils.defaultIfEmpty(annotation.configKey(), clazz.getName())
+                    : clazz.getName();
+            var username = config.getOptionalValue(configKey + MP_REST + "username", String.class);
+            var password = config.getOptionalValue(configKey + MP_REST + "password", String.class);
+            if (username.isPresent() && password.isPresent()) {
+                delegate = new BasicAuthentication(username.get(), password.get());
+                hasDelegate = Boolean.TRUE;
+            } else {
+                hasDelegate = Boolean.FALSE;
+            }
+        }
     }
-  }
 
-  private Class<?> getDeclaringClass(ClientRequestContext requestContext) {
-    if (requestContext instanceof ClientRequestContextImpl clientRequestContext) {
-      return clientRequestContext.getInvocation().getClientInvoker().getDeclaring();
+    private Class<?> getDeclaringClass(ClientRequestContext requestContext) {
+        if (requestContext instanceof ClientRequestContextImpl clientRequestContext) {
+            return clientRequestContext.getInvocation().getClientInvoker().getDeclaring();
+        }
+        throw new IllegalStateException(
+                "Failed to get ClientInvocation from request context. Is RestEasy client used underneath?");
     }
-    throw new IllegalStateException(
-        "Failed to get ClientInvocation from request context. Is RestEasy client used underneath?");
-  }
 }

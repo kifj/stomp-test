@@ -11,8 +11,8 @@ import jakarta.interceptor.InterceptorBinding;
 
 @Inherited
 @InterceptorBinding
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Logged {
-  @Nonbinding boolean onlyFailures() default true;
+    @Nonbinding boolean onlyFailures() default true;
 }

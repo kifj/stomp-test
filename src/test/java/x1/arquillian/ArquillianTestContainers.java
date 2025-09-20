@@ -11,17 +11,17 @@ import org.testcontainers.containers.GenericContainer;
  * with @ContainerDefinition
  */
 public interface ArquillianTestContainers {
-  default List<GenericContainer<?>> instances() {
-    return Collections.emptyList();
-  }
+    default List<GenericContainer<?>> instances() {
+        return Collections.emptyList();
+    }
 
-  default void configureBeforeStart(ContainerRegistry registry) {
-  }
-  
-  default void configureAfterStart(ContainerRegistry registry) {
-  }
+    default void configureBeforeStart(ContainerRegistry registry) {
+    }
 
-  default boolean isActive() {
-    return true;
-  }
+    default void configureAfterStart(ContainerRegistry registry) {
+    }
+
+    default boolean isActive() {
+        return true;
+    }
 }

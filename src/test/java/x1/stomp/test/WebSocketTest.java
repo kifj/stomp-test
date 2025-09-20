@@ -1,11 +1,11 @@
 package x1.stomp.test;
 
 public interface WebSocketTest {
-  Integer getPortOffset();
+    Integer getPortOffset();
 
-  String getHost();
+    String getHost();
 
-  WebSocketClient getWebSocketClient();
+    WebSocketClient getWebSocketClient();
 
-  String getPath();
+    String getPath();
 }

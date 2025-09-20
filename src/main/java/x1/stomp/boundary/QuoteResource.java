@@ -64,129 +64,129 @@ import x1.stomp.version.VersionData;
 
 @Path(QuoteResource.PATH)
 @RequestScoped
-@Services(services = { @Service(technology = REST, value = RestApplication.ROOT + QuoteResource.PATH,
-    version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = { HTTP, HTTPS }) })
+@Services(services = {@Service(technology = REST, value = RestApplication.ROOT + QuoteResource.PATH,
+        version = VersionData.APP_VERSION_MAJOR_MINOR, protocols = {HTTP, HTTPS})})
 @Transactional(Transactional.TxType.REQUIRES_NEW)
 @Logged
 @Tag(name = "Quotes", description = "receive quotes for shares")
-@Produces({ APPLICATION_JSON, APPLICATION_XML })
-@Consumes({ APPLICATION_JSON, APPLICATION_XML })
+@Produces({APPLICATION_JSON, APPLICATION_XML})
+@Consumes({APPLICATION_JSON, APPLICATION_XML})
 @RestRequestStatusCounted
 @Metered
 public class QuoteResource {
-  protected static final String PATH = "/quotes";
-  private static final String MDC_KEY = "quote";
-  
-  @Inject
-  private Logger log;
+    protected static final String PATH = "/quotes";
+    private static final String MDC_KEY = "quote";
 
-  @Inject
-  private ShareSubscription shareSubscription;
+    @Inject
+    private Logger log;
 
-  @Inject
-  private QuoteRetriever quoteRetriever;
+    @Inject
+    private ShareSubscription shareSubscription;
 
-  @Resource
-  private ManagedExecutorService mes;
+    @Inject
+    private QuoteRetriever quoteRetriever;
 
-  @Inject
-  @ConfigProperty(name = "x1.stomp.boundary.QuoteResource/timeout", defaultValue = "5")
-  private Integer timeout;
+    @Resource
+    private ManagedExecutorService mes;
 
-  @Context
-  private UriInfo uriInfo;
-  
-  @GET
-  @Path("/{key}")
-  @Formatted
-  @Operation(description = "get a quote")
-  @Parameters({
-      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
-          schema = @Schema(implementation = String.class)),
-      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID,
-          schema = @Schema(implementation = String.class)) })
-  @APIResponse(responseCode = "200", description = "Quote received",
-      content = @Content(schema = @Schema(implementation = Quote.class)))
-  @APIResponse(responseCode = "404", description = "Subscription not found")
-  @Timed
-  @Bulkhead(value = 5)
-  public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
-      example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
-    var share = shareSubscription.find(key);
-    if (share.isPresent()) {
-      var quote = quoteRetriever.retrieveQuote(share.get());
-      if (quote.isPresent()) {
+    @Inject
+    @ConfigProperty(name = "x1.stomp.boundary.QuoteResource/timeout", defaultValue = "5")
+    private Integer timeout;
+
+    @Context
+    private UriInfo uriInfo;
+
+    @GET
+    @Path("/{key}")
+    @Formatted
+    @Operation(description = "get a quote")
+    @Parameters({
+            @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
+                    schema = @Schema(implementation = String.class)),
+            @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID,
+                    schema = @Schema(implementation = String.class))})
+    @APIResponse(responseCode = "200", description = "Quote received",
+            content = @Content(schema = @Schema(implementation = Quote.class)))
+    @APIResponse(responseCode = "404", description = "Subscription not found")
+    @Timed
+    @Bulkhead(value = 5)
+    public Response getQuote(@Parameter(description = "Stock symbol, see [quote.cnbc.com](https://quote.cnbc.com)",
+            example = "BMW.DE") @PathParam("key") @MDCKey(MDC_KEY) String key) {
+        var share = shareSubscription.find(key);
+        if (share.isPresent()) {
+            var quote = quoteRetriever.retrieveQuote(share.get());
+            if (quote.isPresent()) {
+                var baseUriBuilder = uriInfo.getBaseUriBuilder();
+                return Response.ok(addLinks(baseUriBuilder, quote.get())).build();
+            }
+        }
+        return Response.status(NOT_FOUND).build();
+    }
+
+    @GET
+    @Path("/")
+    @Formatted
+    @Operation(description = "get quotes")
+    @Parameters({
+            @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
+                    schema = @Schema(implementation = String.class)),
+            @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID,
+                    schema = @Schema(implementation = String.class))})
+    @APIResponse(responseCode = "200", description = "Quotes received",
+            content = {
+                    @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = APPLICATION_XML),
+                    @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Quote.class),
+                            mediaType = APPLICATION_JSON)})
+    @APIResponse(responseCode = "404", description = "No subscription found")
+    @Timed
+    @Bulkhead(value = 5)
+    public void getQuotes(
+            @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,
+            @Suspended AsyncResponse response) {
         var baseUriBuilder = uriInfo.getBaseUriBuilder();
-        return Response.ok(addLinks(baseUriBuilder, quote.get())).build();
-      }
+        withTimeoutHandler(response).execute(() -> {
+            try (var r = retrieveQuotes(keys, baseUriBuilder)) {
+                response.resume(r);
+            }
+        });
     }
-    return Response.status(NOT_FOUND).build();
-  }
 
-  @GET
-  @Path("/")
-  @Formatted
-  @Operation(description = "get quotes")
-  @Parameters({
-      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
-          schema = @Schema(implementation = String.class)),
-      @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_REQUEST_ID,
-          schema = @Schema(implementation = String.class)) })
-  @APIResponse(responseCode = "200", description = "Quotes received",
-      content = {
-          @Content(schema = @Schema(implementation = QuoteWrapper.class), mediaType = APPLICATION_XML),
-          @Content(schema = @Schema(type = SchemaType.ARRAY, implementation = Quote.class),
-              mediaType = APPLICATION_JSON) })
-  @APIResponse(responseCode = "404", description = "No subscription found")
-  @Timed
-  @Bulkhead(value = 5)
-  public void getQuotes(
-      @Parameter(description = "Stock symbols", example = "[\"GOOG\"]") @QueryParam("key") @MDCKey(MDC_KEY) List<String> keys,
-      @Suspended AsyncResponse response) {
-    var baseUriBuilder = uriInfo.getBaseUriBuilder();
-    withTimeoutHandler(response).execute(() -> {
-      try (var r = retrieveQuotes(keys, baseUriBuilder)) {
-        response.resume(r);
-      }
-    });
-  }
-
-  private Response retrieveQuotes(List<String> keys, UriBuilder baseUriBuilder) {
-    try {
-      var shares = retrieveShares(keys);
-      if (shares.isEmpty()) {
-        return Response.status(NOT_FOUND).entity(new Quotes()).build();
-      }
-      var quotes = quoteRetriever.retrieveQuotes(shares);
-      quotes.forEach(quote -> addLinks(baseUriBuilder, quote));
-      return Response.ok(from(quotes)).build();
-    } catch (RuntimeException e) {
-      log.error(null, e);
-      throw e;
+    private Response retrieveQuotes(List<String> keys, UriBuilder baseUriBuilder) {
+        try {
+            var shares = retrieveShares(keys);
+            if (shares.isEmpty()) {
+                return Response.status(NOT_FOUND).entity(new Quotes()).build();
+            }
+            var quotes = quoteRetriever.retrieveQuotes(shares);
+            quotes.forEach(quote -> addLinks(baseUriBuilder, quote));
+            return Response.ok(from(quotes)).build();
+        } catch (RuntimeException e) {
+            log.error(null, e);
+            throw e;
+        }
     }
-  }
 
-  private List<Share> retrieveShares(List<String> keys) {
-    if (keys.isEmpty()) {
-      return shareSubscription.list();
-    } else {
-      return keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent).map(Optional::get)
-          .collect(Collectors.toList());
+    private List<Share> retrieveShares(List<String> keys) {
+        if (keys.isEmpty()) {
+            return shareSubscription.list();
+        } else {
+            return keys.stream().map(key -> shareSubscription.find(key)).filter(Optional::isPresent).map(Optional::get)
+                    .collect(Collectors.toList());
+        }
     }
-  }
 
-  private ManagedExecutorService withTimeoutHandler(AsyncResponse response) {
-    response.setTimeout(timeout, SECONDS);
-    response.setTimeoutHandler(r -> r.resume(Response.status(SERVICE_UNAVAILABLE).build()));
-    return mes;
-  }
+    private ManagedExecutorService withTimeoutHandler(AsyncResponse response) {
+        response.setTimeout(timeout, SECONDS);
+        response.setTimeoutHandler(r -> r.resume(Response.status(SERVICE_UNAVAILABLE).build()));
+        return mes;
+    }
 
-  private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
-    var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel(REL_SELF)
-        .build();
-    var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
-        .rel("parent").build();
-    quote.setLinks(List.of(self, share));
-    return quote;
-  }
+    private Quote addLinks(UriBuilder baseUriBuilder, Quote quote) {
+        var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel(REL_SELF)
+                .build();
+        var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
+                .rel("parent").build();
+        quote.setLinks(List.of(self, share));
+        return quote;
+    }
 }

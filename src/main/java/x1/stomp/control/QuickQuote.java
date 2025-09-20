@@ -13,89 +13,89 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonRootName(value = "QuickQuote")
 public class QuickQuote implements Serializable {
-  @Serial
-  private static final long serialVersionUID = -7248251946071933412L;
+    @Serial
+    private static final long serialVersionUID = -7248251946071933412L;
 
-  private Float last;
-  private String name;
-  private String symbol;
-  private Integer volume;
-  private String countryCode;
-  private String currencyCode;
-  private String exchange;
-  private Date timestamp;
+    private Float last;
+    private String name;
+    private String symbol;
+    private Integer volume;
+    private String countryCode;
+    private String currencyCode;
+    private String exchange;
+    private Date timestamp;
 
-  public Float getLast() {
-    return last;
-  }
+    public Float getLast() {
+        return last;
+    }
 
-  public void setLast(Float last) {
-    this.last = last;
-  }
+    public void setLast(Float last) {
+        this.last = last;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getSymbol() {
-    return symbol;
-  }
+    public String getSymbol() {
+        return symbol;
+    }
 
-  public void setSymbol(String symbol) {
-    this.symbol = symbol;
-  }
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
 
-  public Integer getVolume() {
-    return volume;
-  }
+    public Integer getVolume() {
+        return volume;
+    }
 
-  public void setVolume(Integer volume) {
-    this.volume = volume;
-  }
+    public void setVolume(Integer volume) {
+        this.volume = volume;
+    }
 
-  public String getCountryCode() {
-    return countryCode;
-  }
+    public String getCountryCode() {
+        return countryCode;
+    }
 
-  public void setCountryCode(String countryCode) {
-    this.countryCode = countryCode;
-  }
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
 
-  public String getCurrencyCode() {
-    return currencyCode;
-  }
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
 
-  public void setCurrencyCode(String currencyCode) {
-    this.currencyCode = currencyCode;
-  }
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
-  public String getExchange() {
-    return exchange;
-  }
+    public String getExchange() {
+        return exchange;
+    }
 
-  public void setExchange(String exchange) {
-    this.exchange = exchange;
-  }
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
+    }
 
-  @JsonProperty("reg_last_time")
-  @JsonFormat(shape = Shape.STRING)
-  public Date getLastTime() {
-    return timestamp;
-  }
+    @JsonProperty("reg_last_time")
+    @JsonFormat(shape = Shape.STRING)
+    public Date getLastTime() {
+        return timestamp;
+    }
 
-  public void setLastTime(Date lastTime) {
-    this.timestamp = lastTime;
-  }
+    public void setLastTime(Date lastTime) {
+        this.timestamp = lastTime;
+    }
 
-  @Override
-  public String toString() {
-    return "QuickQuote [last=" + last + ", name=" + name + ", symbol=" + symbol + ", volume=" + volume
-        + ", countryCode=" + countryCode + ", currencyCode=" + currencyCode + ", exchange=" + exchange + ", timestamp="
-        + timestamp + "]";
-  }
-  
+    @Override
+    public String toString() {
+        return "QuickQuote [last=" + last + ", name=" + name + ", symbol=" + symbol + ", volume=" + volume
+                + ", countryCode=" + countryCode + ", currencyCode=" + currencyCode + ", exchange=" + exchange + ", timestamp="
+                + timestamp + "]";
+    }
+
 }

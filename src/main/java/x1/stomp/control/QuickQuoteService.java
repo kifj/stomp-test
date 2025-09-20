@@ -17,16 +17,16 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import java.time.temporal.ChronoUnit;
 
-@Produces({ APPLICATION_JSON, APPLICATION_XML })
+@Produces({APPLICATION_JSON, APPLICATION_XML})
 @RegisterProvider(QuickQuoteResponseExceptionMapper.class)
 @RegisterProvider(BasicAuthFilter.class)
 @RegisterRestClient
 @Dependent
 @Timeout(value = 2, unit = ChronoUnit.SECONDS)
-@CircuitBreaker(failOn = { Exception.class }, skipOn = { ClientErrorException.class })
+@CircuitBreaker(failOn = {Exception.class}, skipOn = {ClientErrorException.class})
 public interface QuickQuoteService {
-  @GET
-  @ClientHeaderParam(name = HttpHeaders.USER_AGENT, value = "Mozilla/5.0")
-  @Path("/quote.htm")
-  Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
+    @GET
+    @ClientHeaderParam(name = HttpHeaders.USER_AGENT, value = "Mozilla/5.0")
+    @Path("/quote.htm")
+    Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
 }

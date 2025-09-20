@@ -14,16 +14,16 @@ import jakarta.persistence.EntityManager;
 @Readiness
 public class DatabaseCheck implements HealthCheck {
 
-  @Inject
-  private EntityManager em;
+    @Inject
+    private EntityManager em;
 
-  @Override
-  public HealthCheckResponse call() {
-    try {
-      var count = em.createNamedQuery(Share.COUNT_ALL, Long.class).getSingleResult();
-      return HealthCheckResponse.named("database").withData("shares", count).up().build();
-    } catch (Exception e) {
-      return HealthCheckResponse.named("database").withData("error", e.getMessage()).down().build();
+    @Override
+    public HealthCheckResponse call() {
+        try {
+            var count = em.createNamedQuery(Share.COUNT_ALL, Long.class).getSingleResult();
+            return HealthCheckResponse.named("database").withData("shares", count).up().build();
+        } catch (Exception e) {
+            return HealthCheckResponse.named("database").withData("error", e.getMessage()).down().build();
+        }
     }
-  }
 }

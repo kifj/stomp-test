@@ -10,16 +10,16 @@ import jakarta.ws.rs.ext.Provider;
 
 @Provider
 public class WebApplicationExceptionMapper extends ExceptionMapperBase
-    implements ExceptionMapper<WebApplicationException> {
-  @Context
-  private UriInfo uriInfo;
+        implements ExceptionMapper<WebApplicationException> {
+    @Context
+    private UriInfo uriInfo;
 
-  @Override
-  public Response toResponse(WebApplicationException e) {
-    var response = new ErrorResponse(e.getResponse().getStatusInfo().getReasonPhrase());
-    response.setRequestUri(uriInfo.getRequestUri().toString());
-    response.add(ErrorMessage.from(e));
-    warn(Status.fromStatusCode(e.getResponse().getStatus()), response.toString());
-    return Response.status(e.getResponse().getStatus()).entity(response).build();
-  }
+    @Override
+    public Response toResponse(WebApplicationException e) {
+        var response = new ErrorResponse(e.getResponse().getStatusInfo().getReasonPhrase());
+        response.setRequestUri(uriInfo.getRequestUri().toString());
+        response.add(ErrorMessage.from(e));
+        warn(Status.fromStatusCode(e.getResponse().getStatus()), response.toString());
+        return Response.status(e.getResponse().getStatus()).entity(response).build();
+    }
 }

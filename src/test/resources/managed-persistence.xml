@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
-    version="3.1">
-  <persistence-unit name="stomp-test">
-    <jta-data-source>java:jboss/datasources/stockstestDS</jta-data-source>
-    <properties>
-      <property name="hibernate.hbm2ddl.auto" value="create-drop" />
-      <property name="hibernate.show_sql" value="false" />
-      <property name="hibernate.globally_quoted_identifiers" value="true" />
-    </properties>
-  </persistence-unit>
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
+             version="3.1">
+    <persistence-unit name="stomp-test">
+        <jta-data-source>java:jboss/datasources/stockstestDS</jta-data-source>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>

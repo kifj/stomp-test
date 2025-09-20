@@ -5,6 +5,6 @@ import jakarta.ws.rs.core.Application;
 
 @ApplicationPath(RestApplication.ROOT)
 public class RestApplication extends Application {
-  public static final String ROOT = "/rest";
+    public static final String ROOT = "/rest";
 
 }
