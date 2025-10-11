@@ -25,8 +25,8 @@ import java.time.temporal.ChronoUnit;
 @Timeout(value = 2, unit = ChronoUnit.SECONDS)
 @CircuitBreaker(failOn = { Exception.class }, skipOn = { ClientErrorException.class })
 public interface QuickQuoteService {
-  @GET
-  @ClientHeaderParam(name = HttpHeaders.USER_AGENT, value = "Mozilla/5.0")
-  @Path("/quote.htm")
-  Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
+    @GET
+//    @ClientHeaderParam(name = HttpHeaders.USER_AGENT, value = "Mozilla/5.0")
+    @Path("/quote.htm")
+    Response retrieve(@QueryParam("symbols") String symbols, @QueryParam("output") String output);
 }
