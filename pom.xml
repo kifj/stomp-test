@@ -418,7 +418,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.9.0</version>
+        <version>3.6.2</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -448,13 +448,8 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changelog-plugin</artifactId>
-        <version>2.3</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <configuration>
           <testFailureIgnore>true</testFailureIgnore>
         </configuration>
@@ -506,7 +501,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4</version>
             <configuration>
               <skip>true</skip>
             </configuration>
@@ -538,7 +533,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
@@ -574,7 +569,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
@@ -620,7 +615,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4</version>
             <configuration>
               <skip>false</skip>
               <systemPropertyVariables>
