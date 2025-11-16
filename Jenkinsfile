@@ -89,7 +89,7 @@ pipeline {
 }
 
 def hostIp(container) {
-  sh "docker inspect -f {{.NetworkSettings.IPAddress}} ${container.id} > hostIp"
+  sh "docker inspect -f {{.NetworkSettings.Networks.bridge.IPAddress}} ${container.id} > hostIp"
   readFile('hostIp').trim()
 }
 
