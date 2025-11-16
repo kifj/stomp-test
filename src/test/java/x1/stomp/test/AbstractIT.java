@@ -31,7 +31,7 @@ public abstract class AbstractIT {
     @Deployment
     public static Archive<?> createTestArchive() {
         var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-                .resolve("org.assertj:assertj-core", "org.testcontainers:postgresql")
+                .resolve("org.assertj:assertj-core", "org.testcontainers:testcontainers-postgresql")
                 .withTransitivity()
                 .asFile();
 
