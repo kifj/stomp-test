@@ -28,7 +28,7 @@ import org.testcontainers.shaded.org.awaitility.Awaitility;
 import org.testcontainers.activemq.ArtemisContainer;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
@@ -62,7 +62,7 @@ public class ContainerTest {
     private static final Network NETWORK = Network.newNetwork();
 
     @Container
-    private static final PostgreSQLContainer<?> POSTGRES = createPostgresSQLContainer();
+    private static final PostgreSQLContainer POSTGRES = createPostgresSQLContainer();
     @Container
     private static final GenericContainer<?> OTEL = createOtelContainer();
     @Container
@@ -74,13 +74,13 @@ public class ContainerTest {
     private Client client;
 
     @SuppressWarnings("resource")
-    static PostgreSQLContainer<?> createPostgresSQLContainer() {
+    static PostgreSQLContainer createPostgresSQLContainer() {
         try {
             Files.copy(new File("etc/create-postgresql.sql").toPath(), new File("target/test-classes/init.sql").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        return new PostgreSQLContainer<>("postgres:17-alpine").withNetwork(NETWORK).withNetworkAliases("postgres").withDatabaseName("stocks").withInitScript("init.sql");
+        return new PostgreSQLContainer("postgres:17-alpine").withNetwork(NETWORK).withNetworkAliases("postgres").withDatabaseName("stocks").withInitScript("init.sql");
     }
 
     @SuppressWarnings("resource")
