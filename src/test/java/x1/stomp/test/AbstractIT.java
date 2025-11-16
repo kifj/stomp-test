@@ -33,7 +33,8 @@ public abstract class AbstractIT {
     @Deployment
     public static Archive<?> createTestArchive() {
         var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-                .resolve("org.assertj:assertj-core", "org.testcontainers:activemq", "org.testcontainers:postgresql").withTransitivity()
+                .resolve("org.assertj:assertj-core", "org.testcontainers:testcontainers-activemq", "org.testcontainers:testcontainers-postgresql")
+                .withTransitivity()
                 .asFile();
 
         var archive = ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")
