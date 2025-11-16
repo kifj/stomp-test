@@ -14,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -31,7 +31,7 @@ import x1.stomp.model.Share;
 @DisplayName("Entities")
 public class EntitiesTest {
   @Container
-  private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
+  private static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:17-alpine");
 
   private static EntityManagerFactory emf;
   private EntityManager em;
