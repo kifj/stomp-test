@@ -80,7 +80,7 @@ public class ContainerTest {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        return new PostgreSQLContainer("postgres:17-alpine").withNetwork(NETWORK).withNetworkAliases("postgres").withDatabaseName("stocks").withInitScript("init.sql");
+        return new PostgreSQLContainer("postgres:18-alpine").withNetwork(NETWORK).withNetworkAliases("postgres").withDatabaseName("stocks").withInitScript("init.sql");
     }
 
     @SuppressWarnings("resource")

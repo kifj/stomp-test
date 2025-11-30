@@ -47,7 +47,7 @@
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
-        <jacoco.version>0.8.13</jacoco.version>
+        <jacoco.version>0.8.14</jacoco.version>
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.10.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Final</arquillian.wildfly.version>
@@ -527,7 +527,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>5.1.4.Final</version>
+                <version>5.1.5.Final</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1034,7 +1034,7 @@
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-datasources-galleon-pack</artifactId>
-                                    <version>11.0.0.Final</version>
+                                    <version>11.2.0.Final</version>
                                 </feature-pack>
                             </feature-packs>
                             <layers>
