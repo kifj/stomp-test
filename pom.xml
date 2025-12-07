@@ -1018,6 +1018,7 @@
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%l</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
                 <jkube.generator.tags>1.8</jkube.generator.tags>
+                <jkube.generator.from>registry.x1/j7beck/jkube-java:25</jkube.generator.from>
             </properties>
             <build>
                 <finalName>${project.artifactId}</finalName>
