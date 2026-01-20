@@ -101,7 +101,7 @@ public class ContainerTest {
     }
 
     static GenericContainer<?> createOtelContainer() {
-        return new GenericContainer<>(DockerImageName.parse("otel/opentelemetry-collector-contrib:0.131.0"))
+        return new GenericContainer<>(DockerImageName.parse("otel/opentelemetry-collector-contrib:0.131.1"))
                 .withNetwork(NETWORK)
                 .withExposedPorts(4318)
                 .waitingFor(Wait.forHttp("/").forStatusCode(NOT_FOUND.getStatusCode()))
