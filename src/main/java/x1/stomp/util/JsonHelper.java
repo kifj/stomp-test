@@ -18,7 +18,7 @@ public class JsonHelper {
     public JsonHelper() {
         mapper = new ObjectMapper().enable(WRAP_ROOT_VALUE).enable(ACCEPT_SINGLE_VALUE_AS_ARRAY).enable(UNWRAP_ROOT_VALUE)
                 .enable(UNWRAP_SINGLE_VALUE_ARRAYS).disable(WRITE_DATES_AS_TIMESTAMPS).disable(FAIL_ON_UNKNOWN_PROPERTIES)
-                .setSerializationInclusion(Include.NON_NULL);
+                .setDefaultPropertyInclusion(Include.NON_NULL);
     }
 
     public String toJSON(Object obj) throws IOException {
