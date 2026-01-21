@@ -29,7 +29,7 @@ public class JacksonConfig implements ContextResolver<ObjectMapper> {
   private final ObjectMapper mapper;
 
   public JacksonConfig() {
-    mapper = new ObjectMapper().disable(WRITE_DATES_AS_TIMESTAMPS).setSerializationInclusion(Include.NON_NULL)
+    mapper = new ObjectMapper().disable(WRITE_DATES_AS_TIMESTAMPS).setDefaultPropertyInclusion(Include.NON_NULL)
         .enable(ACCEPT_SINGLE_VALUE_AS_ARRAY).enable(UNWRAP_SINGLE_VALUE_ARRAYS).disable(FAIL_ON_IGNORED_PROPERTIES)
         .disable(FAIL_ON_UNKNOWN_PROPERTIES).enable(INDENT_OUTPUT).disable(WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
         .disable(WRITE_ENUMS_USING_TO_STRING);
