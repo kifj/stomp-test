@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
-        <wildfly.version>39.0.0.Final</wildfly.version>
+        <wildfly.version>39.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
@@ -51,7 +51,7 @@
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.10.0.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Final</arquillian.wildfly.version>
-        <jkube.version>1.18.1</jkube.version>
+        <jkube.version>1.18.2</jkube.version>
         <testcontainers.version>2.0.3</testcontainers.version>
     </properties>
 
