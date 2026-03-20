@@ -5,13 +5,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.micrometer.core.instrument.*;
 import org.apache.commons.lang3.StringUtils;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.Timer.Sample;
 import jakarta.inject.Inject;
 import jakarta.interceptor.AroundInvoke;
@@ -44,7 +42,7 @@ public class MeteredInterceptor {
         Exception exception = null;
         try {
             if (timed != null) {
-                sample = Timer.start(registry);
+                sample = Timer.start();
             }
             return ctx.proceed();
         } catch (Exception e) {
@@ -62,16 +60,15 @@ public class MeteredInterceptor {
 
     private void increaseCounter(Class<?> type, String method, Counted counted, Exception exception) {
         if (!counted.recordFailuresOnly() || exception != null) {
-            Counter.builder(metricId(counted)).description(StringUtils.defaultIfEmpty(counted.description(), null))
-                    .tags(counted.extraTags()).tag("class", type.getSimpleName()).tag("method", method)
-                    .tags(EXCEPTION_TAG, getExceptionTag(exception)).register(registry).increment();
+            registry.counter(metricId(counted), Tags.of(Tag.of("class", type.getSimpleName()), Tag.of("method", method),
+                    Tag.of(EXCEPTION_TAG, getExceptionTag(exception))).and(counted.extraTags()))
+                    .increment();
         }
     }
 
     private void stopTimer(Class<?> type, String method, Timed timed, Sample sample, Exception exception) {
-        var timer = Timer.builder(metricId(timed)).description(StringUtils.defaultIfEmpty(timed.description(), null))
-                .tags(timed.extraTags()).tag("class", type.getSimpleName()).tag("method", method)
-                .tags(EXCEPTION_TAG, getExceptionTag(exception)).register(registry);
+        var timer = registry.timer(metricId(timed), Tags.of(Tag.of("class", type.getSimpleName()),Tag.of("method", method),
+                Tag.of(EXCEPTION_TAG, getExceptionTag(exception))).and(timed.extraTags()));
         sample.stop(timer);
     }
 
