@@ -30,7 +30,7 @@ public final class Containers implements ArquillianTestContainers {
             .dependsOn(database).dependsOn(etcd).withNetwork(network).withEnv("wildfly-testcontainers.properties");
 
     @SuppressWarnings("resource")
-    private final KafkaContainer kafka = new KafkaContainer("apache/kafka-native:3.9.1")
+    private final KafkaContainer kafka = new KafkaContainer("apache/kafka-native:3.9.2")
                 .withNetwork(network)
                 //.withLogConsumer(new Slf4jLogConsumer(LOGGER))
                 .withNetworkAliases("kafka")

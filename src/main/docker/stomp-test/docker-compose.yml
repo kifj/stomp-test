@@ -43,7 +43,7 @@ services:
       - "8888:8888"   # Prometheus metrics exposed by the collector
       - "8889:8889"   # Prometheus exporter metrics
   kafka:
-    image: apache/kafka-native:3.9.1
+    image: apache/kafka-native:3.9.2
     ports:
       - "9092:9092"
     environment:

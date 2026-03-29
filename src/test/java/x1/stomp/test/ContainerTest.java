@@ -94,7 +94,7 @@ public class ContainerTest {
     }
 
     static KafkaContainer createKafkaContainer() {
-        return new KafkaContainer("apache/kafka-native:3.9.1")
+        return new KafkaContainer("apache/kafka-native:3.9.2")
                 .withNetwork(NETWORK)
                 .withNetworkAliases("kafka")
                 .withListener("kafka:19092");
