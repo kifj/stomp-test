@@ -2,14 +2,14 @@ const application = new Client();
 
 function Client() {
 	let protocol = 'ws://';
-	if (window.location.protocol == 'https:') {
+	if (globalThis.location.protocol === 'https:') {
 		protocol = 'wss://';
 	}
 	let path = '';
-	if (window.location.pathname.length > 1) {
-		path = '/' + window.location.pathname.split( '/' )[1];
+	if (globalThis.location.pathname.length > 1) {
+		path = '/' + globalThis.location.pathname.split( '/' )[1];
 	}
-	if (path == '/index.html') {
+	if (path === '/index.html') {
 	  path = '';
 	}
 	this.url = protocol + location.host + path + "/ws/stocks";

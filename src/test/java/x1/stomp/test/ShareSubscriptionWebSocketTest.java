@@ -67,7 +67,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT implements WebSoc
         var share = new Share(TEST_SHARE);
         quote.setShare(share);
         quoteUpdater.updateQuote(quote);
-        getLastResponse(Duration.ofMillis(1000), (r) -> {
+        getLastResponse(Duration.ofMillis(1000), r -> {
             assertThat(r).isNotNull();
             log.debug("Received: {}", r);
             var received = fromJSON(r, Quote.class);
@@ -82,7 +82,7 @@ public class ShareSubscriptionWebSocketTest extends AbstractIT implements WebSoc
         log.debug("Sending {}", command);
         webSocketClient.sendMessage(message);
 
-        getLastResponse(Duration.ofMillis(1000), (r) -> {
+        getLastResponse(Duration.ofMillis(1000), r -> {
             assertThat(r).isNotNull();
             var event = fromJSON(r, SubscriptionEvent.class);
             assertThat(event).isNotNull();

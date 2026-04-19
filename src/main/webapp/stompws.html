@@ -15,13 +15,13 @@
     <script type="text/javascript" src="js/stockmarket.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            let supported = ("WebSocket" in window);
-            if (!supported) {
-                var msg = "Your browser does not support Web Sockets. This example will not work properly.<br>";
+            let supported = ("WebSocket" in globalThis);
+            if (supported) {
+                application.init();
+            } else {
+                let msg = "Your browser does not support Web Sockets. This example will not work properly.<br>";
                 msg += "Please use a Web Browser with Web Sockets support (WebKit or Google Chrome).";
                 $("#connect").html(msg);
-            } else {
-                application.init();
             }
         });
     </script>

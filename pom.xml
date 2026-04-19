@@ -353,7 +353,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>6.6.40.Final</version>
+            <version>6.6.48.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -537,7 +537,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.9.8.2</version>
+                <version>4.9.8.3</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>

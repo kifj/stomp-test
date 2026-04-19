@@ -7,7 +7,6 @@ import static x1.stomp.test.ResponseAssert.assertThat;
 import java.util.Collection;
 import java.util.List;
 
-import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.instrument.Timer;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.GenericType;
@@ -78,11 +77,6 @@ public class MetricsTest extends AbstractIT {
         assertThat(timers).isNotEmpty();
         assertThat(timers).anyMatch(timer -> timer.getId().getTag("method").equals("listAllShares"));
 
-        /*
-        counters = registry.get("method.counted").counters();
-        assertThat(counters).isNotEmpty();
-        assertThat(counters).anyMatch(timer -> timer.getId().getTag("method").equals("listAllShares"));
-        */
     }
 
     private static final class Shares extends GenericType<List<Share>> {

@@ -2,10 +2,10 @@ const application = new Client();
 
 function Client() {
 	let protocol = 'ws://';
-	if (window.location.protocol == 'https:') {
+	if (globalThis.location.protocol === 'https:') {
 		protocol = 'wss://';
 	}
-	this.url = protocol + location.hostname + ":61614/stomp";
+	this.url = protocol + globalThis.location.hostname + ":61614/stomp";
 	this.login = "guest";
 	this.passcode = "guest_12345!";
 	this.stocksQueue = "jms.queue.stocksQueue";
@@ -16,24 +16,22 @@ function Client() {
 //---------------------------------------------------------------------
 
 Client.prototype.init = function() {
-	let caller = this;
-	$("#button_subscribe").click(function(e) {
-		caller.subscribe($('#l_share').val());
+	$("#button_subscribe").click(() => {
+		this.subscribe($('#l_share').val());
 	});
-	$("#button_unsubscribe").click(function(e) {
-		caller.unsubscribe($('#l_share').val());
+	$("#button_unsubscribe").click(() => {
+		this.unsubscribe($('#l_share').val());
 	});
-	$("#button_connect").click(function(e) {
-		caller.connect();
+	$("#button_connect").click(() => {
+		this.connect();
 	});	
-	$("#button_disconnect").click(function(e) {
-		caller.disconnect();
+	$("#button_disconnect").click(() => {
+		this.disconnect();
 	});
 	this.connect();
 }
 
 Client.prototype.connect = function() {
-	let caller = this;
 	let client = Stomp.client(this.url);
 	
 	if (this.debug) {
@@ -45,21 +43,21 @@ Client.prototype.connect = function() {
 		$("#sidebar").fadeOut();
 	}
 	// the client is notified when it is connected to the server.
-	let onconnect = function(frame) {
-    caller.messageOn("Connected.");
+	let onconnect = () => {
+    	this.messageOn("Connected.");
 		$('#button_connect').fadeOut({
 			duration : 'fast'
 		});
 		$('#button_disconnect').fadeIn();
 		$('#l_share').removeAttr('disabled');
 
-		client.subscribe(caller.quotesTopic, function(message) {
-			caller.onmessage(JSON.parse(message.body));
+		client.subscribe(this.quotesTopic, (message) => {
+			this.onmessage(JSON.parse(message.body));
 		});	
 	};
-	let onerror = function(error) {
-		caller.messageOn(error.headers.message + ": " + error.body);
-  		aller.disconnect();
+	let onerror = (error)=> {
+		this.messageOn(error.headers.message + ": " + error.body);
+		this.disconnect();
 	};
 
 	this.stompClient = client;
@@ -67,17 +65,16 @@ Client.prototype.connect = function() {
 }
 
 Client.prototype.disconnect = function() {
-	let caller = this;
 	let client = this.stompClient;
 	if (client) {
 		this.stompClient = null;
-		client.disconnect(function() {
+		client.disconnect(() => {
 			$('#button_disconnect').fadeOut({
 				duration : 'fast'
 			});
 			$('#button_connect').fadeIn();
 			$('#l_share').attr('disabled', 'disabled');
-			caller.messageOn("Disconnected.");
+			this.messageOn("Disconnected.");
 		});
 	}
 }
