@@ -25,7 +25,7 @@ public final class Containers implements ArquillianTestContainers {
             .withEnv("ETCD_ENABLE_V2", "true").withNetwork(network).withNetworkAliases("etcd").withCommand("etcd",
                     "--listen-client-urls", "http://0.0.0.0:2379", "--advertise-client-urls", "http://etcd:2379");
 
-    private final GenericContainer<?> otel = new GenericContainer<>(DockerImageName.parse("otel/opentelemetry-collector-contrib:0.131.1"))
+    private final GenericContainer<?> otel = new GenericContainer<>(DockerImageName.parse("otel/opentelemetry-collector-contrib:0.148.0"))
             .withNetwork(network).withNetworkAliases("otel");
 
     private final WildflyContainer wildfly = new WildflyContainer("registry.x1/j7beck/x1-wildfly-stomp-test-it:1.8")
