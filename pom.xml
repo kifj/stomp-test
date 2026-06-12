@@ -46,13 +46,15 @@
         <wildfly.version>40.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
-        <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
-        <jacoco.version>0.8.14</jacoco.version>
+        <shrinkwrap-resolver.version>3.3.7</shrinkwrap-resolver.version>
+        <jacoco.version>0.8.15</jacoco.version>
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.10.2.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Final</arquillian.wildfly.version>
         <jkube.version>1.19.0</jkube.version>
         <testcontainers.version>2.0.5</testcontainers.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <junit5.version>5.14.3</junit5.version>
     </properties>
 
     <distributionManagement>
@@ -132,6 +134,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -315,6 +318,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit5.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -342,6 +346,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -552,7 +557,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -606,7 +611,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
                 <reportSets>
                     <reportSet>
                         <reports>
