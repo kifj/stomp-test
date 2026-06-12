@@ -66,9 +66,14 @@ public class MeteredInterceptor {
         }
     }
 
-    private void stopTimer(Class<?> type, String method, Timed timed, Sample sample, Exception exception) {
-        var timer = registry.timer(metricId(timed), Tags.of(Tag.of("class", type.getSimpleName()),Tag.of("method", method),
-                Tag.of(EXCEPTION_TAG, getExceptionTag(exception))).and(timed.extraTags()));
+    private void stopTimer(Class<?> type, String method, Timed timed, Timer.Sample sample, Exception exception) {
+        var timer = Timer.builder(metricId(timed))
+                .tags(Tags.of(Tag.of("class", type.getSimpleName()), Tag.of("method", method),
+                        Tag.of(EXCEPTION_TAG, getExceptionTag(exception))).and(timed.extraTags()))
+                // WFLY-21339: this is currently not working
+                .publishPercentileHistogram(timed.histogram())
+                .publishPercentiles(timed.percentiles())
+                .register(registry);
         sample.stop(timer);
     }
 
@@ -80,6 +85,9 @@ public class MeteredInterceptor {
                 annotation = ctx.getMethod().getDeclaringClass().getAnnotation(Timed.class);
             }
             CACHE.put(signature("timed", ctx), Optional.ofNullable(annotation));
+            if (annotation != null && annotation.longTask()) {
+                throw new UnsupportedOperationException("longTask is not supported by this interceptor");
+            }
             return annotation;
         } else {
             return (Timed) cached.orElse(null);
