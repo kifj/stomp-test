@@ -46,7 +46,7 @@
         <wildfly.version>40.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
-        <shrinkwrap-resolver.version>3.3.7</shrinkwrap-resolver.version>
+        <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.15</jacoco.version>
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.10.2.Final</arquillian.version>
