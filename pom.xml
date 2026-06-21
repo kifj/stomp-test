@@ -407,7 +407,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <id>parse-version</id>
@@ -436,7 +436,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -446,7 +446,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/target/generated-sources/java-templates</outputDirectory>
-                            <overwrite>true</overwrite>
+                            <changeDetection>always</changeDetection>
                             <resources>
                                 <resource>
                                     <directory>src/main/java-templates</directory>
@@ -496,7 +496,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -532,12 +532,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.21.0</version>
+                <version>3.22.0</version>
             </plugin>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>5.1.5.Final</version>
+                <version>6.0.0.Final</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -547,7 +547,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.9.8.3</version>
+                <version>4.10.2.0</version>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -585,7 +585,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.2</version>
                 <configuration>
                     <aggregate>true</aggregate>
                     <tags>
@@ -683,7 +683,7 @@
                     <plugin>
                         <groupId>io.smallrye</groupId>
                         <artifactId>smallrye-open-api-maven-plugin</artifactId>
-                        <version>4.2.3</version>
+                        <version>4.2.4</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
@@ -844,7 +844,7 @@
                 <dependency>
                     <groupId>org.ow2.asm</groupId>
                     <artifactId>asm</artifactId>
-                    <version>9.9</version>
+                    <version>9.9.1</version>
                     <scope>test</scope>
                 </dependency>          
             </dependencies>
@@ -1048,7 +1048,7 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
-                        <version>12.0.0.Final</version>
+                        <version>13.0.0.Final</version>
                         <configuration>
                             <feature-packs>
                                 <feature-pack>
@@ -1057,7 +1057,7 @@
                                 <feature-pack>
                                     <groupId>org.wildfly</groupId>
                                     <artifactId>wildfly-datasources-galleon-pack</artifactId>
-                                    <version>11.3.0.Final</version>
+                                    <version>11.4.0.Final</version>
                                 </feature-pack>
                             </feature-packs>
                             <layers>
