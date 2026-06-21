@@ -44,7 +44,7 @@ node {
     }
   }
 
-  stage('dependencyTrack') {
+  stage('Dependency Track') {
     if (params.DEPENDENCY_TRACK) {
       withCredentials([string(credentialsId: 'dtrack', variable: 'API_KEY')]) {
         dependencyTrackPublisher artifact: 'target/bom.xml', projectName: "${pom.artifactId}", projectVersion: "${pom.version}", synchronous: true, dependencyTrackApiKey: API_KEY, projectProperties: [group: "${pom.groupId}"]
