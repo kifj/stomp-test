@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
-        <wildfly.version>40.0.0.Final</wildfly.version>
+        <wildfly.version>41.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
         <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
@@ -53,8 +53,8 @@
         <arquillian.wildfly.version>5.1.0.Final</arquillian.wildfly.version>
         <jkube.version>1.19.0</jkube.version>
         <testcontainers.version>2.0.5</testcontainers.version>
-        <slf4j.version>2.0.17</slf4j.version>
-        <junit5.version>5.14.3</junit5.version>
+        <slf4j.version>2.0.18</slf4j.version>
+        <junit5.version>5.10.5</junit5.version>
     </properties>
 
     <distributionManagement>
@@ -317,6 +317,12 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit5.version}</version>
             <scope>test</scope>
@@ -358,7 +364,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>7.3.2.Final</version>
+            <version>7.4.5.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -552,7 +558,7 @@
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>2.9.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -683,7 +689,7 @@
                     <plugin>
                         <groupId>io.smallrye</groupId>
                         <artifactId>smallrye-open-api-maven-plugin</artifactId>
-                        <version>4.2.4</version>
+                        <version>4.3.5</version>
                         <executions>
                             <execution>
                                 <phase>install</phase>
@@ -797,7 +803,7 @@
                 <dependency>
                     <groupId>org.ow2.asm</groupId>
                     <artifactId>asm</artifactId>
-                    <version>9.9</version>
+                    <version>9.9.1</version>
                     <scope>test</scope>
                 </dependency>          
             </dependencies>
