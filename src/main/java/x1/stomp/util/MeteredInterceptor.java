@@ -112,22 +112,22 @@ public class MeteredInterceptor {
         return StringUtils.defaultIfEmpty(annotation.value(), DEFAULT_METRIC_NAME);
     }
 
-  private String metricId(Counted annotation) {
-    return annotation.value();
-  }
-
-  private String getExceptionTag(Throwable throwable) {
-    if (throwable == null) {
-      return DEFAULT_EXCEPTION_TAG_VALUE;
+    private String metricId(Counted annotation) {
+        return annotation.value();
     }
-    if (throwable.getCause() == null) {
-      return throwable.getClass().getSimpleName();
-    }
-    return throwable.getCause().getClass().getSimpleName();
-  }
 
-  private String signature(String prefix, InvocationContext ctx) {
-    return prefix + "/" + ctx.getMethod().getDeclaringClass().getName() + "." + ctx.getMethod().getName();
-  }
+    private String getExceptionTag(Throwable throwable) {
+        if (throwable == null) {
+            return DEFAULT_EXCEPTION_TAG_VALUE;
+        }
+        if (throwable.getCause() == null) {
+            return throwable.getClass().getSimpleName();
+        }
+        return throwable.getCause().getClass().getSimpleName();
+    }
+
+    private String signature(String prefix, InvocationContext ctx) {
+        return prefix + "/" + ctx.getMethod().getDeclaringClass().getName() + "." + ctx.getMethod().getName();
+    }
 
 }

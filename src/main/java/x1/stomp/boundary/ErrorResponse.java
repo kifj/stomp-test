@@ -14,55 +14,55 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @XmlRootElement(name = "errors")
 @Schema(name = "errors", description = "Error response")
 public final class ErrorResponse {
-  private ErrorResponse() {
-    errors = new ArrayList<>();
-  }
-  
-  public ErrorResponse(String type) {
-    this();
-    this.type = type;
-  }
+    private ErrorResponse() {
+        errors = new ArrayList<>();
+    }
 
-  @XmlElementRef(name = "error")
-  @JsonProperty(value = "error")
-  public List<ErrorMessage> getErrors() {
-    return errors;
-  }
+    public ErrorResponse(String type) {
+        this();
+        this.type = type;
+    }
 
-  public void setErrors(List<ErrorMessage> errors) {
-    this.errors = errors;
-  }
+    @XmlElementRef(name = "error")
+    @JsonProperty(value = "error")
+    public List<ErrorMessage> getErrors() {
+        return errors;
+    }
 
-  public void add(ErrorMessage errorMessage) {
-    errors.add(errorMessage);
-  }
-  
-  @XmlAttribute
-  @Schema(description = "Error type")
-  public String getType() {
-    return type;
-  }
-  
-  public void setType(String type) {
-    this.type = type;
-  }
-  
-  @XmlAttribute
-  @Schema(description = "Request URI")
-  public String getRequestUri() {
-    return requestUri;
-  }
-  
-  public void setRequestUri(String requestUri) {
-    this.requestUri = requestUri;
-  }
+    public void setErrors(List<ErrorMessage> errors) {
+        this.errors = errors;
+    }
 
-  @Override
-  public String toString() {
-    return "ErrorResponse[requestUri=" + requestUri + ", type=" + type + ", errors=" + errors + "]";
-  }
+    public void add(ErrorMessage errorMessage) {
+        errors.add(errorMessage);
+    }
 
-  private List<ErrorMessage> errors;
-  private String requestUri;
-  private String type;
+    @XmlAttribute
+    @Schema(description = "Error type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @XmlAttribute
+    @Schema(description = "Request URI")
+    public String getRequestUri() {
+        return requestUri;
+    }
+
+    public void setRequestUri(String requestUri) {
+        this.requestUri = requestUri;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorResponse[requestUri=" + requestUri + ", type=" + type + ", errors=" + errors + "]";
+    }
+
+    private List<ErrorMessage> errors;
+    private String requestUri;
+    private String type;
 }

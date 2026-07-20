@@ -36,7 +36,7 @@ public final class Containers implements ArquillianTestContainers {
                 .withNetworkAliases("kafka")
                 .withListener("kafka:19092");
 
-    private final GenericContainer<?> otel =  new GenericContainer<>(DockerImageName.parse("otel/opentelemetry-collector-contrib:0.131.1"))
+    private final GenericContainer<?> otel =  new GenericContainer<>(DockerImageName.parse("otel/opentelemetry-collector-contrib:0.148.0"))
             .withNetwork(network).withNetworkAliases("otel");
 
     public static boolean isRemoteArquillian() {

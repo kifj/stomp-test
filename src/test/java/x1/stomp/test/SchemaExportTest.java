@@ -6,6 +6,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.engine.jdbc.env.JdbcMetadataOnBoot;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 import org.junit.jupiter.api.Tag;
@@ -15,12 +16,16 @@ import x1.stomp.model.Share;
 
 @Tag("Unittests")
 public class SchemaExportTest {
-  @Test
-  void testSchemaExport() {
-    var metadata = new MetadataSources(
-        new StandardServiceRegistryBuilder().applySetting(AvailableSettings.DIALECT, PostgreSQLDialect.class.getName())
-            .applySetting(AvailableSettings.DEFAULT_SCHEMA, "stocks").build());
-    new SchemaExport().setOutputFile("target/generated/ddl.sql").setFormat(true).create(EnumSet.of(TargetType.SCRIPT),
-        metadata.addAnnotatedClasses(Share.class).buildMetadata());
-  }
+    @Test
+    void testSchemaExport() {
+        var metadata = new MetadataSources(new StandardServiceRegistryBuilder()
+                .applySetting(AvailableSettings.DIALECT, PostgreSQLDialect.class.getName())
+                .applySetting(AvailableSettings.DEFAULT_SCHEMA, "stocks")
+                .applySetting(AvailableSettings.ALLOW_METADATA_ON_BOOT, JdbcMetadataOnBoot.DISALLOW)
+                .build());
+        new SchemaExport()
+                .setOutputFile("target/generated/ddl.sql")
+                .setFormat(true)
+                .create(EnumSet.of(TargetType.SCRIPT), metadata.addAnnotatedClass(Share.class).buildMetadata());
+    }
 }

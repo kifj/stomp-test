@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                             xsi:schemaLocation="urn:jboss:deployment-structure:1.3 https://www.jboss.org/schema/jbossas/jboss-deployment-structure-1_3.xsd">
-    <deployment>
-        <dependencies>
-            <module name="org.apache.httpcomponents" />
-            <module name="org.apache.commons.codec" />
-            <module name="com.google.guava" />
-        </dependencies>
-        <exclusions>
-            <module name="org.jboss.resteasy.resteasy-json-binding-provider" />
-        </exclusions>
-    </deployment>
+  <deployment>
+    <dependencies>
+      <module name="org.apache.httpcomponents" />
+      <module name="org.apache.commons.codec" />
+      <module name="com.google.guava" />
+    </dependencies>
+    <exclusions>
+      <module name="org.jboss.resteasy.resteasy-json-binding-provider" />
+    </exclusions>
+  </deployment>
 </jboss-deployment-structure>
