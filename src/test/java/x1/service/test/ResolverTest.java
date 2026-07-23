@@ -46,7 +46,12 @@ public class ResolverTest {
     @Deployment
     public static Archive<?> createTestArchive() {
         var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-                .resolve("x1.wildfly:service-registry", "org.assertj:assertj-core", "org.hamcrest:hamcrest-core")
+                .resolve("x1.wildfly:service-registry",
+                        "org.assertj:assertj-core",
+                        "org.hamcrest:hamcrest-core",
+                        "org.testcontainers:testcontainers",
+                        "org.testcontainers:testcontainers-activemq",
+                        "org.testcontainers:testcontainers-postgresql")
                 .withTransitivity()
                 .asFile();
 
