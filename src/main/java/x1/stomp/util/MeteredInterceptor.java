@@ -70,9 +70,8 @@ public class MeteredInterceptor {
         var timer = Timer.builder(metricId(timed))
                 .tags(Tags.of(Tag.of("class", type.getSimpleName()), Tag.of("method", method),
                         Tag.of(EXCEPTION_TAG, getExceptionTag(exception))).and(timed.extraTags()))
-                // WFLY-21339: this is currently not working
                 .publishPercentileHistogram(timed.histogram())
-                .publishPercentiles(timed.percentiles())
+                .publishPercentiles(timed.percentiles().length > 0 ? timed.percentiles() : null)
                 .register(registry);
         sample.stop(timer);
     }
