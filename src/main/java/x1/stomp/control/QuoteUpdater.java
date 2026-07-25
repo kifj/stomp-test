@@ -60,7 +60,7 @@ public class QuoteUpdater {
         return lastUpdatedCount;
     }
 
-    @Schedule(second = "0", minute = "*/1", hour = "*", persistent = false, info = INFO_TEXT)
+    @Schedule(second = "0", minute = "*/1", hour = "*", persistent = true, info = INFO_TEXT)
     @WithSpan(kind = SpanKind.CLIENT)
     public void onSchedule(Timer timer) {
         if (schedulerEnabled && timer.getNextTimeout().after(new Date())) {

@@ -51,7 +51,7 @@
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.10.2.Final</arquillian.version>
         <arquillian.wildfly.version>5.1.0.Final</arquillian.wildfly.version>
-        <jkube.version>1.19.0</jkube.version>
+        <jkube.version>1.20.0</jkube.version>
         <testcontainers.version>2.0.5</testcontainers.version>
         <slf4j.version>2.0.18</slf4j.version>
         <junit5.version>5.10.5</junit5.version>
@@ -340,6 +340,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.eu.ingwar.tools</groupId>
+            <artifactId>arquillian-suite-extension</artifactId>
+            <version>1.2.2</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.arquillian.junit</groupId>
+                    <artifactId>arquillian-junit-container</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-api-maven</artifactId>
             <scope>test</scope>
@@ -359,7 +371,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.11</version>
+            <version>42.7.13</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -1053,7 +1065,6 @@
                 <jkube.generator.name>registry.x1/j7beck/x1-wildfly-jar-stomp-test:%l</jkube.generator.name>
                 <jkube.generator.registry>registry.x1</jkube.generator.registry>
                 <jkube.generator.tags>1.8</jkube.generator.tags>
-                <jkube.generator.from>registry.x1/j7beck/jkube-java:25</jkube.generator.from>
             </properties>
             <build>
                 <finalName>${project.artifactId}</finalName>

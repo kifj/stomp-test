@@ -1,17 +1,11 @@
 package x1.service.test;
 
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit5.ArquillianExtension;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import x1.arquillian.Containers;
 import x1.service.Constants;
 import x1.service.client.Resolver;
 import x1.service.etcd.Node;
@@ -42,36 +36,6 @@ public class ResolverTest {
 
     @Inject
     private Resolver resolver;
-
-    @Deployment
-    public static Archive<?> createTestArchive() {
-        var libraries = Maven.resolver().loadPomFromFile("pom.xml")
-                .resolve("x1.wildfly:service-registry",
-                        "org.assertj:assertj-core",
-                        "org.hamcrest:hamcrest-core",
-                        "org.testcontainers:testcontainers",
-                        "org.testcontainers:testcontainers-activemq",
-                        "org.testcontainers:testcontainers-postgresql")
-                .withTransitivity()
-                .asFile();
-
-        var archive = ShrinkWrap.create(WebArchive.class, VersionData.APP_NAME_MAJOR_MINOR + ".war")
-                .addPackages(true, "x1.stomp")
-                .addAsResource("microprofile-config.properties", "META-INF/microprofile-config.properties")
-                .addAsResource("service-registry.properties")
-                .addAsWebInfResource("beans.xml")
-                .addAsWebInfResource("jboss-deployment-structure.xml")
-                .addAsLibraries(libraries);
-
-        if (Containers.isRemoteArquillian()) {
-            return archive
-                    .addAsResource("remote-persistence.xml", "META-INF/persistence.xml");
-        } else {
-            return archive
-                    .addAsResource("managed-persistence.xml", "META-INF/persistence.xml")
-                    .addAsWebInfResource("test-ds.xml");
-        }
-    }
 
     @BeforeEach
     public void setup() {
