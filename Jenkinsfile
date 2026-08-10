@@ -37,7 +37,7 @@ node {
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
       withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
         sh """
-          mvn -Prpm deploy site-deploy -DskipTests
+          mvn deploy site-deploy -DskipTests
           mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=${pom.groupId}:${pom.artifactId}:$env.BRANCH_NAME -Dsonar.projectName=${pom.artifactId}:$env.BRANCH_NAME
         """
       }
