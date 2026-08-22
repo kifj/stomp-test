@@ -46,15 +46,16 @@
         <wildfly.version>41.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
-        <shrinkwrap-resolver.version>3.3.4</shrinkwrap-resolver.version>
         <jacoco.version>0.8.15</jacoco.version>
         <jacoco.append>true</jacoco.append>
         <arquillian.version>1.10.2.Final</arquillian.version>
+        <shrinkwrap-resolver.version>3.3.7</shrinkwrap-resolver.version>
+        <junit5.version>5.14.4</junit5.version>
+        <maven.version>3.9.16</maven.version>
         <arquillian.wildfly.version>5.1.0.Final</arquillian.wildfly.version>
         <jkube.version>1.20.0</jkube.version>
         <testcontainers.version>2.0.5</testcontainers.version>
         <slf4j.version>2.0.18</slf4j.version>
-        <junit5.version>5.10.5</junit5.version>
     </properties>
 
     <distributionManagement>
@@ -99,6 +100,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven</artifactId>
+                <version>${maven.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
             <dependency>
                 <groupId>org.jboss.shrinkwrap.resolver</groupId>
                 <artifactId>shrinkwrap-resolver-bom</artifactId>
