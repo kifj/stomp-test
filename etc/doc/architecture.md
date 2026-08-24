@@ -6,7 +6,7 @@
 
 `RestApplication` exposes the REST API under `/rest`.
 
-- `ShareResource` manages share subscriptions under `/rest/shares`. It lists and finds subscriptions, removes them directly, and sends subscribe commands to the JMS queue.
+- `ShareResource` manages share subscriptions under `/rest/shares`. It lists and finds subscriptions and directly persists or removes them through `ShareSubscription`.
 - `QuoteResource` serves current quotes under `/rest/quotes`. It resolves subscriptions and retrieves one or more quotes from the external quote provider. Multi-quote requests run asynchronously and have a timeout.
 
 ### Subscription Service
@@ -21,27 +21,21 @@ The service returns a `QuickQuoteResult` containing quote records for the reques
 
 Timeouts, circuit breaking, and response error mapping protect this integration.
 
-### Asynchronous Command Processing
-
-`ShareMessageListener` consumes the `stocks` JMS queue. It processes subscribe and unsubscribe commands delivered either as Java object messages or as JSON byte messages. Subscribe commands retrieve an initial quote before the share is persisted.
-
-The queue is also available through the broker's STOMP interface, allowing STOMP clients to submit the same commands.
-
 ### Quote Publication
 
-`QuoteUpdater` is a startup singleton with a scheduled update job. It retrieves current quotes for all persisted subscriptions and publishes each quote as JSON to the `quotes` JMS topic. It can also publish an individual quote.
+`QuoteUpdater` is a startup singleton with a scheduled update job. It retrieves current quotes for all persisted subscriptions and publishes each quote as JSON through the `to-kafka` channel to the Kafka `stocks` topic. It can also publish an individual quote.
 
-### WebSocket and STOMP Delivery
+### WebSocket Delivery
 
-`ShareSubscriptionWebSocketServerEndpoint` exposes `/ws/stocks` and consumes the `quotes` JMS topic. It accepts JSON subscribe and unsubscribe commands from WebSocket clients, sends quote messages to active sessions, and removes failed sessions.
+`ShareSubscriptionWebSocketServerEndpoint` exposes `/ws/stocks` and consumes the `from-kafka` channel. It accepts JSON subscribe and unsubscribe commands from WebSocket clients, performs those operations directly, sends Kafka quote messages to active sessions, and removes failed sessions.
 
-`SessionHolder` maintains the active WebSocket sessions. `SubscriptionEventListener` forwards successful subscription changes to those sessions. The same JMS queue and topic are exposed by ActiveMQ Artemis through STOMP destinations for broker-based clients.
+`SessionHolder` maintains the active WebSocket sessions. `SubscriptionEventListener` forwards successful subscription changes to those sessions.
 
 ### Web Frontend
 
-The frontend is a static HTML5 application under `src/main/webapp`. It has no frontend framework or package-managed build. It uses CSS for layout and styling, local jQuery for page initialization and UI updates, and JavaScript clients for WebSocket and STOMP communication.
+The frontend is a static HTML5 application under `src/main/webapp`. It has no frontend framework or package-managed build. It uses CSS for layout and styling, local jQuery for page initialization and UI updates, and a JavaScript client for WebSocket communication.
 
-`index.html` uses `stockmarket-ws.js` to connect directly to `/ws/stocks` with the browser WebSocket API. `stompws.html` uses the bundled `stomp.js` client and connects to the broker's STOMP WebSocket endpoint. Both pages send subscribe and unsubscribe commands, manage the connection, and display incoming quotes in a table containing the share symbol, name, price, and currency. They also show connection or operation status and include a debug console for client messages.
+`index.html` uses `stockmarket-ws.js` to connect directly to `/ws/stocks` with the browser WebSocket API. It sends subscribe and unsubscribe commands, manages the connection, and displays incoming quotes in a table containing the share symbol, name, price, and currency. It also shows connection or operation status and includes a debug console for client messages.
 
 ### Domain and Transport Models
 
@@ -53,22 +47,22 @@ The frontend is a static HTML5 application under `src/main/webapp`. It has no fr
 
 ### Runtime Dependencies
 
-- WildFly provides the Jakarta EE runtime, CDI, JAX-RS, WebSocket, EJB, JMS, transactions, and scheduling.
+- WildFly provides the Jakarta EE runtime, CDI, JAX-RS, WebSocket, EJB, transactions, scheduling, and MicroProfile Reactive Messaging with the Kafka connector.
 - PostgreSQL stores subscriptions through the JPA persistence unit `stomp-test` and datasource `java:jboss/datasources/stocksDS`.
-- ActiveMQ Artemis provides the `stocks` command queue and `quotes` publication topic, including their STOMP endpoints.
+- Apache Kafka provides the `stocks` topic used for quote publication.
 - The external quote provider supplies current market data through the `QuickQuoteService` REST client.
 
 ## Business Purpose
 
-The application tracks requested stock symbols and distributes current market quotes through synchronous and asynchronous interfaces. A subscription is stored only after the application has obtained an initial valid quote, which also supplies the share's readable name.
+The application tracks requested stock symbols and distributes current market quotes through REST, WebSocket, and Kafka interfaces. WebSocket subscriptions are stored after an initial valid quote supplies the share's readable name; REST clients provide the share data directly.
 
 ### REST Subscription Flow
 
-A client submits a share to `POST /rest/shares`. The resource sends a subscribe command to the JMS queue and returns a created response. The message listener retrieves the initial quote and asks `ShareSubscription` to persist the share. `DELETE /rest/shares/{key}` removes an existing subscription directly.
+A client submits a share to `POST /rest/shares`. `ShareResource` asks `ShareSubscription` to persist it and returns a created response. `DELETE /rest/shares/{key}` removes an existing subscription directly.
 
-### Asynchronous Subscription Flow
+### WebSocket Subscription Flow
 
-A REST or STOMP client can submit a subscribe or unsubscribe command to the stocks queue. `ShareMessageListener` validates the command, performs the requested operation, and uses the same subscription service as the REST boundary.
+A WebSocket client sends a JSON subscribe or unsubscribe command to `/ws/stocks`. The endpoint validates the command, retrieves an initial quote for a new subscription, and uses `ShareSubscription` for the requested operation.
 
 ### Quote Lookup Flow
 
@@ -76,11 +70,11 @@ A client requests one quote or a set of quotes through `/rest/quotes`. The resou
 
 ### Scheduled Quote Broadcast
 
-`QuoteUpdater` periodically loads all subscriptions and requests fresh data. Each valid quote is serialized and published to the quotes topic. Topic consumers receive updates without polling the REST API.
+`QuoteUpdater` periodically loads all subscriptions and requests fresh data. Each valid quote is serialized and published to Kafka topic `stocks`. The WebSocket consumer receives updates without polling the REST API and broadcasts them to active sessions.
 
-### WebSocket/STOMP Client Flow
+### WebSocket Client Flow
 
-A WebSocket client connects to `/ws/stocks`, or a STOMP client connects through the broker. The client sends commands to the stocks queue and subscribes to the quotes topic. Quote updates are broadcast to active WebSocket sessions, while successful subscription changes are sent as subscription events.
+A WebSocket client connects to `/ws/stocks` and sends commands over the connection. Quote updates from Kafka are broadcast to active WebSocket sessions, while successful subscription changes are sent as subscription events.
 
 ## Interfaces and Destinations
 
@@ -89,7 +83,4 @@ A WebSocket client connects to `/ws/stocks`, or a STOMP client connects through 
 | REST | `/rest/shares` | Manage share subscriptions |
 | REST | `/rest/quotes` | Retrieve current quotes |
 | WebSocket | `/ws/stocks` | Send commands and receive live events |
-| JMS queue | `java:/jms/queue/stocks` | Internal subscription commands |
-| JMS topic | `java:/jms/topic/quotes` | Internal quote broadcasts |
-| STOMP queue | `jms.queue.stocksQueue` | Broker-facing subscription commands |
-| STOMP topic | `jms.topic.quotesTopic` | Broker-facing quote broadcasts |
+| Kafka topic | `stocks` | Quote publication and consumption |
