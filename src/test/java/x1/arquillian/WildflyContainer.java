@@ -39,8 +39,11 @@ public class WildflyContainer extends GenericContainer<WildflyContainer> {
     @Override
     protected void configure() {
         withExposedPorts(HTTP_PORT, MGMT_PORT)
-                .waitingFor(Wait.forHttp("/health/ready").forPort(MGMT_PORT).forStatusCode(Status.OK.getStatusCode()))
-                .withLogConsumer(new SimpleLogConsumer()).withJavaOpts(JAVA_OPTS);
+                .waitingFor(Wait.forHttp("/health/ready")
+                        .forPort(MGMT_PORT)
+                        .forStatusCode(Status.OK.getStatusCode()))
+                .withLogConsumer(new SimpleLogConsumer())
+                .withJavaOpts(JAVA_OPTS);
     }
 
     public Integer getManagementPort() {
