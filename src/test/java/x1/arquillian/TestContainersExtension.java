@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 import org.jboss.arquillian.container.spi.ContainerRegistry;
 import org.jboss.arquillian.container.spi.event.container.AfterStop;
 import org.jboss.arquillian.core.api.annotation.Observes;
 import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.core.spi.ServiceLoader;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
@@ -65,18 +66,20 @@ public class TestContainersExtension implements LoadableExtension {
     }
 
     private Optional<ArquillianTestContainers> findArquillianTestContainers() {
-        var classes = new Reflections(PACKAGE_NAME).getTypesAnnotatedWith(ContainerDefinition.class);
-        if (classes.isEmpty()) {
-            return Optional.empty();
-        } else if (classes.size() > 1) {
-            throw new IllegalStateException("Found more than one ContainerDefinition under " + PACKAGE_NAME + ": " + classes);
-        }
-        try {
-            LOGGER.debug("Found ContainerDefinition in {}", classes);
-            return Optional.of((ArquillianTestContainers) classes.iterator().next().getDeclaredConstructor().newInstance());
-        } catch (Exception e) {
-            LOGGER.warn("Could not create ContainerDefinition", e);
-            return Optional.empty();
+        try (ScanResult scanResult = (new ClassGraph()).acceptPackages(new String[]{PACKAGE_NAME}).enableAnnotationInfo().scan()) {
+            var classes = scanResult.getClassesWithAnnotation(ContainerDefinition.class.getName()).loadClasses();
+            if (classes.isEmpty()) {
+                return Optional.empty();
+            } else if (classes.size() > 1) {
+                throw new IllegalStateException("Found more than one ContainerDefinition under " + PACKAGE_NAME + ": " + classes);
+            }
+            try {
+                LOGGER.debug("Found ContainerDefinition in {}", classes);
+                return Optional.of((ArquillianTestContainers) classes.getFirst().getDeclaredConstructor().newInstance());
+            } catch (Exception e) {
+                LOGGER.warn("Could not create ContainerDefinition", e);
+                return Optional.empty();
+            }
         }
     }
 }
