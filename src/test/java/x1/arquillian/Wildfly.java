@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PARAMETER})
 public @interface Wildfly {
-    String image() default "registry.x1/j7beck/x1-wildfly-profile:41.0.0.Final";
+    String image() default "registry.x1/j7beck/x1-wildfly-profile:41.0.1.Final";
 }

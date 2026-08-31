@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
-        <wildfly.version>41.0.0.Final</wildfly.version>
+        <wildfly.version>41.0.1.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
         <jacoco.version>0.8.15</jacoco.version>
@@ -280,6 +280,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -319,7 +320,7 @@
         <dependency>
             <groupId>x1.wildfly</groupId>
             <artifactId>service-registry</artifactId>
-            <version>1.3.8</version>
+            <version>1.3.9</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -816,12 +817,6 @@
                     <version>${jacoco.version}</version>
                     <scope>test</scope>
                 </dependency>
-                <dependency>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm</artifactId>
-                    <version>9.9.1</version>
-                    <scope>test</scope>
-                </dependency>
             </dependencies>
             <build>
                 <plugins>
@@ -861,12 +856,6 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>org.jacoco.core</artifactId>
                     <version>${jacoco.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm</artifactId>
-                    <version>9.9.1</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
