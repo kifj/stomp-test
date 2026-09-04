@@ -15,13 +15,13 @@ node {
   }
   
   stage('Build') {
-    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
+    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [coveragePublisher(disabled: true), junitPublisher(disabled: true)]) {
       sh "mvn clean package"
     }
   }
   
   stage('Pre IT-Test') {
-    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
+    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [coveragePublisher(disabled: true), junitPublisher(disabled: true)]) {
       sh "mvn -Pdocker-integration-test pre-integration-test -DskipTests"
     }
   }
@@ -34,7 +34,7 @@ node {
   
   stage('Publish') {
     pom = readMavenPom file: 'pom.xml'
-    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
+    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [coveragePublisher(disabled: true), junitPublisher(disabled: true)]) {
       withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
         sh """
           mvn deploy site-deploy -DskipTests
@@ -53,7 +53,7 @@ node {
   }
   
   stage('Create image') {
-    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [jacocoPublisher(disabled: true), junitPublisher(disabled: true)]) {
+    withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [coveragePublisher(disabled: true), junitPublisher(disabled: true)]) {
       sh "mvn -DskipTests -Pdocker install k8s:push"
     }
   }
