@@ -1,6 +1,5 @@
 package x1.stomp.control;
 
-import jakarta.enterprise.context.Dependent;
 import jakarta.ws.rs.*;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -20,7 +19,6 @@ import java.time.temporal.ChronoUnit;
 @RegisterProvider(QuickQuoteResponseExceptionMapper.class)
 @RegisterProvider(BasicAuthFilter.class)
 @RegisterRestClient
-@Dependent
 @Timeout(value = 2, unit = ChronoUnit.SECONDS)
 @CircuitBreaker(failOn = { Exception.class }, skipOn = { ClientErrorException.class })
 public interface QuickQuoteService {
