@@ -18,14 +18,10 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Resource;
 import jakarta.enterprise.concurrent.ManagedExecutorService;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.control.RequestContextController;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.AsyncResponse;
 import jakarta.ws.rs.container.Suspended;
 import jakarta.ws.rs.core.Context;
@@ -96,6 +92,9 @@ public class QuoteResource {
     @Context
     private UriInfo uriInfo;
 
+    @Inject
+    private RequestContextController requestContextController;
+
     @GET
     @Path("/{key}")
     @Formatted
@@ -145,8 +144,13 @@ public class QuoteResource {
             @Suspended AsyncResponse response) {
         var baseUriBuilder = uriInfo.getBaseUriBuilder();
         withTimeoutHandler(response).execute(() -> {
+            requestContextController.activate();
             try (var r = retrieveQuotes(keys, baseUriBuilder)) {
                 response.resume(r);
+            } catch (Exception e) {
+                response.resume(e);
+            } finally {
+                requestContextController.deactivate();
             }
         });
     }
