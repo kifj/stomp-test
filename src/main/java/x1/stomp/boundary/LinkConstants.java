@@ -8,4 +8,5 @@ public interface LinkConstants {
     String PARAM_METHOD = "method";
 
     String REL_SELF = "self";
+    String REL_PARENT = "parent";
 }

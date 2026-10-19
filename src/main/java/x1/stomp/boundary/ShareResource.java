@@ -105,7 +105,7 @@ public class ShareResource {
     @GET
     @Wrapped(element = "shares")
     @Formatted
-    @Operation(description = "List all subscriptions")
+    @Operation(description = "List all subscriptions", operationId = "listAllShares")
     @Parameters({
             @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, schema = @Schema(implementation = String.class)),
             @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, schema = @Schema(implementation = String.class))})
@@ -125,7 +125,7 @@ public class ShareResource {
     @GET
     @Path("/{key}")
     @Formatted
-    @Operation(description = "Find a share subscription")
+    @Operation(description = "Find a share subscription", operationId = "findShare")
     @Parameters({
             @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, schema = @Schema(implementation = String.class)),
             @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, schema = @Schema(implementation = String.class))})
@@ -182,7 +182,7 @@ public class ShareResource {
     @DELETE
     @Path("/{key}")
     @Formatted
-    @Operation(description = "Remove a subscription of a share")
+    @Operation(description = "Remove a subscription of a share", operationId = "removeShare")
     @Parameters({
             @Parameter(in = ParameterIn.HEADER, name = X_CALLER_ID, schema = @Schema(implementation = String.class)),
             @Parameter(in = ParameterIn.HEADER, name = X_REQUEST_ID, schema = @Schema(implementation = String.class))})

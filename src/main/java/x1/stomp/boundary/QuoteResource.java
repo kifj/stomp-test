@@ -98,7 +98,7 @@ public class QuoteResource {
     @GET
     @Path("/{key}")
     @Formatted
-    @Operation(description = "get a quote")
+    @Operation(description = "get a quote", operationId = "getQuote")
     @Parameters({
             @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
                     schema = @Schema(implementation = String.class)),
@@ -125,7 +125,7 @@ public class QuoteResource {
     @GET
     @Path("/")
     @Formatted
-    @Operation(description = "get quotes")
+    @Operation(description = "get quotes", operationId = "getQuotes")
     @Parameters({
             @Parameter(in = ParameterIn.HEADER, name = MDCFilter.X_CALLER_ID,
                     schema = @Schema(implementation = String.class)),
@@ -189,7 +189,7 @@ public class QuoteResource {
         var self = Link.fromUriBuilder(baseUriBuilder.clone().path(PATH).path(quote.getShare().getKey())).rel(REL_SELF)
                 .build();
         var share = Link.fromUriBuilder(baseUriBuilder.clone().path(ShareResource.PATH).path(quote.getShare().getKey()))
-                .rel("parent").build();
+                .rel(REL_PARENT).build();
         quote.setLinks(List.of(self, share));
         return quote;
     }
