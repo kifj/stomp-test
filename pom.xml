@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
-        <wildfly.version>41.0.1.Final</wildfly.version>
+        <wildfly.version>42.0.0.Final</wildfly.version>
         <jboss.home>/opt/wildfly-${wildfly.version}</jboss.home>
         <db.server>localhost</db.server>
         <jacoco.version>0.8.15</jacoco.version>
@@ -55,7 +55,7 @@
         <arquillian.wildfly.version>5.1.0.Final</arquillian.wildfly.version>
         <jkube.version>1.20.0</jkube.version>
         <testcontainers.version>2.0.5</testcontainers.version>
-        <slf4j.version>2.0.18</slf4j.version>
+        <slf4j.version>2.0.20</slf4j.version>
     </properties>
 
     <distributionManagement>
@@ -387,13 +387,13 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.13</version>
+            <version>42.7.14</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-ant</artifactId>
-            <version>7.4.5.Final</version>
+            <version>7.4.13.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
