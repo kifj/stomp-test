@@ -35,10 +35,10 @@ node {
   stage('Publish') {
     pom = readMavenPom file: 'pom.xml'
     withMaven(maven: 'Maven-3.9', mavenSettingsConfig: mavenSetting, options: [coveragePublisher(disabled: true), junitPublisher(disabled: true)]) {
-      withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS')]) {
+      withCredentials([usernameColonPassword(credentialsId: 'nexus', variable: 'USERPASS'), string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
         sh """
           mvn deploy site-deploy -DskipTests
-          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=${pom.groupId}:${pom.artifactId}:$env.BRANCH_NAME -Dsonar.projectName=${pom.artifactId}:$env.BRANCH_NAME
+          mvn sonar:sonar -Dsonar.host.url=https://www.x1/sonar -Dsonar.projectKey=${pom.groupId}:${pom.artifactId}:$env.BRANCH_NAME -Dsonar.projectName=${pom.artifactId}:$env.BRANCH_NAME -Dsonar.token=$env.SONAR_TOKEN
         """
       }
     }
