@@ -85,7 +85,7 @@ public class ContainerTest {
 
     @SuppressWarnings("resource")
     static ArtemisContainer createArtemisContainer() {
-        return new ArtemisContainer("apache/activemq-artemis:2.52.0").withNetwork(NETWORK).withNetworkAliases("activemq-artemis")
+        return new ArtemisContainer("apache/artemis:2.57.0").withNetwork(NETWORK).withNetworkAliases("activemq-artemis")
             .withUser("artemis").withPassword("artemis");
      }
 
